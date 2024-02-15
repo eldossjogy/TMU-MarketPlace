@@ -3,11 +3,11 @@
     "version": "0.1.0",
     "description": "",
     "scripts": {
-        "client": "cd .\\client && npm run start",
-        "server": "cd .\\server && nodemon index.js",
+        "client": "cd ./client && npm run start",
+        "server": "cd ./server && nodemon index.js",
         "dev": "concurrently \"npm run server\"  \"npm run client\"",
-        "client-i": "cd .\\client && npm i",
-        "server-i": "cd .\\server && npm i",
+        "client-i": "cd ./client && npm i",
+        "server-i": "cd ./server && npm i",
         "install" : "concurrently \"npm run server-i\"  \"npm run client-i\""
     },
     "dependencies": {
