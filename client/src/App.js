@@ -1,10 +1,30 @@
 import "./index.css";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient("https://jjcsqjjvzatkopidmaha.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqY3Nxamp2emF0a29waWRtYWhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg1NTk2OTcsImV4cCI6MjAyNDEzNTY5N30.9sby3xIuzizJGRTmBawKI6ra3_0CucTB8AvrU1TX0VA");
 
 function App() {
 
+  const [countries, setCountries] = useState([]);
+
+    useEffect(() => {
+      getCountries();
+    }, []);
+
+    async function getCountries() {
+      const { data } = await supabase.from("countries").select();
+      setCountries(data);
+    }
+
   return (
+
     <div className="App">
+      <ul>
+        {countries.map((country) => (
+          <li key={country.name}>{country.name}</li>
+        ))}
+    </ul>
       <nav className=" bg-slate-900 h-[8vh]">
         <div className="container mx-auto flex px-4 justify-between items-center">
           <div id="logo" className="h-[6vh]">
