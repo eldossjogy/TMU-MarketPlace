@@ -1,9 +1,9 @@
 import "./index.css";
 import React, {useContext} from 'react';
 import { Routes, Route } from 'react-router-dom';
-import HomePage from "../pages/HomePage";
-import MyProfile from "../pages/MyProfile";
-import AdminDashboard from "../pages/AdminDashboard";
+import HomePage from "./pages/HomePage";
+import MyProfile from "./pages/MyProfile";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
 
