@@ -8,9 +8,10 @@
         "dev": "concurrently \"npm run server\"  \"npm run client\"",
         "client-i": "cd ./client && npm i",
         "server-i": "cd ./server && npm i",
-        "install" : "concurrently \"npm run server-i\"  \"npm run client-i\""
+        "install": "concurrently \"npm run server-i\"  \"npm run client-i\""
     },
     "dependencies": {
+        "@supabase/supabase-js": "^2.39.7",
         "concurrently": "^8.2.2",
         "nodemon": "^3.0.3"
     }
