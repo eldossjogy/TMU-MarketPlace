@@ -5,14 +5,19 @@ import { useEffect, useState } from "react";
 
 
 export default function HomePage() {
-    const [countries, setCountries] = useState([]);
+    const [filters, setFilters] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        getCountries();
+        initFilters();
     }, []);
 
-    async function getCountries() {
-        setCountries([{ name: 'can' }, { name: 'ban' }, { name: 'ind' }]);
+    async function initFilters() {
+        setFilters([{ name: 'can' }, { name: 'ban' }, { name: 'ind' }]);
+    }
+
+    async function initCategories() {
+        setCategories([{ name: 'Automobiles' }, { name: 'Textbooks' }, { name: 'Recently Added' }, { name: 'Electronics' }, { name: 'Supplies' }]);
     }
 
     return (
@@ -26,6 +31,10 @@ export default function HomePage() {
                         <ToolbarButton primary={false} value={"Recently Added"} />
                         <ToolbarButton primary={false} value={"Electronics"} />
                         <ToolbarButton primary={false} value={"Supplies"} />
+
+                        {categories.map((element, index) => (
+                            <ToolbarButton primary={index == 0 ? true : false} value={element.name} />
+                        ))}
                     </div>
                     <div id="controls">
                         <ToolbarButton primary={false} value={"X"} />
@@ -33,8 +42,8 @@ export default function HomePage() {
                 </section>
                 <section id="sidebar" className="w-[20%] h-[80vh] bg-slate-300 rounded-lg shadow-lg">
                     <ul>
-                        {countries.map((country) => (
-                            <li key={country.name}>{country.name}</li>
+                        {filters.map((filter) => (
+                            <li key={filters.name}>{filters.name}</li>
                         ))}
                     </ul>
                 </section>
