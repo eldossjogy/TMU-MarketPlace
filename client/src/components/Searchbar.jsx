@@ -1,5 +1,6 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Searchbar() {
     const [searchInput, setSearchInput] = useState("");
@@ -36,14 +37,19 @@ export default function Searchbar() {
     const handleChange = (e) => {
         e.preventDefault();
         setSearchInput(e.target.value);
-        console.log('hi');
     };
-      
-    if (searchInput.length > 0) {
-        countries.filter((country) => {
-            return country.name.match(searchInput);
-        });
+
+    const search = () => {
+        toast(`Searching for ${searchInput}`)
     }
+
+    useEffect(() => {
+    
+      return () => {
+        toast(`Searching for ${searchInput}`)
+      }
+    }, [])
+    
 
     return (
         <div className='flex z-10 space-x-2 h-[4vh] rounded-xl bg-white'>
@@ -51,11 +57,12 @@ export default function Searchbar() {
                 className="rounded-xl h-[4vh] w-[30vw] px-[2vw] text-left focus:outline-none" placeholder="Search here"
                 onChange={handleChange}
                 value={searchInput}
+                
             >
             </input>
-            <span className='flex justify-center items-center w-[3vh] h-[3vh] my-auto mr-[2vw]'>
+            <button className='flex justify-center items-center w-[4vh] h-[3vh] pr-[1vh] my-auto' onClick={() => {search()}}>
                 <MagnifyingGlassIcon/>
-            </span>
+            </button>
         </div>
     )
 }
