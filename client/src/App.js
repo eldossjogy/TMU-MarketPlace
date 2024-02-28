@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import MyProfile from "./pages/MyProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import { createClient } from "@supabase/supabase-js";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route index element={<HomePage />}/>
           <Route path = "my-market" element={<MyProfile />}/>
           <Route path = "admin-dashboard" element={<AdminDashboard />}/>
+          <Route path = "/login" element={<LoginPage />}/>
         </Route>
     </Routes>
   );
