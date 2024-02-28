@@ -1,7 +1,6 @@
 import React from "react";
 import VerticalCard from "../component/VerticalCard";
 import "../index.css";
-
 export default function HomePage() {
   return (
     <div>
@@ -24,7 +23,6 @@ export default function HomePage() {
           description={"This is a bike"}
           postID={2}
         />
-
       </div>
     </div>
   );
