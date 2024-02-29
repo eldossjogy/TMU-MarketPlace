@@ -11,8 +11,11 @@
         "install": "concurrently \"npm run server-i\"  \"npm run client-i\""
     },
     "dependencies": {
+        "@headlessui/react": "^1.7.18",
+        "@heroicons/react": "^2.1.1",
         "@supabase/supabase-js": "^2.39.7",
         "concurrently": "^8.2.2",
-        "nodemon": "^3.0.3"
+        "nodemon": "^3.0.3",
+        "react-hot-toast": "^2.4.1"
     }
 }
