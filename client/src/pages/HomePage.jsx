@@ -1,5 +1,5 @@
 import React from "react";
-import VerticalCard from "../component/VerticalCard";
+import VerticalCard from "../components/VerticalCard";
 import "../index.css";
 export default function HomePage() {
   return (
