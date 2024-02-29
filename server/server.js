@@ -7,7 +7,6 @@ import adminRoutes from "./routes/adminRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
-dotenv.config();
 
 const app = express();
 const port = process.env.port || 5000;
