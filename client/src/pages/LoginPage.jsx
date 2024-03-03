@@ -4,46 +4,47 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
-
-    const {signIn, user} = useContext(AuthContext)
-    const [errors, setErrors] = useState({})
+    const {signIn, user} = useContext(AuthContext);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-
-    const signInAttempt = async () => {
-        const response = await signIn('email', 'passwoird12324');
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
-        let invalid = {};
-
         const email = form.get("email");
-        const password = form.get("password")
+        const password = form.get("password");
+        let invalid = {};
 
         if (email && !email.endsWith("@torontomu.ca")) {
             invalid.email = "Must use student email with domain @torontomu.ca";
         }
 
-
         if (Object.keys(invalid).length > 0) {
             setErrors(invalid);
         } else {
-            console.log(Array.from(form.entries()));
+            // console.log(Array.from(form.entries()));
             setErrors({});
             const [data, error] = await signIn(email, password);
              
-            console.log(data);
-            console.log(error);
+            // console.log(data);
+            // console.log(error);
             if(! error && data.success == true) {
                 toast.success(`Logged in ${email}`);
                 navigate('/');
             }
             else{
-                toast.error(`Unable to log in. ${error.error.message ?? 'Unknown reason.'}`)
+                toast.error(`Unable to log in. ${error.error.message ?? 'Unknown reason.'}`);
             }
         }
     }
+
+    useEffect(() => {
+        console.log(user);
+        if (user != null) {
+            navigate('/');
+        }
+    }, [])
+    
 
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>

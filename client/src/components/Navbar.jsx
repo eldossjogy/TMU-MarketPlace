@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import Dropdown from './Dropdown'
 import Searchbar from './Searchbar'
 import AuthContext from '../authAndContext/contextApi';
+import { MapPinIcon } from '@heroicons/react/24/solid';
+import ProfilePicture from './ProfilePicture';
 
 export default function Navbar() {
     const [location, setLocation] = useState('Toronto, ON');
@@ -66,28 +68,49 @@ export default function Navbar() {
             setDropdownOptions(authOptions);
         }
 
-        console.log(user);
-        user ? console.log(user.user.email) : console.log('');;
+        //console.log(user);
+        //user ? console.log(user.user.email) : console.log('');;
       }, []);
     
     return (
-        <nav className=" bg-slate-900 h-[8vh] w-full">
-            <div className="container mx-auto flex justify-between space-x-4 items-center py-[1vh] ">
-                <section className='flex w-[80%] shrink-0'>
-                    <section id="nav-logo" className="w-[25%] h-[6vh] flex justify-center items-center">
+        <nav className=" bg-slate-900 h-auto md:h-[8vh] w-full">
+            <div className="container mx-auto hidden md:flex flex-row justify-between space-x-4 items-center py-[1vh] ">
+                <section className='flex flex-col sm:flex-row w-[80%] shrink-0'>
+                    <section id="nav-logo" className="w-full sm:w-[25%] h-[6vh] flex justify-start sm:justify-center items-center">
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
                     </section>
-                    <section id="nav-search-group" className="w-auto flex ml-20 space-x-4 items-center justify-start">
+                    <section id="nav-search-group" className="flex flex-col sm:flex-row sm:ml-20 space-x-4 items-center justify-start">
                         <Searchbar/>
                         <section className='text-white flex justify-start items-center space-x-2'>
-                            <h2 className=' overflow-hidden text-nowrap'>{location} - {range}</h2>
+                            <h2 className=' overflow-hidden text-nowrap'>{location}</h2>
+                            <h2 className=' overflow-hidden text-nowrap'> - </h2>
+                            <h2 className=' overflow-hidden text-nowrap'>{range}</h2>
                         </section>
                     </section>
                 </section>
-                <section id="nav-account" className="flex justify-center items-center space-x-2 float-end">
-                    <div id="nav-account-header"></div>
-                    <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'}/>
+                <section id="nav-account" className="flex justify-start sm:justify-center items-center space-x-2 sm:float-end">
+                    <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
                 </section>
+            </div>
+            <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-[1vh]">
+                <section className='flex w-full items-center justify-between flex-row flex-wrap'>
+                    <section id="nav-logo-mobile" className="w-auto h-[6vh] flex justify-start sm:justify-center items-center mx-auto">
+                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
+                    </section>
+                    <section id="nav-account-mobile" className="flex justify-center items-center space-x-2 mx-auto shrink-0">
+                        <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                    </section>
+                </section>
+                <section id="nav-search-group" className="flex flex-wrap space-y-2">
+                    <Searchbar/>
+                    <section className='text-white flex items-center justify-center space-x-2'>
+                        <MapPinIcon className='h-[3vh] w-[3vh]'/>
+                        <h2 className=' overflow-hidden text-nowrap'>{location}</h2>
+                        <h2 className=' overflow-hidden text-nowrap'> - </h2>
+                        <h2 className=' overflow-hidden text-nowrap'>{range}</h2>
+                    </section>
+                </section>
+                
             </div>
         </nav>
     )

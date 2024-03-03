@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import ProfilePicture from './ProfilePicture';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
-export default function Dropdown({options, text = 'Log In'}) {
+export default function Dropdown({options, text = 'Log In', image = <ProfilePicture/>}) {
     const [show, setShow] = useState(false);
 
     if(show) {
         return (
             <div className="relative inline-block text-left">
-                <button type="button" className="flex text-lg text-white space-x-2" id="menu-button" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(!show)}}>
-                    <span className='min-w-fit'>{text}</span>
-                    <img src="./assets/avatars/12345.jpg" className="h-7 w-7 rounded-full sm:mx-0 sm:shrink-0 ring-2 ring-orange-600/60 shadow-lg" alt='profile picture'></img>
+                <button type="button" className="flex text-lg text-white space-x-2 items-center" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(!show)}}>
+                    <span className='text-ellipsis'>{text}</span>
+                    <ChevronDownIcon className='w-[4vh] h-[4vh]'/>
+                    {image}
                 </button>
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-300" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                     <DropDownSection>
@@ -24,9 +27,10 @@ export default function Dropdown({options, text = 'Log In'}) {
     else{
         return (
             <div className="relative inline-block text-left">
-                <button type="button" className="flex text-lg text-white space-x-2" id="menu-button" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(true)}}>
-                    <span>{text}</span>
-                    <img src="./assets/avatars/12345.jpg" className="h-7 w-7 rounded-full sm:mx-0 sm:shrink-0 ring-2 ring-orange-600/60 shadow-lg" alt='profile picture'></img>
+                <button type="button" className="flex text-lg text-white space-x-2 items-center" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(true)}}>
+                    <span className='text-ellipsis'>{text}</span>
+                    <ChevronDownIcon className='w-[4vh] h-[4vh]'/>
+                    {image}
                 </button>
             </div>
         )

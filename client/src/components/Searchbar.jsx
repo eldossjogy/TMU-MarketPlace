@@ -52,17 +52,18 @@ export default function Searchbar() {
     
 
     return (
-        <div className='flex z-10 space-x-2 h-[4vh] rounded-xl bg-white'>
-            <input
-                className="rounded-xl h-[4vh] w-[30vw] px-[2vw] text-left focus:outline-none" placeholder="Search here"
-                onChange={handleChange}
-                value={searchInput}
-                
-            >
-            </input>
-            <button className='flex justify-center items-center w-[4vh] h-[3vh] pr-[1vh] my-auto' onClick={() => {search()}}>
-                <MagnifyingGlassIcon/>
-            </button>
+        <div className='w-full h-[6vh] md:h-[4vh] max-h-[10vw]'>
+            <div className='flex space-x-2 h-full w-full rounded-xl bg-white'>
+                <input
+                    className="rounded-xl h-full w-full md:w-[20vw] px-[2vw] text-left focus:outline-none text-ellipsis" placeholder="Search here"
+                    onChange={handleChange}
+                    value={searchInput}
+                >
+                </input>
+                <button className='flex justify-center items-center w-[10%] pr-[1vh] my-auto' onClick={() => {search()}}>
+                    <MagnifyingGlassIcon className='w-[4vh] h-[4vh] md:w-[3vh] md:h-[3vh] max-w-[8vw] max-h-[8vw]'/>
+                </button>
+            </div>
         </div>
     )
 }
