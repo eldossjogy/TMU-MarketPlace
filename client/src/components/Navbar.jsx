@@ -10,21 +10,21 @@ export default function Navbar() {
 
     const { user } = useContext(AuthContext);
 
-    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/'}];
+    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
     const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
 
     function success(pos) {
         var crd = pos.coords;
-        console.log("Your current position is:");
-        console.log(`Latitude : ${crd.latitude}`);
-        console.log(`Longitude: ${crd.longitude}`);
-        console.log(`More or less ${crd.accuracy} meters.`);
+        // console.log("Your current position is:");
+        // console.log(`Latitude : ${crd.latitude}`);
+        // console.log(`Longitude: ${crd.longitude}`);
+        // console.log(`More or less ${crd.accuracy} meters.`);
     
         setLocation(`${crd.latitude} ${crd.longitude}`)
 
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
         fetch(GEOCODE_URL+`${crd.longitude},${crd.latitude}`).then(res => res.json()).then(res => {
-            console.log(res.address);
+            //console.log(res.address);
             setLocation(`${res.address.City}, ${res.address.RegionAbbr}`);
             setRange(`${crd.accuracy} m`)
         });
@@ -45,7 +45,7 @@ export default function Navbar() {
             navigator.permissions
             .query({ name: "geolocation" })
             .then(function (result) {
-                console.log(result);
+                //console.log(result);
                 if (result.state === "granted") {
                 //If granted then you can directly call your function here
                 navigator.geolocation.getCurrentPosition(success, errors, options);
@@ -66,7 +66,8 @@ export default function Navbar() {
             setDropdownOptions(authOptions);
         }
 
-        console.log();
+        console.log(user);
+        user ? console.log(user.user.email) : console.log('');;
       }, []);
     
     return (
@@ -85,7 +86,7 @@ export default function Navbar() {
                 </section>
                 <section id="nav-account" className="flex justify-center items-center space-x-2 float-end">
                     <div id="nav-account-header"></div>
-                    <Dropdown options={dropdownOptions}/>
+                    <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'}/>
                 </section>
             </div>
         </nav>
