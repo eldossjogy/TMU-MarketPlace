@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Dropdown from './Dropdown'
 import Searchbar from './Searchbar'
+import AuthContext from '../authAndContext/contextApi';
 
 export default function Navbar() {
     const [location, setLocation] = useState('Toronto, ON');
     const [range, setRange] = useState('60KM');
+    const [dropdownOptions, setDropdownOptions] = useState([]);
+
+    const { user } = useContext(AuthContext);
+
+    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/'}];
+    const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
 
     function success(pos) {
         var crd = pos.coords;
@@ -13,7 +20,6 @@ export default function Navbar() {
         console.log(`Longitude: ${crd.longitude}`);
         console.log(`More or less ${crd.accuracy} meters.`);
     
-        //getLocationInfo(crd.latitude, crd.longitude);
         setLocation(`${crd.latitude} ${crd.longitude}`)
 
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
@@ -22,12 +28,6 @@ export default function Navbar() {
             setLocation(`${res.address.City}, ${res.address.RegionAbbr}`);
             setRange(`${crd.accuracy} m`)
         });
-        // fetch(`https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&format=json`).then(res => res.json()).then(res => {
-        //     console.log(res);
-        //     console.log(crd);
-        //     setLocation(`${res.address.city}`);
-        //     setRange(`${crd.accuracy} m`)
-        // })
     }
 
     function errors(err) {
@@ -59,6 +59,14 @@ export default function Navbar() {
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
+
+        if(!user){
+            setDropdownOptions(unauthOptions);
+        } else{
+            setDropdownOptions(authOptions);
+        }
+
+        console.log();
       }, []);
     
     return (
@@ -77,7 +85,7 @@ export default function Navbar() {
                 </section>
                 <section id="nav-account" className="flex justify-center items-center space-x-2 float-end">
                     <div id="nav-account-header"></div>
-                    <Dropdown></Dropdown>
+                    <Dropdown options={dropdownOptions}/>
                 </section>
             </div>
         </nav>

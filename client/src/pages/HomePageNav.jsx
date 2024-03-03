@@ -21,7 +21,7 @@ export default function HomePage() {
     }
 
     return (
-        <div className="App">
+        <div >
             <Navbar></Navbar>
             <main className="container m-auto flex flex-wrap md:flex-nowrap mt-4">
                 <section id="sidebar" className="w-[20%] h-[80vh] bg-slate-300 rounded-lg shadow-lg">

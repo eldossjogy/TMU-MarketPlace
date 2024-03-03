@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
-export default function Dropdown() {
+export default function Dropdown({options}) {
     const [show, setShow] = useState(false);
-
-    let options = ['Your Market','Your Profile','Your Inbox','Saved Listings','Log out']
-
 
     if(show) {
         return (
@@ -40,7 +38,9 @@ function DropdownOption({index, content, count}) {
     let roundedStyle = index == count - 1 ? 'rounded-b-md' : 'rounded-t-md';
 
     return(
-        <a href="#" className={"text-gray-700 block px-4 py-2 text-sm hover:bg-neutral-200 " + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">{content ?? ''}</a>
+        <span className={"text-gray-700 block px-4 py-2 text-sm hover:bg-neutral-200 " + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">
+            <Link to={content.url ?? '/'} className='flex w-full h-full'>{content.name ?? ''}</Link>
+        </span>
     )
 }
 
