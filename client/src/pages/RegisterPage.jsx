@@ -48,6 +48,12 @@ export default function RegisterPage() {
         }
     }
 
+    useEffect(() => {
+        if (user != null) {
+            navigate('/');
+        }
+    }, [user])
+
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-white shadow-lg rounded-xl p-8 flex-wrap space-y-4'>

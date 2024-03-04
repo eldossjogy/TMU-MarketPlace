@@ -8,10 +8,10 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
 
     if(show) {
         return (
-            <div className="relative inline-block text-left">
-                <button type="button" className="flex text-lg text-white space-x-2 items-center" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(!show)}}>
-                    <span className='text-ellipsis'>{text}</span>
-                    <ChevronDownIcon className='w-[4vh] h-[4vh]'/>
+            <div className="relative inline-block text-left justify-end">
+                <button type="button" className="flex text-lg text-white space-x-2 items-center w-auto" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(!show)}}>
+                    <span className='pl-2 truncate shrink'>{text}</span>
+                    <ChevronDownIcon className='w-7 h-7 ml-1 shrink-0'/>
                     {image}
                 </button>
                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-300" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
@@ -26,10 +26,10 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
     }
     else{
         return (
-            <div className="relative inline-block text-left">
-                <button type="button" className="flex text-lg text-white space-x-2 items-center" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(true)}}>
-                    <span className='text-ellipsis'>{text}</span>
-                    <ChevronDownIcon className='w-[4vh] h-[4vh]'/>
+            <div className="relative inline-block text-left justify-start">
+                <button type="button" className="flex text-lg text-white space-x-2 items-center w-auto" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(true)}}>
+                    <span className='pl-2 truncate'>{text}</span>
+                    <ChevronDownIcon className='w-7 h-7 ml-1 shrink-0'/>
                     {image}
                 </button>
             </div>
@@ -38,7 +38,6 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
 }
 
 function DropdownOption({index, content, count}) {
-
     let roundedStyle = index == count - 1 ? 'rounded-b-md' : 'rounded-t-md';
 
     return(

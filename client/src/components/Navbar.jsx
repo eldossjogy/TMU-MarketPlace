@@ -28,7 +28,7 @@ export default function Navbar() {
         fetch(GEOCODE_URL+`${crd.longitude},${crd.latitude}`).then(res => res.json()).then(res => {
             //console.log(res.address);
             setLocation(`${res.address.City}, ${res.address.RegionAbbr}`);
-            setRange(`${crd.accuracy} m`)
+            setRange(`${String(crd.accuracy).substring(0,4)} m`)
         });
     }
 
@@ -70,47 +70,45 @@ export default function Navbar() {
 
         //console.log(user);
         //user ? console.log(user.user.email) : console.log('');;
-      }, []);
+      }, [user]);
     
     return (
-        <nav className=" bg-slate-900 h-auto md:h-[8vh] w-full">
-            <div className="container mx-auto hidden md:flex flex-row justify-between space-x-4 items-center py-[1vh] ">
-                <section className='flex flex-col sm:flex-row w-[80%] shrink-0'>
-                    <section id="nav-logo" className="w-full sm:w-[25%] h-[6vh] flex justify-start sm:justify-center items-center">
-                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
+        <nav className=" bg-slate-900 h-auto md:h-16 w-full">
+            <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto">
+                <section className='flex w-auto'>
+                    <section id="nav-logo" className="w-[20vw] h-12 flex justify-start items-center">
+                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto m-auto"></img>
                     </section>
-                    <section id="nav-search-group" className="flex flex-col sm:flex-row sm:ml-20 space-x-4 items-center justify-start">
+                    <section id="nav-search-group" className="flex group space-x-2 items-center justify-start">
                         <Searchbar/>
-                        <section className='text-white flex justify-start items-center space-x-2'>
-                            <h2 className=' overflow-hidden text-nowrap'>{location}</h2>
-                            <h2 className=' overflow-hidden text-nowrap'> - </h2>
-                            <h2 className=' overflow-hidden text-nowrap'>{range}</h2>
-                        </section>
+                        <div className='flex space-x-1 text-white truncate text-sm items-center'>
+                            <MapPinIcon className='h-6 w-6 shrink-0'/>
+                            <span className='truncate'>{location}</span>
+                            <span className='whitespace-nowrap'>- {range}</span>
+                        </div>
                     </section>
                 </section>
-                <section id="nav-account" className="flex justify-start sm:justify-center items-center space-x-2 sm:float-end">
-                    <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                <section id="nav-account" className="flex justify-center items-center shrink-0">
+                    <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<></>}/>
                 </section>
             </div>
-            <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-[1vh]">
-                <section className='flex w-full items-center justify-between flex-row flex-wrap'>
-                    <section id="nav-logo-mobile" className="w-auto h-[6vh] flex justify-start sm:justify-center items-center mx-auto">
+            <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
+                <section className='flex w-full items-center justify-between flex-wrap'>
+                    <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0">
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
                     </section>
-                    <section id="nav-account-mobile" className="flex justify-center items-center space-x-2 mx-auto shrink-0">
-                        <Dropdown options={dropdownOptions} text={user ? user.user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                    <section id="nav-account-mobile" className="flex space-x-2">
+                        <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
                     </section>
                 </section>
-                <section id="nav-search-group" className="flex flex-wrap space-y-2">
+                <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">
                     <Searchbar/>
-                    <section className='text-white flex items-center justify-center space-x-2'>
-                        <MapPinIcon className='h-[3vh] w-[3vh]'/>
-                        <h2 className=' overflow-hidden text-nowrap'>{location}</h2>
-                        <h2 className=' overflow-hidden text-nowrap'> - </h2>
-                        <h2 className=' overflow-hidden text-nowrap'>{range}</h2>
+                    <section className='text-white flex items-center justify-center space-x-2 overflow-hidden'>
+                        <MapPinIcon className='h-6 w-6'/>
+                        <span className='truncate'>{location}</span>
+                        <span className='whitespace-nowrap'>- {range}</span>
                     </section>
                 </section>
-                
             </div>
         </nav>
     )

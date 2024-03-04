@@ -1,12 +1,10 @@
 import React from "react";
 import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar"
-import "../index.css";
 export default function HomePage() {
   return (
-    <div className="App">
+    <>
       <Navbar/>
-
       <main className="container m-auto flex flex-wrap md:flex-nowrap mt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           <VerticalCard
@@ -29,6 +27,6 @@ export default function HomePage() {
           />
         </div>
       </main>
-    </div>
+    </>
   );
 }

@@ -15,22 +15,22 @@ function App() {
   // protected routes such as login required routes and admin dashboard route will be protected later. 
   // not a high priority right now
   return (
-    <>
-    <Toaster 
-    position="bottom-right"
-    reverseOrder={true}/>
-    <Routes>
-       <Route path = "/">
-          <Route index element={<HomePage />}/>
-          <Route path = "nav" element={<HomePageNav />}/>
-          <Route path = "my-market" element={<MyProfile />}/>
-          <Route path = "admin-dashboard" element={<AdminDashboard />}/>
-          <Route path = "/login" element={<LoginPage />}/>
-          <Route path = "/register" element={<RegisterPage />}/>
-          <Route path = "/logout" element={<LogoutPage />}/>
-        </Route>
-    </Routes>
-    </>
+    <div id="app" className="">
+      <Toaster 
+      position="bottom-right"
+      reverseOrder={true}/>
+      <Routes>
+        <Route path = "/">
+            <Route index element={<HomePage />}/>
+            <Route path = "nav" element={<HomePageNav />}/>
+            <Route path = "my-market" element={<MyProfile />}/>
+            <Route path = "admin-dashboard" element={<AdminDashboard />}/>
+            <Route path = "/login" element={<LoginPage />}/>
+            <Route path = "/register" element={<RegisterPage />}/>
+            <Route path = "/logout" element={<LogoutPage />}/>
+          </Route>
+      </Routes>
+    </div>
   );
 }
 
