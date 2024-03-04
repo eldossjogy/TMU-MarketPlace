@@ -19,6 +19,8 @@ export default function RegisterPage() {
         const form = new FormData(e.target);
         let invalid = {};
 
+        const username = form.get("username")
+
         const email = form.get("email");
         if (email && !email.endsWith("@torontomu.ca")) {
             invalid.email = "Must use student email with domain @torontomu.ca";
@@ -32,12 +34,12 @@ export default function RegisterPage() {
         if (Object.keys(invalid).length > 0) {
             setErrors(invalid);
         } else {
-            console.log(Array.from(form.entries()));
+            // console.log(Array.from(form.entries()));
             setErrors({});
-            const [data, error] = await registerNewAccount(email, password);
+            const [data, error] = await registerNewAccount(email, password, username);
              
-            console.log(data);
-            console.log(error);
+            // console.log(data);
+            // console.log(error);
             if(! error && data.success == true) {
                 toast.success(`Successfully registered as ${email}`);
                 navigate('/');

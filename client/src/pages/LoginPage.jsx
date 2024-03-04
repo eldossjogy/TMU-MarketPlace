@@ -34,16 +34,16 @@ export default function LoginPage() {
             }
             else{
                 toast.error(`Unable to log in. ${error.error.message ?? 'Unknown reason.'}`);
+                // console.log(error);
             }
         }
     }
 
     useEffect(() => {
-        console.log(user);
         if (user != null) {
             navigate('/');
         }
-    }, [])
+    }, [user])
     
 
     return (

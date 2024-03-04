@@ -91,7 +91,7 @@ export default function Navbar() {
                     </section>
                 </section>
                 <section id="nav-account" className="flex justify-center items-center shrink-0">
-                    <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<></>}/>
+                    <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
                 </section>
             </div>
             <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
@@ -100,7 +100,7 @@ export default function Navbar() {
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
                     </section>
                     <section id="nav-account-mobile" className="flex space-x-2">
-                        <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                        <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
                     </section>
                 </section>
                 <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">

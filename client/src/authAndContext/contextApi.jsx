@@ -36,12 +36,20 @@ export const AuthProvider = ({ children }) => {
     
 
 
-    async function registerNewAccount(email, password) {
+    async function registerNewAccount(email, password, username) {
         console.log(`${email} ${password}`);
         try {
             const { data, error } = await supabase.auth.signUp({
                 email: email,
                 password: password,
+                options: {
+                    data: {
+                        avatar_url: '',
+                        name: username,
+                        postal_code: '',
+                        role_id: 1
+                    },
+                },
             });
             if( error ) return [null, {success: false, message:'Not Registered', error: error}];
             else {
