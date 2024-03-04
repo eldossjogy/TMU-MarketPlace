@@ -14,7 +14,7 @@ export default function Navbar() {
 
     const navigate = useNavigate();
 
-    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
+    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/settings'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
     const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
 
     function success(pos) {
