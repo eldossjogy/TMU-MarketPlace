@@ -4,13 +4,15 @@ import Searchbar from './Searchbar'
 import AuthContext from '../authAndContext/contextApi';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
     const [location, setLocation] = useState('Toronto, ON');
     const [range, setRange] = useState('60KM');
     const [dropdownOptions, setDropdownOptions] = useState([]);
-
     const { user } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
     const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
@@ -76,7 +78,7 @@ export default function Navbar() {
         <nav className=" bg-slate-900 h-auto md:h-16 w-full">
             <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto">
                 <section className='flex w-auto'>
-                    <section id="nav-logo" className="w-[20vw] h-12 flex justify-start items-center">
+                    <section id="nav-logo" className="w-[20vw] h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto m-auto"></img>
                     </section>
                     <section id="nav-search-group" className="flex group space-x-2 items-center justify-start">
@@ -94,7 +96,7 @@ export default function Navbar() {
             </div>
             <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
                 <section className='flex w-full items-center justify-between flex-wrap'>
-                    <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0">
+                    <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer" onClick={() => {navigate('/');}}>
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
                     </section>
                     <section id="nav-account-mobile" className="flex space-x-2">

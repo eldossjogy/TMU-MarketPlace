@@ -64,7 +64,6 @@ export const AuthProvider = ({ children }) => {
             if( error ) return [null, {success: false, message:'Not logged in', error: error}];
             else {
                 setLocalSession(data);
-                console.log(data.user);
                 setUser(data.user ? data.user : null);
                 return [{success: true, message: 'Logged in', error: null}, null];
             }
