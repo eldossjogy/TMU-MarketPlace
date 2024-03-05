@@ -9,6 +9,7 @@ export default function AccountSettings() {
   return (
     <div>
       <Navbar />
+
       <div className="flex justify-center items-center my-3 mx-3">
         <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md">
           {selectedImage && (
@@ -41,7 +42,7 @@ export default function AccountSettings() {
                   type="text"
                   name="username"
                   id=""
-                  defaultValue={user.user_metadata.name}
+                  defaultValue={user.name}
                 />
               </div>
               <div>
@@ -61,16 +62,7 @@ export default function AccountSettings() {
                   type="text"
                   name="postalCode"
                   id=""
-                  defaultValue={user.user_metadata.postal_code}
-                />
-              </div>
-              <div>
-                <label htmlFor="">Phone:</label>
-                <input
-                  type="text"
-                  name="phone"
-                  id=""
-                  defaultValue={user.user_metadata.phone}
+                  defaultValue={user.postal_code}
                 />
               </div>
             </>
