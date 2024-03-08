@@ -82,12 +82,12 @@ export const AuthProvider = ({ children }) => {
         return null;
       }
     }
-    async function downloadImage(avatarID) {
+    async function downloadImage(avatar_url) {
       try {
         const timestamp = new Date().getTime(); 
         const { data, error } = await supabase.storage
           .from("avatars")
-          .download(`${avatarID}?timestamp=${timestamp}`);
+          .download(`${avatar_url}?timestamp=${timestamp}`);
         if (error) {
           throw error;
         }
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
       console.log("cacheBuster",timestamp)
       const { data, error } = await supabase.storage
         .from("avatars")
-        .download(`avatars/${filePath}?timestamp=${timestamp}`);
+        .download(`${filePath}?timestamp=${timestamp}`);
       if (error) {
         throw error;
       }
@@ -197,7 +197,6 @@ export const AuthProvider = ({ children }) => {
   // function that uploads pfp to supbase and updates db and useStates
   async function uploadProfilePicture(file) {
     const fileExt = file.name.split(".").pop().toLowerCase();
-    // _${Math.floor(Math.random() * 2) / 1}
     const fileName = `${user.id}.${fileExt}`;
     const filePath = `${fileName}`;
 
@@ -210,22 +209,8 @@ export const AuthProvider = ({ children }) => {
         throw uploadError;
       }
 
-      // const { error: fetchError, data: data } = await supabase.storage
-      //   .from("avatars")
-      //   .getPublicUrl("avatars/" + filePath);
-      // if (uploadError) {
-      //   throw fetchError;
-      // }
-
-      // console.log("data", data);
-
       // Update profile db with file path
       updateProfile(filePath, user.id);
-
-      // const currentDate = new Date();
-      // const dateString = currentDate.toISOString();
-
-      // setProfileData((prev) => ({ ...prev, avatar_url: data.publicUrl, updated_at: dateString }));
 
       // // Download uploaded image to get its URL
       downloadImage(filePath).then((res) => {
@@ -242,9 +227,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   // use effect for when profileData changes
-  // useEffect(() => {
-  //   console.log(profileData);
-  // }, [profileData]);
+  useEffect(() => {
+    console.log(profileData);
+  }, [profileData]);
 
   return (
     <AuthContext.Provider
