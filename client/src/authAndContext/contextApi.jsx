@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
   const [profileData, setProfileData] = useState(null);
-  const [pfpURL, setPfpURL] = useState(null);
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -85,9 +84,10 @@ export const AuthProvider = ({ children }) => {
     }
     async function downloadImage(avatarID) {
       try {
+        const timestamp = new Date().getTime(); 
         const { data, error } = await supabase.storage
           .from("avatars")
-          .download(avatarID);
+          .download(`${avatarID}?timestamp=${timestamp}`);
         if (error) {
           throw error;
         }
@@ -107,7 +107,6 @@ export const AuthProvider = ({ children }) => {
           ...profileData[0],
           avatar_url: profileImage,
         };
-        setPfpURL(profileImage);
         setProfileData(combinedDict);
       }
     }
@@ -116,11 +115,13 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   // function that returns link for pfp from supabase bucket
-  async function downloadImage(avatarID) {
+  async function downloadImage(filePath) {
     try {
+      const timestamp = new Date().getTime();
+      console.log("cacheBuster",timestamp)
       const { data, error } = await supabase.storage
         .from("avatars")
-        .download(avatarID);
+        .download(`avatars/${filePath}?timestamp=${timestamp}`);
       if (error) {
         throw error;
       }
@@ -187,7 +188,7 @@ export const AuthProvider = ({ children }) => {
         .update({ avatar_url: value })
         .eq("id", userID)
         .select();
-      console.log(data, error);
+      // console.log(data, error);
     } catch (error) {
       console.error(error);
     }
@@ -196,33 +197,48 @@ export const AuthProvider = ({ children }) => {
   // function that uploads pfp to supbase and updates db and useStates
   async function uploadProfilePicture(file) {
     const fileExt = file.name.split(".").pop().toLowerCase();
+    // _${Math.floor(Math.random() * 2) / 1}
     const fileName = `${user.id}.${fileExt}`;
     const filePath = `${fileName}`;
 
     // Upload or update file in Supabase storage
-    if (file != undefined) {
+    if (file !== undefined) {
       const { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(filePath, file, { upsert: true });
       if (uploadError) {
         throw uploadError;
       }
+
+      // const { error: fetchError, data: data } = await supabase.storage
+      //   .from("avatars")
+      //   .getPublicUrl("avatars/" + filePath);
+      // if (uploadError) {
+      //   throw fetchError;
+      // }
+
+      // console.log("data", data);
+
+      // Update profile db with file path
+      updateProfile(filePath, user.id);
+
+      // const currentDate = new Date();
+      // const dateString = currentDate.toISOString();
+
+      // setProfileData((prev) => ({ ...prev, avatar_url: data.publicUrl, updated_at: dateString }));
+
+      // // Download uploaded image to get its URL
+      downloadImage(filePath).then((res) => {
+        const currentDate = new Date();
+        const dateString = currentDate.toISOString();
+
+        // Update profile and user state
+        setProfileData((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
+        setUser((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
+      });
     } else {
       alert("Invalid image upload");
     }
-
-    console.log(filePath);
-
-    // update profile db with file path
-    updateProfile(filePath, user.id);
-    // update user state (this does not work)
-    downloadImage(filePath).then((res) =>{
-    console.log("Res:>,",res)
-    const currentDate = new Date();
-    const dateString = currentDate.toISOString();
-    setProfileData((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
-    setUser((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
-  });
   }
 
   // use effect for when profileData changes
