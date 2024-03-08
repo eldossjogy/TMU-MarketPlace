@@ -38,7 +38,7 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
 }
 
 function DropdownOption({index, content, count}) {
-    let roundedStyle = index == count - 1 ? 'rounded-b-md' : 'rounded-t-md';
+    let roundedStyle = index === count - 1 ? 'rounded-b-md' : 'rounded-t-md';
 
     return(
         <span className={"text-gray-700 block px-4 py-2 text-sm hover:bg-neutral-200 " + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">

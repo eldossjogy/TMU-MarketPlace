@@ -1,5 +1,5 @@
 import "./index.css";
-import React, {useContext} from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from "./pages/HomePage";
 import HomePageNav from "./pages/HomePageNav";

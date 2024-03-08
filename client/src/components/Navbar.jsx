@@ -75,18 +75,17 @@ export default function Navbar() {
       }, [user]);
     
     return (
-        <nav className=" bg-slate-900 h-auto md:h-16 w-full">
-            <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto">
+        <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
+            <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto lg:max-w-[90%]">
                 <section className='flex w-auto'>
                     <section id="nav-logo" className="w-[20vw] h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
                         <img src="./assets/logo.png" alt="logo" className="h-full w-auto m-auto"></img>
                     </section>
-                    <section id="nav-search-group" className="flex group space-x-2 items-center justify-start">
-                        <Searchbar/>
-                        <div className='flex space-x-1 text-white truncate text-sm items-center'>
+                    <section id="nav-search-group" className="flex md:w-[30vw] group space-x-2 items-center justify-start">
+                        <Searchbar location={location}/>
+                        <div className='flex space-x-1 text-white text-sm items-center'>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
-                            <span className='truncate'>{location}</span>
-                            <span className='whitespace-nowrap'>- {range}</span>
+                            <span className='whitespace-nowrap'>{range}</span>
                         </div>
                     </section>
                 </section>

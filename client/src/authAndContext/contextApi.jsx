@@ -10,32 +10,24 @@ export const AuthProvider = ({ children }) => {
 
     // use effect that subscribes to supabase user events such as on sign in, sign out, etc
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setLocalSession(session);
-        });
-
         const {data} = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT') {
+            console.log(event);
+            if (event === 'INITIAL_SESSION') {
+            } else if (event === 'SIGNED_OUT') {
                 setLocalSession(null)
-                setUser(null);
             } 
             else {
                 setLocalSession(session)
-                setUser(localSession ? (localSession.user ? localSession.user : null ) : null);
             }
         });
 
         return () => data.subscription.unsubscribe()
-
-    }, [])
+    }, []);
 
     useEffect(() => {
         setUser(localSession ? (localSession.user ? localSession.user : null ) : null);
-      
-    }, [localSession])
+    }, [localSession]);
     
-
-
     async function registerNewAccount(email, password, username) {
         console.log(`${email} ${password}`);
         try {
@@ -53,8 +45,8 @@ export const AuthProvider = ({ children }) => {
             });
             if( error ) return [null, {success: false, message:'Not Registered', error: error}];
             else {
-                setLocalSession(data);
-                setUser(data ? (data.user ? data.user : null ) : null);
+                // setLocalSession(data);
+                // setUser(data ? (data.user ? data.user : null ) : null);
                 //console.log(data);
                 return [{success: true, message: 'Registered', error: null}, null];
             }
@@ -71,8 +63,8 @@ export const AuthProvider = ({ children }) => {
             });
             if( error ) return [null, {success: false, message:'Not logged in', error: error}];
             else {
-                setLocalSession(data);
-                setUser(data.user ? data.user : null);
+                // setLocalSession(data);
+                // setUser(data.user ? data.user : null);
                 return [{success: true, message: 'Logged in', error: null}, null];
             }
         }
@@ -86,8 +78,8 @@ export const AuthProvider = ({ children }) => {
             const { error } = await supabase.auth.signOut({ scope: 'local' });
             if( error ) return [null, {success: false, message:'Not logged out', error: error}];
             else {
-                setLocalSession(null);
-                setUser(null);
+                // setLocalSession(null);
+                // setUser(null);
                 return [{success: true, message: 'Logged out', error: null}, null];
             }
         }

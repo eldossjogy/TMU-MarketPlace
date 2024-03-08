@@ -5,8 +5,8 @@ export default function HomePage() {
   return (
     <>
       <Navbar/>
-      <main className="container m-auto flex flex-wrap md:flex-nowrap mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
           <VerticalCard
             image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
             title={"Mazda RX-7"}
@@ -24,6 +24,56 @@ export default function HomePage() {
             location={"Toronto, ON"}
             description={"This is a bike"}
             postID={2}
+          />
+          <VerticalCard
+            image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+            title={"Mazda RX-7"}
+            price={"30,000"}
+            location={"Toronto, ON"}
+            description={
+              "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
+            }
+            postID={1}
+          />
+          <VerticalCard
+            image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+            title={"Mazda RX-7"}
+            price={"30,000"}
+            location={"Toronto, ON"}
+            description={
+              "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
+            }
+            postID={1}
+          />
+          <VerticalCard
+            image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+            title={"Mazda RX-7"}
+            price={"30,000"}
+            location={"Toronto, ON"}
+            description={
+              "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
+            }
+            postID={1}
+          />
+          <VerticalCard
+            image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+            title={"Mazda RX-7"}
+            price={"30,000"}
+            location={"Toronto, ON"}
+            description={
+              "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
+            }
+            postID={1}
+          />
+          <VerticalCard
+            image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+            title={"Mazda RX-7"}
+            price={"30,000"}
+            location={"Toronto, ON"}
+            description={
+              "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
+            }
+            postID={1}
           />
         </div>
       </main>

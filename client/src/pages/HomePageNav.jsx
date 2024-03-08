@@ -10,6 +10,7 @@ export default function HomePage() {
 
     useEffect(() => {
         initFilters();
+        initCategories();
     }, []);
 
     async function initFilters() {
@@ -42,7 +43,7 @@ export default function HomePage() {
                             <ToolbarButton primary={false} value={"Supplies"} />
 
                             {categories.map((element, index) => (
-                                <ToolbarButton primary={index == 0 ? true : false} value={element.name} key={index} />
+                                <ToolbarButton primary={index === 0 ? true : false} value={element.name} key={index} />
                             ))}
                         </div>
                         <div id="controls">
