@@ -1,36 +1,58 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import AuthContext from "../authAndContext/contextApi";
- 
+
 export default function AccountSettings() {
   const [selectedImage, setSelectedImage] = useState(null);
   const { uploadProfilePicture, user } = useContext(AuthContext);
- 
+  const [userName, setUserName] = useState("");
+  const [postCode, setPostCode] = useState("");
+
+  // use effect updates when user changes
+  useEffect(() => {
+    if (user) {
+      setUserName(user.name);
+      setPostCode(user.postal_code);
+    }
+  }, [user]);
+
+
+  function updateUserData(){
+    uploadProfilePicture(selectedImage)
+  }
+  
+
   return (
     <div>
       <Navbar />
 
       <div className="flex justify-center items-center my-3 mx-3">
         <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md">
-          {selectedImage && (
-            <img
-              alt="not found"
-              width={"250px"}
-              src={URL.createObjectURL(selectedImage)}
-            />
-          )}
-          {user && (
-            <img alt="not found" width={"250px"} src={user.avatar_url} />
-          )}
+          <div className="flex justify-evenly">
+            {selectedImage && (
+              <div>
+                {"Selected Image"}
+                <img
+                  alt="not found"
+                  width={"250px"}
+                  src={URL.createObjectURL(selectedImage)}
+                />
+              </div>
+            )}
+            {user && (
+              <div>
+                {"Database Image"}
+                <img alt="not found" width={"250px"} src={user.avatar_url} />
+              </div>
+            )}
+          </div>
           <input
             type="file"
             id="avatar"
             name="avatar"
             accept="image/png, image/jpeg"
             onChange={(event) => {
-              console.log(event.target.files[0]);
               setSelectedImage(event.target.files[0]);
-              // uploadProfilePicture(event.target.files[0]);
             }}
           />
 
@@ -67,6 +89,13 @@ export default function AccountSettings() {
               </div>
             </>
           )}
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={updateUserData}
+          >
+            Update
+          </button>
         </div>
       </div>
     </div>

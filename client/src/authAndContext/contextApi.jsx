@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [pfpURL, setPfpURL] = useState(null);
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -106,6 +107,7 @@ export const AuthProvider = ({ children }) => {
           ...profileData[0],
           avatar_url: profileImage,
         };
+        setPfpURL(profileImage);
         setProfileData(combinedDict);
       }
     }
@@ -193,40 +195,40 @@ export const AuthProvider = ({ children }) => {
 
   // function that uploads pfp to supbase and updates db and useStates
   async function uploadProfilePicture(file) {
-    // I dont like the naming convention
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${user.id.replaceAll("-", "_")}.${fileExt}`;
+    const fileExt = file.name.split(".").pop().toLowerCase();
+    const fileName = `${user.id}.${fileExt}`;
     const filePath = `${fileName}`;
 
-    // fix this
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(filePath, file);
-    if (uploadError) {
-      const { data, error } = await supabase.storage
+    // Upload or update file in Supabase storage
+    if (file != undefined) {
+      const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .update(filePath, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-      console.log(data, error);
-
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) {
+        throw uploadError;
+      }
+    } else {
+      alert("Invalid image upload");
     }
 
     console.log(filePath);
 
-    // update profile db link
+    // update profile db with file path
     updateProfile(filePath, user.id);
     // update user state (this does not work)
-    let link = await downloadImage(filePath);
-    console.log("UPDATE", link);
-    setProfileData({ ...profileData, avatar_url: link });
+    downloadImage(filePath).then((res) =>{
+    console.log("Res:>,",res)
+    const currentDate = new Date();
+    const dateString = currentDate.toISOString();
+    setProfileData((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
+    setUser((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
+  });
   }
 
   // use effect for when profileData changes
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
+  // useEffect(() => {
+  //   console.log(profileData);
+  // }, [profileData]);
 
   return (
     <AuthContext.Provider
