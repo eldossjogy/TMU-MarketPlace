@@ -91,7 +91,7 @@ export default function Navbar() {
                     </section>
                 </section>
                 <section id="nav-account" className="flex justify-center items-center shrink-0">
-                    <Dropdown options={dropdownOptions} text={user ? user.email ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                    <Dropdown options={dropdownOptions} text={user ? user.name ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
                 </section>
             </div>
             <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
