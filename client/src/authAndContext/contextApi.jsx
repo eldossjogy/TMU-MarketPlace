@@ -29,13 +29,13 @@ export const AuthProvider = ({ children }) => {
 
     }, [])
 
+    // use effect that updates the user state when local session exists
     useEffect(() => {
         setUser(localSession ? (localSession.user ? localSession.user : null ) : null);
-      
     }, [localSession])
     
 
-
+    // function for registering new account
     async function registerNewAccount(email, password, username) {
         console.log(`${email} ${password}`);
         try {
@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    // function for sign in to account
     async function signIn(email, password) {
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
@@ -81,6 +82,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    // function for signing out of account
     async function signOut() {
         try {
             const { error } = await supabase.auth.signOut({ scope: 'local' });
