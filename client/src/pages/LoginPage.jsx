@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
-    const {signIn, user} = useContext(AuthContext);
+    const {signIn, user} = useContext(AuthContext); //signin function
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
