@@ -23,13 +23,17 @@ function App() {
       <Routes>
         <Route path = "/">
             <Route index element={<HomePage />}/>
-            <Route path = "nav" element={<HomePageNav />}/>
-            <Route path = "my-market" element={<MyProfile />}/>
             <Route path = "admin-dashboard" element={<AdminDashboard />}/>
             <Route path = "/login" element={<LoginPage />}/>
             <Route path = "/register" element={<RegisterPage />}/>
             <Route path = "/logout" element={<LogoutPage />}/>
-            <Route path="/settings" element={<AccountSettings />} />s
+            <Route path="/settings" element={<AccountSettings />} />
+            <Route path = "/my-market">
+              <Route index element={<MyProfile />} />
+              <Route path="sold-listings" element={<HomePage />} />
+              <Route path="create-listings" element={<HomePage />} />
+              <Route path="repost-listings" element={<HomePage />} />
+            </Route>
           </Route>
       </Routes>
     </div>
