@@ -10,6 +10,7 @@ import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import { Toaster } from 'react-hot-toast';
 import AccountSettings from "./pages/AccountSettings";
+import CreateListings from "./pages/CreateListings";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
             <Route path = "/my-market">
               <Route index element={<MyProfile />} />
               <Route path="sold-listings" element={<HomePage />} />
-              <Route path="create-listings" element={<HomePage />} />
+              <Route path="create-listings" element={<CreateListings />} />
               <Route path="repost-listings" element={<HomePage />} />
             </Route>
           </Route>

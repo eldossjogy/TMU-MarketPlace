@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [loadingState, setLoadingState] = useState(false)
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -248,6 +249,8 @@ export const AuthProvider = ({ children }) => {
         localSession,
         user: profileData,
         uploadProfilePicture,
+        loadingState, 
+        setLoadingState
       }}
     >
       {children}
