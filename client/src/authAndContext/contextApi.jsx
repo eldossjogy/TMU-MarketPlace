@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         const url = URL.createObjectURL(data);
         return url;
       } catch (error) {
-        alert("Error downloading image: ", error.message);
+        alert("Error downloading image: ", error);
       }
     }
     async function fetchProfile() {
@@ -235,16 +235,18 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
         {
-          listingInfo
+          ...listingInfo
         },
         {
           headers: {
-          Authorization: localSession.token_type + ' ' + localSession.access_token
+            Authorization: 'Bearer ' + localSession.access_token
           }
         }
       )
+      const newListing = response.data[0]
+
     } catch (error) {
-      alert(error)
+      alert(error.message)
     }
   }
 
@@ -259,7 +261,8 @@ export const AuthProvider = ({ children }) => {
         uploadProfilePicture,
         loadingState, 
         setLoadingState,
-        createNewListing
+        createNewListing,
+        user
       }}
     >
       {children}

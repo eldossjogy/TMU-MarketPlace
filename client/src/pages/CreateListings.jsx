@@ -5,7 +5,7 @@ import AuthContext from '../authAndContext/contextApi'
 
 export default function CreateListings() {
 
-    const { createNewListing ,loadingState, setLoadingState } = useContext(AuthContext)
+    const { createNewListing ,loadingState, setLoadingState, user } = useContext(AuthContext)
     const navigate = useNavigate()
     const [postTitle, setPostTitle] = useState('')
     const [postDescription, setPostDescription] = useState('')
@@ -13,8 +13,7 @@ export default function CreateListings() {
     const [selectedImages, setSelectedImages] = useState([]);
 
     const [formData, setFormData] = useState({title: "Nissan GTR", price: 250000, description: "This is my Nissan GTR. Eldoss owns it so please dont steal it", 
-    post_time: getCurrentDateTime(0), expiry_time: getCurrentDateTime(48), postal_code: "M4C9P9", 
-    location:"Toronto"})
+    expire_time: getCurrentDateTime(48), postal_code: "M4C9P9", location:"101 Markham Road", category_id: 2, user_id: user?.id})
 
 
     useEffect(() => {
@@ -49,7 +48,7 @@ export default function CreateListings() {
       
         const formattedDateTime = `${year}-${month}-${day} ${hours % 12}:${minutes}:${seconds} ${ampm}`;
         return formattedDateTime;
-      }
+    }
 
 
     async function handleNewPost(event) {
