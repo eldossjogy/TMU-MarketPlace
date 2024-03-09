@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import supabase from "./supabaseConfig";
+import axios from 'axios'
 
 const AuthContext = createContext();
 
@@ -47,7 +48,7 @@ export const AuthProvider = ({ children }) => {
           .eq("id", userID);
         return profile;
       } catch (error) {
-        console.log(error);
+        alert(error);
         return null;
       }
     }
@@ -63,10 +64,9 @@ export const AuthProvider = ({ children }) => {
         const url = URL.createObjectURL(data);
         return url;
       } catch (error) {
-        console.log("Error downloading image: ", error.message);
+        alert("Error downloading image: ", error.message);
       }
     }
-
     async function fetchProfile() {
       if (user) {
         const profileData = await getProfile(user.id);
@@ -79,18 +79,11 @@ export const AuthProvider = ({ children }) => {
         setProfileData(combinedDict);
       }
     }
-
     fetchProfile();
   }, [user]);
 
-  // use effect for when profileData changes
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
-
   // function for registering new account
   async function registerNewAccount(email, password, username) {
-    console.log(`${email} ${password}`);
     try {
       const { data, error } = await supabase.auth.signUp({
         email: email,
@@ -112,7 +105,6 @@ export const AuthProvider = ({ children }) => {
       else {
         setLocalSession(data);
         setUser(data ? (data.user ? data.user : null) : null);
-        //console.log(data);
         return [{ success: true, message: "Registered", error: null }, null];
       }
     } catch (error) {
@@ -172,7 +164,6 @@ export const AuthProvider = ({ children }) => {
   async function downloadImage(filePath) {
     try {
       const timestamp = new Date().getTime();
-      console.log("cacheBuster", timestamp);
       const { data, error } = await supabase.storage
         .from("avatars")
         .download(`${filePath}?timestamp=${timestamp}`);
@@ -182,7 +173,7 @@ export const AuthProvider = ({ children }) => {
       const url = URL.createObjectURL(data);
       return url;
     } catch (error) {
-      console.log("Error downloading image: ", error.message);
+      alert("Error downloading image: ", error.message);
     }
   }
 
@@ -196,7 +187,7 @@ export const AuthProvider = ({ children }) => {
         .select();
       // console.log(data, error);
     } catch (error) {
-      console.error(error);
+      alert(error);
     }
   }
 
@@ -240,6 +231,23 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function createNewListing(listingInfo, imageList) {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
+        {
+          listingInfo
+        },
+        {
+          headers: {
+          Authorization: localSession.token_type + ' ' + localSession.access_token
+          }
+        }
+      )
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -250,7 +258,8 @@ export const AuthProvider = ({ children }) => {
         user: profileData,
         uploadProfilePicture,
         loadingState, 
-        setLoadingState
+        setLoadingState,
+        createNewListing
       }}
     >
       {children}

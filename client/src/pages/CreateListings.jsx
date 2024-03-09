@@ -5,18 +5,22 @@ import AuthContext from '../authAndContext/contextApi'
 
 export default function CreateListings() {
 
-    const { loadingState, setLoadingState } = useContext(AuthContext)
+    const { createNewListing ,loadingState, setLoadingState } = useContext(AuthContext)
     const navigate = useNavigate()
     const [postTitle, setPostTitle] = useState('')
     const [postDescription, setPostDescription] = useState('')
     const [imageList, setImageList] = useState([])
     const [selectedImages, setSelectedImages] = useState([]);
-    let bool = true
+
+    const [formData, setFormData] = useState({title: "Nissan GTR", price: 250000, description: "This is my Nissan GTR. Eldoss owns it so please dont steal it", 
+    post_time: getCurrentDateTime(0), expiry_time: getCurrentDateTime(48), postal_code: "M4C9P9", 
+    location:"Toronto"})
+
 
     useEffect(() => {
 
         if (imageList.length !== 0) {
-            //converting the fileList object (array, but dont use array functions such as .forEach()) to an array
+            //converting the fileList object to an array
             const imgList = Array.from(imageList)
 
             imgList.forEach((image) => {
@@ -25,16 +29,33 @@ export default function CreateListings() {
                 reader.onload = (e) => {
                     setSelectedImages(prev => [...prev, e.target.result])
                 };
-
                 reader.readAsDataURL(image)
             });
         }
 
     }, [imageList])
 
-    const handleNewPost = async (event) => {
+    function getCurrentDateTime(offset) {
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + offset);
+      
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const hours = String(currentDate.getHours()).padStart(2, '0');
+        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+        const formattedDateTime = `${year}-${month}-${day} ${hours % 12}:${minutes}:${seconds} ${ampm}`;
+        return formattedDateTime;
+      }
+
+
+    async function handleNewPost(event) {
 
         event.preventDefault()
+        /*
         if (postDescription.length === 0 || postTitle === 0) {
            alert('Please enter post title and description')
         }
@@ -43,10 +64,12 @@ export default function CreateListings() {
             //await createNewPostReq(postDescription, postTitle, imageList)
             alert("came here")
         }
+        */
 
+        await createNewListing(formData, imageList)
     }
 
-    const checkFileForImage = (files) => {
+    function checkFileForImage(files) {
         if (files.length <= 4) {
             const imageArr = []
             for (let i = 0; i < files.length; i++) {
@@ -77,6 +100,9 @@ export default function CreateListings() {
                 multiple
                 onChange={(e) => checkFileForImage(e.target.files)} 
             />
+            <button onClick={handleNewPost} className="btn overflow-hidden relative w-64 bg-blue-500 text-white py-4 px-4 rounded-xl font-bold uppercase -- before:block before:absolute before:h-full before:w-1/2 before:rounded-full before:bg-orange-400 before:top-0 before:left-1/4 before:transition-transform before:opacity-0 before:hover:opacity-100 hover:text-orange-200 hover:before:animate-ping transition-all duration-300">
+                <span className="relative">Button</span>
+            </button>
         </div>
         {loadingState &&
             <div className="editItemModalContainer2 flex justify-center items-center flex-col">
