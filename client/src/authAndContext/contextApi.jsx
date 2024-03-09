@@ -36,38 +36,6 @@ export const AuthProvider = ({ children }) => {
     );
   }, [localSession]);
 
-  // function for registering new account
-  async function registerNewAccount(email, password, username) {
-    console.log(`${email} ${password}`);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            avatar_url: "",
-            name: username,
-            postal_code: "",
-            role_id: 1,
-          },
-        },
-      });
-      if (error)
-        return [
-          null,
-          { success: false, message: "Not Registered", error: error },
-        ];
-      else {
-        setLocalSession(data);
-        setUser(data ? (data.user ? data.user : null) : null);
-        //console.log(data);
-        return [{ success: true, message: "Registered", error: null }, null];
-      }
-    } catch (error) {
-      return [null, { success: false, message: null, error: error }];
-    }
-  }
-
   // use effect that updates the profileData with data from profile db and pfp link
   useEffect(() => {
     async function getProfile(userID) {
@@ -84,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     }
     async function downloadImage(avatar_url) {
       try {
-        const timestamp = new Date().getTime(); 
+        const timestamp = new Date().getTime();
         const { data, error } = await supabase.storage
           .from("avatars")
           .download(`${avatar_url}?timestamp=${timestamp}`);
@@ -114,21 +82,40 @@ export const AuthProvider = ({ children }) => {
     fetchProfile();
   }, [user]);
 
-  // function that returns link for pfp from supabase bucket
-  async function downloadImage(filePath) {
+  // use effect for when profileData changes
+  useEffect(() => {
+    console.log(profileData);
+  }, [profileData]);
+
+  // function for registering new account
+  async function registerNewAccount(email, password, username) {
+    console.log(`${email} ${password}`);
     try {
-      const timestamp = new Date().getTime();
-      console.log("cacheBuster",timestamp)
-      const { data, error } = await supabase.storage
-        .from("avatars")
-        .download(`${filePath}?timestamp=${timestamp}`);
-      if (error) {
-        throw error;
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            avatar_url: "",
+            name: username,
+            postal_code: "",
+            role_id: 1,
+          },
+        },
+      });
+      if (error)
+        return [
+          null,
+          { success: false, message: "Not Registered", error: error },
+        ];
+      else {
+        setLocalSession(data);
+        setUser(data ? (data.user ? data.user : null) : null);
+        //console.log(data);
+        return [{ success: true, message: "Registered", error: null }, null];
       }
-      const url = URL.createObjectURL(data);
-      return url;
     } catch (error) {
-      console.log("Error downloading image: ", error.message);
+      return [null, { success: false, message: null, error: error }];
     }
   }
 
@@ -180,6 +167,24 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // function that returns link for pfp from supabase bucket
+  async function downloadImage(filePath) {
+    try {
+      const timestamp = new Date().getTime();
+      console.log("cacheBuster", timestamp);
+      const { data, error } = await supabase.storage
+        .from("avatars")
+        .download(`${filePath}?timestamp=${timestamp}`);
+      if (error) {
+        throw error;
+      }
+      const url = URL.createObjectURL(data);
+      return url;
+    } catch (error) {
+      console.log("Error downloading image: ", error.message);
+    }
+  }
+
   // function that updates the pfp link in profile db
   async function updateProfile(value, userID) {
     try {
@@ -218,18 +223,21 @@ export const AuthProvider = ({ children }) => {
         const dateString = currentDate.toISOString();
 
         // Update profile and user state
-        setProfileData((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
-        setUser((prev) => ({ ...prev, avatar_url: res, updated_at: dateString }));
+        setProfileData((prev) => ({
+          ...prev,
+          avatar_url: res,
+          updated_at: dateString,
+        }));
+        setUser((prev) => ({
+          ...prev,
+          avatar_url: res,
+          updated_at: dateString,
+        }));
       });
     } else {
       alert("Invalid image upload");
     }
   }
-
-  // use effect for when profileData changes
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
 
   return (
     <AuthContext.Provider
