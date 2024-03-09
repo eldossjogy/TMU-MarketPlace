@@ -18,7 +18,9 @@ export default function AccountSettings() {
 
 
   function updateUserData(){
-    uploadProfilePicture(selectedImage)
+    if (selectedImage){
+      uploadProfilePicture(selectedImage)
+    }
   }
   
 
