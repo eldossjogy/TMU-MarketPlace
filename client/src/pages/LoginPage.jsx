@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
-    const {signIn, user} = useContext(AuthContext); //signin function
+    const {signIn, user} = useContext(AuthContext); //Signin function
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
@@ -48,16 +48,16 @@ export default function LoginPage() {
 
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>
-            <form onSubmit={handleSubmit} className='flex bg-white shadow-lg rounded-xl p-8 flex-wrap space-y-4'>
-                <h2 className='w-full text-xl'>Log in</h2>
+            <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] p-8 flex-wrap space-y-4 justify-center'>
+                <h2 className='w-full text-xl text-center'>Logo</h2>
                 <section className='w-full space-y-2'>
                     <div className='flex-col w-[80%]'>
-                        <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400'>(must use TMU email)</span></label>
+                        <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400'>(Must use TMU Email)</span></label>
                         <input  type="email" name="email"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
                             placeholder="name@torontomu.ca" required>
                         </input>
-                        {errors.email && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.email}</div>}
+                        {errors.email && <div className={"mb-2 text-sm font-medium text-red-600 text-wrap"}>{errors.email}</div>}
                     </div>
                     <div className='flex-col w-[80%]'>
                         <label htmlFor={"password"} className={"block mb-2 text-sm font-medium text-gray-900"}>Password</label>
@@ -69,7 +69,7 @@ export default function LoginPage() {
                     </div>
                 </section>
                 <section className='flex flex-col space-y-3'>
-                    <button className={" bg-sky-500 rounded w-32 shadow hover:bg-sky-600 text-white py-2"} type='submit'>Submit</button>
+                    <button className={" bg-sky-500 rounded w-32 shadow hover:bg-sky-600 text-white py-2"} type='submit'>Log in</button>
                     <Link to={'/register'} className='hover:underline'>{'Not registered?'}</Link>
                 </section>
             </form>
