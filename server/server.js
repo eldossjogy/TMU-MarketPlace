@@ -5,8 +5,8 @@ import http from 'http'
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
-dotenv.config();
 
 const app = express();
 const port = process.env.port || 5000;
@@ -17,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use('/home', homeRoutes);
 
