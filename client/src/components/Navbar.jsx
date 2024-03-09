@@ -36,7 +36,7 @@ export default function Navbar() {
                         <Searchbar location={city}/>
                         <div className='flex space-x-1 text-white text-sm items-center'>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
-                            <span className='whitespace-nowrap'>{range}</span>
+                            <span className='whitespace-nowrap'>{range}m</span>
                         </div>
                     </section>
                 </section>
@@ -55,10 +55,9 @@ export default function Navbar() {
                 </section>
                 <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">
                     <Searchbar/>
-                    <section className='text-white flex items-center justify-center overflow-hidden'>
+                    <section className='text-white flex items-center justify-center overflow-hidden space-x-2'>
                         <MapPinIcon className='h-6 w-6'/>
-                        <span className='truncate'>{city + (city === '' ? '' : ' - ')}</span>
-                        <span className='whitespace-nowrap'>{range}</span>
+                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range}M</span>
                     </section>
                 </section>
             </div>

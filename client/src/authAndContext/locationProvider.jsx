@@ -6,9 +6,9 @@ const LocationContext = createContext();
 export const LocationProvider = ({ children }) =>  {
 
         // Parameters from local storage
-    const [location, setLocation] = useState(null);
-    const [city, setCity] = useState("Toronto, ON");
-    const [range, setRange] = useState('60KM');
+    const [location, setLocation] = useState({lat:43.65775180503111,lng:-79.3786619239608});
+    const [city, setCity] = useState("Toronto, ON ");
+    const [range, setRange] = useState(500);
 
     useEffect(() => {
         getLocation();
@@ -53,7 +53,7 @@ export const LocationProvider = ({ children }) =>  {
         setLocation(pos);
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
         fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
-            setCity(`${res.address.City != '' ? `${res.address.City}, ` : ''}${res.address.RegionAbbr}`);
+            setCity(`${res.address.City != '' ? `${res.address.City},` : ''} ${res.address.RegionAbbr} `);
         });
     }
 
