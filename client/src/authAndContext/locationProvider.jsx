@@ -4,26 +4,20 @@ import toast from 'react-hot-toast';
 const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) =>  {
-
-        // Parameters from local storage
-    const [location, setLocation] = useState({lat:43.65775180503111,lng:-79.3786619239608});
-    const [city, setCity] = useState("Toronto, ON ");
-    const [range, setRange] = useState(500);
+    const [isReady, setIsReady] = useState(false);
+    const [location, setLocation] = useState({lat:0,lng:0});
+    const [city, setCity] = useState("");
+    const [range, setRange] = useState(5000);
 
     useEffect(() => {
         getLocation();
     }, []);
 
-    useEffect(() => {
-        if(location == null) return;
-        localStorage.setItem("location", JSON.stringify(location));
-        console.log("Set location in storage");
-    }, [location])
-
     // Gets IP address location from browser and forwards it to generateLocation(pos)
-    function getLocation() {
+    async function getLocation() {
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by this browser.");
+            generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
             return;
         }
 
@@ -31,7 +25,7 @@ export const LocationProvider = ({ children }) =>  {
             if (result.state === "denied") {
                 //If denied then you have to show instructions to enable location
                 toast.error(`You did not allow location access.`);
-                setLocation({lat: 43.65775180503111, lng:-79.3786619239608})
+                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608})
             } else{
                 //If prompt then the user will be asked to give permission or location was already granted 
                 navigator.geolocation.getCurrentPosition(
@@ -53,8 +47,10 @@ export const LocationProvider = ({ children }) =>  {
         setLocation(pos);
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
         fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
-            setCity(`${res.address.City != '' ? `${res.address.City},` : ''} ${res.address.RegionAbbr} `);
+            setCity(`${res.address.City != '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr != '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
         });
+
+        setIsReady(true);
     }
 
     // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
@@ -63,8 +59,8 @@ export const LocationProvider = ({ children }) =>  {
     }
 
     return (
-        <LocationContext.Provider value={{location, city, range, setRange, generateLocation}} >
-            {children}
+        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation}} >
+            {isReady ? children : null}
         </LocationContext.Provider>
     )
 }

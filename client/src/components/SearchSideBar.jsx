@@ -28,9 +28,8 @@ export default function SearchSideBar() {
                 </div>
                 <div></div>
                 <div></div>
-                <div className=" aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400" id="map">
-                    <LocationPicker />
-                </div>
+
+                <LocationPicker />
             </section>
         </div>
     )

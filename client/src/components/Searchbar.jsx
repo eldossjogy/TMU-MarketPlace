@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import toast from 'react-hot-toast';
 
 export default function Searchbar(location) {
     const [searchInput, setSearchInput] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -12,7 +14,7 @@ export default function Searchbar(location) {
 
     const search = () => {
         toast(`Searching for ${searchInput}`);
-        console.log(location);
+        navigate('/search/');
     }
 
     return (

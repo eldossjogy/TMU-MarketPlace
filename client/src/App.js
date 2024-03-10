@@ -8,7 +8,13 @@ import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
+import SearchPage from "./pages/SearchPage";
+
 import { Toaster } from 'react-hot-toast';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas)
 
 function App() {
 
@@ -22,7 +28,7 @@ function App() {
       <Routes>
         <Route path = "/">
             <Route index element={<HomePage />}/>
-            <Route path = "nav" element={<HomePageNav />}/>
+            <Route path = "/search/" element={<SearchPage />}/>
             <Route path = "my-market" element={<MyProfile />}/>
             <Route path = "admin-dashboard" element={<AdminDashboard />}/>
             <Route path = "/login" element={<LoginPage />}/>
