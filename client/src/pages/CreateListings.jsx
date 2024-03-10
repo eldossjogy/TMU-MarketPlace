@@ -67,7 +67,6 @@ export default function CreateListings() {
         setLoadingState(true)
         await createNewListing(formData, imageList)
         setLoadingState(false)
-        navigate("/my-market")
     }
 
     function checkFileForImage(files) {

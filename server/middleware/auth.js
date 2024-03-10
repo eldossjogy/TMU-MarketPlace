@@ -3,10 +3,10 @@ import supabase from "../config/supabaseConfig.js"
 export const verifyToken = async (req, res, next) => {
 
     const userToken = req.header("Authorization").split(' ')[1]
-
     if (userToken) {
         try {
             const output = await supabase.auth.getUser(userToken)
+            
             const user = output.data.user
 
             req.body.user_id = user.id
@@ -18,7 +18,7 @@ export const verifyToken = async (req, res, next) => {
         }
     }
     else {
-        res.status(500).json({ message: "Unauthorized Access!!" })
+        res.status(403).json({ message: "Unauthorized Access!!" })
     }
 
 }

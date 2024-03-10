@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import supabase from "./supabaseConfig";
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -9,6 +10,9 @@ export const AuthProvider = ({ children }) => {
   const [localSession, setLocalSession] = useState(null);
   const [profileData, setProfileData] = useState(null);
   const [loadingState, setLoadingState] = useState(false)
+
+  const navigate = useNavigate()
+
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -256,20 +260,27 @@ export const AuthProvider = ({ children }) => {
 
   async function createNewListing(listingInfo, imageList) {
     try {
-
-      const listOfImages = await uploadImageToBucket(imageList, "ad-listings")
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
-        {
-          ...listingInfo,
-          images: listOfImages
-        },
-        {
-          headers: {
-            Authorization: 'Bearer ' + localSession.access_token
+      if (supabase.auth.getUser().data) {
+        const listOfImages = await uploadImageToBucket(imageList, "ad-listings")
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
+          {
+            ...listingInfo,
+            images: listOfImages
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localSession.access_token
+            }
           }
-        }
-      )
-      alert(response.data.message)
+        )
+        alert(response.data.message)
+        navigate("/my-market")
+      }
+      else {
+        const error = new Error("Unauthorized access!! not a logged in user!!")
+        error.status = 403
+        throw error;
+      }
     } catch (error) {
       alert(error.message)
     }
