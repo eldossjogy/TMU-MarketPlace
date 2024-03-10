@@ -16,6 +16,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fas)
 
+
 function App() {
 
   // protected routes such as login required routes and admin dashboard route will be protected later. 
