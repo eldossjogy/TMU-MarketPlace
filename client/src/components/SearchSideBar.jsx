@@ -36,14 +36,7 @@ export default function SearchSideBar() {
             </section>
             <section className={`w-full space-y-4 mt-6 md:mt-0 ${collapsed ? 'hidden' : ''}`}>
                 <div className='w-full flex-col space-y-2'>
-                    <section className='flex w-full justify-between items-center'>
-                        <h3 className='text-xl'>Price</h3>
-                        <button className="py-1 px-2 rounded-lg hover:bg-sky-600 bg-sky-500 text-white text-sm" onClick={(e) => {
-                            updateSearchPriceRange();
-                        }}>
-                            Apply Price
-                        </button>
-                    </section>
+                    <h3 className='text-xl'>Price</h3>
                     <section className='flex w-full justify-between items-center'>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
@@ -69,6 +62,13 @@ export default function SearchSideBar() {
                                 <label htmlFor={`price-${price.id}`} className="py-1 w-full ms-2 text-sm font-medium text-gray-900 rounded">{price.name}</label>
                             </div>
                         ))}
+                    </section>
+                    <section className='flex w-full justify-end items-center py-2'>
+                        <button className="py-1 px-2 rounded-lg hover:bg-sky-600 ring-sky-500 ring-2 text-neutral-900 hover:text-white text-sm" onClick={(e) => {
+                            updateSearchPriceRange();
+                        }}>
+                            Apply Price
+                        </button>
                     </section>
                 </div>
                 <div className='w-full flex-col space-y-2'>

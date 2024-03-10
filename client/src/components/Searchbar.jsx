@@ -20,7 +20,7 @@ export default function Searchbar(location) {
     return (
         <div className='flex w-full h-10 md:h-8 group divide-x-2 divide-neutral-400'>
             <input
-                className="rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis" 
+                className="rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis border-none focus:ring-0" 
                 placeholder={`Search ${location?.location ?? "here"}`}
                 onChange={handleChange}
                 value={searchInput}

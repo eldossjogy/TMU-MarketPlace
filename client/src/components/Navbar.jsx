@@ -37,7 +37,7 @@ export default function Navbar() {
                         <Searchbar location={city}/>
                         <div className='flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
-                            <span className='whitespace-nowrap'>Range {range/1000}km</span>
+                            <span className='whitespace-nowrap'>{range/1000}km range</span>
                         </div>
                     </section>
                 </section>
@@ -48,7 +48,7 @@ export default function Navbar() {
             <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
                 <section className='flex w-full items-center justify-between flex-wrap'>
                     <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer" onClick={() => {navigate('/');}}>
-                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto"></img>
+                        <img src={Logo} alt="logo" className="h-full w-auto"></img>
                     </section>
                     <section id="nav-account-mobile" className="flex space-x-2">
                         <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
@@ -58,7 +58,7 @@ export default function Navbar() {
                     <Searchbar/>
                     <section className='text-white flex items-center justify-center overflow-hidden space-x-2 hover:text-red-400' onClick={() => {getLocation()}}>
                         <MapPinIcon className='h-6 w-6'/>
-                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km</span>
+                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km range</span>
                     </section>
                 </section>
             </div>
