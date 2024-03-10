@@ -257,8 +257,7 @@ export const AuthProvider = ({ children }) => {
   async function createNewListing(listingInfo, imageList) {
     try {
 
-      const listOfImages = await uploadImageToBucket(imageList, "avatars")
-      console.log(listOfImages)
+      const listOfImages = await uploadImageToBucket(imageList, "ad-listings")
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
         {
           ...listingInfo,
