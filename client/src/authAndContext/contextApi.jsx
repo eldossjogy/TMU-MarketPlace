@@ -275,6 +275,7 @@ export const AuthProvider = ({ children }) => {
           }
         )
         alert(response.data.message)
+        setLoadingState(false);
         navigate("/my-market")
       }
       else {

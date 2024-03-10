@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import AuthContext from '../authAndContext/contextApi';
 import { useNavigate } from 'react-router-dom';
+import LoadingScreen from '../components/LoadingScreen'
 
 export default function CreateListings() {
     const { createNewListing, loadingState, setLoadingState, user } = useContext(AuthContext);
@@ -48,7 +49,6 @@ export default function CreateListings() {
         event.preventDefault();
         setLoadingState(true);
         await createNewListing(formData, imageList);
-        setLoadingState(false);
     };
 
     const checkFileForImage = (files) => {
@@ -117,13 +117,9 @@ export default function CreateListings() {
                 />
             </form>
 
-            {loadingState && (
-                <div className="itemModalContainer flex justify-center items-center flex-col mt-8">
-                    <div className="text-white text-2xl md:text-3xl">
-                        Creating new Listing...
-                    </div>
-                </div>
-            )}
+            {loadingState &&
+                <LoadingScreen message={"Creating new Listing..."} />
+            }
         </div>
     );
 }
