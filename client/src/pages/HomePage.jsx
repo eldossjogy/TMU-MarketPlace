@@ -1,7 +1,6 @@
 import React from "react";
 import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar"
-import SearchSideBar from "../components/SearchSideBar"
 export default function HomePage() {
   return (
     <>

@@ -6,19 +6,18 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 const searchOptions = { availability: ['Available', 'Pending', 'Sold', 'All'], priceRange: {}, prices: [{ id: 0, name: '$0-$20', min: 0, max: 20}, { id: 1, name: '$20-$50', min: 20, max: 50 }, { id: 2, name: '$50-$100', min: 50, max: 100 }, { id: 3, name: '$100-$200', min: 100, max: 200 }] };
 
 export default function SearchSideBar() {
-    const [selected, setSelected] = useState("Available")
-    const [selectedPrices, setSelectedPrices] = useState([searchOptions.prices[0]])
+    const [selected, setSelected] = useState("Available");
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
     const [collapsed, setCollapsed] = useState(false);
 
     const updateSearchPriceRange = () => {
-        if(Object.entries(searchOptions.priceRange).length == 0) return; 
+        if(Object.entries(searchOptions.priceRange).length === 0) return; 
 
         let min = minPrice ?? 2000000;
         let max = maxPrice ?? 0;
 
-        for (const [key, price] of Object.entries(searchOptions.priceRange)) {
+        for (const [price] of Object.entries(searchOptions.priceRange)) {
             min = Math.min(min, price.min);
             max = Math.max(max, price.max);
         }

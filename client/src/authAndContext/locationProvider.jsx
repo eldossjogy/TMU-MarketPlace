@@ -47,16 +47,16 @@ export const LocationProvider = ({ children }) =>  {
         setLocation(pos);
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
         fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
-            setCity(`${res.address.City != '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr != '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
+            setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
         });
 
         setIsReady(true);
     }
 
     // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
-    function generateCoordinates(loc) {
+    //function generateCoordinates(loc) {
         //TODO
-    }
+    //}
 
     return (
         <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation}} >
