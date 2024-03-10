@@ -230,7 +230,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  async function uploadListingImages(files, bucketName) {
+  async function uploadImageToBucket(files, bucketName) {
     let imagesPaths = []
 
     for (const file of files) {
@@ -257,7 +257,7 @@ export const AuthProvider = ({ children }) => {
   async function createNewListing(listingInfo, imageList) {
     try {
 
-      const listOfImages = await uploadListingImages(imageList, "avatars")
+      const listOfImages = await uploadImageToBucket(imageList, "avatars")
       console.log(listOfImages)
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
         {
