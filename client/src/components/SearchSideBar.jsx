@@ -42,12 +42,26 @@ export default function SearchSideBar() {
                     <section className='flex w-full justify-between items-center'>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='minPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Min' value={minPrice} onChange={(e) => {setMinPrice(e.target.value)}}></input>
+                            <input type='text' name='minPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Min' value={minPrice} 
+                                onChange={(e) => { 
+                                    if(!isNaN(parseInt(e.target.value))) {
+                                        setMinPrice(parseInt(e.target.value));
+                                    }
+                                    else setMinPrice('');
+                                }
+                            }></input>
                         </div>
                         <span className='w-[20%] text-center text-lg'>&mdash;</span>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='maxPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Max' value={maxPrice} onChange={(e) => {setMaxPrice(e.target.value)}}></input>
+                            <input type='text' name='maxPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Max' value={maxPrice} 
+                                onChange={(e) => { 
+                                    if(!isNaN(parseInt(e.target.value))) {
+                                        setMaxPrice(parseInt(e.target.value));
+                                    }
+                                    else setMaxPrice('');
+                                }
+                            }></input>
                         </div>
                     </section>
                     <section className='w-full bg-inherit space-y-2'>
