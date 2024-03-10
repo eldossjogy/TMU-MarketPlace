@@ -49,6 +49,7 @@ export async function createListing(req, res) {
 
 }
 
+/*
 export async function getMyListings(req, res) {
     let {user_id} = req.body
     try {
@@ -64,3 +65,4 @@ export async function getMyListings(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+*/
