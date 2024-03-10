@@ -259,8 +259,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   async function createNewListing(listingInfo, imageList) {
+    const checkUser = await supabase.auth.getUser()
     try {
-      if (supabase.auth.getUser().data) {
+      if (checkUser.data.user !== null) {
         const listOfImages = await uploadImageToBucket(imageList, "ad-listings")
         const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
           {
