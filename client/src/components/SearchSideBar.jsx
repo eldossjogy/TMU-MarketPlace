@@ -14,12 +14,14 @@ export default function SearchSideBar() {
     const updateSearchPriceRange = () => {
         if(Object.entries(searchOptions.priceRange).length === 0) return; 
 
-        let min = minPrice ?? 2000000;
-        let max = maxPrice ?? 0;
+        let min = 2000000;
+        let max = 0;
+        
 
-        for (const [price] of Object.entries(searchOptions.priceRange)) {
+        for (const [key, price] of Object.entries(searchOptions.priceRange)) {
             min = Math.min(min, price.min);
             max = Math.max(max, price.max);
+            console.log(price);
         }
         
         setMinPrice(min);
