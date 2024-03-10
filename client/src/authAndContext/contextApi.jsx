@@ -185,7 +185,6 @@ export const AuthProvider = ({ children }) => {
         .update({ avatar_url: value })
         .eq("id", userID)
         .select();
-      // console.log(data, error);
     } catch (error) {
       alert(error);
     }
@@ -231,11 +230,39 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function uploadListingImages(files, bucketName) {
+    let imagesPaths = []
+
+    for (const file of files) {
+      const fileExt = file.name.split(".").pop().toLowerCase();
+      const fileName = `${user.id}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload or update file in Supabase storage
+      if (file !== undefined) {
+        const { data, error: uploadError } = await supabase.storage
+          .from(bucketName)
+          .upload(filePath, file, { upsert: true });
+        if (uploadError) {
+          throw uploadError;
+        }
+        else {
+          imagesPaths.push(data.fullPath)
+        }
+      }
+    }
+    return imagesPaths
+  }
+
   async function createNewListing(listingInfo, imageList) {
     try {
+
+      const listOfImages = await uploadListingImages(imageList, "avatars")
+      console.log(listOfImages)
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
         {
-          ...listingInfo
+          ...listingInfo,
+          images: listOfImages
         },
         {
           headers: {
@@ -243,8 +270,7 @@ export const AuthProvider = ({ children }) => {
           }
         }
       )
-      const newListing = response.data[0]
-
+      alert(response.data.message)
     } catch (error) {
       alert(error.message)
     }
@@ -262,7 +288,6 @@ export const AuthProvider = ({ children }) => {
         loadingState, 
         setLoadingState,
         createNewListing,
-        user
       }}
     >
       {children}
