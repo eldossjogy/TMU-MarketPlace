@@ -7,7 +7,7 @@ export default function ProfilePicture() {
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        if(user) setURL('./assets/avatars/12345.jpg')
+        if(user) setURL(user.avatar_url)
         else setURL(null)
     }, [user])
     

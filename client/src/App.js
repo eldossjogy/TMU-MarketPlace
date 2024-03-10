@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
+import AccountSettings from "./pages/AccountSettings";
 
 import { Toaster } from 'react-hot-toast';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -33,6 +34,7 @@ function App() {
             <Route path = "/login" element={<LoginPage />}/>
             <Route path = "/register" element={<RegisterPage />}/>
             <Route path = "/logout" element={<LogoutPage />}/>
+            <Route path="/settings" element={<AccountSettings />} />s
           </Route>
       </Routes>
     </div>
