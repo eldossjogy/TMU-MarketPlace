@@ -18,7 +18,7 @@ export default function LocationPicker() {
 
         try {
             let locationResult = results[0]
-            console.log(locationResult);
+            // console.log(locationResult);
             setLocationQuery(locationResult['display_name'])
             setNoResults(false);
             generateLocation({lat: locationResult['lat'], lng: locationResult['lon']});
@@ -57,7 +57,7 @@ export default function LocationPicker() {
             </div>   
             <div className="flex justify-end space-x-2">
                 <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={(e) => {//bg-[#F9B300]
-                    handleLocationSearch(e.target.value); 
+                    //handleLocationSearch(e.target.value); 
                 }}>
                     Apply Location
                 </button>

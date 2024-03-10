@@ -10,20 +10,11 @@ export default function LocationMarker() {
 
     const mapEvents = useMapEvents({
         dblclick(e) {
-            generateLocation({lat: e.latlng.lat, lng: e.latlng.lng}).then(()=>{
-                // map.flyTo(e.latlng, 10); 
-                //let circle = L.circle(e.latlng, range).addTo(map);
-                //map.fitBounds(circle.getBounds());
-                //map.removeLayer(circle);
-            });
+            generateLocation({lat: e.latlng.lat, lng: e.latlng.lng});
         }
     })
 
-
-
-
     useEffect(() => {
-        console.log('CIRCLE');
         circle.addTo(map)
     }, [circle]);
 

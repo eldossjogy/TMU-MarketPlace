@@ -2,7 +2,6 @@ import "./index.css";
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from "./pages/HomePage";
-import HomePageNav from "./pages/HomePageNav";
 import MyProfile from "./pages/MyProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";

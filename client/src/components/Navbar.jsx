@@ -6,6 +6,7 @@ import LocationContext from '../authAndContext/locationProvider';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
 import { useNavigate } from 'react-router-dom';
+import Logo from "../assets/logo.png"
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
@@ -28,9 +29,9 @@ export default function Navbar() {
     return (
         <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
             <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto lg:max-w-[90%]">
-                <section className='flex w-auto'>
-                    <section id="nav-logo" className="w-64 mx-3 h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
-                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto m-auto"></img>
+                <section className='flex w-auto '>
+                    <section id="nav-logo" className="w-64 xl:w-80 mx-3 me-6 shrink-0 h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
+                        <img src={Logo} alt="logo" className="h-full w-auto m-auto"></img>
                     </section>
                     <section id="nav-search-group" className="flex md:w-[30vw] group space-x-2 items-center justify-start">
                         <Searchbar location={city}/>
