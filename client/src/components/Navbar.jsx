@@ -10,7 +10,7 @@ import Logo from "../assets/logo.png"
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
-    const {city, range} = useContext(LocationContext);
+    const {city, range, getLocation} = useContext(LocationContext);
     const { user } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -35,9 +35,9 @@ export default function Navbar() {
                     </section>
                     <section id="nav-search-group" className="flex md:w-[30vw] group space-x-2 items-center justify-start">
                         <Searchbar location={city}/>
-                        <div className='flex space-x-1 text-white text-sm items-center'>
+                        <div className='flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
-                            <span className='whitespace-nowrap'>{range}m</span>
+                            <span className='whitespace-nowrap'>Range {range/1000}km</span>
                         </div>
                     </section>
                 </section>
@@ -56,9 +56,9 @@ export default function Navbar() {
                 </section>
                 <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">
                     <Searchbar/>
-                    <section className='text-white flex items-center justify-center overflow-hidden space-x-2'>
+                    <section className='text-white flex items-center justify-center overflow-hidden space-x-2 hover:text-red-400' onClick={() => {getLocation()}}>
                         <MapPinIcon className='h-6 w-6'/>
-                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range}M</span>
+                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km</span>
                     </section>
                 </section>
             </div>
