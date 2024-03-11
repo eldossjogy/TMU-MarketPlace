@@ -11,6 +11,8 @@ import SearchPage from "./pages/SearchPage";
 import AccountSettings from "./pages/AccountSettings";
 import CreateListings from "./pages/CreateListings";
 import PrivateRoutes from "./util/PrivateRoutes";
+import ErrorPage from "./pages/ErrorPage";
+
 
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -42,6 +44,7 @@ function App() {
             </Route>
           </Route>
         </Route>
+        <Route path='*' element={<ErrorPage />}/>
       </Routes>
     </div>
   );
