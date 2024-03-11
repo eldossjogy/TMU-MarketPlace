@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import AuthContext from '../authAndContext/contextApi';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen'
+import toast from 'react-hot-toast';
 
 export default function CreateListings() {
     const { createNewListing, loadingState, setLoadingState, user } = useContext(AuthContext);
@@ -59,12 +60,12 @@ export default function CreateListings() {
                 if (file.type.startsWith('image/')) {
                     imageArr.push(file);
                 } else {
-                    alert('Please select image files only!!');
+                    toast.error('Please select image files only!!');
                 }
             }
             setImageList([...imageArr]);
         } else {
-            alert("Please seelect max 4 images!!!");
+            toast.error("Please seelect max 4 images!!!");
         }
     };
 

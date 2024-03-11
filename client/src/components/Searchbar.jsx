@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import toast from 'react-hot-toast';
 
-export default function Searchbar() {
+export default function Searchbar(location) {
     const [searchInput, setSearchInput] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -11,18 +13,15 @@ export default function Searchbar() {
     };
 
     const search = () => {
-        toast(`Searching for ${searchInput}`)
+        toast(`Searching for ${searchInput}`);
+        navigate('/search/');
     }
 
-    useEffect(() => {
-    
-    }, [])
-    
-
     return (
-        <div className='flex w-full md:w-auto md:max-w-[20vw] h-10 md:h-8 group divide-x-2 divide-neutral-400'>
+        <div className='flex w-full h-10 md:h-8 group divide-x-2 divide-neutral-400'>
             <input
-                className="rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis" placeholder="Search here"
+                className="rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis border-none focus:ring-0" 
+                placeholder={`Search ${location?.location ?? "here"}`}
                 onChange={handleChange}
                 value={searchInput}
             >

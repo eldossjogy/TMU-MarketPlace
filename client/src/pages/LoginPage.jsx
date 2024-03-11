@@ -28,7 +28,7 @@ export default function LoginPage() {
              
             // console.log(data);
             // console.log(error);
-            if(! error && data.success == true) {
+            if(! error && data.success === true) {
                 toast.success(`Logged in ${email}`);
                 navigate('/');
             }
@@ -43,7 +43,7 @@ export default function LoginPage() {
         if (user != null) {
             navigate('/');
         }
-    }, [user])
+    }, [user, navigate])
     
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>

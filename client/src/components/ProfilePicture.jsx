@@ -13,7 +13,7 @@ export default function ProfilePicture() {
     
     if(url){
         return (
-            <img src={`${url}`} className="h-6 w-6 rounded-full ring-2 ring-orange-600/60 shadow-lg shrink-0" alt='profile picture'></img>
+            <img src={`${url}`} className="h-6 w-6 rounded-full ring-2 ring-orange-600/60 shadow-lg shrink-0 object-cover object-center" alt='profile'></img>
         )
     }
     else{
