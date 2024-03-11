@@ -7,6 +7,8 @@ import toast from "react-hot-toast"
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+	const {navigate} = useNavigate();
 	const [user, setUser] = useState(null);
 	const [localSession, setLocalSession] = useState(null);
 	const [profileData, setProfileData] = useState(null);
