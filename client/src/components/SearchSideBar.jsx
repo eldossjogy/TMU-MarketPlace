@@ -13,8 +13,8 @@ export default function SearchSideBar() {
         { id: 1, name: '$20 - $50', min: 20, max: 50, selected: false }, 
         { id: 2, name: '$50 - $100', min: 50, max: 100, selected: false }, 
         { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }])
-    const [minPrice, setMinPrice] = useState();
-    const [maxPrice, setMaxPrice] = useState();
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
     const [collapsed, setCollapsed] = useState(false);
     const [priceRangeError, setPriceRangeError] = useState(false);
 
@@ -62,7 +62,7 @@ export default function SearchSideBar() {
                     <section className='flex flex-wrap w-full justify-between items-center'>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='minPrice' maxLength={5} pattern="^\d{1-5}" className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Min' value={minPrice} 
+                            <input type='text' name='minPrice' maxLength={5} className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Min' value={minPrice} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
@@ -80,7 +80,7 @@ export default function SearchSideBar() {
                         <span className='w-[20%] text-center text-lg'>&mdash;</span>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='maxPrice' maxLength={5} pattern="^\d{1-5}" className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Max' value={maxPrice} 
+                            <input type='text' name='maxPrice' maxLength={5} className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Max' value={maxPrice} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
