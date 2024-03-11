@@ -32,7 +32,7 @@ function App() {
             <Route path = "/my-market">
               <Route index element={<MyProfile />} />
               <Route path="sold-listings" element={<HomePage />} />
-              <Route path="create-listings" element={<CreateListings />} />
+              <Route path="create-listing" element={<CreateListings />} />
               <Route path="repost-listings" element={<HomePage />} />
             </Route>
           </Route>
