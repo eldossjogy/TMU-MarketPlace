@@ -1,7 +1,8 @@
 import React, { useState, useEffect, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import supabase from "./supabaseConfig";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
 
 const AuthContext = createContext();
 
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 					.eq("id", userID);
 				return profile;
 			} catch (error) {
-				alert(error);
+				toast.error(error);
 				return null;
 			}
 		}
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 				const url = URL.createObjectURL(data);
 				return url;
 			} catch (error) {
-				alert("Error downloading image: ", error);
+				toast.error("Error downloading image: ", error);
 			}
 		}
 		async function fetchProfile() {
@@ -173,7 +174,7 @@ export const AuthProvider = ({ children }) => {
 			const url = URL.createObjectURL(data);
 			return url;
 		} catch (error) {
-			alert("Error downloading image: ", error.message);
+			toast.error("Error downloading image: ", error.message);
 		}
 	}
 
@@ -186,7 +187,7 @@ export const AuthProvider = ({ children }) => {
 				.eq("id", userID)
 				.select();
 		} catch (error) {
-			alert(error);
+			toast.error(error);
 		}
 	}
 
@@ -226,7 +227,7 @@ export const AuthProvider = ({ children }) => {
 				}));
 			});
 		} else {
-			alert("Invalid image upload");
+			toast.error("Invalid image upload");
 		}
 	}
 
@@ -270,7 +271,7 @@ export const AuthProvider = ({ children }) => {
 						}
 					}
 				)
-				alert(response.data.message)
+				toast(response.data.message)
 				setLoadingState(false);
 				navigate("/my-market")
 			}
@@ -280,7 +281,7 @@ export const AuthProvider = ({ children }) => {
 				throw error;
 			}
 		} catch (error) {
-			alert(error.message)
+			toast.error(error.message)
 		}
 	}
 
