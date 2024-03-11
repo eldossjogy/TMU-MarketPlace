@@ -9,6 +9,7 @@ import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
 import AccountSettings from "./pages/AccountSettings";
+import CreateListings from "./pages/CreateListings";
 
 import { Toaster } from 'react-hot-toast';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -30,12 +31,17 @@ function App() {
         <Route path = "/">
             <Route index element={<HomePage />}/>
             <Route path = "/search/" element={<SearchPage />}/>
-            <Route path = "my-market" element={<MyProfile />}/>
             <Route path = "admin-dashboard" element={<AdminDashboard />}/>
             <Route path = "/login" element={<LoginPage />}/>
             <Route path = "/register" element={<RegisterPage />}/>
             <Route path = "/logout" element={<LogoutPage />}/>
-            <Route path="/settings" element={<AccountSettings />} />s
+            <Route path="/settings" element={<AccountSettings />} />
+            <Route path = "/my-market">
+              <Route index element={<MyProfile />} />
+              <Route path="sold-listings" element={<HomePage />} />
+              <Route path="create-listing" element={<CreateListings />} />
+              <Route path="repost-listings" element={<HomePage />} />
+            </Route>
           </Route>
       </Routes>
     </div>
