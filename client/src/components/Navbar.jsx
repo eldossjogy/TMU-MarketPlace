@@ -12,7 +12,6 @@ export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const {city, range, getLocation} = useContext(LocationContext);
     const { user } = useContext(AuthContext);
-
     const navigate = useNavigate();
 
     useEffect(() => {
