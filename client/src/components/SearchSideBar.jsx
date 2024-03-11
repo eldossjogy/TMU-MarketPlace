@@ -10,6 +10,12 @@ export default function SearchSideBar() {
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
     const [collapsed, setCollapsed] = useState(false);
+    const [priceRangeError, setPriceRangeError] = useState(false);
+
+    const checkPriceRange = (min, max) => {
+        if(max < min ) setPriceRangeError(true);
+        else setPriceRangeError(false);
+    }
 
     const updateSearchPriceRange = () => {
         if(Object.entries(searchOptions.priceRange).length === 0) return; 
@@ -39,30 +45,45 @@ export default function SearchSideBar() {
             <section className={`w-full space-y-4 mt-6 md:mt-0 ${collapsed ? 'hidden' : ''}`}>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Price</h3>
-                    <section className='flex w-full justify-between items-center'>
+                    <section className='flex flex-wrap w-full justify-between items-center'>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='minPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Min' value={minPrice} 
+                            <input type='text' name='minPrice' maxLength={5} pattern="^\d{1-5}" className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Min' value={minPrice} 
                                 onChange={(e) => { 
-                                    if(!isNaN(parseInt(e.target.value))) {
-                                        setMinPrice(parseInt(e.target.value));
+                                    let val = parseInt(e.target.value)
+
+                                    if(isNaN(val)){
+                                        setMinPrice('');
+                                        setPriceRangeError(false);
+                                        return;
                                     }
-                                    else setMinPrice('');
+
+                                    setMinPrice(val);
+                                    checkPriceRange(val, maxPrice);
                                 }
                             }></input>
                         </div>
                         <span className='w-[20%] text-center text-lg'>&mdash;</span>
                         <div className="relative w-[40%]">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='maxPrice' maxLength={5} pattern="^\d{1-5}" className='ps-7 py-2 rounded-md shadow-md w-full' placeholder='Max' value={maxPrice} 
+                            <input type='text' name='maxPrice' maxLength={5} pattern="^\d{1-5}" className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Max' value={maxPrice} 
                                 onChange={(e) => { 
-                                    if(!isNaN(parseInt(e.target.value))) {
-                                        setMaxPrice(parseInt(e.target.value));
+                                    let val = parseInt(e.target.value)
+
+                                    if(isNaN(val)){
+                                        setMaxPrice('');
+                                        setPriceRangeError(false);
+                                        return;
                                     }
-                                    else setMaxPrice('');
+
+                                    setMaxPrice(val);
+                                    checkPriceRange(minPrice, val);
                                 }
                             }></input>
                         </div>
+                        {priceRangeError && (
+                            <div className={"m-2 text-sm font-medium text-red-600"}>{'Max price is less than minimum.'}</div>
+                        )}
                     </section>
                     <section className='w-full bg-inherit space-y-2'>
                         {searchOptions.prices.map((price) => (
