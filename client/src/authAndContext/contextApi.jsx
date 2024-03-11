@@ -274,7 +274,6 @@ export const AuthProvider = ({ children }) => {
 					}
 				)
 				toast(response.data.message)
-				setLoadingState(false);
 				navigate("/my-market")
 			}
 			else {
@@ -285,6 +284,7 @@ export const AuthProvider = ({ children }) => {
 		} catch (error) {
 			toast.error(error.message)
 		}
+		setLoadingState(false);
 	}
 
 
