@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }) => {
 	const [localSession, setLocalSession] = useState(null);
 	const [profileData, setProfileData] = useState(null);
 	const [loadingState, setLoadingState] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
+
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
@@ -74,6 +76,7 @@ export const AuthProvider = ({ children }) => {
 					avatar_url: profileImage,
 				};
 				setProfileData(combinedDict);
+        setIsLoading(false);
 			}
 		}
 		fetchProfile();
@@ -300,6 +303,7 @@ export const AuthProvider = ({ children }) => {
 				loadingState,
 				setLoadingState,
 				createNewListing,
+        isLoading
 			}}
 		>
 			{children}
