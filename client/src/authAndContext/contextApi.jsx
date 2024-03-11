@@ -1,5 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 import supabase from "./supabaseConfig";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -7,6 +9,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [loadingState, setLoadingState] = useState(false)
+
+  const navigate = useNavigate()
+
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -46,7 +52,7 @@ export const AuthProvider = ({ children }) => {
           .eq("id", userID);
         return profile;
       } catch (error) {
-        console.log(error);
+        alert(error);
         return null;
       }
     }
@@ -62,10 +68,9 @@ export const AuthProvider = ({ children }) => {
         const url = URL.createObjectURL(data);
         return url;
       } catch (error) {
-        console.log("Error downloading image: ", error.message);
+        alert("Error downloading image: ", error);
       }
     }
-
     async function fetchProfile() {
       if (user) {
         const profileData = await getProfile(user.id);
@@ -78,18 +83,11 @@ export const AuthProvider = ({ children }) => {
         setProfileData(combinedDict);
       }
     }
-
     fetchProfile();
   }, [user]);
 
-  // use effect for when profileData changes
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
-
   // function for registering new account
   async function registerNewAccount(email, password, username) {
-    console.log(`${email} ${password}`);
     try {
       const { data, error } = await supabase.auth.signUp({
         email: email,
@@ -111,7 +109,6 @@ export const AuthProvider = ({ children }) => {
       else {
         setLocalSession(data);
         setUser(data ? (data.user ? data.user : null) : null);
-        //console.log(data);
         return [{ success: true, message: "Registered", error: null }, null];
       }
     } catch (error) {
@@ -171,7 +168,6 @@ export const AuthProvider = ({ children }) => {
   async function downloadImage(filePath) {
     try {
       const timestamp = new Date().getTime();
-      console.log("cacheBuster", timestamp);
       const { data, error } = await supabase.storage
         .from("avatars")
         .download(`${filePath}?timestamp=${timestamp}`);
@@ -181,7 +177,7 @@ export const AuthProvider = ({ children }) => {
       const url = URL.createObjectURL(data);
       return url;
     } catch (error) {
-      console.log("Error downloading image: ", error.message);
+      alert("Error downloading image: ", error.message);
     }
   }
 
@@ -193,9 +189,8 @@ export const AuthProvider = ({ children }) => {
         .update({ avatar_url: value })
         .eq("id", userID)
         .select();
-      // console.log(data, error);
     } catch (error) {
-      console.error(error);
+      alert(error);
     }
   }
 
@@ -239,6 +234,60 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function uploadImageToBucket(files, bucketName) {
+    let imagesPaths = []
+
+    for (const file of files) {
+      const fileExt = file.name.split(".").pop().toLowerCase();
+      const fileName = `${user.id}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload or update file in Supabase storage
+      if (file !== undefined) {
+        const { data, error: uploadError } = await supabase.storage
+          .from(bucketName)
+          .upload(filePath, file, { upsert: true });
+        if (uploadError) {
+          throw uploadError;
+        }
+        else {
+          imagesPaths.push(data.fullPath)
+        }
+      }
+    }
+    return imagesPaths
+  }
+
+  async function createNewListing(listingInfo, imageList) {
+    const checkUser = await supabase.auth.getUser()
+    try {
+      if (checkUser.data.user !== null) {
+        const listOfImages = await uploadImageToBucket(imageList, "ad-listings")
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/create-new-listing`,
+          {
+            ...listingInfo,
+            images: listOfImages
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localSession.access_token
+            }
+          }
+        )
+        alert(response.data.message)
+        setLoadingState(false);
+        navigate("/my-market")
+      }
+      else {
+        const error = new Error("Unauthorized access!! not a logged in user!!")
+        error.status = 403
+        throw error;
+      }
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -248,6 +297,9 @@ export const AuthProvider = ({ children }) => {
         localSession,
         user: profileData,
         uploadProfilePicture,
+        loadingState, 
+        setLoadingState,
+        createNewListing,
       }}
     >
       {children}

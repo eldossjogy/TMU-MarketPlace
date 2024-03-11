@@ -1,12 +1,11 @@
 import express from 'express';
 import cors from "cors";
-import dotenv from "dotenv";
 import http from 'http'
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
+import myMarketRoutes from "./routes/myMarketRoutes.js";
 
-dotenv.config();
 
 const app = express();
 const port = process.env.port || 5000;
@@ -19,6 +18,7 @@ app.use(express.json());
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/home', homeRoutes);
+app.use('/my-market', myMarketRoutes);
 
 server.listen(port, () => {
   console.log(`server is now running on port ${port}`);

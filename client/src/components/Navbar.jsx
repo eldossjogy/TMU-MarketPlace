@@ -4,6 +4,7 @@ import Searchbar from './Searchbar'
 import AuthContext from '../authAndContext/contextApi';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
+import Logo from '../assets/logo.png'
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
@@ -14,7 +15,7 @@ export default function Navbar() {
 
     const navigate = useNavigate();
 
-    const authOptions = [{name: 'Your Market', url: '/'},{name: 'Your Profile', url: '/settings'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
+    const authOptions = [{name: 'Your Market', url: '/my-market'},{name: 'Your Profile', url: '/settings'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
     const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
 
     function success(pos) {
@@ -79,7 +80,7 @@ export default function Navbar() {
             <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto">
                 <section className='flex w-auto'>
                     <section id="nav-logo" className="w-[20vw] h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
-                        <img src="./assets/logo.png" alt="logo" className="h-full w-auto m-auto"></img>
+                        <img src={Logo} alt="logo" className="h-full w-auto m-auto"></img>
                     </section>
                     <section id="nav-search-group" className="flex group space-x-2 items-center justify-start">
                         <Searchbar/>
