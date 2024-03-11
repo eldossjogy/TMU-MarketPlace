@@ -17,12 +17,12 @@ export default function VerticalCard({
       <div id="card" className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="bg-[#fafafb] m-3 rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
           <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-4">
-            {Array.isArray(image) ?
+            {image.length > 1 ?
               <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} />
               :
               <img
                 className="rounded-md w-full h-auto object-cover  aspect-square"
-                src={image}
+                src={image[0].file_path}
                 alt="img"
               ></img>
 

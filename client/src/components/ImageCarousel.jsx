@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 export default function ImageCarousel({ images, hovered, setHovered }) {
-  const [currImage, setImage] = useState(images[0]);
+  const [currImage, setImage] = useState(images[0].file_path);
   const [currPos, setPos] = useState(0);
   useEffect(() => {
-    setImage(images[currPos]);
+    setImage(images[currPos].file_path);
   }, [currPos,images]);
 
   useEffect(() => {
