@@ -17,7 +17,6 @@ export default function CreateListings() {
         postal_code: '',
         location: '',
         category_id: '',
-        user_id: user?.id || ''
     });
 
     const [imageList, setImageList] = useState([]);

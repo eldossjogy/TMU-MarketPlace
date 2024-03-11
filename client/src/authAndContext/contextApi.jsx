@@ -8,7 +8,8 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-	const {navigate} = useNavigate();
+	const navigate = useNavigate();
+
 	const [user, setUser] = useState(null);
 	const [localSession, setLocalSession] = useState(null);
 	const [profileData, setProfileData] = useState(null);
@@ -17,7 +18,6 @@ export const AuthProvider = ({ children }) => {
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, session) => {
-			console.log(event);
 			if (event === 'INITIAL_SESSION') {
 			} else if (event === 'SIGNED_OUT') {
 				setLocalSession(null)
