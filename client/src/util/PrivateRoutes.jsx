@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import AuthContext from "../authAndContext/contextApi";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
+import Navbar from "../components/Navbar";
 
 const PrivateRoutes = () => {
   const { user, isLoading } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const PrivateRoutes = () => {
   if (loading) {
     return (
       <>
+        <Navbar />
         <Loading />
       </>
     );
