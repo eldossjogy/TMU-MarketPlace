@@ -34,7 +34,7 @@ Running client only using `npm run client`.
 Running server only using `npm run server`.
 
 Open http://localhost:3000 to view the React client in your browser.  
-Open http://localhost:3001 to view the Express server in your browser.
+Open http://localhost:5000 to view the Express server in your browser.
 
 ## Contributors
 
