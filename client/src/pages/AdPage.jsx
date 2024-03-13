@@ -3,9 +3,10 @@ import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import AdCard from "../components/AdCard";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import AdContext from "../authAndContext/adProvider";
 
 export default function Adpage() {
+  const { fetchAdPage } = useContext(AdContext);
   const location = useLocation();
   const passed = location.state || {};
   const [dbData, setData] = useState(null);
@@ -13,22 +14,10 @@ export default function Adpage() {
 
   useEffect(() => {
     if (slug) {
-      async function fetchAds() {
-        try {
-          const response = await axios.get(
-            `${process.env.REACT_APP_BACKEND_API_URL}/ad`,
-            { params: { id: slug } }
-          );
-          setData(response.data[0]);
-        } catch (error) {
-          console.error("Error fetching ads:", error);
-        }
-      }
-      fetchAds();
+      fetchAdPage(slug).then((res)=>{setData(res)})
     }
   }, [slug]);
 
- 
   return (
     <div>
       {/* <p>Nav Paramater: {slug}</p>

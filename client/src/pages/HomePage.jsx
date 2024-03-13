@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import AdContext from "../authAndContext/adProvider";
+
 export default function HomePage() {
+  const { fetchHomePage } = useContext(AdContext);
   const [ads, setAds] = useState(null);
 
   useEffect(() => {
-    async function fetchAds() {
-      const reponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_API_URL}/ad/homepage`
-      );
-      setAds(reponse.data);
-    }
-    fetchAds();
+    fetchHomePage().then((res) => {
+      setAds(res);
+    });
   }, []);
 
-  
   return (
     <>
       <Navbar />
