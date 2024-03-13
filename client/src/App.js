@@ -12,7 +12,7 @@ import AccountSettings from "./pages/AccountSettings";
 import CreateListings from "./pages/CreateListings";
 import PrivateRoutes from "./util/PrivateRoutes";
 import ErrorPage from "./pages/ErrorPage";
-
+import Adpage from "./pages/AdPage";
 
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -28,6 +28,7 @@ function App() {
         <Route path="/">
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/ad/:slug" element={<Adpage />} />
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -42,7 +43,7 @@ function App() {
             </Route>
           </Route>
         </Route>
-        <Route path='*' element={<ErrorPage />}/>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
   );

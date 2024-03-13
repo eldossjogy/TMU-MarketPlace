@@ -12,7 +12,7 @@ export default function VerticalCard({
 }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <Link to={{ pathname: `/${postID}` }}
+    <Link to={{ pathname: `/ad/${postID}` }}
     >
       <div id="card" className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="bg-[#fafafb] m-3 rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
@@ -30,7 +30,7 @@ export default function VerticalCard({
           </div>
           <div className="px-4 pb-4 bg-[#fafafb]">
             <div className="flex justify-between pb-2">
-              <p className="line-clamp-1 font-bold text-xl    ">{title}</p>
+              <p className="line-clamp-1 font-bold text-xl">{title}</p>
               <h2 className="text-green-600 font-bold text-lg">${price}</h2>
             </div>
             <div className="min-h-16">
