@@ -29,11 +29,14 @@ export default function Searchbar(location) {
     }
 
     useEffect(() => {
+        if(onSearchPage === true) search();
+    }, [onSearchPage])
+
+    useEffect(() => {
         let path = window.location.pathname;
 
         if(path.startsWith('/search')){ 
             setOnSearchPage(true);
-            search();
         }  
         else setOnSearchPage(false);
     }, [])
