@@ -17,12 +17,12 @@ export default function Searchbar(location) {
 
     const search = (e) => {
         if(e) e.preventDefault()
+        if(onSearchPage === null) return;
+
         toast(`Searching for ${searchInput}`);
         //searchForAds(searchInput);
 
-
         if(onSearchPage === false){
-            console.log('nav');
             navigate('/search/');
             setOnSearchPage(true);
         }
@@ -33,7 +33,6 @@ export default function Searchbar(location) {
 
         if(path.startsWith('/search')){ 
             setOnSearchPage(true);
-            console.log('use');
             search();
         }  
         else setOnSearchPage(false);
