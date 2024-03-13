@@ -5,7 +5,7 @@ const router = express.Router();
 
 // get your ads
 router.get("/me", async (req, res) => {
-  let { user_id } = req.body;
+  let { user_id } = req.query;
   try {
     const myListings = await supabase
       .from("ad")
@@ -19,7 +19,7 @@ router.get("/me", async (req, res) => {
 
 // get ads by id
 router.get("/", async (req, res) => {
-  let { id } = req.body;
+  let { id } = req.query;
   try {
     const postData = await supabase
       .from("ad")
@@ -28,7 +28,8 @@ router.get("/", async (req, res) => {
         *,
         image!inner(file_path),
         category!inner(name),
-        status!inner(type)
+        status!inner(type),
+        profile!inner(id,name,avatar_url,postal_code)
         `
       )
       .eq("id", id);
