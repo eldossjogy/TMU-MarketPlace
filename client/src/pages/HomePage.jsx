@@ -16,8 +16,8 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="container m-auto flex flex-wrap md:flex-nowrap mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
           {ads ? (
             ads.map((element) => (
               <VerticalCard
