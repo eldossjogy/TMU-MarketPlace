@@ -295,6 +295,34 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false);
   }
 
+  // fetch profile picture link from user id
+  //  param: userid
+  async function fetchAvatar(userID) {
+    try {
+      const { data: tempData, error:tempError } = await supabase
+        .from("profile")
+        .select("avatar_url")
+        .eq("id", userID);
+        let filePath = tempData[0].avatar_url
+        if (tempError != null) {
+        throw tempError;
+      }
+      const timestamp = new Date().getTime();
+      const { data, error } = await supabase.storage
+        .from("avatars")
+        .download(`${filePath}?timestamp=${timestamp}`);
+        if (error) {
+          throw error;
+        }
+        const url = URL.createObjectURL(data);
+        return url;
+    } catch (error) {
+      toast.error("Error downloading image: ", JSON.stringify(error));
+      return "error";
+    }
+  }
+  
+
   return (
     <AuthContext.Provider
       value={{
@@ -308,6 +336,7 @@ export const AuthProvider = ({ children }) => {
         setLoadingState,
         createNewListing,
         isLoading,
+        fetchAvatar,
       }}
     >
       {children}

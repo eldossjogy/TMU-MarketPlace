@@ -1,10 +1,8 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-
+ 
 export default function Loading() {
   return (
     <>
-      <Navbar />
       <div className="text-center m-4">
         <div role="status">
           <svg
