@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LocationPicker from './LocationPicker'
 import { RadioGroup } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid';
+import SearchContext from '../authAndContext/searchProvider';
 
-const searchOptions = { availability: ['Available', 'Pending', 'Sold', 'All'], dateRange: ['Any', 'Last 24 Hours', 'Last 7 Days', 'Last 30 Days'], priceRange: {}, prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
+const searchOptions = { availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], dateRange: ['Any', 'Last 24 Hours', 'Last 7 Days', 'Last 30 Days'], priceRange: {}, prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
+    const {searchForAds, filterResults, minPrice, setMinPrice, maxPrice, setMaxPrice, statusFilter, setStatusFilter} = useContext(SearchContext);
+
     const [loaded, setLoaded] = useState(false);
-    const [selected, setSelected] = useState("Available");
     const [selectedDateRange, setSelectedDateRange] = useState("Any");
+    
+    const [collapsed, setCollapsed] = useState(true);
+    const [priceRangeError, setPriceRangeError] = useState(false);
+
+
     const [priceRanges, setPriceRanges] = useState([
         { id: 0, name: '$0 - $20', min: 0, max: 20, selected: false }, 
         { id: 1, name: '$20 - $50', min: 20, max: 50, selected: false }, 
         { id: 2, name: '$50 - $100', min: 50, max: 100, selected: false }, 
-        { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }])
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
-    const [collapsed, setCollapsed] = useState(true);
-    const [priceRangeError, setPriceRangeError] = useState(false);
+        { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }]);
 
     const checkPriceRange = (min, max) => {
         if(max < min ) setPriceRangeError(true);
@@ -32,7 +35,7 @@ export default function SearchSideBar() {
 
     const updateSearchPriceRange = () => {
         let selected = 0;
-        let min = 2000000;
+        let min = 20000000;
         let max = 0;
         
         priceRanges.forEach(price => {
@@ -44,8 +47,14 @@ export default function SearchSideBar() {
         });
         
         if(selected !== 0){
+            //filterResults({min: min, max: max});
             setMinPrice(min);
             setMaxPrice(max);
+        }
+        else{
+            setMinPrice('');
+            setMaxPrice('');
+            //filterResults({min: 0, max: 200000000});
         }
     }
 
@@ -127,15 +136,15 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Availability</h3>
-                    <RadioGroup value={selected} onChange={setSelected} className={"space-y-2"}>
+                    <RadioGroup value={statusFilter} onChange={setStatusFilter} className={"space-y-2"}>
                         {searchOptions.availability.map((option) => (
-                            <RadioGroup.Option key={option} value={option} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
+                            <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
-                                {({ active, checked }) => (
+                                {({ checked }) => (
                                     <div className="flex w-full items-center justify-between">
                                         <div className="flex items-center text-sm h-6">
                                             <RadioGroup.Label as="p" className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}>
-                                                {option}
+                                                {option.name}
                                             </RadioGroup.Label>
                                         </div>
                                         {checked && (<div className="shrink-0 text-white"> <CheckIcon className="h-6 w-6" /></div>)}
