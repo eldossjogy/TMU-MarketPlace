@@ -6,14 +6,14 @@ import AuthContext from "../authAndContext/contextApi";
 
 export default function SearchPage() {
 	const [grid, setGrid] = useState(false);
-	//const {searchResults} = useContext(AuthContext)
+	const {searchResults} = useContext(AuthContext)
 	return (
 		<>
 			<Navbar />
 			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
 				<SearchSideBar />
 				<div className="grid grid-cols-1 w-full">
-					<HorizontalCard
+					{/* <HorizontalCard
 						image={[{file_path:"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}]}
 						title={"Mazda RX-7"}
 						price={"30,000"}
@@ -24,8 +24,8 @@ export default function SearchPage() {
 						status={{id: 2, type: 'Pending'}}
 						postID={1}
 						key={1} 
-					/>
-					{/* { searchResults && searchResults.map((result) => (
+					/> */}
+					{ searchResults && searchResults.map((result) => (
 						<HorizontalCard
 							image={result.image}
 							title={result.title}
@@ -39,7 +39,7 @@ export default function SearchPage() {
 							date={result.created_at}
 							key={result.id} 
 						/>
-					))} */}
+					))}
 				</div>
 			</main>
 		</>
