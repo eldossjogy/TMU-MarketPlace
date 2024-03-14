@@ -25,7 +25,7 @@ export default function HorizontalCard({
 
 	const age = weeks > 0 ? `${weeks} weeks ago` : days > 0 ? `${days} days ago` : hours > 0 ? `${hours} hours ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
 	return (
-		<Link to={{ pathname: `/${postID}` }}
+		<Link to={{ pathname: `/ad/${postID}` }}
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
 				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 2xl:max-h-80">
