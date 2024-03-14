@@ -7,7 +7,7 @@ import AuthContext from '../authAndContext/contextApi';
 export default function Searchbar(location) {
     const [searchInput, setSearchInput] = useState("");
     const [onSearchPage, setOnSearchPage] = useState(null);
-    //const {searchForAds} = useContext(AuthContext);
+    const {searchForAds} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -19,8 +19,8 @@ export default function Searchbar(location) {
         if(e) e.preventDefault()
         if(onSearchPage === null) return;
 
-        toast(`Searching for ${searchInput}`);
-        //searchForAds(searchInput);
+        toast(`Searching for ${searchInput === '' ? 'all posts' : searchInput}`);
+        searchForAds(searchInput);
 
         if(onSearchPage === false){
             navigate('/search/');

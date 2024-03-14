@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LocationPicker from './LocationPicker'
 import { RadioGroup } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid';
@@ -6,6 +6,7 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 const searchOptions = { availability: ['Available', 'Pending', 'Sold', 'All'], dateRange: ['Any', 'Last 24 Hours', 'Last 7 Days', 'Last 30 Days'], priceRange: {}, prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
+    const [loaded, setLoaded] = useState(false);
     const [selected, setSelected] = useState("Available");
     const [selectedDateRange, setSelectedDateRange] = useState("Any");
     const [priceRanges, setPriceRanges] = useState([
@@ -15,7 +16,7 @@ export default function SearchSideBar() {
         { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }])
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const [priceRangeError, setPriceRangeError] = useState(false);
 
     const checkPriceRange = (min, max) => {
@@ -48,6 +49,10 @@ export default function SearchSideBar() {
         }
     }
 
+    useEffect(() => {
+        setLoaded(true);
+    },[])
+
     return (
         <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 m-3 p-4 bg-[#fafafb] rounded-lg shadow-lg border-2 border-gray`}>
             <section className={`w-full space-y-4 md:hidden`}>
@@ -56,7 +61,7 @@ export default function SearchSideBar() {
                     <span>Show Search Filters</span>
                 </div>
             </section>
-            <section className={`w-full space-y-4 mt-6 md:mt-0 md:block ${collapsed ? 'hidden' : ''}`}>
+            <section className={`w-full space-y-4 mt-6 md:mt-0 md:block ${collapsed ? loaded ? 'hidden' : 'invisible' : ''}`}>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Price</h3>
                     <section className='flex flex-wrap w-full justify-between items-center'>
