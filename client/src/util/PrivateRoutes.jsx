@@ -3,7 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import AuthContext from "../authAndContext/contextApi";
 import Loading from "./Loading";
 
-const PrivateRoutes = () => {
+const PrivateRoutes = ({loggedIn}) => {
   const { user, isLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +19,12 @@ const PrivateRoutes = () => {
       </>
     );
   }
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  if (loggedIn) {
+    return user ? <Outlet /> : <Navigate to="/login" />;
+  }
+  else {
+    return !user ? <Outlet /> : <Navigate to="/" />;
+  }
 };
 
 export default PrivateRoutes;

@@ -29,10 +29,12 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
-          <Route element={<PrivateRoutes />}>
+          <Route element={<PrivateRoutes loggedIn={false}/>}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
+          <Route element={<PrivateRoutes loggedIn={true}/>}>
+            <Route path="/logout" element={<LogoutPage />} />
             <Route path="/settings" element={<AccountSettings />} />
             <Route path="/my-market">
               <Route index element={<MyProfile />} />
