@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-export default function ImageCarousel({ images, hovered, setHovered }) {
-  const [currImage, setImage] = useState(images[0]);
+export default function ImageCarousel({ images, hovered, setHovered, vertical = true }) {
+  const [currImage, setImage] = useState(images[0].file_path);
   const [currPos, setPos] = useState(0);
   useEffect(() => {
-    setImage(images[currPos]);
+    setImage(images[currPos].file_path);
   }, [currPos,images]);
 
   useEffect(() => {
@@ -25,19 +25,16 @@ export default function ImageCarousel({ images, hovered, setHovered }) {
   }
 
   return (
-    <div
-      id="slide-carousel"
-      className="w-full relative"
-    >
+    <div className={`${vertical ? 'w-full' : 'h-full'} relative`}>
       <img
-        className="rounded-md w-full h-auto object-cover aspect-square"
+        className={`rounded-md object-cover aspect-square h-auto ${vertical ? 'w-full' : 'md:max-w-30 lg:max-w-60 2xl:max-w-72'}`}
         src={currImage}
         alt="img"
       ></img>
       <div className={`text-center mt-2 absolute w-full bottom-0 ${hovered ? 'visible' : 'invisible'}`}>
         {images.map((ele, index) => (
           <button
-            className={`cursor-pointer h-4 w-4 mx-0.5 rounded-full inline-block transition-colors duration-600 ease-in-out ${index === currPos ? 'bg-white' : 'bg-gray-400'}`}
+            className={`cursor-pointer h-3 w-3 mx-0.5 rounded-full inline-block transition-colors duration-600 ease-in-out ${index === currPos ? 'bg-white' : 'bg-gray-400'}`}
             onClick={() => setPos(index)}
             key={index}
           ></button>
