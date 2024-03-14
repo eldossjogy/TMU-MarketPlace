@@ -3,64 +3,25 @@ import dotenv from "dotenv";
 
 export async function searchAds(req, res) {
 
-    const {q, user, lng, lat} = req.query;
+    const {q, user, lng, lat, min, max} = req.query;
     try {
-        // return status 200 with success message
-        // const { data, error } = await supabase.from('ad').select().textSearch('title', q, {
-        //     type: 'websearch',
-        //     config: 'english'
-        // });
 
-        
-        const { data, error } = user ? 
-            await supabase.from('ad').select(
-                 `
-        id,
-        title,
-        price,
-        description,
-        postal_code,
-        longitude,
-        latitude,
-        post_time,
-        status_id,
-        created_at,
-        image!inner(file_path),
-        category!inner(name),
-        status!inner(type)
-        `
-            ).eq('user_id', user)
-                .textSearch('title', q, { type: 'websearch', config: 'english' })
-            : q ? ( await supabase.from('ad').select( `
-            id,
-            title,
-            price,
-            description,
-            postal_code,
-            longitude,
-            latitude,
-            post_time,
-            status_id,
-            created_at,
-            image!inner(file_path),
-            category!inner(name),
-            status!inner(type)
-            `).textSearch('title', q, { type: 'websearch', config: 'english' }) )
-                : ( await supabase.from('ad').select( `
-                id,
-                title,
-                price,
-                description,
-                postal_code,
-                longitude,
-                latitude,
-                post_time,
-                status_id,
-                created_at,
-                image!inner(file_path),
-                category!inner(name),
-                status!inner(type)
-                `))
+        if(user){
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            .eq('user_id', user)
+            .textSearch('title', q, { type: 'websearch', config: 'english' })
+        }
+        else if (q) {
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            .filter('price','gte', parseInt(min) ? `${parseInt(min)}` : '0')
+            .filter('price','lte', parseInt(max) ? `${parseInt(max)}` : '2147483647')
+            .textSearch('title', q, { type: 'websearch', config: 'english' })
+        }
+        else{
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            .filter('price','gte', parseInt(min) ? `${parseInt(min)}` : '0')
+            .filter('price','lte', parseInt(max) ? `${parseInt(max)}` : '2147483647')
+        }
 
         if(error){
             res.status(500).json({
