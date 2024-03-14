@@ -28,12 +28,12 @@ export default function HorizontalCard({
 		<Link to={{ pathname: `/ad/${postID}` }}
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 2xl:max-h-80">
-					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md bg-[#fafafb] ">
+				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72">
+					<section className="max-w-32 lg:max-w-60 my-auto rounded-md bg-[#fafafb] ">
 						{ image.length > 1 ? <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={false}/> 
 							:
 							<img
-								className="rounded-md object-cover aspect-square md:max-w-30 lg:max-w-60 2xl:max-w-72 h-auto"
+								className="rounded-md object-cover aspect-square max-w-32 lg:max-w-60 h-auto"
 								src={image[0].file_path}
 								alt="img"
 							></img>
