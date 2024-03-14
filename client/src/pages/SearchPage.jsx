@@ -14,7 +14,7 @@ export default function SearchPage() {
 				<SearchSideBar />
 				<div className="grid grid-cols-1 w-full">
 					<HorizontalCard
-						image={"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}
+						image={[{file_path:"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}]}
 						title={"Mazda RX-7"}
 						price={"30,000"}
 						location={"Toronto, ON"}
