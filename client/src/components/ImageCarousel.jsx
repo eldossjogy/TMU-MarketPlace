@@ -27,7 +27,7 @@ export default function ImageCarousel({ images, hovered, setHovered, vertical = 
   return (
     <div className={`${vertical ? 'w-full' : 'h-full'} relative`}>
       <img
-        className={`rounded-md object-cover aspect-square h-auto ${vertical ? 'w-full' : 'md:max-w-30 lg:max-w-60'}`}
+        className={`rounded-md object-cover aspect-square h-auto ${vertical ? 'w-full' : 'md:max-w-30 lg:max-w-60 2xl:max-w-72'}`}
         src={currImage}
         alt="img"
       ></img>

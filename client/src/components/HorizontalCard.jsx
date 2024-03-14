@@ -28,12 +28,12 @@ export default function HorizontalCard({
 		<Link to={{ pathname: `/${postID}` }}
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72">
-					<section className="max-w-32 lg:max-w-60 my-auto h-full rounded-md bg-[#fafafb] ">
+				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 2xl:max-h-80">
+					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md bg-[#fafafb] ">
 						{ image.length > 1 ? <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={false}/> 
 							:
 							<img
-								className="rounded-md object-cover aspect-square md:max-w-30 lg:max-w-60 h-auto"
+								className="rounded-md object-cover aspect-square md:max-w-30 lg:max-w-60 2xl:max-w-72 h-auto"
 								src={image[0].file_path}
 								alt="img"
 							></img>
@@ -53,13 +53,13 @@ export default function HorizontalCard({
 								<div className="flex justify-between pb-2">
 									<p className="line-clamp-1 font-bold text-xl    ">{title}</p>
 								</div>
-								<div className="min-h-16">
-									<p className="line-clamp-2 lg:line-clamp-4">{description}</p>
+								<div className="sm:min-h-16">
+									<p className="line-clamp-1 sm:line-clamp-2 lg:line-clamp-4">{description}</p>
 								</div>
 							</div>
-							<div className="flex space-x-4">
-								<div className="h-auto">📍{location}</div>
-								<div className="h-auto">{String(age)}</div>
+							<div className="flex flex-wrap sm:flex-nowrap sm:space-x-4">
+								<div className="h-auto line-clamp-1 sm:line-clamp-none">📍{location}</div>
+								<div className="h-auto line-clamp-1 sm:line-clamp-none">{String(age)}</div>
 							</div>
 						</section>
 					</section>
