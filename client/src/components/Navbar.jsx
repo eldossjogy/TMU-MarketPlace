@@ -26,39 +26,67 @@ export default function Navbar() {
       }, [user]);
     
     return (
+        // <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
+        //     <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto lg:max-w-[90%]">
+        //         <section className='flex w-auto '>
+        //             <section id="nav-logo" className="w-64 xl:w-80 mx-3 me-6 shrink-0 h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
+        //                 <img src={Logo} alt="logo" className="h-full w-auto m-auto"></img>
+        //             </section>
+        //             <section id="nav-search-group" className="flex md:w-[30vw] group space-x-2 items-center justify-start">
+        //                 <Searchbar location={city}/>
+        //                 <div className='flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
+        //                     <MapPinIcon className='h-6 w-6 shrink-0'/>
+        //                     <span className='whitespace-nowrap'>{range/1000}km range</span>
+        //                 </div>
+        //             </section>
+        //         </section>
+        //         <section id="nav-account" className="flex justify-center items-center shrink-0">
+        //             <Dropdown options={dropdownOptions} text={user ? user.name ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+        //         </section>
+        //     </div>
+        //     <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
+        //         <section className='flex w-full items-center justify-between flex-wrap'>
+        //             <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer" onClick={() => {navigate('/');}}>
+        //                 <img src={Logo} alt="logo" className="h-full w-auto"></img>
+        //             </section>
+        //             <section id="nav-account-mobile" className="flex space-x-2">
+        //                 <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
+        //             </section>
+        //         </section>
+        //         <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">
+        //             <Searchbar/>
+        //             <section className='text-white flex items-center justify-center overflow-hidden space-x-2 hover:text-red-400' onClick={() => {getLocation()}}>
+        //                 <MapPinIcon className='h-6 w-6'/>
+        //                 <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km range</span>
+        //             </section>
+        //         </section>
+        //     </div>
+        // </nav>
         <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
-            <div className="hidden md:flex justify-between items-center h-full py-1 pr-[3vw] container mx-auto lg:max-w-[90%]">
-                <section className='flex w-auto '>
-                    <section id="nav-logo" className="w-64 xl:w-80 mx-3 me-6 shrink-0 h-12 flex justify-start items-center cursor-pointer" onClick={() => {navigate('/');}}>
-                        <img src={Logo} alt="logo" className="h-full w-auto m-auto"></img>
+            <div className="container mx-auto flex flex-col justify-center p-4 md:flex-row md:justify-between md:items-center md:h-full md:p-0 md:py-1 md:pr-[3vw] lg:max-w-[90%]">
+                <section className='md:flex md:flex-row md:w-auto space-y-4 md:space-y-0'>
+                    <section className='flex w-full items-center justify-between flex-wrap md:block md:w-auto'>
+                        <section id="nav-logo" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer md:w-64 xl:w-80 md:mx-3 md:me-6" onClick={() => {navigate('/');}}>
+                            <img src={Logo} alt="logo" className="h-full w-auto md:m-auto"></img>
+                        </section>
+                        <section id="nav-account-mobile" className="flex md:hidden space-x-2">
+                            <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
+                        </section>
                     </section>
-                    <section id="nav-search-group" className="flex md:w-[30vw] group space-x-2 items-center justify-start">
+                    <section id="nav-search-group" className="flex flex-wrap space-y-2 group md:flex-nowrap md:space-y-0 md:w-[30vw] md:space-x-2 md:items-center md:justify-start">
                         <Searchbar location={city}/>
-                        <div className='flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
+                        <section className='hidden md:flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
                             <span className='whitespace-nowrap'>{range/1000}km range</span>
-                        </div>
+                        </section>
+                        <section className='md:hidden text-white flex items-center justify-center overflow-hidden space-x-2 hover:text-red-400' onClick={() => {getLocation()}}>
+                            <MapPinIcon className='h-6 w-6'/>
+                            <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km range</span>
+                        </section>
                     </section>
                 </section>
-                <section id="nav-account" className="flex justify-center items-center shrink-0">
+                <section id="nav-account" className="hidden md:flex justify-center items-center shrink-0">
                     <Dropdown options={dropdownOptions} text={user ? user.name ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
-                </section>
-            </div>
-            <div className="container mx-auto flex flex-col md:hidden space-y-4 justify-center p-4">
-                <section className='flex w-full items-center justify-between flex-wrap'>
-                    <section id="nav-logo-mobile" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer" onClick={() => {navigate('/');}}>
-                        <img src={Logo} alt="logo" className="h-full w-auto"></img>
-                    </section>
-                    <section id="nav-account-mobile" className="flex space-x-2">
-                        <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
-                    </section>
-                </section>
-                <section id="nav-search-group-mobile" className="flex flex-wrap space-y-2">
-                    <Searchbar/>
-                    <section className='text-white flex items-center justify-center overflow-hidden space-x-2 hover:text-red-400' onClick={() => {getLocation()}}>
-                        <MapPinIcon className='h-6 w-6'/>
-                        <span className='whitespace-nowrap'>{(city === '' ? '' : ` ${city} - `)}{range/1000}km range</span>
-                    </section>
                 </section>
             </div>
         </nav>

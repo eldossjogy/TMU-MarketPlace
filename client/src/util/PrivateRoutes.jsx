@@ -4,7 +4,7 @@ import AuthContext from "../authAndContext/contextApi";
 import Loading from "../components/Loading";
 import Navbar from "../components/Navbar";
 
-const PrivateRoutes = () => {
+const PrivateRoutes = ({loggedIn}) => {
   const { user, isLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +21,12 @@ const PrivateRoutes = () => {
       </>
     );
   }
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  if (loggedIn) {
+    return user ? <Outlet /> : <Navigate to="/login" />;
+  }
+  else {
+    return !user ? <Outlet /> : <Navigate to="/" />;
+  }
 };
 
 export default PrivateRoutes;
