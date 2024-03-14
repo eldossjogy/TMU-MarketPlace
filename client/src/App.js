@@ -11,7 +11,6 @@ import SearchPage from "./pages/SearchPage";
 import AccountSettings from "./pages/AccountSettings";
 import CreateListings from "./pages/CreateListings";
 import PrivateRoutes from "./util/PrivateRoutes";
-import LoginPageProtector from "./util/LoginPageProtector"
 import ErrorPage from "./pages/ErrorPage";
 
 
@@ -30,11 +29,11 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="admin-dashboard" element={<AdminDashboard />} />
-          <Route element={<LoginPageProtector />}>
+          <Route element={<PrivateRoutes loggedIn={false}/>}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
-          <Route element={<PrivateRoutes />}>
+          <Route element={<PrivateRoutes loggedIn={true}/>}>
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/settings" element={<AccountSettings />} />
             <Route path="/my-market">
