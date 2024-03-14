@@ -26,8 +26,6 @@ export default function LoginPage() {
         const fn = async () => {
             const [data, error] = await signOut();
             
-            // console.log(data);
-            // console.log(error);
             if(! error && data.success == true) {
                 toast.success(`Logged out`);
             }
@@ -36,7 +34,6 @@ export default function LoginPage() {
             }
             navigate('/');
         }
-
         fn();
     }, []);
 
