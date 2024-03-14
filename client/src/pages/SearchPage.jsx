@@ -2,17 +2,17 @@ import React, { useContext, useState } from "react";
 import HorizontalCard from "../components/HorizontalCard";
 import Navbar from "../components/Navbar"
 import SearchSideBar from "../components/SearchSideBar"
-import AuthContext from "../authAndContext/contextApi";
+import SearchContext from "../authAndContext/searchProvider";
 
 export default function SearchPage() {
 	const [grid, setGrid] = useState(false);
-	const {searchResults} = useContext(AuthContext)
+	const {filteredResults} = useContext(SearchContext)
 	return (
 		<>
 			<Navbar />
 			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
 				<SearchSideBar />
-				<div className="grid grid-cols-1 w-full">
+				<div className="w-full">
 					{/* <HorizontalCard
 						image={[{file_path:"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}]}
 						title={"Mazda RX-7"}
@@ -25,7 +25,7 @@ export default function SearchPage() {
 						postID={1}
 						key={1} 
 					/> */}
-					{ searchResults && searchResults.map((result) => (
+					{ filteredResults && filteredResults.map((result) => (
 						<HorizontalCard
 							image={result.image}
 							title={result.title}
@@ -34,7 +34,7 @@ export default function SearchPage() {
 							description={
 								result.description
 							}
-							status={{id: result?.status?.id ?? 1, type: result.status?.type ?? ''}}
+							status={{id: result?.status_id ?? 1, type: result.status?.type ?? ''}}
 							postID={result.id}
 							date={result.created_at}
 							key={result.id} 
