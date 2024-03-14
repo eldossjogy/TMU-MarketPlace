@@ -43,7 +43,9 @@ export const SearchProvider = ({ children }) =>  {
                 if (parseInt(maxPrice) && result.price > parseInt(maxPrice)) {
                     return stack;
                 }
-                if (parseInt(statusFilter) && (statusFilter === 5 ? result.status_id !== 4 : result.status_id === parseInt(statusFilter)))
+                if (parseInt(statusFilter) && (statusFilter === 5 ? result.status_id === 4 : result.status_id !== parseInt(statusFilter))){
+                    return stack;
+                }
                 if (maxDays && result.created_at){
                     const rawDate = new Date(result.created_at);
                     const rawAge = Date.now() - rawDate.getTime();
@@ -59,7 +61,7 @@ export const SearchProvider = ({ children }) =>  {
 
     useEffect(() => {
         filterResults();
-    },[statusFilter, minPrice, maxPrice])
+    },[statusFilter, minPrice, maxPrice, maxDays])
 
     return (
         <SearchContext.Provider value={{
