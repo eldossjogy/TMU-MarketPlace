@@ -11,8 +11,19 @@ export default function HorizontalCard({
 	status,
 	location,
 	postID,
+	date
 }) {
 	const [hovered, setHovered] = useState(false);
+	const rawDate = new Date(date ?? '01/16/2024');
+	const rawAge = Date.now() - rawDate.getTime();
+
+	const weeks = Math.round(rawAge / (1000 * 3600 * 24 * 7));
+	const days = Math.round(rawAge / (1000 * 3600 * 24));
+	const hours = Math.round(rawAge / (1000 * 3600));
+	const minutes = Math.round(rawAge / (1000 * 60));
+	const seconds = Math.round(rawAge / (1000));
+
+	const age = weeks > 0 ? `${weeks} weeks ago` : days > 0 ? `${days} days ago` : hours > 0 ? `${hours} hours ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
 	return (
 		<Link to={{ pathname: `/${postID}` }}
 		>
@@ -22,23 +33,18 @@ export default function HorizontalCard({
 						{ Array.isArray(image) ? <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={false}/> 
 							:
 							<img
-								className="rounded-md object-cover aspect-square "
+								className="rounded-md object-cover aspect-square md:max-w-30 lg:max-w-60 h-auto"
 								src={image}
 								alt="img"
 							></img>
 						}
-						{/* <img
-							className="rounded-md object-cover aspect-square "
-							src={Array.isArray(image) ? image[0].file_path : image}
-							alt="img"
-						></img> */}
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">
 						<section className="flex flex-col justify-between text-right">
 							<div>
 								<h2 className="text-green-700 font-bold text-sm md:text-lg">C${price}</h2>
-								<h2 className="text-rose-700 font-bold text-sm md:text-base">{(status?.type !== 'Available') ? status?.type ?? '' : ''}</h2>
+								<h2 className="text-rose-700 font-bold text-sm md:text-base">{(status?.id !== 1) ? status?.type ?? '' : ''}</h2>
 							</div>
 							<button className="rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-black hidden group-hover:flex justify-center items-center py-1 max-w-20"><ArrowLongRightIcon className="h-6 w-6"/></button>
 						</section>
@@ -53,7 +59,7 @@ export default function HorizontalCard({
 							</div>
 							<div className="flex space-x-4">
 								<div className="h-auto">📍{location}</div>
-								<div className="h-auto">5 s ago</div>
+								<div className="h-auto">{String(age)}</div>
 							</div>
 						</section>
 					</section>
