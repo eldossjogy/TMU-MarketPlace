@@ -2,12 +2,11 @@ import React, {useContext, useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import toast from 'react-hot-toast';
-import AuthContext from '../authAndContext/contextApi';
+import SearchContext from '../authAndContext/searchProvider';
 
 export default function Searchbar(location) {
-    const [searchInput, setSearchInput] = useState("");
     const [onSearchPage, setOnSearchPage] = useState(null);
-    const {searchForAds} = useContext(AuthContext);
+    const {searchForAds, searchInput, setSearchInput} = useContext(SearchContext);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -20,7 +19,7 @@ export default function Searchbar(location) {
         if(onSearchPage === null) return;
 
         toast(`Searching for ${searchInput === '' ? 'all posts' : searchInput}`);
-        searchForAds(searchInput);
+        searchForAds();
 
         if(onSearchPage === false){
             navigate('/search/');
