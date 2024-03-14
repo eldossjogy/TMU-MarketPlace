@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
 	const [profileData, setProfileData] = useState(null);
 	const [loadingState, setLoadingState] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [searchResults, setSearchResults] = useState([]);
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
@@ -324,24 +323,6 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 
-
-	async function searchForAds(query) {
-		try {
-			const { data, error } = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/search?q=${encodeURI(query)}`)
-
-			setSearchResults(data?.data ?? []);
-
-			if (error) {
-				toast.error(error.message);
-				console.log(error);
-			}
-		} catch (error) {
-			toast.error(error.message);
-			console.log(error);
-		}
-	}
-
-
 	return (
 		<AuthContext.Provider
 			value={{
@@ -356,8 +337,6 @@ export const AuthProvider = ({ children }) => {
 				createNewListing,
 				isLoading,
 				fetchAvatar,
-				searchResults,
-				searchForAds
 			}}
 		>
 			{children}
