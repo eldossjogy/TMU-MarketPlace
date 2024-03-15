@@ -6,8 +6,8 @@
 <h3 align="center">TMU Marketplace</h3>
 
 <p align="center">
-      <a href="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/react-ci.yml" ><img src="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/react-ci.yml/badge.svg?branch=main"></a>
-      <a href="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/express-ci.yml" ><img src="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/express-ci.yml/badge.svg?branch=main"></a>
+      <a href="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/react-ci.yml" ><img src="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/react-ci.yml/badge.svg"></a>
+      <a href="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/express-ci.yml" ><img src="https://github.com/eldossjogy/TMU-MarketPlace/actions/workflows/express-ci.yml/badge.svg"></a>
 </p>
 
 ## About 
