@@ -122,14 +122,19 @@
 .createListingForm {
     width: 80%;
     display: flex;
+    flex-direction: column;
     gap: 1em;
 }
+.formTitle {
+    font-weight: bold;
+    font-size: 3em;
+}
 
+.topFormSection {
+    width: 100%;
+}
 .rightFormSection {
     width: 30%;
-}
-.imageUploadSection {
-
 }
 
 .leftFormSection {
@@ -138,6 +143,17 @@
 
 .leftFormSection * {
     font-size: 1.2em;
+}
+
+.bottomFormSection {
+    width: 50%;
+    display: flex;
+    gap: 2em;
+}
+
+.bottomFormSection button{
+    font-size: 1.5em;
+    width: 20%;
 }
 /*for phone screen*/
 @media all and (min-width: 100px) and (max-width: 950px) {
@@ -192,8 +208,33 @@
     .cardImageContainer img {
         object-fit: cover;
     }
+    .createListingForm {
+        width: 100%;
+    }
+    .formTitle {
+        font-size: 1.8em;
+    }
+    .rightFormSection {
+        width: 100%;
+    }
+    .leftFormSection {
+        width: 100%;
+    }
+    .leftFormSection * {
+        font-size: 1em;
+    }
+    
+    .bottomFormSection {
+        width: 100%;
+    }
+    
+    .bottomFormSection button{
+        font-size: 1em;
+        width: 50%;
+    }
 }
 
+/*speical cases for ipads and weird devices*/
 @media all and (min-width: 951px) and (max-width: 1400px) {
     .myListingCardContainer {
         gap: 0;
@@ -237,5 +278,11 @@
     }
     .listingInfoContainer {
         width: 75%;
+    }
+    .rightFormSection {
+        width: 100%;
+    }
+    .leftFormSection {
+        width: 100%;
     }
 }
