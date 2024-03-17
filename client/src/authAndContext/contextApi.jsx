@@ -11,9 +11,16 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
+  const [isLoading, setIsLoading] = useState(null)
   const [profileData, setProfileData] = useState(null);
+  const [userListings, setUserListings] = useState([])
+
+  // loading useState. set it true before api req, and at the end of server req function set it to false
   const [loadingState, setLoadingState] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  //caching/performance useStates:
+  const [fetchedUserListings, setFetchedUserListings] = useState(false)
+  
 
   // use effect that subscribes to supabase user events such as on sign in, sign out, etc
   useEffect(() => {
@@ -25,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         }
       } else if (event === "SIGNED_OUT") {
         setLocalSession(null);
-      } else {
+      } else { //check this one
         setLocalSession(session);
       }
     });
@@ -282,7 +289,6 @@ export const AuthProvider = ({ children }) => {
             },
           }
         );
-        toast(response.data.message);
         navigate("/my-market");
       } else {
         const error = new Error("Unauthorized access!! not a logged in user!!");
@@ -293,6 +299,24 @@ export const AuthProvider = ({ children }) => {
       toast.error(error.message);
     }
     setLoadingState(false);
+  }
+
+  async function fetchMyPostings() {
+    try{
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      )
+      setUserListings(response.data)
+    }
+    catch(error) {
+      toast.error(error.message + ". Can't get user listings from db");
+    }
+    setLoadingState(false)
   }
 
   // fetch profile picture link from user id
@@ -335,8 +359,11 @@ export const AuthProvider = ({ children }) => {
         loadingState,
         setLoadingState,
         createNewListing,
-        isLoading,
         fetchAvatar,
+        setFetchedUserListings,
+        fetchedUserListings,
+        fetchMyPostings,
+        userListings
       }}
     >
       {children}

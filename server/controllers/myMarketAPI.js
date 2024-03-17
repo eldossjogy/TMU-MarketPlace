@@ -35,7 +35,7 @@ export async function createListing(req, res) {
         }
 
         // return status 200 with success message
-        res.status(200).json({message: "New Listing added successfully"})
+        res.status(201).json({message: "New Listing added successfully"})
     }
     catch(error) {
         console.log(error)
@@ -49,20 +49,31 @@ export async function createListing(req, res) {
 
 }
 
-/*
+
 export async function getMyListings(req, res) {
     let {user_id} = req.body
     try {
-
         const myListings = await supabase
             .from('ad')
-            .select()
+            .select(
+                `
+                *,
+                image!inner(file_path),
+                category!inner(name),
+                status!inner(type)
+                `
+            )
             .eq('user_id', user_id)
 
-        res.status(200).json(myListings)
+        if (myListings.status == 400) {
+            const error = new Error(myListings.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(myListings.data)
     }
     catch(error) {
         res.status(500).json({ message: error.message });
     }
 }
-*/
