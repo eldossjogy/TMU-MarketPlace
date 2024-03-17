@@ -125,18 +125,18 @@
     gap: 1em;
 }
 
-.leftFormSection {
+.rightFormSection {
     width: 30%;
 }
 .imageUploadSection {
 
 }
 
-.rightFormSection {
+.leftFormSection {
     width: 70%;
 }
 
-.rightFormSection * {
+.leftFormSection * {
     font-size: 1.2em;
 }
 /*for phone screen*/
@@ -159,14 +159,15 @@
     .listingInfoContainer {
         width: 60%;
         flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
+        align-items: start;
+        justify-content: space-between;
+        margin-top: 1;
     }
     .cardLeftSection {
         width: 100%;
     }
     .cardRightSection {
-        width: 100%;
+        width: 50%;
         flex-direction: row;
         justify-content: start;
         align-items: start;
@@ -178,6 +179,9 @@
     }
     .cardLeftSection p {
         font-size: 0.8em;
+    }
+    .cardLeftSection h1 {
+        font-size: 1.1em;
     }
     .cardRightSection * {
         font-size: 0.8em;
@@ -197,6 +201,7 @@
     }
     .cardImageContainer {
     }
+
     .listingInfoContainer {
         flex-direction: column;
         justify-content: space-between;
@@ -216,6 +221,7 @@
         margin: 0;
         gap: 0;
     }
+
 }
 
 /*for laptop screen*/
