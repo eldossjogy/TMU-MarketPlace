@@ -41,11 +41,11 @@ export default function MyListingCard({listingInfo}) {
                 Repost
               </button>
             </div>
-            <div className='cardButtons w-full flex md:justify-around sm:justify-center gap-1'>
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] lg:w-[40%]">
+            <div className='cardButtons w-full flex md:justify-end sm:justify-center gap-4'>
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] lg:w-[35%]">
                 Remove
               </button>
-              <button className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] lg:w-[40%]">
+              <button className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] lg:w-[35%]">
                 Edit
               </button>
             </div>
