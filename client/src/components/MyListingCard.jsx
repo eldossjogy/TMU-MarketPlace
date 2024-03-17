@@ -35,17 +35,17 @@ export default function MyListingCard({listingInfo}) {
             <p className='mt-2 text-[1.2em]'>{truncateString(listingInfo.description, 100)} </p>
           </div>
           <div className='cardRightSection'>
-            <div className='w-full flex md:flex-col md:items-end sm:justify-end'>
+            <div className='flex md:flex-col md:items-end sm:justify-end'>
               <p className=''>{listingInfo.status.type}</p>
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-[1.5em]">
                 Repost
               </button>
             </div>
             <div className='w-full flex md:justify-around sm:justify-center gap-1'>
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] md:w-[40%]">
+              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] lgd:w-[40%]">
                 Remove
               </button>
-              <button class="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] md:w-[40%]">
+              <button class="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] lg:w-[40%]">
                 Edit
               </button>
             </div>

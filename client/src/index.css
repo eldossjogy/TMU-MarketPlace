@@ -160,7 +160,7 @@
         width: 60%;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
     }
     .cardLeftSection {
         width: 100%;
@@ -187,6 +187,34 @@
     }
     .cardImageContainer img {
         object-fit: cover;
+    }
+}
+
+@media all and (min-width: 951px) and (max-width: 1400px) {
+    .myListingCardContainer {
+        gap: 0;
+        height: 18vh;
+    }
+    .cardImageContainer {
+    }
+    .listingInfoContainer {
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+    }
+    .cardLeftSection {
+        width: 100%;
+    }
+    .cardRightSection p {
+        display: none;
+    }
+    .cardRightSection {
+        width: 100%;
+        flex-direction: row;
+        justify-content: start;
+        align-items: start;
+        margin: 0;
+        gap: 0;
     }
 }
 
