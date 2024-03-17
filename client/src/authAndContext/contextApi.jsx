@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import supabase from "./supabaseConfig";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingScreen from "../components/LoadingScreen";
 
 const AuthContext = createContext();
 
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
   const [localSession, setLocalSession] = useState(null);
-  const [isLoading, setIsLoading] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [profileData, setProfileData] = useState(null);
   const [userListings, setUserListings] = useState([])
 
@@ -30,11 +31,14 @@ export const AuthProvider = ({ children }) => {
         if (session == null) {
           setIsLoading(false);
         }
-      } else if (event === "SIGNED_OUT") {
-        setLocalSession(null);
-      } else { //check this one
         setLocalSession(session);
-      }
+        setIsLoading(false)
+      } 
+      else if (event === "SIGNED_OUT") {
+        console.log(3)
+        setLocalSession(null);
+        setIsLoading(false)
+      } 
     });
 
     return () => data.subscription.unsubscribe();
@@ -363,10 +367,12 @@ export const AuthProvider = ({ children }) => {
         setFetchedUserListings,
         fetchedUserListings,
         fetchMyPostings,
-        userListings
+        userListings,
+        localSession
       }}
     >
-      {children}
+       {isLoading ? <LoadingScreen /> : children}
+
     </AuthContext.Provider>
   );
 };

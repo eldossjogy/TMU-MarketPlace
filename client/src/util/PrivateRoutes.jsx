@@ -5,7 +5,7 @@ import Loading from "../components/Loading";
 import Navbar from "../components/Navbar";
 
 const PrivateRoutes = ({loggedIn}) => {
-  const { user, isLoading } = useContext(AuthContext);
+  const { localSession, isLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,10 +22,10 @@ const PrivateRoutes = ({loggedIn}) => {
     );
   }
   if (loggedIn) {
-    return user ? <Outlet /> : <Navigate to="/login" />;
+    return localSession ? <Outlet /> : <Navigate to="/login" />;
   }
   else {
-    return !user ? <Outlet /> : <Navigate to="/" />;
+    return !localSession ? <Outlet /> : <Navigate to="/" />;
   }
 };
 
