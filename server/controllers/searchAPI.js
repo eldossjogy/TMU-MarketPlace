@@ -3,24 +3,32 @@ import dotenv from "dotenv";
 
 export async function searchAds(req, res) {
 
-    const {q, user, lng, lat, min, max} = req.query;
+    const {q, user, lng, lat, min, max, status, maxDays, page} = req.query;
     try {
 
         if(user){
-            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .eq('user_id', user)
             .textSearch('title', q, { type: 'websearch', config: 'english' })
+            // .limit(30)
+            // .offset(page ?? 0)
         }
         else if (q) {
-            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .filter('price','gte', parseInt(min) ? `${parseInt(min)}` : '0')
             .filter('price','lte', parseInt(max) ? `${parseInt(max)}` : '2147483647')
+            .filter('status_id', 'in', parseInt(status) && parseInt(status) !== 5 ? `(${parseInt(status)})` : '(1,2,3)')
             .textSearch('title', q, { type: 'websearch', config: 'english' })
+            // .limit(30)
+            // .offset(page ?? 0)
         }
         else{
-            var { data, error } = await supabase.from('ad').select(`id, title, price, description, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+            var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, longitude, latitude, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .filter('price','gte', parseInt(min) ? `${parseInt(min)}` : '0')
             .filter('price','lte', parseInt(max) ? `${parseInt(max)}` : '2147483647')
+            .filter('status_id', 'in', parseInt(status) && parseInt(status) !== 5 ? `(${parseInt(status)})` : '(1,2,3)')
+            // .limit(30)
+            // .offset(page ?? 0)
         }
 
         if(error){

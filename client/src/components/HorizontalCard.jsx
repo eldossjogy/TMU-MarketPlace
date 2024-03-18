@@ -58,7 +58,7 @@ export default function HorizontalCard({
 								</div>
 							</div>
 							<div className="flex flex-wrap sm:flex-nowrap sm:space-x-4">
-								<div className="h-auto line-clamp-1 sm:line-clamp-none">📍{location}</div>
+								<div className="h-auto line-clamp-1 sm:line-clamp-none font-bold">📍 {location}</div>
 								<div className="h-auto line-clamp-1 sm:line-clamp-none">{String(age)}</div>
 							</div>
 						</section>

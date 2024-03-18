@@ -1,25 +1,27 @@
-import React, {useContext, useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import toast from 'react-hot-toast';
 import SearchContext from '../authAndContext/searchProvider';
+import React, {useContext, useEffect, useState} from 'react'
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-export default function Searchbar(location) {
+export default function Searchbar(searchLocation) {
+    const {searchForAds, searchInput, setSearchInput, updateFilters } = useContext(SearchContext);
     const [onSearchPage, setOnSearchPage] = useState(null);
-    const {searchForAds, searchInput, setSearchInput} = useContext(SearchContext);
     const navigate = useNavigate();
+    const location = useLocation();
+    const searchParams2 = new URLSearchParams(location.search);
 
     const handleChange = (e) => {
         e.preventDefault();
         setSearchInput(e.target.value);
     };
 
-    const search = (e) => {
+    const search = (e, options = {}) => {
         if(e) e.preventDefault()
         if(onSearchPage === null) return;
 
-        toast(`Searching for ${searchInput === '' ? 'all posts' : searchInput}`);
-        searchForAds();
+        toast(`Searching for ${searchInput === '' ? (options.query ? options.query : 'all posts') : searchInput}`);
+        updateFilters(options);
 
         if(onSearchPage === false){
             navigate('/search/');
@@ -28,8 +30,18 @@ export default function Searchbar(location) {
     }
 
     useEffect(() => {
-        if(onSearchPage === true) search();
-    }, [onSearchPage])
+        if(onSearchPage === true) {
+            const searchParams = new URLSearchParams(location.search);
+            let options = {};
+            if(searchParams.get('q')) options.query = (searchParams.get('q'));
+            if(parseInt(searchParams.get('min') ?? '')) options.min = (parseInt(searchParams.get('min')));
+            if(parseInt(searchParams.get('max') ?? '')) options.max = (parseInt(searchParams.get('max')));
+            if(parseInt(searchParams.get('status') ?? '')) options.status = (parseInt(searchParams.get('status')));
+            if(parseInt(searchParams.get('maxDaysOld') ?? '')) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
+            
+            search(null, options);
+        }
+    }, [onSearchPage, location])
 
     useEffect(() => {
         let path = window.location.pathname;
@@ -50,7 +62,7 @@ export default function Searchbar(location) {
             ></input>
             <input
                 className="hidden md:block rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis border-none focus:ring-0" 
-                placeholder={`Search ${location?.location ?? "here"}`}
+                placeholder={`Search ${searchLocation?.location ?? "here"}`}
                 onChange={handleChange}
                 value={searchInput}
             ></input>

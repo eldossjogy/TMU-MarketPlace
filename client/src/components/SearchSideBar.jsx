@@ -11,11 +11,9 @@ const searchOptions = {
     prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
-    const {minPrice, setMinPrice, maxPrice, setMaxPrice, maxDays, setMaxDays, statusFilter, setStatusFilter} = useContext(SearchContext);
+    const {minPrice, maxPrice, maxDays, statusFilter, updateFilters} = useContext(SearchContext);
 
     const [loaded, setLoaded] = useState(false);
-    const [selectedDateRange, setSelectedDateRange] = useState("Any");
-    
     const [collapsed, setCollapsed] = useState(true);
     const [priceRangeError, setPriceRangeError] = useState(false);
 
@@ -51,12 +49,14 @@ export default function SearchSideBar() {
         });
         
         if(selected !== 0){
-            setMinPrice(min);
-            setMaxPrice(max);
+            // setMinPrice(min);
+            // setMaxPrice(max);
+            updateFilters({min: min, max: max})
         }
         else{
-            setMinPrice('');
-            setMaxPrice('');
+            // setMinPrice('');
+            // setMaxPrice('');
+            updateFilters({min: '', max: ''})
         }
     }
 
@@ -83,12 +83,14 @@ export default function SearchSideBar() {
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        setMinPrice('');
+                                        // setMinPrice('');
+                                        updateFilters({min: ''})
                                         setPriceRangeError(false);
                                         return;
                                     }
 
-                                    setMinPrice(val);
+                                    // setMinPrice(val);
+                                    updateFilters({min: val})
                                     checkPriceRange(val, maxPrice);
                                 }
                             }></input>
@@ -101,12 +103,14 @@ export default function SearchSideBar() {
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        setMaxPrice('');
+                                        // setMaxPrice('');
+                                        updateFilters({max: ''})
                                         setPriceRangeError(false);
                                         return;
                                     }
 
-                                    setMaxPrice(val);
+                                    // setMaxPrice(val);
+                                    updateFilters({max: val})
                                     checkPriceRange(minPrice, val);
                                 }
                             }></input>
@@ -138,7 +142,7 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Availability</h3>
-                    <RadioGroup value={statusFilter} onChange={setStatusFilter} className={"space-y-2"}>
+                    <RadioGroup value={statusFilter} onChange={(e) => {updateFilters({status: e})}} className={"space-y-2"}>
                         {searchOptions.availability.map((option) => (
                             <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
@@ -158,7 +162,7 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Post Time</h3>
-                    <RadioGroup value={maxDays} onChange={setMaxDays} className={"space-y-2"}>
+                    <RadioGroup value={maxDays} onChange={(e) => {updateFilters({maxDays: e})}} className={"space-y-2"}>
                         {searchOptions.dateRange.map((option) => (
                             <RadioGroup.Option key={option.name} value={option.days} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>

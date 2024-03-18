@@ -1,16 +1,16 @@
-import React, { useContext, useState } from "react";
-import HorizontalCard from "../components/HorizontalCard";
-import Navbar from "../components/Navbar"
-import SearchSideBar from "../components/SearchSideBar"
 import SearchContext from "../authAndContext/searchProvider";
+import HorizontalCard from "../components/HorizontalCard";
+import SearchSideBar from "../components/SearchSideBar"
+import React, { useContext, useState } from "react";
+import Navbar from "../components/Navbar"
 
 export default function SearchPage() {
 	const [grid, setGrid] = useState(false);
-	const {filteredResults} = useContext(SearchContext)
+	const {searchResults} = useContext(SearchContext)
 	return (
 		<>
 			<Navbar />
-			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
+			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 min-h-[100vh] overflow-show">
 				<SearchSideBar />
 				<div className="w-full">
 					{/* <HorizontalCard
@@ -25,12 +25,12 @@ export default function SearchPage() {
 						postID={1}
 						key={1} 
 					/> */}
-					{ filteredResults && filteredResults.map((result) => (
+					{ searchResults && searchResults.map((result) => (
 						<HorizontalCard
 							image={result.image}
 							title={result.title}
 							price={result.price}
-							location={"Toronto, ON"}
+							location={result.location}
 							description={
 								result.description
 							}
