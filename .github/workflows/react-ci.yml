@@ -1,0 +1,38 @@
+name: React-CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+
+      - name: Install dependencies
+        run: |
+          cd client
+          npm install
+
+      - name: Build React App
+        run: |
+          cd client
+          CI=false npm run build
+
+      - name: Verify Build
+        run: |
+          if [ -d "client/build" ]; then
+            echo "Build successful."
+          else
+            echo "Build failed."
+            exit 1
+          fi

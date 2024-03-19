@@ -24,7 +24,7 @@ export default function HomePage() {
                 image={element.image}
                 title={element.title}
                 price={element.price.toLocaleString()}
-                location={"Toronto, ON"}
+                location={element.location}
                 description={element.description}
                 postID={element.id}
                 key={element.id}

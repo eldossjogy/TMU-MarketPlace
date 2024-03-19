@@ -1,0 +1,41 @@
+name: Express-CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '21'
+
+    - name: Install dependencies
+      run: |
+        cd server
+        npm install
+
+    - name: Attempt to start the Express app
+      run: |
+        cd server
+        npm start &>/dev/null &
+        sleep 10
+        if ! pgrep node > /dev/null; then
+          echo "Express app failed to start."
+          exit 1
+        fi
+      env:
+        # Define environment variables that your app needs to start, or mock them.
+        # This is an example of mocking an environment variable.
+        SUPABASE_URL: "https://mocking.supabase.co"
+        SUPABASE_KEY: "mocking"
+        SUPABASE_SERVICE_KEY: "mocking"
+        SUPABASE_STORAGE_CDN_URL: "mocking"
