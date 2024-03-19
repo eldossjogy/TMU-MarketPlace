@@ -45,6 +45,7 @@ export async function createListing(req, res) {
                 `
             )
             .eq('id', newlyCreatedListing.id);
+            
         // return status 200 with success message
         res.status(201).json(fetNewListing.data[0])
     }
@@ -73,6 +74,7 @@ export async function getMyListings(req, res) {
                 `
             )
             .eq('user_id', user_id)
+            .order('id', { ascending: false });
 
         if (myListings.status == 400) {
             const error = new Error(myListings.error.message)
