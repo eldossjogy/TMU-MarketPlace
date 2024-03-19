@@ -157,6 +157,11 @@ export default function ListingForm({formDataProp = {
         const index = imageList.indexOf(img)
 
         setImageList(prev => prev.filter((item, i) => i !== index));
+        
+        const fileInput = document.getElementById('dropzone-file');
+        if (fileInput) {
+            fileInput.value = '';
+        }
     }
 
 
