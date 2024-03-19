@@ -89,14 +89,26 @@ export const SearchProvider = ({ children }) =>  {
             setSearchInput(options.query);
         }
 
-        if(Object.hasOwn(options, 'min') && !isNaN(parseInt(options.min))){
-            parsedOptions.min = parseInt(options.min);
-            setMinPrice(parsedOptions.min);
+        if(Object.hasOwn(options, 'min')){
+            if(!isNaN(parseInt(options.min))){
+                parsedOptions.min = parseInt(options.min);
+                setMinPrice(parsedOptions.min);
+            }
+            else if(options.min === ''){
+                parsedOptions.min = '';
+                setMinPrice('');
+            }
         }
 
-        if(Object.hasOwn(options, 'max') && !isNaN(parseInt(options.max))){
-            parsedOptions.max = parseInt(options.max);
-            setMaxPrice(parsedOptions.max);
+        if(Object.hasOwn(options, 'max')){
+            if(!isNaN(parseInt(options.max))){
+                parsedOptions.max = parseInt(options.max);
+                setMaxPrice(parsedOptions.max);
+            }
+            else if(options.max === ''){
+                parsedOptions.max = '';
+                setMaxPrice('');
+            }
         }
 
         if(Object.hasOwn(options, 'status') && !isNaN(parseInt(options.status))){
