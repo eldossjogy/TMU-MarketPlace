@@ -8,12 +8,7 @@ const PrivateRoutes = ({loggedIn}) => {
   const { localSession, isLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setLoading(false);
-    }
-  }, [isLoading]);
-  if (loading) {
+  if (isLoading) {
     return (
       <>
         <Navbar />
