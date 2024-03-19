@@ -11,6 +11,7 @@ export const LocationProvider = ({ children }) =>  {
 
     useEffect(() => {
         getLocation();
+        setIsReady(true);
     }, []);
 
     // Gets IP address location from browser and forwards it to generateLocation(pos)
@@ -51,7 +52,7 @@ export const LocationProvider = ({ children }) =>  {
             setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
         });
 
-        setIsReady(true);
+        //setIsReady(true);
     }
 
     // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
