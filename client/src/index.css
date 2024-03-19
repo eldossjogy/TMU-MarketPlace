@@ -10,7 +10,7 @@
 }
 
 .itemModalContainer {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -307,6 +307,7 @@
         align-items: start;
         justify-content: space-between;
         margin-top: 1;
+        gap: 0;
     }
     .cardLeftSection {
         width: 100%;
