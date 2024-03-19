@@ -428,7 +428,7 @@ export const AuthProvider = ({ children }) => {
     }
     else if (action === "Add") {
       console.log("came to add")
-      setUserListings(prev => [...prev, listingInfo])
+      setUserListings(prev => [listingInfo, ...prev])
     }
   }
 

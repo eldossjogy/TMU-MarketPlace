@@ -1,11 +1,67 @@
 import supabase from '../config/supabaseConfig.js'
 import dotenv from "dotenv";
 
+function validateFormData(formData) {
+    const errors = {};
+
+    // Title validation
+    if (!formData.title.trim()) {
+        errors.title = 'Title is required.';
+    } else if (formData.title.length > 100) {
+        errors.title = 'Title must be at most 100 characters long.';
+    }
+
+    // Price validation
+    const price = parseFloat(formData.price);
+    if (isNaN(price)) {
+        setFormData(prev => ({...prev, price: "0"}))
+    }
+    else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.trim())) {
+        errors.price = 'Price must be a valid number.';
+    }
+    else if (price < 0 || price > 100000 || !formData.price.trim()) {
+        errors.price = 'Price must be a number between $0 and $100,000.';
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+        errors.description = 'Description is required.';
+    }
+    else if (formData.description.length > 350) {
+        errors.description = 'Description must be at most 350 characters long.';
+    }
+
+    // Postal code validation
+    if (formData.postal_code && !/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/.test(formData.postal_code)) {
+        errors.postal_code = 'Invalid Canadian postal code format.';
+    }
+
+    // Category ID validation
+    if (formData.category_id === null) {
+        errors.category_id = 'Category is required.';
+    }
+
+    //location validation
+    if (formData.location.length > 150) {
+        errors.location = 'Location must be at most 150 characters long.';
+    }
+
+    return errors;
+}
+
 export async function createListing(req, res) {
 
     const {title, price, description, expire_time, postal_code, location, category_id, user_id, images} = req.body
     try {
         //need .select at the end to get the created data and use its id for new image POST req
+        let err = validateFormData({title, price, description, expire_time, postal_code, location, category_id})
+
+        if (Object.keys(err).length !== 0) {
+            const error = new Error("Bad form data !")
+            error.status = 422
+            throw error;
+        }
+      
         const newListing = await supabase
             .from('ad')
             .insert([
@@ -50,12 +106,8 @@ export async function createListing(req, res) {
         res.status(201).json(fetNewListing.data[0])
     }
     catch(error) {
-        if(error.status === 401) {
-            res.status(401).json({ message: error.message});
-        }
-        else {
-            res.status(500).json({ message: error.message });
-        }
+        console.log(error)
+        res.status(error.status).json({ message: error.message });
     }
 
 }

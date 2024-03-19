@@ -6,20 +6,20 @@ import LoadingScreen from '../components/LoadingScreen'
 import toast from 'react-hot-toast';
 import MyProfileContainer from '../components/MyProfileContainer';
 
-export default function CreateListings() {
+export default function CreateListings({formDataProp = {
+    title: '',
+    price: '',
+    description: '',
+    expire_time: null,
+    postal_code: '',
+    location: '',
+    category_id: null,
+}}) {
     const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formErrors, setFormErrors] = useState({})
 
-    const [formData, setFormData] = useState({
-        title: '',
-        price: '',
-        description: '',
-        expire_time: getCurrentDateTime(48),
-        postal_code: '',
-        location: '',
-        category_id: null,
-    });
+    const [formData, setFormData] = useState(formDataProp);
 
     const [imageList, setImageList] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -79,6 +79,12 @@ export default function CreateListings() {
         if (formData.category_id === null) {
             errors.category_id = 'Category is required.';
         }
+
+        //location validation
+        if (formData.location.length > 150) {
+            errors.location = 'Location must be at most 150 characters long.';
+        }
+    
     
         return errors;
     }
@@ -107,7 +113,7 @@ export default function CreateListings() {
         if (Object.keys(err).length === 0) {
             setLoadingState(true);
             console.log('sending: ', formData)
-            await createNewListing(formData, imageList);
+            await createNewListing({...formData, expire_time: getCurrentDateTime(48)}, imageList);
         }
         else {
             console.log(err)
@@ -178,7 +184,7 @@ export default function CreateListings() {
                         <label className="block mb-2">Location:</label>
                         <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
-                        <label className="block mb-2">Category ID:{formErrors.category_id && <span className='text-red-500'>{formErrors.category_id}</span>}</label>
+                        <label className="block mb-2">Category:{formErrors.category_id && <span className='text-red-500'>{formErrors.category_id}</span>}</label>
                         <select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2">
                             <option value="">Select Category</option>
                             {categories.map((elem, index) => (

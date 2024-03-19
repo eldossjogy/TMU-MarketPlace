@@ -97,7 +97,7 @@ export default function MyListingCard({listingInfo}) {
           }
           {modal && 
             <div className="dashboard-Item-Modal flex flex-col p-3 rounded shadow-md hover:shodow-lg bg-red-500 text-white">
-                    <div className="w-full flex items-center flex-col gap-5">
+                    <div className="w-full flex items-center flex-col md:gap-5 gap-2">
                         <div className="flex items-center w-full">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 className="w-16 h-16 rounded-2xl p-3 border border-blue-100 text-blue-400 bg-blue-50" fill="none"
@@ -106,14 +106,14 @@ export default function MyListingCard({listingInfo}) {
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div className="flex flex-col ml-3">
-                                <div className="md:text-[1.5em] leading-none">Delete Ad '{listingInfo.title}' ?</div>
-                                <p style={{color:'white'}} className="md:text-[1.3em] leading-none mt-1">You will lose your listing
+                                <div className="md:text-[1.5em] text-[1em] leading-none">Delete Ad '{listingInfo.title}' ?</div>
+                                <p style={{color:'white'}} className="md:text-[1.3em] text-[0.8em] leading-none mt-1">Your listing will be removed and wont be active for others!
                                 </p>
                             </div>
                         </div>
-                        <div className='flex gap-5'>
-                            <button onClick={handleDeleteEntry} style={{fontWeight: 'bold'}} className="flex-no-shrink bg-white px-5 ml-4 py-2 md:text-[1.5em] shadow-sm hover:shadow-lg tracking-wider border-2 border-white text-red-500 rounded-full hover:underline">Delete</button>
-                            <button style={{fontWeight: 'bold'}} className="flex-no-shrink bg-blue-500 px-5 ml-4 py-2 md:text-[1.5em] shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-500 text-white-500 rounded-full hover:underline" 
+                        <div className='flex md:gap-5 gap-2'>
+                            <button onClick={handleDeleteEntry} className="font-bold flex-no-shrink bg-white lg:px-5 lg:ml-4 lg:py-2 p-2 md:text-[1.5em] shadow-sm hover:shadow-lg tracking-wider border-2 border-white text-red-500 rounded-md hover:underline">Delete</button>
+                            <button className="font-bold flex-no-shrink bg-blue-500 lg:px-5 lg:ml-4 lg:py-2 p-2 md:text-[1.5em] shadow-sm hover:shadow-lg tracking-wider border-2 border-blue-500 text-white-500 rounded-md hover:underline" 
                             onClick={() => {setModal(prev => !prev)}}>Cancel</button>
                         </div>
                     </div>
