@@ -10,7 +10,7 @@ export default function CreateListings() {
         <div>
             <Navbar />
             <MyProfileContainer>
-                <ListingForm />
+                <ListingForm/>
             </MyProfileContainer>
         </div>
     );

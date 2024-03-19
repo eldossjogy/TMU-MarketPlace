@@ -11,7 +11,7 @@ export default function ListingForm({formDataProp = {
     postal_code: '',
     location: '',
     category_id: null,
-}}, typeOfReq="Post") {
+}, typeOfReq="Post"}) {
 
     const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -112,6 +112,7 @@ export default function ListingForm({formDataProp = {
         if (Object.keys(err).length === 0) {
             setLoadingState(true);
             if (typeOfReq === "Post") {
+                console.log("came here")
                 await createNewListing({...formData, expire_time: getCurrentDateTime(48)}, imageList);
             }
             else if (typeOfReq === "Put") {
@@ -157,7 +158,7 @@ export default function ListingForm({formDataProp = {
         const index = imageList.indexOf(img)
 
         setImageList(prev => prev.filter((item, i) => i !== index));
-        
+
         const fileInput = document.getElementById('dropzone-file');
         if (fileInput) {
             fileInput.value = '';
