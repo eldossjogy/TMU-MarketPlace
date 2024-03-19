@@ -50,8 +50,12 @@ export default function ListingForm({formDataProp = {
     
         // Price validation
         const price = parseFloat(formData.price);
-        if (isNaN(price)) {
+        
+        if (formData.price.length <= 0) {
             setFormData(prev => ({...prev, price: "0"}))
+        }
+        else if (isNaN(price)) {
+            errors.price = 'Price must be a valid number.';
         }
         else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.toString().trim())) {
             errors.price = 'Price must be a valid number.';
