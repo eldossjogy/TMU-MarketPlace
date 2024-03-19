@@ -5,7 +5,7 @@ export async function getCategories(req, res) {
     try {
         const categories = await supabase
             .from('category')
-            .select('name')
+            .select('name, id')
 
         res.status(200).json(categories.data)
     }

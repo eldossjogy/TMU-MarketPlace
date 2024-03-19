@@ -65,7 +65,7 @@ export default function MyListingCard({listingInfo}) {
           </div>
         </div>
         {loadingState &&
-                <LoadingScreen message={"Changing Ad status."} />
+          <LoadingScreen message={"Changing Ad status."} />
         }
     </div>
   )

@@ -12,7 +12,7 @@ export async function createListing(req, res) {
                 {title, price, description, expire_time, postal_code, location, category_id, user_id}
             ])
             .select()
-
+                    
         //if unauthorized (dont need this since using service key to bypass any RLS)
         if (newListing.status == 401) {
             const error = new Error(newListing.error.message)
@@ -38,7 +38,6 @@ export async function createListing(req, res) {
         res.status(201).json({message: "New Listing added successfully"})
     }
     catch(error) {
-        console.log(error)
         if(error.status === 401) {
             res.status(401).json({ message: error.message});
         }
@@ -105,7 +104,14 @@ export async function changeListingStatus(req, res) {
             .from('ad')
             .update({status_id: statusId})
             .eq('id', listing.id)
-            .select();
+            .select(
+                `
+                *,
+                image!inner(file_path),
+                category!inner(name),
+                status!inner(type)
+                `
+            );
 
             res.status(200).json(updatedListing.data[0])
         }

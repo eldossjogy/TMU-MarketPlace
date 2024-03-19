@@ -399,13 +399,25 @@ export const AuthProvider = ({ children }) => {
           },
         }
       )
-      updateUserListingsLocally(response.data)
+      updateUserListingsLocally(listingInfo, response.data)
     }
     catch(error) {
       toast.error(error.message);
     }
 
     setLoadingState(false)
+  }
+
+  function updateUserListingsLocally(listingInfo, updatedData) {
+    let targetIndex = userListings.indexOf(listingInfo)
+
+    setUserListings(prev => prev.map((item, i) => {
+      if (i !== targetIndex) {
+          return item; // Keep the item unchanged if the index doesn't match
+      } else {
+          return updatedData; // Replace the item at the target index with updatedData
+      }
+    }));
   }
 
   return (

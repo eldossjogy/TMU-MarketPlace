@@ -9,6 +9,7 @@ import MyProfileContainer from '../components/MyProfileContainer';
 export default function CreateListings() {
     const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [formErrors, setFormErrors] = useState({})
 
     const [formData, setFormData] = useState({
         title: '',
@@ -17,7 +18,7 @@ export default function CreateListings() {
         expire_time: getCurrentDateTime(48),
         postal_code: '',
         location: '',
-        category_id: '',
+        category_id: null,
     });
 
     const [imageList, setImageList] = useState([]);
@@ -38,6 +39,50 @@ export default function CreateListings() {
         }
     }, [imageList]);
 
+    //function that returns array of errors for form valdation
+    function validateFormData(formData) {
+        const errors = {};
+    
+        // Title validation
+        if (!formData.title.trim()) {
+            errors.title = 'Title is required.';
+        } else if (formData.title.length > 100) {
+            errors.title = 'Title must be at most 100 characters long.';
+        }
+    
+        // Price validation
+        const price = parseFloat(formData.price);
+        if (isNaN(price)) {
+            setFormData(prev => ({...prev, price: "0"}))
+        }
+        else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.trim())) {
+            errors.price = 'Price must be a valid number.';
+        }
+        else if (price < 0 || price > 100000 || !formData.price.trim()) {
+            errors.price = 'Price must be a number between $0 and $100,000.';
+        }
+    
+        // Description validation
+        if (!formData.description.trim()) {
+            errors.description = 'Description is required.';
+        }
+        else if (formData.description.length > 350) {
+            errors.description = 'Description must be at most 350 characters long.';
+        }
+    
+        // Postal code validation
+        if (formData.postal_code && !/^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/.test(formData.postal_code)) {
+            errors.postal_code = 'Invalid Canadian postal code format.';
+        }
+    
+        // Category ID validation
+        if (formData.category_id === null) {
+            errors.category_id = 'Category is required.';
+        }
+    
+        return errors;
+    }
+
     function handleDrop(event) {
         event.preventDefault();
         const files = event.dataTransfer.files;
@@ -56,8 +101,17 @@ export default function CreateListings() {
 
     async function handleNewPost(event) {
         event.preventDefault();
-        setLoadingState(true);
-        await createNewListing(formData, imageList);
+        let err = validateFormData(formData)
+        setFormErrors(err)
+
+        if (Object.keys(err).length === 0) {
+            setLoadingState(true);
+            console.log('sending: ', formData)
+            await createNewListing(formData, imageList);
+        }
+        else {
+            console.log(err)
+        }
     };
 
     function checkFileForImage(files) {
@@ -107,32 +161,32 @@ export default function CreateListings() {
                 <h1 className='formTitle'>Create A New Listing</h1>
                 <div className='topFormSection'>
                     <div className='leftFormSection'>
-                        <label className="block mb-2">Title:</label>
+                        <label className="block mb-2">Title:{formErrors.title && <span className='text-red-500'>{formErrors.title}</span>}</label>
                         <input autoComplete='off' type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter Title" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
-                        <label className="block mb-2">Price:</label>
+                        <label className="block mb-2">Price:{formErrors.price && <span className='text-red-500'>{formErrors.price}</span>}</label>
                             <div className="relative">
                                 <span className="rounded-md absolute inset-y-0 left-0 p-3 flex items-center bg-gray-200 text-gray-600">$
                                 </span>
-                                <input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price" className="rounded-md pl-10 pr-12 block w-full border border-gray-300 rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" style={{ backgroundColor: 'white' }} />
+                                <input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price ($0 if not set)" className="rounded-md pl-10 pr-12 block w-full border border-gray-300 rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" style={{ backgroundColor: 'white' }} />
                                 <span className="rounded-md absolute inset-y-0 right-0 p-3 flex items-center bg-gray-200 text-gray-600">.00</span>
                             </div>
 
-                        <label className="block mb-2">Postal Code:</label>
+                        <label className="block mb-2">Postal Code:{formErrors.postal_code && <span className='text-red-500'>{formErrors.postal_code}</span>}</label>
                         <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
                         <label className="block mb-2">Location:</label>
                         <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
-                        <label className="block mb-2">Category ID:</label>
+                        <label className="block mb-2">Category ID:{formErrors.category_id && <span className='text-red-500'>{formErrors.category_id}</span>}</label>
                         <select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2">
                             <option value="">Select Category</option>
                             {categories.map((elem, index) => (
-                                <option value={elem.name}>{elem.name}</option>
+                                <option key={index} value={elem.id}>{elem.name}</option>
                             ))}
                         </select>
 
-                        <label className="block mb-2">Description:</label>
+                        <label className="block mb-2">Description:{formErrors.description && <span className='text-red-500'>{formErrors.description}</span>}</label>
                         <textarea rows="3" name="description" value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2"></textarea>
                         
                     </div>

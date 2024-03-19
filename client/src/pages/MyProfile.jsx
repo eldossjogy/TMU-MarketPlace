@@ -4,6 +4,7 @@ import MyProfileContainer from '../components/MyProfileContainer'
 import MyListingCard from '../components/MyListingCard'
 import AuthContext from '../authAndContext/contextApi'
 import LoadingScreen from '../components/LoadingScreen'
+import CategoryComponent from '../components/CategoryComponent'
 
 export default function MyProfile() {
 
@@ -22,6 +23,7 @@ export default function MyProfile() {
       <Navbar />
       <MyProfileContainer>
         <div className='myListingsContainer'>
+          <CategoryComponent />
           {userListings.map((elem, index) => (
             <MyListingCard listingInfo={elem} key={index}/>
           ))}
