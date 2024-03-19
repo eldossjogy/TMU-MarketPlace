@@ -49,7 +49,7 @@ export default function LoginPage() {
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 flex-wrap space-y-4 justify-center'>
-                <h2 className='w-full text-xl text-center'>Logo</h2>
+                <img src="../assets/logo-light.png" alt="Logo" className="h-full w-[30%] m-auto"></img>
                 <section className='w-full space-y-2'>
                     <div className='flex-col w-[90%]'>
                         <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400 text-xs'>(Must use TMU Email)</span></label>
