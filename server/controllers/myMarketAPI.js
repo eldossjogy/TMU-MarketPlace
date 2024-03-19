@@ -107,7 +107,7 @@ export async function changeListingStatus(req, res) {
             .select(
                 `
                 *,
-                image!inner(file_path),
+                image!left(file_path),
                 category!inner(name),
                 status!inner(type)
                 `

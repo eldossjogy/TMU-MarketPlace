@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-export default function MyMarketSideNavbar() {
+export default function MyMarketSideNavbar({collapsed}) {
 
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("")
@@ -16,8 +16,8 @@ export default function MyMarketSideNavbar() {
         {linkText: "Create Post", link: "/my-market/create-listing"},
         {linkText: "Repost Listing", link: "/my-market/repost-listings"}
     ]},
-    {title: "Messages", items:[{linkText: "Your Listings", link: "/"},
-        {linkText: "Your Listings", link: "/"}
+    {title: "Messages", items:[{linkText: "Inbox", link: "/"},
+        {linkText: "Unread", link: "/"}
     ]},
     {title: "Settigs", items:[
         {linkText: "Edit Settings", link: "/"},
@@ -27,7 +27,7 @@ export default function MyMarketSideNavbar() {
     ]
 
   return (
-    <div className='marketSideNavbar'>
+    <div className={`marketSideNavbar ${collapsed ? 'show' : 'hide'}`}>
         <h1 className='sideNavBar-heading'>Your Market</h1>
         {navList.map((elem, index) => (
             <div className='sideNavLinkContainer' key={index}>

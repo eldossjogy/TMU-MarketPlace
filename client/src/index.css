@@ -23,7 +23,10 @@
 .marketPageMainContainer {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-top: 1em;
+    gap: 1em;
 }
 
 .myMarketPageContainer {
@@ -236,14 +239,51 @@
     color: black;
 }
 
+
 /*for phone screen*/
 @media all and (min-width: 100px) and (max-width: 950px) {
     .myMarketPageContainer {
-        width: 95%;
+        width: 100%;
     }
     .marketSideNavbar {
-        display: none;
+        width: 75%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0%;
+        z-index:10;
+        padding: 5%;
+        padding-top: 10%;
+        border-radius: 5px;
+        animation-duration: 0.3s;
+        animation-timing-function: ease-in;
+        animation-fill-mode: forwards; /* Ensure the navbar stays at the final position after animation */
     }
+
+    .marketSideNavbar.show {
+        animation-name: slideIn; /* Apply slideIn animation when the show class is present */
+    }
+
+    .marketSideNavbar.hide {
+        animation-name: slideOut; /* Apply slideOut animation when the hide class is present */
+    }
+
+    .sideNavBar-heading {
+        font-size: 1.5em;
+    }
+    
+    .navSubHeading {
+        font-size: 1em;
+    }
+    
+    .sideNavLinkContainer ul {
+        font-size: 1em;
+    }
+    
+    .sideNavLinkContainer ul li {
+        padding: 2%;
+    }
+
     .myListingsContainer {
         width: 100%;
     }
@@ -326,6 +366,15 @@
         padding: 0.2em;
         font-size: 1.1em;
     }
+    .categoryComponentContainer {
+        font-size: 1em;
+        padding: 1%;
+    }
+    .categoryComponentContainer ul {
+        gap: 0.5em;
+        font-size: 1em;
+        flex-wrap: wrap;
+    }
 }
 
 /*speical cases for ipads and weird devices*/
@@ -333,8 +382,6 @@
     .myListingCardContainer {
         gap: 0;
         height: 18vh;
-    }
-    .cardImageContainer {
     }
 
     .listingInfoContainer {
@@ -348,10 +395,10 @@
     .cardRightSection {
         width: 100%;
         flex-direction: row;
-        justify-content: start;
-        align-items: start;
+        justify-content: end;
+        align-items: end;
         margin: 0;
-        gap: 0;
+        gap: 5em;
     }
     .bottomFormSection {
         width: 100%;
@@ -380,5 +427,25 @@
     }
     .cardButtons button {
         width: 50%;
+    }
+}
+
+
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
     }
 }

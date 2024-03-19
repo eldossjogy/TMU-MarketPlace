@@ -52,19 +52,19 @@ export default function MyListingCard({listingInfo}) {
   return (
     <div className='myListingCardContainer'>
         <div className='cardImageContainer'>
-          <img src={listingInfo.image.length !== 0? listingInfo.image[0].file_path : noImage }></img>
+          <img src={(listingInfo.image.length !== 0) ? listingInfo.image[0].file_path : noImage }></img>
         </div>
         <div className='listingInfoContainer'>
           <div className='cardLeftSection'>
             <h1 className='font-bold text-[2em]'>{isPhone ? truncateString(listingInfo.title, 25) : truncateString(listingInfo.title, 50)}</h1>
             <div className='flex justify-between'>
-              <h3 className='text-green-500 font-bold text-[1.3em]'>{listingInfo.price}</h3>
+              <h3 className='text-green-500 font-bold text-[1.3em]'>${listingInfo.price}</h3>
               <div className="h-auto line-clamp-1 sm:line-clamp-none text-[1.3em]">📍{listingInfo.location}</div>
             </div>
             <p className='mt-2 text-[1.2em]'>{isPhone ? truncateString(listingInfo.description, 65) : truncateString(listingInfo.description, 200) } </p>
           </div>
           <div className='cardRightSection'>
-            <div className='sm:w-[50%] md:w-[100%] relative flex flex-col md:items-end sm:justify-end'>
+            <div className='sm:w-[50%] md:w-[80%] lg:w-[35%] relative flex flex-col md:justify-end md:items-end'>
               <p className='font-bold text-[1.5em]'>Status:<span className={`font-bold ${listingInfo.status.type === "Available" && 'text-green-500'} ${listingInfo.status.type === "Sold" && 'text-red-500'} ${listingInfo.status.type === "Pending" && 'text-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'text-blue-400'}`}>{listingInfo.status.type}</span></p>
               <select onChange={changeListingStatus} className="selectContainer bg-blue-500 hover:bg-blue-700 text-white font-bold rounded text-[1.5em]">
                 <option value =''>Status</option>

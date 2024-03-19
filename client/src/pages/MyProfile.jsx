@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import MyProfileContainer from '../components/MyProfileContainer'
 import MyListingCard from '../components/MyListingCard'
@@ -9,6 +9,7 @@ import CategoryComponent from '../components/CategoryComponent'
 export default function MyProfile() {
 
   const {fetchedUserListings, setFetchedUserListings, setLoadingState, loadingState, fetchMyPostings, userListings} = useContext(AuthContext)
+  
   useEffect(() => {
     if (!fetchedUserListings) {
       setFetchedUserListings(!fetchedUserListings)
