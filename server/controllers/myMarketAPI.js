@@ -13,18 +13,17 @@ function validateFormData(formData) {
 
     // Price validation
     const price = parseFloat(formData.price);
-        
     if (formData.price.length <= 0) {
-        formData.price = "0"
+        formData.price = 0
     }
     else if (isNaN(price)) {
         errors.price = 'Price must be a valid number.';
     }
-    else if (!/^\d+(\.\d{1,2})?$/.test(formData.price.toString().trim())) {
-        errors.price = 'Price must be a valid number.';
-    }
     else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
         errors.price = 'Price must be a number between $0 and $100,000.';
+    }
+    else if (!/^\d+$/.test(formData.price.toString().trim())) {
+        errors.price = 'Price must be a valid integer > 0.';
     }
     
 
