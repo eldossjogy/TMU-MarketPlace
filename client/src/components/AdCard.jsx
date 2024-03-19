@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Loading from "./Loading";
 import Avatar from "./Avatar";
 
 export default function AdCard({ adData }) {
-  if (adData == null) {
+  if (adData === null) {
     return <Loading />;
+  }
+
+  if (adData === false || adData === undefined) {
+    return (
+      <div className="flex justify-center items-center my-3 mx-3">
+        <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
+          <h1 className="text-xl">
+            This listing does not exist or has been removed.
+          </h1>
+          <a href="/" className="text-xl text-blue-500">
+            Return home
+          </a>
+        </div>
+      </div>
+    );
   }
 
   return (
