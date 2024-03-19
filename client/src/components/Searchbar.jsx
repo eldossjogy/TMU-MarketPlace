@@ -9,7 +9,6 @@ export default function Searchbar(searchLocation) {
     const [onSearchPage, setOnSearchPage] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
-    const searchParams2 = new URLSearchParams(location.search);
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -19,14 +18,15 @@ export default function Searchbar(searchLocation) {
     const search = (e, options = {}) => {
         if(e) e.preventDefault()
         if(onSearchPage === null) return;
+        if(onSearchPage === false){
+            navigate(`/search${searchInput && searchInput !== '' ? `?q=${searchInput}` : (options.query && options.query !== '' ? `?q=${options.query}` : '')}`);
+            console.log(searchInput);
+            setOnSearchPage(true);
+            return;
+        }
 
         toast(`Searching for ${searchInput === '' ? (options.query ? options.query : 'all posts') : searchInput}`);
         updateFilters(options);
-
-        if(onSearchPage === false){
-            navigate('/search/');
-            setOnSearchPage(true);
-        }
     }
 
     useEffect(() => {
@@ -39,15 +39,15 @@ export default function Searchbar(searchLocation) {
             if(!isNaN(parseInt(searchParams.get('status')))) options.status = (parseInt(searchParams.get('status')));
             if(!isNaN(parseInt(searchParams.get('maxDaysOld')))) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
             if(!isNaN(parseInt(searchParams.get('page')))) options.page = (parseInt(searchParams.get('page')))
+            if(!isNaN(parseInt(searchParams.get('category')))) options.category = (parseInt(searchParams.get('category')));
             
 
             search(null, options);
         }
-    }, [onSearchPage, location])
+    }, [onSearchPage])
 
     useEffect(() => {
         let path = window.location.pathname;
-
         if(path.startsWith('/search')){ 
             setOnSearchPage(true);
         }  
@@ -55,7 +55,7 @@ export default function Searchbar(searchLocation) {
     }, [])
 
     return (
-        <form className='flex w-full h-10 md:h-8 group divide-x-2 divide-neutral-400' onSubmit={search}>
+        <form id='search-bar' className='flex w-full h-10 md:h-8 group divide-x-2 divide-neutral-400' onSubmit={search}>
             <input
                 className="md:hidden rounded-l-xl h-full w-full px-4 text-left focus:outline-none text-ellipsis border-none focus:ring-0" 
                 placeholder={`Search here`}

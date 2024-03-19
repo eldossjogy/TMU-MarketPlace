@@ -5,13 +5,14 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 import SearchContext from '../authAndContext/searchProvider';
 
 const searchOptions = { 
+    category: [{value:1, name: 'Wanted Items'}, {value:2, name: 'Items for Sale'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
     availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], 
     dateRange: [{days:1825, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
     priceRange: {}, 
     prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
-    const {minPrice, maxPrice, maxDays, statusFilter, updateFilters} = useContext(SearchContext);
+    const {minPrice, maxPrice, maxDays, statusFilter, categoryFilter, updateFilters} = useContext(SearchContext);
 
     const [loaded, setLoaded] = useState(false);
     const [collapsed, setCollapsed] = useState(true);
@@ -147,6 +148,26 @@ export default function SearchSideBar() {
                             Apply Price
                         </button>
                     </section>
+                </div>
+                <div className='w-full flex-col space-y-2'>
+                    <h3 className='text-xl'>Category</h3>
+                    <RadioGroup value={categoryFilter} onChange={(e) => {updateFilters({category: e})}} className={"space-y-2"}>
+                        {searchOptions.category.map((option) => (
+                            <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
+                                ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
+                                {({ checked }) => (
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center text-sm h-6">
+                                            <RadioGroup.Label as="p" className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}>
+                                                {option.name}
+                                            </RadioGroup.Label>
+                                        </div>
+                                        {checked && (<div className="shrink-0 text-white"> <CheckIcon className="h-6 w-6" /></div>)}
+                                    </div>
+                                )}
+                            </RadioGroup.Option>
+                        ))}
+                    </RadioGroup>
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Availability</h3>

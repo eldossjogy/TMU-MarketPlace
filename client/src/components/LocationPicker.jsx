@@ -6,23 +6,21 @@ import LocationMarker from "./LocationMarker";
 import toast from "react-hot-toast";
 
 export default function LocationPicker(applyFn) {
-    const {location, city, range, setRange, generateLocation} = useContext(LocationContext);
+    const {location, city, range, setRange, generateLocation, searchForLocation} = useContext(LocationContext);
     const [locationQuery, setLocationQuery] = useState('');
     const [noResults, setNoResults] = useState(false);
     const handleLocationSearch = async (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
         const query = form.get('location');
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1&countrycodes=ca`);
-        const results = await response.json();
-
-        try {
-            let locationResult = results[0]
-            // console.log(locationResult);
-            setLocationQuery(locationResult['display_name'])
+        const results = await searchForLocation(query); // Search for a map location given a user query
+        
+        if(results[0]){ // If there are results, use the first one
+            setLocationQuery(results[0].name) // Update the query text to be the result
             setNoResults(false);
-            generateLocation({lat: locationResult['lat'], lng: locationResult['lon']});
-        } catch (error) {
+            generateLocation({lat: results[0].lat, lng: results[0].lng}); // Set user location to search result
+        }
+        else{ // No search results for user location query
             toast.error("No location results.")
             setNoResults(true);
         }
@@ -57,7 +55,7 @@ export default function LocationPicker(applyFn) {
             </div>   
             <div className="flex justify-end space-x-2">
                 <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={() => {//bg-[#F9B300]
-                    applyFn.applyFn(location.lat, location.lng, range);
+                    applyFn.applyFn(location.lat, location.lng, range); // Use generated location and range for feature specified in props (such as updating search results or changing user location)
                 }}>
                     Apply Location
                 </button>

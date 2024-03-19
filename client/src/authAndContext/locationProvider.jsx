@@ -11,7 +11,7 @@ export const LocationProvider = ({ children }) =>  {
 
     useEffect(() => {
         getLocation();
-        setIsReady(true);
+        //setIsReady(true);
     }, []);
 
     // Gets IP address location from browser and forwards it to generateLocation(pos)
@@ -52,17 +52,31 @@ export const LocationProvider = ({ children }) =>  {
             setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
         });
 
-        // setIsReady(true);
+        setIsReady(true);
     }
 
     // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
-    //function generateCoordinates(loc) {
-        //TODO
-    //}
+    async function searchForLocation(query, options = {postalCode: false}) {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1&countrycodes=ca`);
+        const results = await response.json();
+
+        try {
+            let locationResult = results[0]
+
+            return([{name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}])
+            setLocationQuery()
+            setNoResults(false);
+            generateLocation({lat: locationResult['lat'], lng: locationResult['lon']});
+        } catch (error) {
+            return([])
+            toast.error("No location results.")
+            setNoResults(true);
+        }
+    }
 
     return (
-        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation}} >
-            {isReady ? children : null}
+        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation, searchForLocation}} >
+            {children}
         </LocationContext.Provider>
     )
 }

@@ -6,12 +6,13 @@ import axios from 'axios';
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
-    const {location} = useContext(LocationContext);
+    const {location, range} = useContext(LocationContext);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [maxDays, setMaxDays] = useState(null);
+    const [categoryFilter, setCategoryFilter] = useState(2);
     const [page, setPage] = useState(0);
     const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
 
@@ -19,30 +20,43 @@ export const SearchProvider = ({ children }) =>  {
 
     async function searchForAds(options = {}) {
 		try {
-            let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}/search?q=${encodeURI(options.query !== null ? options.query : searchInput)}`;
 
-            if(options.min !== null) searchURL += `&min=${options.min}`;
-            else if(minPrice !== '') searchURL += `&min=${minPrice}`;
+            /*
+                Options
+                    - Query
+                    - Min and Max Price
+                    - Category 
+                    - Status
+                    - Max Days Old
+                    - Page Number
+                    - Location (lat lng) and Range
+            */
 
-            if(options.max !== null) searchURL += `&max=${options.max}`;
-            else if(maxPrice !== '') searchURL += `&max=${maxPrice}`;
+            let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}`;
+            let searchQuery = `/search?q=${encodeURI(options.query !== null ? options.query : searchInput)}`
 
-            if(options.status !== null) searchURL += `&status=${options.status}`
-            else searchURL += `&status=${statusFilter}`
+            if(options.min !== null) searchQuery += `&min=${options.min}`;
+            else if(minPrice !== '') searchQuery += `&min=${minPrice}`;
 
-            if(options.maxDays && options.maxDays !== null) searchURL += `&maxDays=${options.maxDays}`
-            else if(maxDays) searchURL += `&maxDays=${maxDays}`
+            if(options.max !== null) searchQuery += `&max=${options.max}`;
+            else if(maxPrice !== '') searchQuery += `&max=${maxPrice}`;
 
-            if(options.page && options.page !== null) searchURL += `&page=${options.page}`
-            else if(page && page !== 0) searchURL += `&page=${page}`
+            if(options.category && options.category !== null) searchQuery += `&category=${options.category}`
+            else searchQuery += `&category=${categoryFilter}`
 
-            if(options.lat && options.lng) searchURL += `&lat=${options.lat}&lng=${options.lng}`
-            else if(searchLocation.lat && searchLocation.lng) searchURL += `&lat=${searchLocation.lat}&lng=${searchLocation.lng}`
+            if(options.status !== null) searchQuery += `&status=${options.status}`
+            else searchQuery += `&status=${statusFilter}`
 
-            if(options.range) searchURL += `&range=${options.range}`
+            if(options.maxDays && options.maxDays !== null) searchQuery += `&maxDays=${options.maxDays}`
+            else if(maxDays) searchQuery += `&maxDays=${maxDays}`
 
+            if(options.page && options.page !== null) searchQuery += `&page=${options.page}`
+            else if(page && page !== 0) searchQuery += `&page=${page}`
 
-			const { data, error } = await axios.get(searchURL)
+            if(options.lat && options.lng && options.range) searchQuery += `&lat=${options.lat}&lng=${options.lng}&range=${options.range}`
+            else if(searchLocation.lat && searchLocation.lng && range) searchQuery += `&lat=${searchLocation.lat}&lng=${searchLocation.lng}&range=${range}`
+
+			const { data, error } = await axios.get(searchURL + searchQuery)
 
 			setSearchResults(data?.data ?? []);
 
@@ -81,7 +95,7 @@ export const SearchProvider = ({ children }) =>  {
     // }
 
     async function updateFilters(options = {}) {
-        let parsedOptions = {query: null, min: null, max: null, status: null, maxDays: null};
+        let parsedOptions = {query: null, min: null, max: null, status: null, maxDays: null, category: null};
 
 
         if(Object.hasOwn(options, 'query')){
@@ -109,6 +123,11 @@ export const SearchProvider = ({ children }) =>  {
                 parsedOptions.max = '';
                 setMaxPrice('');
             }
+        }
+
+        if(Object.hasOwn(options, 'category') && !isNaN(parseInt(options.category))){
+            parsedOptions.category = parseInt(options.category);
+            setCategoryFilter(parsedOptions.category);
         }
 
         if(Object.hasOwn(options, 'status') && !isNaN(parseInt(options.status))){
@@ -160,6 +179,7 @@ export const SearchProvider = ({ children }) =>  {
             // setMaxPrice,
             maxDays,
             // setMaxDays
+            categoryFilter
         }} >
             {children}
         </SearchContext.Provider>
