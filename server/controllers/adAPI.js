@@ -43,6 +43,7 @@ export async function homepage(req, res) {
           price,
           description,
           postal_code,
+          location,
           lng,
           lat,
           post_time,
