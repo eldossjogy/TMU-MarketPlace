@@ -20,7 +20,7 @@ export default function Searchbar(searchLocation) {
         if(onSearchPage === null) return;
         if(onSearchPage === false){
             navigate(`/search${searchInput && searchInput !== '' ? `?q=${searchInput}` : (options.query && options.query !== '' ? `?q=${options.query}` : '')}`);
-            console.log(searchInput);
+            // console.log(searchInput);
             setOnSearchPage(true);
             return;
         }
@@ -40,7 +40,6 @@ export default function Searchbar(searchLocation) {
             if(!isNaN(parseInt(searchParams.get('maxDaysOld')))) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
             if(!isNaN(parseInt(searchParams.get('page')))) options.page = (parseInt(searchParams.get('page')))
             if(!isNaN(parseInt(searchParams.get('category')))) options.category = (parseInt(searchParams.get('category')));
-            
 
             search(null, options);
         }

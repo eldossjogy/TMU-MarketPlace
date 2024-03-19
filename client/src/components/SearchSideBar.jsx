@@ -5,7 +5,7 @@ import { Bars3Icon } from '@heroicons/react/24/solid';
 import SearchContext from '../authAndContext/searchProvider';
 
 const searchOptions = { 
-    category: [{value:1, name: 'Wanted Items'}, {value:2, name: 'Items for Sale'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
+    category: [{value:2, name: 'Items for Sale'}, {value:1, name: 'Wanted Items'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
     availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], 
     dateRange: [{days:1825, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
     priceRange: {}, 

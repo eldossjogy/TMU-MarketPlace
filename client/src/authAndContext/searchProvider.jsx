@@ -11,7 +11,7 @@ export const SearchProvider = ({ children }) =>  {
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
-    const [maxDays, setMaxDays] = useState(null);
+    const [maxDays, setMaxDays] = useState(1825);
     const [categoryFilter, setCategoryFilter] = useState(2);
     const [page, setPage] = useState(0);
     const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
@@ -56,6 +56,8 @@ export const SearchProvider = ({ children }) =>  {
             if(options.lat && options.lng && options.range) searchQuery += `&lat=${options.lat}&lng=${options.lng}&range=${options.range}`
             else if(searchLocation.lat && searchLocation.lng && range) searchQuery += `&lat=${searchLocation.lat}&lng=${searchLocation.lng}&range=${range}`
 
+            window.history.replaceState(null, "TMMU Marketplace", searchQuery)
+
 			const { data, error } = await axios.get(searchURL + searchQuery)
 
 			setSearchResults(data?.data ?? []);
@@ -70,33 +72,8 @@ export const SearchProvider = ({ children }) =>  {
 		}
 	}
 
-    // async function filterResults(){
-    //     let newFilteredResults = searchResults.reduce(function(stack, result) {
-    //         if (parseInt(minPrice) && result.price < parseInt(minPrice)) {
-    //             return stack;
-    //         }
-    //         if (parseInt(maxPrice) && result.price > parseInt(maxPrice)) {
-    //             return stack;
-    //         }
-    //         if (parseInt(statusFilter) && (statusFilter === 5 ? result.status_id === 4 : result.status_id !== parseInt(statusFilter))){
-    //             return stack;
-    //         }
-    //         if (maxDays && result.created_at){
-    //             const rawDate = new Date(result.created_at);
-    //             const rawAge = Date.now() - rawDate.getTime();
-    //             const days = Math.round(rawAge / (1000 * 3600 * 24));
-    //             if(days > maxDays) return stack;
-    //         }
-
-    //         stack ? stack.push(result) : [result];
-    //         return stack;
-    //     }, []);
-    //     setFilteredResults(newFilteredResults ?? searchResults);
-    // }
-
     async function updateFilters(options = {}) {
         let parsedOptions = {query: null, min: null, max: null, status: null, maxDays: null, category: null};
-
 
         if(Object.hasOwn(options, 'query')){
             parsedOptions.query = options.query;

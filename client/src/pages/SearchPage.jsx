@@ -20,7 +20,7 @@ export default function SearchPage() {
 				<SearchSideBar />
 				<div className="w-full mt-3">
 					<section id="toolbar" className="flex shadow-md bg-[#fafafb] rounded-xl justify-between p-4 items-center mx-3">
-						<div id="filters" className="flex space-x-4 text-xl justify-center items-center">
+						<div id="filters" className="flex flex-wrap space-x-4 text-xl justify-center items-center">
 							<ToolbarButton primary={true} value={"Automobiles"} />
 							<ToolbarButton primary={false} value={"Textbooks"} />
 							<ToolbarButton primary={false} value={"Recently Added"} />
@@ -67,10 +67,10 @@ export default function SearchPage() {
 function ToolbarButton(props) {
     const [filterState, setFilterState] = useState(false);
 
-    let colourStyle = props.primary ? `ring-yellow-500 ${filterState ? '' : 'hover:'}bg-yellow-400 ` : `ring-blue-500 ${filterState ? '' : 'hover:'}bg-blue-500 ${filterState ? '' : 'hover:'}text-white `
+    let colourStyle = props.primary ? `ring-yellow-500 ${filterState ? '' : 'hover:bg-yellow-400'} ` : `ring-blue-500 ${filterState ? 'text-white bg-blue-400' : 'hover:text-white'} hover:bg-blue-500 `
     let style = colourStyle + 'ring-2 rounded-2xl px-4 py-1';
 
     return (
-        <button className={style} onClick={() => {setFilterState(!filterState); props.clickFn();}}>{props.value}</button>
+        <button className={style} onClick={() => {setFilterState(!filterState); if(props.clickFn) props.clickFn();}}>{props.value}</button>
     )
 }
