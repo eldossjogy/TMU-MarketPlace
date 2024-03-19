@@ -77,3 +77,41 @@ export async function getMyListings(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+
+export async function changeListingStatus(req, res) {
+    let {user_id, listing, status} = req.body
+    try {
+        const getStatusId = await supabase
+            .from('status')
+            .select('id')
+            .eq('type', status)
+        
+        //get chosen status status.id from status table
+        const statusId = getStatusId.data[0].id
+        
+        //confirm if to be updated lisiting is indeed by owner of listing
+        const getListing = await supabase
+        .from('ad')
+        .select('*')
+        .eq('id', listing.id)
+
+        if (getListing.data[0].user_id !== user_id) {
+            const error = new Error("You don't have permission to update this post.")
+            error.status = 403
+            throw error;
+        }
+        else {
+            const updatedListing = await supabase
+            .from('ad')
+            .update({status_id: statusId})
+            .eq('id', listing.id)
+            .select();
+
+            res.status(200).json(updatedListing.data[0])
+        }
+    }
+    catch(error) {
+        console.log(error)
+        res.status(error.status).json({ message: error.message });
+    }
+}

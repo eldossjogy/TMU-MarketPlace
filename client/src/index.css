@@ -66,6 +66,11 @@
     border-radius: 10px;
 }
 
+.sideNavLinkContainer ul li.active {
+    background-color: #fef08a;
+    border-radius: 10px;
+}
+
 .myListingsContainer {
     width: 80%;
     display: flex;
@@ -155,6 +160,51 @@
     font-size: 1.5em;
     width: 20%;
 }
+
+.selectedImageDisplayContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.selectedImageBox {
+    width: 100%;
+    font-size: 1.5em;
+    padding: 0.5em;
+    color: blue;
+    background-color: #e0f2fe;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.selectedImageBox p {
+    text-decoration: underline;
+}
+
+.selectedImageBox i {
+    cursor: pointer;
+    color: #d4d4d4;
+    text-decoration: none;
+}
+
+.selectedImageBox i:hover {
+    color: red;
+}
+
+.cardButtons {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    gap: 1em;
+}
+
+.selectContainer {
+    padding: 2%;
+    padding-right: 10%;
+}
+
 /*for phone screen*/
 @media all and (min-width: 100px) and (max-width: 950px) {
     .myMarketPageContainer {
@@ -168,6 +218,7 @@
     }
     .myListingCardContainer {
         height: 20vh;
+        padding-right: 0;
     }
     .cardImageContainer {
         width: 35%;
@@ -183,12 +234,16 @@
         width: 100%;
     }
     .cardRightSection {
-        width: 50%;
+        width: 100%;
         flex-direction: row;
-        justify-content: start;
-        align-items: start;
+        justify-content: space-between;
+        align-items: end;
         margin: 0;
         gap: 0;
+        width: 100%;
+    }
+    .cardRightSection p, .cardRightSection span{
+        font-size: 1em;
     }
     .cardLeftSection * {
         font-size: 1em;
@@ -202,9 +257,7 @@
     .cardRightSection * {
         font-size: 0.8em;
     }
-    .cardRightSection p {
-        display: none;
-    }
+
     .cardImageContainer img {
         object-fit: cover;
     }
@@ -232,6 +285,16 @@
         font-size: 1em;
         width: 50%;
     }
+    .cardButtons {
+        gap: 0.2em;
+        width: 50%;
+        font-size: 0.8em;
+    }
+    .selectContainer {
+        width: 75%;
+        padding: 0.2em;
+        font-size: 1.1em;
+    }
 }
 
 /*speical cases for ipads and weird devices*/
@@ -251,9 +314,6 @@
     .cardLeftSection {
         width: 100%;
     }
-    .cardRightSection p {
-        display: none;
-    }
     .cardRightSection {
         width: 100%;
         flex-direction: row;
@@ -262,7 +322,9 @@
         margin: 0;
         gap: 0;
     }
-
+    .bottomFormSection {
+        width: 100%;
+    }
 }
 
 /*for laptop screen*/
@@ -284,5 +346,8 @@
     }
     .leftFormSection {
         width: 100%;
+    }
+    .cardButtons button {
+        width: 50%;
     }
 }

@@ -1,7 +1,14 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function MyMarketSideNavbar() {
+
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState("")
+
+  useEffect(()=> {
+    setCurrentPath(location.pathname)
+  }, [])
 
   const navList = [
     {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
@@ -27,7 +34,7 @@ export default function MyMarketSideNavbar() {
                 <h3 className="navSubHeading" key={index}>{elem.title}</h3>
                 <ul>
                    {elem.items.map((elemLinks, index2) => (
-                    <li key={index2}><Link to={elemLinks.link}>{elemLinks.linkText}</Link></li>
+                    <li className={`${elemLinks.link === currentPath && 'active'}`}key={index2}><Link to={elemLinks.link}>{elemLinks.linkText}</Link></li>
                    ))}
                 </ul>
             </div>

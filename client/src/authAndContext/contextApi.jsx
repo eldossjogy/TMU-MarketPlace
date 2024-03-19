@@ -16,7 +16,11 @@ export const AuthProvider = ({ children }) => {
   const [profileData, setProfileData] = useState(null);
   const [userListings, setUserListings] = useState([])
 
-  // loading useState. set it true before api req, and at the end of server req function set it to false
+  //usestates for global use acquired from db (categories, etc)
+  const [categories, setCategories] = useState([])
+  const [statusList, setStatusList] = useState([])
+
+  // API req loading useState. set it true before api req, and at the end of server req function set it to false
   const [loadingState, setLoadingState] = useState(false);
 
   //caching/performance useStates:
@@ -95,6 +99,12 @@ export const AuthProvider = ({ children }) => {
     }
     fetchProfile();
   }, [user]);
+
+  //useEffect to get all required infomration such as categories and statusList once upon entering app
+  useEffect(() => {
+    getCategories()
+    getStatusLists()
+  }, [])
 
   // use effect for when profileData changes
   // useEffect(() => {
@@ -177,6 +187,33 @@ export const AuthProvider = ({ children }) => {
         null,
         { success: false, message: "Error logging out", error: error },
       ];
+    }
+  }
+
+  // fetch profile picture link from user id
+  //  param: userid
+  async function fetchAvatar(userID) {
+    try {
+      const { data: tempData, error:tempError } = await supabase
+        .from("profile")
+        .select("avatar_url")
+        .eq("id", userID);
+        let filePath = tempData[0].avatar_url
+        if (tempError != null) {
+        throw tempError;
+      }
+      const timestamp = new Date().getTime();
+      const { data, error } = await supabase.storage
+        .from("avatars")
+        .download(`${filePath}?timestamp=${timestamp}`);
+        if (error) {
+          throw error;
+        }
+        const url = URL.createObjectURL(data);
+        return url;
+    } catch (error) {
+      toast.error("Error downloading image: ", JSON.stringify(error));
+      return "error";
     }
   }
 
@@ -323,33 +360,53 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false)
   }
 
-  // fetch profile picture link from user id
-  //  param: userid
-  async function fetchAvatar(userID) {
-    try {
-      const { data: tempData, error:tempError } = await supabase
-        .from("profile")
-        .select("avatar_url")
-        .eq("id", userID);
-        let filePath = tempData[0].avatar_url
-        if (tempError != null) {
-        throw tempError;
-      }
-      const timestamp = new Date().getTime();
-      const { data, error } = await supabase.storage
-        .from("avatars")
-        .download(`${filePath}?timestamp=${timestamp}`);
-        if (error) {
-          throw error;
-        }
-        const url = URL.createObjectURL(data);
-        return url;
-    } catch (error) {
-      toast.error("Error downloading image: ", JSON.stringify(error));
-      return "error";
-    }
+  function getCategories() {
+    axios.get(
+      `${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`,
+    )
+    .then(response => {
+      setCategories(response.data)
+    })
+    .catch(error => {
+      toast.error(error.message + "Erro fetching categories from db");
+    })
+
   }
-  
+
+  function getStatusLists() {
+    axios.get(
+      `${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+    )
+    .then(response => {
+      setStatusList(response.data)
+    })
+    .catch(error => {
+      toast.error(error.message + "Erro fetching status Lists from db");
+    })
+
+  }
+
+  async function changeListingStatusAPI(listingInfo, status) {
+    try{
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_API_URL}/my-market/change-listing-status`,{
+          listing: listingInfo,
+          status
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      )
+      updateUserListingsLocally(response.data)
+    }
+    catch(error) {
+      toast.error(error.message);
+    }
+
+    setLoadingState(false)
+  }
 
   return (
     <AuthContext.Provider
@@ -368,7 +425,10 @@ export const AuthProvider = ({ children }) => {
         fetchedUserListings,
         fetchMyPostings,
         userListings,
-        localSession
+        localSession,
+        categories,
+        statusList,
+        changeListingStatusAPI
       }}
     >
        {isLoading ? <LoadingScreen /> : children}

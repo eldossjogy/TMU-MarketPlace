@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import MyProfileContainer from '../components/MyProfileContainer';
 
 export default function CreateListings() {
-    const { createNewListing, loadingState, setLoadingState, user } = useContext(AuthContext);
+    const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -38,7 +38,15 @@ export default function CreateListings() {
         }
     }, [imageList]);
 
-    const handleChange = (e) => {
+    function handleDrop(event) {
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+
+        //check if files are images or not:
+        checkFileForImage(files)
+    }
+
+    function handleChange(e){
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -46,13 +54,13 @@ export default function CreateListings() {
         }));
     };
 
-    const handleNewPost = async (event) => {
+    async function handleNewPost(event) {
         event.preventDefault();
         setLoadingState(true);
         await createNewListing(formData, imageList);
     };
 
-    const checkFileForImage = (files) => {
+    function checkFileForImage(files) {
         setSelectedImages([])
 
         if (files.length <= 4) {
@@ -85,6 +93,12 @@ export default function CreateListings() {
         return formattedDateTime;
     }
 
+    function handleImageDelete(img) {
+        const index = imageList.indexOf(img)
+
+        setImageList(prev => prev.filter((item, i) => i !== index));
+    }
+
     return (
         <div>
             <Navbar />
@@ -97,7 +111,12 @@ export default function CreateListings() {
                         <input autoComplete='off' type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter Title" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
                         <label className="block mb-2">Price:</label>
-                        <input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
+                            <div className="relative">
+                                <span className="rounded-md absolute inset-y-0 left-0 p-3 flex items-center bg-gray-200 text-gray-600">$
+                                </span>
+                                <input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price" className="rounded-md pl-10 pr-12 block w-full border border-gray-300 rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" style={{ backgroundColor: 'white' }} />
+                                <span className="rounded-md absolute inset-y-0 right-0 p-3 flex items-center bg-gray-200 text-gray-600">.00</span>
+                            </div>
 
                         <label className="block mb-2">Postal Code:</label>
                         <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
@@ -106,14 +125,19 @@ export default function CreateListings() {
                         <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
 
                         <label className="block mb-2">Category ID:</label>
-                        <input type="text" name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
+                        <select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2">
+                            <option value="">Select Category</option>
+                            {categories.map((elem, index) => (
+                                <option value={elem.name}>{elem.name}</option>
+                            ))}
+                        </select>
 
                         <label className="block mb-2">Description:</label>
                         <textarea rows="3" name="description" value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2"></textarea>
                         
                     </div>
                     <div className='rightFormSection'> 
-                        <div className="imageUploadSection">
+                        <div className="imageUploadSection" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
                             <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                     <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -133,16 +157,19 @@ export default function CreateListings() {
                                 />
                             </label>
                         </div> 
-                        <div>
+                        <ul className='selectedImageDisplayContainer'>
                             <h1>Images Selected:</h1>
-                            {selectedImages.map((elem, index) => (
-                                <img src={elem} key={index}></img>
+                            {imageList.map((elem, index) => (
+                                <li className='selectedImageBox' key={index}>
+                                    <p>{elem.name}</p>
+                                    <i onClick={() => handleImageDelete(elem)}>&#x2715;</i>
+                                </li>
                             ))}
-                        </div>
+                        </ul>
                     </div>
                 </div>
                 <div className='bottomFormSection'>
-                    <button type="submit" className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Submit</button>
+                    <button type="submit" className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600">Post</button>
                     <button className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">Cancel</button>
                 </div>
             </form>
