@@ -12,7 +12,7 @@ export async function createListing(req, res) {
                 {title, price, description, expire_time, postal_code, location, category_id, user_id}
             ])
             .select()
-                    
+
         //if unauthorized (dont need this since using service key to bypass any RLS)
         if (newListing.status == 401) {
             const error = new Error(newListing.error.message)
@@ -57,7 +57,7 @@ export async function getMyListings(req, res) {
             .select(
                 `
                 *,
-                image!inner(file_path),
+                image!left(file_path),
                 category!inner(name),
                 status!inner(type)
                 `

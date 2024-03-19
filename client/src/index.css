@@ -203,6 +203,7 @@
 .selectContainer {
     padding: 2%;
     padding-right: 10%;
+    cursor: pointer;
 }
 
 .categoryComponentContainer {
@@ -247,7 +248,7 @@
         width: 100%;
     }
     .myListingCardContainer {
-        height: 20vh;
+        height: 22vh;
         padding-right: 0;
     }
     .cardImageContainer {

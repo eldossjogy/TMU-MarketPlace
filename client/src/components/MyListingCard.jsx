@@ -1,12 +1,31 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ImageCarousel from './ImageCarousel'
 import Logo from "../assets/logo.png"
 import AuthContext from '../authAndContext/contextApi';
 import LoadingScreen from './LoadingScreen';
+import noImage from '../assets/noImage.png'
 
 export default function MyListingCard({listingInfo}) {
 
   const {statusList, setLoadingState, loadingState, changeListingStatusAPI} = useContext(AuthContext)
+
+  const [isPhone, setIsPhone] = useState(false);
+
+  //useEffect that checks if user is on a phone/ needed for truncating text accordingly
+  useEffect(() => {
+      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      setIsPhone(mediaQuery.matches); // Set initial value based on media query match
+
+      const handleChange = (e) => {
+          setIsPhone(e.matches); // Update value when media query matches change
+      };
+
+      mediaQuery.addListener(handleChange); // Listen for changes in media query matches
+
+      return () => {
+          mediaQuery.removeListener(handleChange); // Cleanup on unmount
+      };
+  }, []);
 
   //function to trunacate strings and end with ...
   //params str, and word count limit
@@ -33,16 +52,16 @@ export default function MyListingCard({listingInfo}) {
   return (
     <div className='myListingCardContainer'>
         <div className='cardImageContainer'>
-          <img src={listingInfo.image[0].file_path}></img>
+          <img src={listingInfo.image.length !== 0? listingInfo.image[0].file_path : noImage }></img>
         </div>
         <div className='listingInfoContainer'>
           <div className='cardLeftSection'>
-            <h1 className='font-bold text-[2em]'>{truncateString(listingInfo.title, 20)}</h1>
+            <h1 className='font-bold text-[2em]'>{isPhone ? truncateString(listingInfo.title, 25) : truncateString(listingInfo.title, 50)}</h1>
             <div className='flex justify-between'>
               <h3 className='text-green-500 font-bold text-[1.3em]'>{listingInfo.price}</h3>
               <div className="h-auto line-clamp-1 sm:line-clamp-none text-[1.3em]">📍{listingInfo.location}</div>
             </div>
-            <p className='mt-2 text-[1.2em]'>{truncateString(listingInfo.description, 100)} </p>
+            <p className='mt-2 text-[1.2em]'>{isPhone ? truncateString(listingInfo.description, 65) : truncateString(listingInfo.description, 200) } </p>
           </div>
           <div className='cardRightSection'>
             <div className='sm:w-[50%] md:w-[100%] relative flex flex-col md:items-end sm:justify-end'>
