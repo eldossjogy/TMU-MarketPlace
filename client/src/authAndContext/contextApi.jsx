@@ -330,6 +330,7 @@ export const AuthProvider = ({ children }) => {
             },
           }
         );
+        updateUserListingsLocally("Add", response.data)
         navigate("/my-market");
       } else {
         const error = new Error("Unauthorized access!! not a logged in user!!");
@@ -399,7 +400,7 @@ export const AuthProvider = ({ children }) => {
           },
         }
       )
-      updateUserListingsLocally(listingInfo, response.data)
+      updateUserListingsLocally('Modify', listingInfo, response.data)
     }
     catch(error) {
       toast.error(error.message);
@@ -408,16 +409,49 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false)
   }
 
-  function updateUserListingsLocally(listingInfo, updatedData) {
-    let targetIndex = userListings.indexOf(listingInfo)
+  function updateUserListingsLocally(action, listingInfo, updatedData) {
+    if (action === "Modify") {
+      console.log("came to modify")
+      let targetIndex = userListings.indexOf(listingInfo)
+      setUserListings(prev => prev.map((item, i) => {
+        if (i !== targetIndex) {
+            return item; // Keep the item unchanged if the index doesn't match
+        } else {
+            return updatedData; // Replace the item at the target index with updatedData
+        }
+      }));
+    }
+    else if (action === "Delete") {
+      console.log("came to delete")
+      let targetIndex = userListings.indexOf(listingInfo)
+      setUserListings(prev => prev.filter((item, i) => i !== targetIndex));
+    }
+    else if (action === "Add") {
+      console.log("came to add")
+      setUserListings(prev => [...prev, listingInfo])
+    }
+  }
 
-    setUserListings(prev => prev.map((item, i) => {
-      if (i !== targetIndex) {
-          return item; // Keep the item unchanged if the index doesn't match
-      } else {
-          return updatedData; // Replace the item at the target index with updatedData
-      }
-    }));
+  async function deleteListing(listingInfo) {
+    try{
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_API_URL}/my-market/delete-listing`,{
+          listing: listingInfo
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      )
+      toast.success(response.data.message)
+      updateUserListingsLocally('Delete', listingInfo)
+    }
+    catch(error) {
+      toast.error(error.message);
+    }
+
+    setLoadingState(false)
   }
 
   return (
@@ -440,7 +474,8 @@ export const AuthProvider = ({ children }) => {
         localSession,
         categories,
         statusList,
-        changeListingStatusAPI
+        changeListingStatusAPI,
+        deleteListing
       }}
     >
        {isLoading ? <LoadingScreen /> : children}

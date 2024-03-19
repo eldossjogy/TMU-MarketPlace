@@ -34,8 +34,19 @@ export async function createListing(req, res) {
             throw error;
         }
 
+        const fetNewListing = await supabase
+            .from('ad')
+            .select(
+                `
+                *,
+                image!left(file_path),
+                category!inner(name),
+                status!inner(type)
+                `
+            )
+            .eq('id', newlyCreatedListing.id);
         // return status 200 with success message
-        res.status(201).json({message: "New Listing added successfully"})
+        res.status(201).json(fetNewListing.data[0])
     }
     catch(error) {
         if(error.status === 401) {
@@ -47,7 +58,6 @@ export async function createListing(req, res) {
     }
 
 }
-
 
 export async function getMyListings(req, res) {
     let {user_id} = req.body
@@ -117,7 +127,33 @@ export async function changeListingStatus(req, res) {
         }
     }
     catch(error) {
-        console.log(error)
+        res.status(error.status).json({ message: error.message });
+    }
+}
+
+export async function deleteMyListing(req, res) {
+    let {user_id, listing} = req.body
+    try {
+        const getListing = await supabase
+        .from('ad')
+        .select('*')
+        .eq('id', listing.id)
+
+        if (getListing.data[0].user_id !== user_id) {
+            const error = new Error("You don't have permission to delete this post.")
+            error.status = 403
+            throw error;
+        }
+        else {
+            const response = await supabase
+            .from('ad')
+            .delete()
+            .match({ 'id': listing.id });
+
+            res.status(200).json({message: "Post Deleted Successfully!"})
+        }
+    }
+    catch(error) {
         res.status(error.status).json({ message: error.message });
     }
 }
