@@ -51,15 +51,15 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] p-8 flex-wrap space-y-4 justify-center'>
                 <h2 className='w-full text-xl text-center'>Logo</h2>
                 <section className='w-full space-y-2'>
-                    <div className='flex-col w-[80%]'>
-                        <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400'>(Must use TMU Email)</span></label>
+                    <div className='flex-col w-[90%]'>
+                        <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400 text-xs'>(Must use TMU Email)</span></label>
                         <input  type="email" name="email"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
                             placeholder="name@torontomu.ca" required>
                         </input>
                         {errors.email && <div className={"mb-2 text-sm font-medium text-red-600 text-wrap"}>{errors.email}</div>}
                     </div>
-                    <div className='flex-col w-[80%]'>
+                    <div className='flex-col w-[90%]'>
                         <label htmlFor={"password"} className={"block mb-2 text-sm font-medium text-gray-900"}>Password</label>
                         <input  type="password" name="password"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
