@@ -3,9 +3,6 @@ import Loading from "./Loading";
 import Avatar from "./Avatar";
 
 export default function AdCard({ adData }) {
-  useEffect(()=>{console.log(new Date(),adData, adData == null)
-  },[adData])
-
   if (adData === null) {
     return <Loading />;
   }
