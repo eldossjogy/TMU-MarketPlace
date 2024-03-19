@@ -26,9 +26,24 @@ export default function RegisterPage() {
             invalid.email = "Must use student email with domain @torontomu.ca";
         }
 
-        const password = form.get("password")
+        const password = form.get("password");
         if (form.get("password") !== form.get("confirm-password")) {
             invalid.confirm = "Passwords do not match";
+        }
+
+        const studNum = form.get("student-num");
+        if (studNum.length != 9) {
+            invalid.studentNum = "Student number must be 9 digits!";
+        }
+
+        const first = form.get("first-name");
+        if(first.length < 2){
+            invalid.first = "First name must be at least 2 letters";
+        }
+
+        const last = form.get("last-name");
+        if(last.length < 2){
+            invalid.last = "Last name must be at least 2 letters";
         }
 
         if (Object.keys(invalid).length > 0) {
@@ -66,26 +81,26 @@ export default function RegisterPage() {
                             <label htmlFor={"first-name"} className={"block mb-2 text-sm font-medium text-gray-900"}>First Name <span className='text-neutral-400 text-xs'>(Letters Only)</span></label>
                             <input  type="text" name="first-name"
                                 className={" bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
-                                placeholder="Enter First Name" required pattern='[A-Za-z]+' minLength={2}>
+                                placeholder="Enter First Name" required pattern='[A-Za-z]+'>
                             </input>
-                            {errors.username && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.username}</div>}
+                            {errors.first && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.first}</div>}
                         </div>
                         <div className='flex-col w-[47%]'>
                             <label htmlFor={"last-name"} className={"block mb-2 text-sm font-medium text-gray-900"}>Last Name <span className='text-neutral-400 text-xs'>(Letters Only)</span></label>
                             <input  type="text" name="last-name"
                                 className={"bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
-                                placeholder="Enter Last Name" required pattern='[A-Za-z]+' minLength={2}>
+                                placeholder="Enter Last Name" required pattern='[A-Za-z]+'>
                             </input>
-                            {errors.username && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.username}</div>}
+                            {errors.last && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.last}</div>}
                         </div>
                     </div>
                     <div className='flex-col w-[90%]'>
-                        <label htmlFor={"student-num"} className={"block mb-2 text-sm font-medium text-gray-900"}>Student Number <span className='text-neutral-400 text-xs'>(9 digits)</span></label>
+                        <label htmlFor={"student-num"} className={"block mb-2 text-sm font-medium text-gray-900"}>Student Number <span className='text-neutral-400 text-xs'>(9 digits, no spaces)</span></label>
                         <input  type="text" name="student-num"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"} 
                             placeholder="Enter Student Number" required pattern='[0-9]{9}' minLength={9} maxLength={9}>
                         </input>
-                        {errors.username && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.username}</div>}
+                        {errors.studentNum && <div className={"mb-2 text-sm font-medium text-red-600"}>{errors.studentNum}</div>}
                     </div>
                     <div className='flex-col w-[90%]'>
                         <label htmlFor={"username"} className={"block mb-2 text-sm font-medium text-gray-900"}>Username <span className='text-neutral-400 text-xs'>(No spaces)</span></label>
