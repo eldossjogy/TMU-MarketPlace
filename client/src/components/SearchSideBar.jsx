@@ -6,7 +6,7 @@ import SearchContext from '../authAndContext/searchProvider';
 
 const searchOptions = { 
     availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], 
-    dateRange: [{days:null, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
+    dateRange: [{days:1825, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
     priceRange: {}, 
     prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
@@ -58,6 +58,14 @@ export default function SearchSideBar() {
             // setMaxPrice('');
             updateFilters({min: '', max: ''})
         }
+    }
+
+    const updateSearchLocation = (lat, lng, range = 100000) => {
+        console.log(lat); 
+        console.log(lng);
+        console.log(range);
+
+        updateFilters({lat: lat, lng: lng, range: range});
     }
 
     useEffect(() => {
@@ -185,7 +193,7 @@ export default function SearchSideBar() {
                 </div>
                 <div className='space-y-4'>
                     <h3 className='text-xl -mb-2'>Change Location</h3>
-                    <LocationPicker />
+                    <LocationPicker applyFn={updateSearchLocation}/>
                 </div>
             </section>
         </div>

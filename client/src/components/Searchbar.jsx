@@ -5,7 +5,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function Searchbar(searchLocation) {
-    const {searchForAds, searchInput, setSearchInput, updateFilters } = useContext(SearchContext);
+    const {searchInput, setSearchInput, updateFilters } = useContext(SearchContext);
     const [onSearchPage, setOnSearchPage] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,11 +34,13 @@ export default function Searchbar(searchLocation) {
             const searchParams = new URLSearchParams(location.search);
             let options = {};
             if(searchParams.get('q')) options.query = (searchParams.get('q'));
-            if(parseInt(searchParams.get('min') ?? '')) options.min = (parseInt(searchParams.get('min')));
-            if(parseInt(searchParams.get('max') ?? '')) options.max = (parseInt(searchParams.get('max')));
-            if(parseInt(searchParams.get('status') ?? '')) options.status = (parseInt(searchParams.get('status')));
-            if(parseInt(searchParams.get('maxDaysOld') ?? '')) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
+            if(!isNaN(parseInt(searchParams.get('min')))) options.min = (parseInt(searchParams.get('min')));
+            if(!isNaN(parseInt(searchParams.get('max')))) options.max = (parseInt(searchParams.get('max')));
+            if(!isNaN(parseInt(searchParams.get('status')))) options.status = (parseInt(searchParams.get('status')));
+            if(!isNaN(parseInt(searchParams.get('maxDaysOld')))) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
+            if(!isNaN(parseInt(searchParams.get('page')))) options.page = (parseInt(searchParams.get('page')))
             
+
             search(null, options);
         }
     }, [onSearchPage, location])

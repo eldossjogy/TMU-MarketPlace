@@ -5,8 +5,8 @@ import LocateControl from "./LeafletLocateControl";
 import LocationMarker from "./LocationMarker";
 import toast from "react-hot-toast";
 
-export default function LocationPicker() {
-    const {location, city, setRange, generateLocation} = useContext(LocationContext);
+export default function LocationPicker(applyFn) {
+    const {location, city, range, setRange, generateLocation} = useContext(LocationContext);
     const [locationQuery, setLocationQuery] = useState('');
     const [noResults, setNoResults] = useState(false);
     const handleLocationSearch = async (e) => {
@@ -56,8 +56,8 @@ export default function LocationPicker() {
                 </MapContainer>
             </div>   
             <div className="flex justify-end space-x-2">
-                <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={(e) => {//bg-[#F9B300]
-                    //handleLocationSearch(e.target.value); 
+                <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={() => {//bg-[#F9B300]
+                    applyFn.applyFn(location.lat, location.lng, range);
                 }}>
                     Apply Location
                 </button>

@@ -17,6 +17,7 @@ export const LocationProvider = ({ children }) =>  {
     async function getLocation() {
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by this browser.");
+            //generateLocation({lat: 43.6577518, lng:-79.3786619});
             generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
             return;
         }
@@ -25,7 +26,7 @@ export const LocationProvider = ({ children }) =>  {
             if (result.state === "denied") {
                 //If denied then you have to show instructions to enable location
                 toast.error(`You did not allow location access.`);
-                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608})
+                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
             } else{
                 //If prompt then the user will be asked to give permission or location was already granted 
                 navigator.geolocation.getCurrentPosition(

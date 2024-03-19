@@ -1,21 +1,25 @@
-import React, { useState, useEffect, createContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import LocationContext from '../authAndContext/locationProvider';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
+    const {location} = useContext(LocationContext);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [maxDays, setMaxDays] = useState(null);
+    const [page, setPage] = useState(0);
+    const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
 
 	const [searchResults, setSearchResults] = useState([]);
 
     async function searchForAds(options = {}) {
 		try {
-            let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}/search?q=${encodeURI(options.query != null ? options.query : searchInput)}`;
+            let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}/search?q=${encodeURI(options.query !== null ? options.query : searchInput)}`;
 
             if(options.min !== null) searchURL += `&min=${options.min}`;
             else if(minPrice !== '') searchURL += `&min=${minPrice}`;
@@ -26,8 +30,17 @@ export const SearchProvider = ({ children }) =>  {
             if(options.status !== null) searchURL += `&status=${options.status}`
             else searchURL += `&status=${statusFilter}`
 
-            if(options.maxDays !== null) searchURL += `&maxDays=${options.maxDays}`
+            if(options.maxDays && options.maxDays !== null) searchURL += `&maxDays=${options.maxDays}`
             else if(maxDays) searchURL += `&maxDays=${maxDays}`
+
+            if(options.page && options.page !== null) searchURL += `&page=${options.page}`
+            else if(page && page !== 0) searchURL += `&page=${page}`
+
+            if(options.lat && options.lng) searchURL += `&lat=${options.lat}&lng=${options.lng}`
+            else if(searchLocation.lat && searchLocation.lng) searchURL += `&lat=${searchLocation.lat}&lng=${searchLocation.lng}`
+
+            if(options.range) searchURL += `&range=${options.range}`
+
 
 			const { data, error } = await axios.get(searchURL)
 
@@ -70,33 +83,47 @@ export const SearchProvider = ({ children }) =>  {
     async function updateFilters(options = {}) {
         let parsedOptions = {query: null, min: null, max: null, status: null, maxDays: null};
 
-        console.log(options);
 
         if(Object.hasOwn(options, 'query')){
             parsedOptions.query = options.query;
             setSearchInput(options.query);
         }
 
-        if(Object.hasOwn(options, 'min')){
-            parsedOptions.min = !isNaN(parseInt(options.min)) ? parseInt(options.min) : '';
+        if(Object.hasOwn(options, 'min') && !isNaN(parseInt(options.min))){
+            parsedOptions.min = parseInt(options.min);
             setMinPrice(parsedOptions.min);
         }
 
-        if(Object.hasOwn(options, 'max')){
-            parsedOptions.max = !isNaN(parseInt(options.max)) ? parseInt(options.max) : '';
+        if(Object.hasOwn(options, 'max') && !isNaN(parseInt(options.max))){
+            parsedOptions.max = parseInt(options.max);
             setMaxPrice(parsedOptions.max);
         }
 
-        if(Object.hasOwn(options, 'status')){
-            parsedOptions.status = !isNaN(parseInt(options.status)) ? parseInt(options.status) : '';
+        if(Object.hasOwn(options, 'status') && !isNaN(parseInt(options.status))){
+            parsedOptions.status = parseInt(options.status);
             setStatusFilter(parsedOptions.status);
         }
 
-        if(Object.hasOwn(options, 'maxDays')){
-            parsedOptions.maxDays = !isNaN(parseInt(options.maxDays)) ? parseInt(options.maxDays) : '';
+        if(Object.hasOwn(options, 'maxDays') && !isNaN(parseInt(options.maxDays))){
+            parsedOptions.maxDays = parseInt(options.maxDays);
             setMaxDays(parsedOptions.maxDays);
         }
 
+        if((Object.hasOwn(options, 'lat') && !isNaN(parseFloat(options.lat))) && (Object.hasOwn(options, 'lng') && !isNaN(parseFloat(options.lng)))){
+            parsedOptions.lat = parseFloat(options.lat);
+            parsedOptions.lng = parseFloat(options.lng);
+            setSearchLocation({lat: options.lat, lng: options.lng});
+        }
+
+        if(Object.hasOwn(options, 'range') && !isNaN(parseInt(options.range))){
+            parsedOptions.range = parseInt(options.range);
+        }
+
+        if(Object.hasOwn(options, 'page') && !isNaN(parseInt(options.page))){
+            parsedOptions.page = Math.max(parseInt(options.page), 0);
+            setStatusFilter(parsedOptions.page);
+        }
+        
         searchForAds(parsedOptions);
     }
 
@@ -110,17 +137,17 @@ export const SearchProvider = ({ children }) =>  {
             //filteredResults,
             //filterResults,
             updateFilters,
-            searchForAds,
+            // searchForAds,
             searchInput, 
             setSearchInput,
             statusFilter,
-            setStatusFilter,
+            // setStatusFilter,
             minPrice, 
-            setMinPrice, 
+            // setMinPrice, 
             maxPrice, 
-            setMaxPrice,
+            // setMaxPrice,
             maxDays,
-            setMaxDays
+            // setMaxDays
         }} >
             {children}
         </SearchContext.Provider>

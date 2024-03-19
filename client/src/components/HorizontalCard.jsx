@@ -23,12 +23,12 @@ export default function HorizontalCard({
 	const minutes = Math.round(rawAge / (1000 * 60));
 	const seconds = Math.round(rawAge / (1000));
 
-	const age = weeks > 0 ? `${weeks} weeks ago` : days > 0 ? `${days} days ago` : hours > 0 ? `${hours} hours ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
+	const age = weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''} ago` : days > 0 ? `${days} day${days > 1 ? 's' : ''} ago` : hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
 	return (
 		<Link to={{ pathname: `/ad/${postID}` }}
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72">
+				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
 					<section className="max-w-32 lg:max-w-60 my-auto rounded-md bg-[#fafafb] ">
 						{ image.length > 1 ? <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={false}/> 
 							:
@@ -42,9 +42,9 @@ export default function HorizontalCard({
 						
 					<section className="w-full flex flex-row-reverse">
 						<section className="flex flex-col justify-between text-right">
-							<div>
-								<h2 className="text-green-700 font-bold text-sm md:text-lg">C${price}</h2>
-								<h2 className="text-rose-700 font-bold text-sm md:text-base">{(status?.id !== 1) ? status?.type ?? '' : ''}</h2>
+							<div className="overflow-hidden">
+								<h2 className="text-green-700 font-bold text-xs sm:text-sm md:text-lg line-clamp-1">C${price}</h2>
+								<h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(status?.id !== 1) ? status?.type ?? '' : ''}</h2>
 							</div>
 							<button className="rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-black hidden group-hover:flex justify-center items-center py-1 max-w-20"><ArrowLongRightIcon className="h-6 w-6"/></button>
 						</section>
@@ -57,9 +57,9 @@ export default function HorizontalCard({
 									<p className="line-clamp-1 sm:line-clamp-2 lg:line-clamp-4">{description}</p>
 								</div>
 							</div>
-							<div className="flex flex-wrap sm:flex-nowrap sm:space-x-4">
-								<div className="h-auto line-clamp-1 sm:line-clamp-none font-bold">📍 {location}</div>
-								<div className="h-auto line-clamp-1 sm:line-clamp-none">{String(age)}</div>
+							<div className="block sm:flex sm:flex-nowrap sm:space-x-4">
+								<div className="h-auto line-clamp-1 font-bold">📍 {location}</div>
+								<div className="h-auto line-clamp-1">{String(age)}</div>
 							</div>
 						</section>
 					</section>
