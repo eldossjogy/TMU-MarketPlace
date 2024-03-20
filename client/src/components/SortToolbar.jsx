@@ -31,7 +31,7 @@ export default function SortToolbar() {
 
     function ToolbarButton(props) {
         return (
-            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 text-sm ${props.checked ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
+            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${props.checked ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
                     handleCycleState(props.id)
                 }}>
                 <span>{props.value}</span>
@@ -42,25 +42,27 @@ export default function SortToolbar() {
 
     return (
         <section id="search-toolbar" className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
-            <div id="search-sort" className="flex space-x-2 text-xl items-center">
-                <div className='w-auto'>Sort: </div>
-                <RadioGroup value={Math.floor(sort / 2)} onChange={(e) => {}} className={"flex flex-wrap space-x-2 text-xl items-center"}>
-                    {sortStates && sortStates.map((sortKey) => (
-                        <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
-                            {({ checked }) => (
-                                <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id]} value={sortKey.name} checked={checked}/>
-                            )}
-                    </RadioGroup.Option>
-                    ))}
-                </RadioGroup>
-            </div>
-            <div id="search-controls" className="space-x-2 flex justify-center items-center">
-                <button aria-label='Clear Sort' className={`flex items-center ring-0 ring-inset rounded-xl px-2 h-7 text-sm ring-blue-500 ${grid ? 'text-white bg-blue-400' : 'hover:text-white'} hover:text-white hover:bg-blue-500`} onClick={handleToggle}>
-                    {grid ? <Squares2X2Icon className='w-4 h-4'/> : <ListBulletIcon className='h-4 w-4'/>}
-                </button>
-                <button className={`flex items-center ring-0 ring-inset rounded-xl px-2 py-1 text-sm ring-rose-500 hover:text-white hover:bg-rose-500`} onClick={handleResetStates}>
-                    <span>X</span>
-                </button>
+            <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg w-full'>
+                <div id="search-sort" className="flex space-x-2 text-xl items-center">
+                    <div className='w-auto'>Sort: </div>
+                    <RadioGroup value={Math.floor(sort / 2)} onChange={(e) => {}} className={"flex flex-wrap text-xl items-center"}>
+                        {sortStates && sortStates.map((sortKey) => (
+                            <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
+                                {({ checked }) => (
+                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id]} value={sortKey.name} checked={checked}/>
+                                )}
+                        </RadioGroup.Option>
+                        ))}
+                    </RadioGroup>
+                </div>
+                <div id="search-controls" className="space-x-2 flex justify-center items-center">
+                    <button aria-label='Clear Sort' className={`flex items-center ring-0 ring-inset rounded-xl px-2 h-7 text-sm ring-blue-500 ${grid ? 'text-white bg-blue-400' : 'hover:text-white'} hover:text-white hover:bg-blue-500`} onClick={handleToggle}>
+                        {grid ? <Squares2X2Icon className='w-4 h-4'/> : <ListBulletIcon className='h-4 w-4'/>}
+                    </button>
+                    <button className={`flex items-center ring-0 ring-inset rounded-xl px-2 py-1 text-sm ring-rose-500 hover:text-white hover:bg-rose-500`} onClick={handleResetStates}>
+                        <span>X</span>
+                    </button>
+                </div>
             </div>
         </section>
     )

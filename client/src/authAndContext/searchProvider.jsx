@@ -56,7 +56,7 @@ export const SearchProvider = ({ children }) =>  {
             else if(page && page !== 0) searchQuery += `&page=${page}`
 
             if(options.lat && options.lng && options.range) searchQuery += `&lat=${options.lat}&lng=${options.lng}&range=${options.range}`
-            else if(searchLocation.lat && searchLocation.lng && range) searchQuery += `&lat=${searchLocation.lat}&lng=${searchLocation.lng}&range=${range}`
+            else if(location.lat && location.lng && range) searchQuery += `&lat=${location.lat}&lng=${location.lng}&range=${range}`
 
             window.history.replaceState(null, "TMMU Marketplace", searchQuery)
 
@@ -122,7 +122,7 @@ export const SearchProvider = ({ children }) =>  {
         if((Object.hasOwn(options, 'lat') && !isNaN(parseFloat(options.lat))) && (Object.hasOwn(options, 'lng') && !isNaN(parseFloat(options.lng)))){
             parsedOptions.lat = parseFloat(options.lat);
             parsedOptions.lng = parseFloat(options.lng);
-            setSearchLocation({lat: options.lat, lng: options.lng});
+            // setSearchLocation({lat: options.lat, lng: options.lng});
         }
 
         if(Object.hasOwn(options, 'range') && !isNaN(parseInt(options.range))){
