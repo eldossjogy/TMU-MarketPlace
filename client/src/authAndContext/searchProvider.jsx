@@ -164,8 +164,7 @@ export const SearchProvider = ({ children }) =>  {
             case 7: // Sort by distance Up
                 tempResults.sort((a,b) => {return a.distance < b.distance ? -1 : 1});
                 break;
-            default:
-                // tempResults.sort((a,b) => {return b.status_id < a.status_id ? 1 : b.id < a.id ? 1 : -1});
+            default: // Sort by ID Down
                 tempResults.sort((a,b) => {return a.id - b.id});
                 break;
         }
