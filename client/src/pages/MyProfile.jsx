@@ -30,7 +30,7 @@ export default function MyProfile() {
           ))}
         </div>
       </MyProfileContainer>
-      {loadingState && <LoadingScreen />}
+      {loadingState && <LoadingScreen message={"Changing Ad status"}/>}
     </div>
   )
 }

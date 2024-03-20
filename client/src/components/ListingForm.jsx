@@ -11,7 +11,7 @@ export default function ListingForm({formDataProp = {
     postal_code: '',
     location: '',
     category_id: null,
-}, typeOfReq="Post"}) {
+}, typeOfReq="Post", editingForm=false}) {
 
     const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
     const navigate = useNavigate();

@@ -78,10 +78,10 @@ export default function MyListingCard({listingInfo}) {
               <p className='font-bold text-[1.5em]'>
                 Status:
               </p>
-              <select onChange={changeListingStatus} className={`selectContainer font-bold text-white rounded text-[1.5em] ${listingInfo.status.type === "Available" && 'bg-green-500'} ${listingInfo.status.type === "Sold" && 'bg-red-500'} ${listingInfo.status.type === "Pending" && 'bg-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'text-blue-400'}`}>
-                  <option value ='' style={{ backgroundColor: listingInfo.status.type === "Available" ? '#34D399' : listingInfo.status.type === "Sold" ? '#EF4444' : listingInfo.status.type === "Pending" ? '#FBBF24' : listingInfo.status.type === "Unavailable" ? '#3B82F6' : '' }} >{listingInfo.status.type}</option>
+              <select onChange={changeListingStatus} className={`selectContainer font-bold text-black rounded text-[1.5em] ${listingInfo.status.type === "Available" && 'bg-green-400'} ${listingInfo.status.type === "Sold" && 'bg-red-400'} ${listingInfo.status.type === "Pending" && 'bg-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'bg-blue-400'}`}>
+                  <option value ='' style={{ backgroundColor: listingInfo.status.type === "Available" ? '#6EE7B7' : listingInfo.status.type === "Sold" ? '#F87171' : listingInfo.status.type === "Pending" ? '#FBBF24' : listingInfo.status.type === "Unavailable" ? '#60A5FA' : '' }} >{listingInfo.status.type}</option>
                   {statusList.map((elem, index) => (
-                    elem.type !== listingInfo.status.type && <option className="text-white" style={{ backgroundColor: elem.type === "Available" ? '#34D399' : elem.type === "Sold" ? '#EF4444' : elem.type === "Pending" ? '#FBBF24' : elem.type === "Unavailable" ? '#3B82F6' : '' }} key={index} value={elem.type}>{elem.type}</option>
+                    elem.type !== listingInfo.status.type && <option className="text-black" style={{ backgroundColor: elem.type === "Available" ? '#6EE7B7' : elem.type === "Sold" ? '#F87171' : elem.type === "Pending" ? '#FBBF24' : elem.type === "Unavailable" ? '#60A5FA' : '' }} key={index} value={elem.type}>{elem.type}</option>
                   ))}
                 </select>
             </div>
