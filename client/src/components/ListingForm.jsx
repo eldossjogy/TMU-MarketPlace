@@ -168,6 +168,15 @@ export default function ListingForm({formDataProp = {
         }
     }
 
+    function truncateString(str, limit) {
+      if (str.length <= limit) {
+        return str; // Return the original string if within the limit
+      } else {
+          // Truncate the string and append "..."
+          return str.substring(0, limit) + '...';
+        }
+    }
+
 
   return (
     <>
@@ -188,7 +197,7 @@ export default function ListingForm({formDataProp = {
           </div>
   
           <label className="block mb-2">Postal Code:{formErrors.postal_code && <span className='text-red-500'>{formErrors.postal_code}</span>}</label>
-          <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
+          <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code (Example: A1AA1A)" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
   
           <label className="block mb-2">Location:</label>
           <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
@@ -203,7 +212,7 @@ export default function ListingForm({formDataProp = {
             ))}
           </select>
   
-          <label className="block mb-2">Description:{formErrors.description && <span className='text-red-500'>{formErrors.description}</span>}
+          <label className="block mb-2">Description (max 350 characters):{formErrors.description && <span className='text-red-500'>{formErrors.description}</span>}
             <span class="text-red-500">*</span>
           </label>
           <textarea rows="3" name="description" value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2"></textarea>
@@ -233,9 +242,9 @@ export default function ListingForm({formDataProp = {
           <ul className='selectedImageDisplayContainer'>
             <h1>Images Selected:</h1>
             {imageList.map((elem, index) => (
-              <li className='selectedImageBox' key={index}>
+              <li className='relative selectedImageBox overflow-hidden' key={index}>
                 <p>{elem.name}</p>
-                <i onClick={() => handleImageDelete(elem)}>&#x2715;</i>
+                <i className="absolute right-1 p-1" onClick={() => handleImageDelete(elem)}>&#x2715;</i>
               </li>
             ))}
           </ul>

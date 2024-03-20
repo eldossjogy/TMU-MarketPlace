@@ -192,10 +192,12 @@
     cursor: pointer;
     color: #d4d4d4;
     text-decoration: none;
+    
 }
 
 .selectedImageBox i:hover {
     color: red;
+    background-color: rgb(255, 255, 255,0.7);
 }
 
 .cardButtons {

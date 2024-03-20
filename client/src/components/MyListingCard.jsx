@@ -35,10 +35,10 @@ export default function MyListingCard({listingInfo}) {
   function truncateString(str, limit) {
     if (str.length <= limit) {
       return str; // Return the original string if within the limit
-  } else {
-      // Truncate the string and append "..."
-      return str.substring(0, limit) + '...';
-  }
+    } else {
+        // Truncate the string and append "..."
+        return str.substring(0, limit) + '...';
+      }
   }
 
   //function to quickly change status of a post
