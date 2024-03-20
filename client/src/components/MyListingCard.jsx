@@ -74,15 +74,17 @@ export default function MyListingCard({listingInfo}) {
               <p className='mt-2 text-[1.2em]'>{isPhone ? truncateString(listingInfo.description, 65) : truncateString(listingInfo.description, 200) } </p>
             </div>
             <div className='cardRightSection'>
-              <div className='sm:w-[50%] md:w-[80%] lg:w-[35%] relative flex flex-col md:justify-end md:items-end'>
-                <p className='font-bold text-[1.5em]'>Status:<span className={`font-bold ${listingInfo.status.type === "Available" && 'text-green-500'} ${listingInfo.status.type === "Sold" && 'text-red-500'} ${listingInfo.status.type === "Pending" && 'text-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'text-blue-400'}`}>{listingInfo.status.type}</span></p>
-                <select onChange={changeListingStatus} className="selectContainer bg-blue-500 hover:bg-blue-700 text-white font-bold rounded text-[1.5em]">
-                  <option value =''>Status</option>
+            <div className='sm:w-[50%] md:w-[80%] lg:w-[35%] relative flex flex-col md:flex-row md:gap-1 md:justify-end md:items-end sm:items-start'>
+              <p className='font-bold text-[1.5em]'>
+                Status:
+              </p>
+              <select onChange={changeListingStatus} className={`selectContainer font-bold text-white rounded text-[1.5em] ${listingInfo.status.type === "Available" && 'bg-green-500'} ${listingInfo.status.type === "Sold" && 'bg-red-500'} ${listingInfo.status.type === "Pending" && 'bg-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'text-blue-400'}`}>
+                  <option value ='' style={{ backgroundColor: listingInfo.status.type === "Available" ? '#34D399' : listingInfo.status.type === "Sold" ? '#EF4444' : listingInfo.status.type === "Pending" ? '#FBBF24' : listingInfo.status.type === "Unavailable" ? '#3B82F6' : '' }} >{listingInfo.status.type}</option>
                   {statusList.map((elem, index) => (
-                    <option key={index} value={elem.type}>{elem.type}</option>
+                    elem.type !== listingInfo.status.type && <option className="text-white" style={{ backgroundColor: elem.type === "Available" ? '#34D399' : elem.type === "Sold" ? '#EF4444' : elem.type === "Pending" ? '#FBBF24' : elem.type === "Unavailable" ? '#3B82F6' : '' }} key={index} value={elem.type}>{elem.type}</option>
                   ))}
                 </select>
-              </div>
+            </div>
               <div className='cardButtons'>
                 <button onClick={() => {setModal(prev => !prev)}} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
                   Remove
