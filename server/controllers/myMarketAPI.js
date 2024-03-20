@@ -110,8 +110,8 @@ export async function createListing(req, res) {
         res.status(201).json(fetNewListing.data[0])
     }
     catch(error) {
-        console.log(error)
-        res.status(error.status).json({ message: error.message });
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
     }
 
 }
@@ -141,7 +141,8 @@ export async function getMyListings(req, res) {
         res.status(200).json(myListings.data)
     }
     catch(error) {
-        res.status(500).json({ message: error.message });
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
     }
 }
 
@@ -194,7 +195,12 @@ export async function deleteMyListing(req, res) {
     try {
         const getListing = await supabase
         .from('ad')
-        .select('*')
+        .select(
+            `
+            *,
+            image!left(file_path)
+            `
+        )
         .eq('id', listing.id)
 
         if (getListing.data[0].user_id !== user_id) {
@@ -203,15 +209,39 @@ export async function deleteMyListing(req, res) {
             throw error;
         }
         else {
-            const response = await supabase
-            .from('ad')
-            .delete()
-            .match({ 'id': listing.id });
+            //delete the ad listing from ad table
+            const deleteListing = await supabase
+                .from('ad')
+                .delete()
+                .match({ 'id': listing.id });
+
+            //delete the images form the image table for the ad
+            const listingImages = await supabase
+                .from('image')
+                .delete()
+                .eq( 'ad_id', listing.id )
+            
+            //delete the images from the supabase bucket/storage
+            for (let i of getListing.data[0].image) {
+                const file_path = i.file_path.split('/').pop()
+                
+                const { data, error } = await supabase
+                    .storage
+                    .from('avatars')
+                    .remove([`ad-listings/${file_path}`])
+                
+                if (error) {
+                    const error = new Error("Unable to delete Image from the bucket")
+                    error.status = 500
+                    throw error;
+                }
+            }
 
             res.status(200).json({message: "Post Deleted Successfully!"})
         }
     }
     catch(error) {
-        res.status(error.status).json({ message: error.message });
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
     }
 }
