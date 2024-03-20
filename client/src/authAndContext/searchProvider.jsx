@@ -7,6 +7,8 @@ const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
     const {location, range} = useContext(LocationContext);
+    const [grid, setGrid] = useState(false);
+    const [sort, setSort] = useState(0);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
@@ -156,7 +158,11 @@ export const SearchProvider = ({ children }) =>  {
             // setMaxPrice,
             maxDays,
             // setMaxDays
-            categoryFilter
+            categoryFilter,
+            grid,
+            setGrid,
+            sort, 
+            setSort
         }} >
             {children}
         </SearchContext.Provider>

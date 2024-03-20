@@ -12,12 +12,12 @@ export async function searchAds(req, res) {
 
         const searchMinPrice = !isNaN(parseInt(min)) ? parseInt(min) : 0;
         const searchMaxPrice = !isNaN(parseInt(max)) ? parseInt(max) : 2147483647;
-        const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status < 4) ? `(${parseInt(status)})` : '(1,2,3)') : '1';
+        const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status) < 4 ? `(${parseInt(status)})` : '(1,2,3)') : '(1)';
         const searchLatLng = {lat: isNaN(parseFloat(lat)) ? 43.6577518 : parseFloat(lat), lng: isNaN(parseFloat(lng)) ? -79.3786619 : parseFloat(lng)}
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
         const searchCategory = isNaN(parseInt(category)) ? 2 : parseInt(category)
 
-        //console.log(req.query);
+        console.log(searchStatus);
 
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
