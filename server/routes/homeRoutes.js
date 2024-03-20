@@ -1,8 +1,10 @@
 import express from "express";
+import {getCategories, getStatusList} from '../controllers/homeAPI.js'
 
 const router = express.Router();
 
-router.get('/get-all-ads', function() {console.log("came to home getAllAds route")})
+router.get('/get-categories', getCategories)
+router.get('/get-status-list', getStatusList)
 
 export default router;
 
