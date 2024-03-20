@@ -7,7 +7,7 @@ export async function searchAds(req, res) {
     try {
 
         let minDate = new Date(0).toISOString().split('T')[0];
-        let pageCount = isNaN(parseInt(page)) ? 1 : parseInt(page);
+        // let pageCount = isNaN(parseInt(page)) ? 1 : parseInt(page);
 
         const searchMinPrice = !isNaN(parseInt(min)) ? parseInt(min) : 0;
         const searchMaxPrice = !isNaN(parseInt(max)) ? parseInt(max) : 2147483647;
@@ -24,7 +24,6 @@ export async function searchAds(req, res) {
             var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .eq('user_id', user)
             .textSearch('title', q, { type: 'websearch', config: 'english' })
-            // .range(5 * (pageCount - 1), 5 * pageCount - 1)
         }
         else if (q) {
             var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
@@ -34,7 +33,6 @@ export async function searchAds(req, res) {
             .filter('status_id', 'in', searchStatus)
             .filter('created_at', 'gte', minDate)
             .textSearch('title', q, { type: 'websearch', config: 'english' })
-            // .range(5 * (pageCount - 1), 5 * pageCount - 1)
         }
         else{
             var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
@@ -43,7 +41,6 @@ export async function searchAds(req, res) {
             .filter('category_id', 'eq', searchCategory)
             .filter('status_id', 'in', searchStatus)
             .filter('created_at', 'gte', minDate)
-            // .range(5 * (pageCount - 1), 5 * pageCount - 1)
         }
 
         if(error){

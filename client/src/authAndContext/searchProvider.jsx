@@ -62,7 +62,7 @@ export const SearchProvider = ({ children }) =>  {
 
 			const { data, error } = await axios.get(searchURL + searchQuery)
 
-			setSearchResults(data?.data ?? []);
+			sortResults(-1, data?.data ?? []);
 
 			if (error) {
 				toast.error(error.message);
@@ -137,70 +137,57 @@ export const SearchProvider = ({ children }) =>  {
         searchForAds(parsedOptions);
     }
 
-    function sortResults(sortType = 1) {
-        let tempResults = [...searchResults];
-        // console.log(searchResults);
-        // console.log(sortType);
+    function sortResults(sortType = -1, data = searchResults) {
+        let tempResults = [...data];
         switch (sortType) {
             case 0: // Sort by name Down
-                tempResults.sort((a,b) => {console.log(a.title); a.title >= b.title ? -1 : a.description >= b.description ? -1 : 1});
+                tempResults.sort((a,b) => {return a.title.toLocaleLowerCase() < b.title.toLocaleLowerCase() ? 1 : -1});
                 break;
             case 1: // Sort by name Up
-                tempResults.sort((a,b) => {a.title < b.title ? -1 : a.description < b.description ? -1 : 1});
+                tempResults.sort((a,b) => {return a.title.toLocaleLowerCase() > b.title.toLocaleLowerCase() ? 1 : -1});
                 break;
             case 2: // Sort by price Down
-                tempResults.sort((a,b) => {a.price >= b.price ? -1 : 1});
+                tempResults.sort((a,b) => {return a.price - b.price});
                 break;
             case 3: // Sort by price Up
-                tempResults.sort((a,b) => {a.price < b.price ? -1 : 1});
+                tempResults.sort((a,b) => {return b.price - a.price});
                 break;
             case 4: // Sort by date Down
+                tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
                 break;
             case 5: // Sort by date Up
-                
+                tempResults.sort((a,b) => {return (new Date(b.created_at)).getTime() - (new Date(a.created_at)).getTime()});
                 break;
             case 6: // Sort by distance Down
-                tempResults.sort((a,b) => {a.distance >= b.distance ? -1 : 1});
+                tempResults.sort((a,b) => {return a.distance >= b.distance ? -1 : 1});
                 break;
             case 7: // Sort by distance Up
-                tempResults.sort((a,b) => {a.distance < b.distance ? -1 : 1});
+                tempResults.sort((a,b) => {return a.distance < b.distance ? -1 : 1});
                 break;
-
             default:
-                tempResults.sort((a,b) => {b.id > a.id ? 1 : -1});
+                // tempResults.sort((a,b) => {return b.status_id < a.status_id ? 1 : b.id < a.id ? 1 : -1});
+                tempResults.sort((a,b) => {return a.id - b.id});
                 break;
         }
         setSort(sortType);
-        //setSearchResults(tempResults);
+        setSearchResults(tempResults);
         
     }
-
-    // useEffect(() => {
-    //     searchForAds();
-    // },[statusFilter, minPrice, maxPrice, maxDays])
 
     return (
         <SearchContext.Provider value={{
             searchResults,
-            //filteredResults,
-            //filterResults,
             updateFilters,
-            // searchForAds,
             searchInput, 
             setSearchInput,
             statusFilter,
-            // setStatusFilter,
             minPrice, 
-            // setMinPrice, 
             maxPrice, 
-            // setMaxPrice,
             maxDays,
-            // setMaxDays
             categoryFilter,
             grid,
             setGrid,
             sort, 
-            //setSort,
             sortResults
         }} >
             {children}

@@ -20,7 +20,7 @@ export default function SearchPage() {
 							<HorizontalCard
 								image={result.image}
 								title={result.title}
-								price={result.price}
+								price={result.price.toLocaleString()}
 								location={result.location}
 								description={result.description}
 								status={{id: result?.status_id ?? 1, type: result.status?.type ?? ''}}

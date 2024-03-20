@@ -10,7 +10,7 @@ export default function SortToolbar() {
 
     const handleResetStates = () => {
         setSortStates([{id: 0, name:'Name', state: 0}, {id: 1, name:'Price', state: 0}, {id: 2, name:'Date', state: 0}, {id: 3, name:'Distance', state: 0}]);
-        sortResults(1);
+        sortResults(-1);
     }
 
     const handleCycleState = (idx) => {
@@ -44,7 +44,7 @@ export default function SortToolbar() {
         <section id="search-toolbar" className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
             <div id="search-sort" className="flex space-x-2 text-xl items-center">
                 <div className='w-auto'>Sort: </div>
-                <RadioGroup value={Math.floor(sort, 2)} onChange={(e) => {}} className={"flex flex-wrap space-x-2 text-xl items-center"}>
+                <RadioGroup value={Math.floor(sort / 2)} onChange={(e) => {}} className={"flex flex-wrap space-x-2 text-xl items-center"}>
                     {sortStates && sortStates.map((sortKey) => (
                         <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
                             {({ checked }) => (
@@ -65,9 +65,3 @@ export default function SortToolbar() {
         </section>
     )
 }
-{/* <RadioGroup.Option key={sortKey.id} value={sortKey.name} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
-                            ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
-                            {({ checked }) => (
-                                
-                            )}
-                        </RadioGroup.Option> */}
