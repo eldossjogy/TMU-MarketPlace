@@ -26,6 +26,7 @@ export default function SearchPage() {
 								status={{id: result?.status_id ?? 1, type: result.status?.type ?? ''}}
 								postID={result.id}
 								date={result.created_at}
+								distance={result.distance}
 								key={result.id} 
 							/>
 						))}
@@ -37,6 +38,7 @@ export default function SearchPage() {
 								location={result.location}
 								description={result.description}
 								postID={result.id}
+								distance={result.distance}
 								key={result.id}
 						  />
 						))}

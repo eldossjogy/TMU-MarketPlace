@@ -11,7 +11,8 @@ export default function HorizontalCard({
 	status,
 	location,
 	postID,
-	date
+	date,
+	distance
 }) {
 	const [hovered, setHovered] = useState(false);
 	const rawDate = new Date(date ?? '01/16/2024');
@@ -60,6 +61,7 @@ export default function HorizontalCard({
 							<div className="block sm:flex sm:flex-nowrap sm:space-x-4">
 								<div className="h-auto line-clamp-1 font-bold">📍 {location}</div>
 								<div className="h-auto line-clamp-1">{String(age)}</div>
+								<div className="h-auto line-clamp-1">{distance ? `${parseInt(distance)} m` : ''}</div>
 							</div>
 						</section>
 					</section>

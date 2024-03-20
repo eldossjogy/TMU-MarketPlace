@@ -8,6 +8,7 @@ export default function VerticalCard({
   description,
   title,
   location,
+  distance,
   postID
 }) {
   const [hovered, setHovered] = useState(false);
@@ -36,7 +37,10 @@ export default function VerticalCard({
             <div className="min-h-16">
               <p className="line-clamp-2">{description}</p>
             </div>
-            <div className="h-auto line-clamp-1">📍{location}</div>
+            <span className="block sm:flex sm:flex-nowrap sm:space-x-4">
+              <div className="h-auto line-clamp-1">📍{location}</div>
+              <div className="h-auto line-clamp-1">{distance ? `${parseInt(distance)} m` : ''}</div>  
+            </span>
           </div>
         </div>
       </div>
