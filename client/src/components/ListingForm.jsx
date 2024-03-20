@@ -175,7 +175,9 @@ export default function ListingForm({formDataProp = {
       <h1 className='formTitle'>Create A New Listing</h1>
       <div className='topFormSection'>
         <div className='leftFormSection'>
-          <label className="block mb-2">Title:{formErrors.title && <span className='text-red-500'>{formErrors.title}</span>}</label>
+          <label className="block mb-2">Title:{formErrors.title && <span className='text-red-500'>{formErrors.title}</span>}
+            <span class="text-red-500">*</span>
+          </label>
           <input autoComplete='off' type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Enter Title" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
   
           <label className="block mb-2">Price:{formErrors.price && <span className='text-red-500'>{formErrors.price}</span>}</label>
@@ -191,7 +193,9 @@ export default function ListingForm({formDataProp = {
           <label className="block mb-2">Location:</label>
           <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2" />
   
-          <label className="block mb-2">Category:{formErrors.category_id && <span className='text-red-500'>{formErrors.category_id}</span>}</label>
+          <label className="block mb-2">Category:{formErrors.category_id && <span className='text-red-500'>{formErrors.category_id}</span>}
+            <span class="text-red-500">*</span>
+          </label>
           <select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2">
             <option value="">Select Category</option>
             {categories.map((elem, index) => (
@@ -199,7 +203,9 @@ export default function ListingForm({formDataProp = {
             ))}
           </select>
   
-          <label className="block mb-2">Description:{formErrors.description && <span className='text-red-500'>{formErrors.description}</span>}</label>
+          <label className="block mb-2">Description:{formErrors.description && <span className='text-red-500'>{formErrors.description}</span>}
+            <span class="text-red-500">*</span>
+          </label>
           <textarea rows="3" name="description" value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4 p-2"></textarea>
         </div>
   
