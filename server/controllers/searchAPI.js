@@ -1,5 +1,4 @@
 import supabase from '../config/supabaseConfig.js'
-import dotenv from "dotenv";
 
 export async function searchAds(req, res) {
 
@@ -7,7 +6,7 @@ export async function searchAds(req, res) {
     try {
 
         let minDate = new Date(0).toISOString().split('T')[0];
-        // let pageCount = isNaN(parseInt(page)) ? 1 : parseInt(page);
+        //let pageCount = isNaN(parseInt(page)) ? 1 : parseInt(page);
 
         const searchMinPrice = !isNaN(parseInt(min)) ? parseInt(min) : 0;
         const searchMaxPrice = !isNaN(parseInt(max)) ? parseInt(max) : 2147483647;
