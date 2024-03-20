@@ -35,12 +35,12 @@ export default function LocationPicker(applyFn) {
                 <select className="w-full rounded-md" name="range" onChange={(e) => {
                     setRange(e.target.value ?? 1000)
                 }}>
-                    <option value={5000}>5 km</option>
-                    <option value={10000}>10 km</option>
-                    <option value={15000}>15 km</option>
-                    <option value={30000}>30 km</option>
-                    <option value={50000}>50 km</option>
-                    <option value={100000}>100 km</option>
+                    <option aria-label="Set range to 5 kilometers" value={5000}>5 km</option>
+                    <option aria-label="Set range to 10 kilometers" value={10000}>10 km</option>
+                    <option aria-label="Set range to 15 kilometers" value={15000}>15 km</option>
+                    <option aria-label="Set range to 30 kilometers" value={30000}>30 km</option>
+                    <option aria-label="Set range to 50 kilometers" value={50000}>50 km</option>
+                    <option aria-label="Set range to 100 kilometers" value={100000}>100 km</option>
                 </select>
             </form>
             <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400" id="map">

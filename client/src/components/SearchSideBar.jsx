@@ -62,9 +62,9 @@ export default function SearchSideBar() {
     }
 
     const updateSearchLocation = (lat, lng, range = 100000) => {
-        console.log(lat); 
-        console.log(lng);
-        console.log(range);
+        // console.log(lat); 
+        // console.log(lng);
+        // console.log(range);
 
         updateFilters({lat: lat, lng: lng, range: range});
     }

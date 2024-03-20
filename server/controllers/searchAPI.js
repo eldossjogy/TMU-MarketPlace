@@ -9,7 +9,6 @@ export async function searchAds(req, res) {
         let minDate = new Date(0).toISOString().split('T')[0];
         let pageCount = isNaN(parseInt(page)) ? 1 : parseInt(page);
 
-
         const searchMinPrice = !isNaN(parseInt(min)) ? parseInt(min) : 0;
         const searchMaxPrice = !isNaN(parseInt(max)) ? parseInt(max) : 2147483647;
         const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status) < 4 ? `(${parseInt(status)})` : '(1,2,3)') : '(1)';
@@ -17,11 +16,8 @@ export async function searchAds(req, res) {
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
         const searchCategory = isNaN(parseInt(category)) ? 2 : parseInt(category)
 
-        console.log(searchStatus);
-
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
-            
             minDate = new Date(rawAge).toISOString().split('T')[0];
         }
         if(user){
@@ -67,7 +63,6 @@ export async function searchAds(req, res) {
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
             const distance = cosineDistanceBetweenPoints(element.lat, element.lng, searchLatLng.lat, searchLatLng.lng)
-            //console.log(`Range between me and item ${element.title} is ${distance}`);
             if(distance <= searchRange){
                 element.distance = distance;
                 parsedData.push(element);

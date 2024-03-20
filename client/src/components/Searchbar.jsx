@@ -67,7 +67,7 @@ export default function Searchbar(searchLocation) {
                 onChange={handleChange}
                 value={searchInput}
             ></input>
-            <button className='bg-white flex justify-center items-center w-12 md:w-8 h-full p-1 my-auto rounded-r-xl hover:fill-yellow-500' >
+            <button className='bg-white flex justify-center items-center w-12 md:w-8 h-full p-1 my-auto rounded-r-xl hover:fill-yellow-500' aria-label='Search'>
                 <MagnifyingGlassIcon className='w-6 h-6 fill-inherit'/>
             </button>
         </form>

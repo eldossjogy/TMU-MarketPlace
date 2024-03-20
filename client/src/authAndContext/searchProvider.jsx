@@ -137,6 +137,44 @@ export const SearchProvider = ({ children }) =>  {
         searchForAds(parsedOptions);
     }
 
+    function sortResults(sortType = 1) {
+        let tempResults = [...searchResults];
+        // console.log(searchResults);
+        // console.log(sortType);
+        switch (sortType) {
+            case 0: // Sort by name Down
+                tempResults.sort((a,b) => {console.log(a.title); a.title >= b.title ? -1 : a.description >= b.description ? -1 : 1});
+                break;
+            case 1: // Sort by name Up
+                tempResults.sort((a,b) => {a.title < b.title ? -1 : a.description < b.description ? -1 : 1});
+                break;
+            case 2: // Sort by price Down
+                tempResults.sort((a,b) => {a.price >= b.price ? -1 : 1});
+                break;
+            case 3: // Sort by price Up
+                tempResults.sort((a,b) => {a.price < b.price ? -1 : 1});
+                break;
+            case 4: // Sort by date Down
+                break;
+            case 5: // Sort by date Up
+                
+                break;
+            case 6: // Sort by distance Down
+                tempResults.sort((a,b) => {a.distance >= b.distance ? -1 : 1});
+                break;
+            case 7: // Sort by distance Up
+                tempResults.sort((a,b) => {a.distance < b.distance ? -1 : 1});
+                break;
+
+            default:
+                tempResults.sort((a,b) => {b.id > a.id ? 1 : -1});
+                break;
+        }
+        setSort(sortType);
+        //setSearchResults(tempResults);
+        
+    }
+
     // useEffect(() => {
     //     searchForAds();
     // },[statusFilter, minPrice, maxPrice, maxDays])
@@ -162,7 +200,8 @@ export const SearchProvider = ({ children }) =>  {
             grid,
             setGrid,
             sort, 
-            setSort
+            //setSort,
+            sortResults
         }} >
             {children}
         </SearchContext.Provider>
