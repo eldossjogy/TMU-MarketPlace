@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import supabase from "./supabaseConfig";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingScreen from "../components/LoadingScreen";
 
 const AuthContext = createContext();
 
@@ -11,25 +12,38 @@ export const AuthProvider = ({ children }) => {
 
 	const [user, setUser] = useState(null);
 	const [localSession, setLocalSession] = useState(null);
-	const [profileData, setProfileData] = useState(null);
-	const [loadingState, setLoadingState] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [profileData, setProfileData] = useState(null);
+	const [userListings, setUserListings] = useState([]);
+
+	//usestates for global use acquired from db (categories, etc)
+	const [categories, setCategories] = useState([]);
+	const [statusList, setStatusList] = useState([]);
+
+	// API req loading useState. set it true before api req, and at the end of server req function set it to false
+	const [loadingState, setLoadingState] = useState(false);
+
+	//caching/performance useStates:
+	const [fetchedUserListings, setFetchedUserListings] = useState(false);
+
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, session) => {
 			if (event === "INITIAL_SESSION") {
 				// if not logged in
-				if (session == null) {
-					setIsLoading(false);
+				if (session !== null) {
+					setLocalSession(session);
 				}
-			} else if (event === "SIGNED_OUT") {
+			}
+			else if (event === "SIGNED_OUT") {
 				setLocalSession(null);
 			} else {
 				setLocalSession(session);
 			}
-		});
+			setIsLoading(false)
 
+		});
 
 		return () => data.subscription.unsubscribe();
 	}, []);
@@ -85,6 +99,12 @@ export const AuthProvider = ({ children }) => {
 		}
 		fetchProfile();
 	}, [user]);
+
+	//useEffect to get all required infomration such as categories and statusList once upon entering app
+	useEffect(() => {
+		getCategories()
+		getStatusLists()
+	}, [])
 
 	// use effect for when profileData changes
 	// useEffect(() => {
@@ -240,6 +260,7 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 
+	//function that uploads images to bucket
 	async function uploadImageToBucket(files, bucketName) {
 		let imagesPaths = [];
 
@@ -263,6 +284,7 @@ export const AuthProvider = ({ children }) => {
 		return imagesPaths;
 	}
 
+	//function that creates new Listing 
 	async function createNewListing(listingInfo, imageList) {
 		const checkUser = await supabase.auth.getUser();
 		try {
@@ -283,7 +305,7 @@ export const AuthProvider = ({ children }) => {
 						},
 					}
 				);
-				toast(response.data.message);
+				updateUserListingsLocally("Add", response.data)
 				navigate("/my-market");
 			} else {
 				const error = new Error("Unauthorized access!! not a logged in user!!");
@@ -323,6 +345,123 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 
+	//function to get user's listings
+	async function fetchMyPostings() {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
+				{
+					headers: {
+						Authorization: "Bearer " + localSession.access_token,
+					},
+				}
+			)
+			setUserListings(response.data)
+		}
+		catch (error) {
+			toast.error(error.message + ". Can't get user listings from db");
+		}
+		setLoadingState(false)
+	}
+
+	//function that gets categories
+	function getCategories() {
+		axios.get(
+			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`,
+		)
+			.then(response => {
+				setCategories(response.data)
+			})
+			.catch(error => {
+				toast.error(error.message + "Erro fetching categories from db");
+			})
+
+	}
+
+	//function that gets status' list
+	function getStatusLists() {
+		axios.get(
+			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+		)
+			.then(response => {
+				setStatusList(response.data)
+			})
+			.catch(error => {
+				toast.error(error.message + "Erro fetching status Lists from db");
+			})
+
+	}
+
+	//function to qickly change status of listing
+	async function changeListingStatusAPI(listingInfo, status) {
+		try {
+			const response = await axios.put(
+				`${process.env.REACT_APP_BACKEND_API_URL}/my-market/change-listing-status`, {
+				listing: listingInfo,
+				status
+			},
+				{
+					headers: {
+						Authorization: "Bearer " + localSession.access_token,
+					},
+				}
+			)
+			updateUserListingsLocally('Modify', listingInfo, response.data)
+		}
+		catch (error) {
+			toast.error(error.message);
+		}
+
+		setLoadingState(false)
+	}
+
+	//function to locally perform CRUD operations on user's listing aftre update for performance
+	function updateUserListingsLocally(action, listingInfo, updatedData) {
+		if (action === "Modify") {
+			console.log("came to modify")
+			let targetIndex = userListings.indexOf(listingInfo)
+			setUserListings(prev => prev.map((item, i) => {
+				if (i !== targetIndex) {
+					return item; // Keep the item unchanged if the index doesn't match
+				} else {
+					return updatedData; // Replace the item at the target index with updatedData
+				}
+			}));
+		}
+		else if (action === "Delete") {
+			console.log("came to delete")
+			let targetIndex = userListings.indexOf(listingInfo)
+			setUserListings(prev => prev.filter((item, i) => i !== targetIndex));
+		}
+		else if (action === "Add") {
+			console.log("came to add")
+			setUserListings(prev => [listingInfo, ...prev])
+		}
+	}
+
+	//function to delete lisitng
+	async function deleteListing(listingInfo) {
+		try {
+			const response = await axios.put(
+				`${process.env.REACT_APP_BACKEND_API_URL}/my-market/delete-listing`, {
+				listing: listingInfo
+			},
+				{
+					headers: {
+						Authorization: "Bearer " + localSession.access_token,
+					},
+				}
+			)
+			toast.success(response.data.message)
+			updateUserListingsLocally('Delete', listingInfo)
+		}
+		catch (error) {
+			toast.error(error.message);
+		}
+
+		setLoadingState(false)
+	}
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -335,11 +474,18 @@ export const AuthProvider = ({ children }) => {
 				loadingState,
 				setLoadingState,
 				createNewListing,
-				isLoading,
 				fetchAvatar,
+				setFetchedUserListings,
+				fetchedUserListings,
+				fetchMyPostings,
+				userListings,
+				categories,
+				statusList,
+				changeListingStatusAPI,
+				deleteListing
 			}}
 		>
-			{children}
+			{isLoading ? <LoadingScreen /> : children}
 		</AuthContext.Provider>
 	);
 };
