@@ -42,7 +42,7 @@ export default function SortToolbar() {
 
     return (
         <section id="search-toolbar" className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
-            <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 bg-white p-2 text-lg w-full'>
+            <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 bg-white p-2 text-lg w-full overflow-auto'>
                 <div id="search-sort" className="flex space-x-2 text-xl items-center">
                     <div className='w-auto'>Sort: </div>
                     <RadioGroup value={Math.floor(sort / 2)} onChange={(e) => {}} className={"flex flex-wrap text-xl items-center"}>
