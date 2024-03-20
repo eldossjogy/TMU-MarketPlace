@@ -224,7 +224,7 @@ export async function deleteMyListing(req, res) {
             //delete the images from the supabase bucket/storage
             for (let i of getListing.data[0].image) {
                 const file_path = i.file_path.split('/').pop()
-                
+
                 const { data, error } = await supabase
                     .storage
                     .from('avatars')

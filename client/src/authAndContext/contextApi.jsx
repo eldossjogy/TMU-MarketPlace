@@ -287,6 +287,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  //function that uploads images to bucket
   async function uploadImageToBucket(files, bucketName) {
     let imagesPaths = [];
 
@@ -310,6 +311,7 @@ export const AuthProvider = ({ children }) => {
     return imagesPaths;
   }
 
+  //function that creates new Listing 
   async function createNewListing(listingInfo, imageList) {
     const checkUser = await supabase.auth.getUser();
     try {
@@ -343,6 +345,7 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false);
   }
 
+  //function to get user's listings
   async function fetchMyPostings() {
     try{
       const response = await axios.get(
@@ -361,6 +364,7 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false)
   }
 
+  //function that gets categories
   function getCategories() {
     axios.get(
       `${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`,
@@ -374,6 +378,7 @@ export const AuthProvider = ({ children }) => {
 
   }
 
+  //function that gets status' list
   function getStatusLists() {
     axios.get(
       `${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
@@ -387,6 +392,7 @@ export const AuthProvider = ({ children }) => {
 
   }
 
+  //function to qickly change status of listing
   async function changeListingStatusAPI(listingInfo, status) {
     try{
       const response = await axios.put(
@@ -409,6 +415,7 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false)
   }
 
+  //function to locally perform CRUD operations on user's listing aftre update for performance
   function updateUserListingsLocally(action, listingInfo, updatedData) {
     if (action === "Modify") {
       console.log("came to modify")
@@ -432,6 +439,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  //function to delete lisitng
   async function deleteListing(listingInfo) {
     try{
       const response = await axios.put(
