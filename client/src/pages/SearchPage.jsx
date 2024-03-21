@@ -44,10 +44,10 @@ export default function SearchPage() {
 						))}
 						{!searchResults || (searchResults && searchResults.length === 0) && [1].map((key) => (
 							<div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
-								<div class="max-w-xl mx-auto sm:px-6 lg:px-8">
-								<div class="flex items-center pt-8 sm:justify-start sm:pt-0">
+								<div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+								<div className="flex items-center pt-8 sm:justify-start sm:pt-0">
 
-									<div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">No Results</div>
+									<div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">No Results</div>
 								</div>
 							</div>
 							</div>
