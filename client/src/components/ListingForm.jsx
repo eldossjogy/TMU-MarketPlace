@@ -233,7 +233,7 @@ export default function ListingForm({ formDataProp = {
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
                             <input type='text' name='minPrice' maxLength={20} required
-								className={`ps-7 py-2 rounded-md w-full border-gray-300 ${false ? 'focus:ring-red-600 focus:border-0' : ''}`} 
+								className={`ps-7 py-2 rounded-md w-full border-gray-300`} 
 								placeholder='Enter Price' value={price === 0 ? '' : price} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
@@ -256,9 +256,9 @@ export default function ListingForm({ formDataProp = {
 						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{formErrors.location_search} *</span></label>
+							<label className="block">Set Location: <span className='text-red-500'>{formErrors.location} *</span></label>
 							<input
-								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
+								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
 								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
 								onChange={(e) => {
 									if (postCoordinates !== null) {

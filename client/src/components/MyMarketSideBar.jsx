@@ -29,9 +29,9 @@ export default function MyMarketSideBar() {
     ]
 
   return (
-    <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 m-3 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:h-[90vh] md:bg-[#e0f2fe] md:border-[#7dd3fc]`}>
+    <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 m-3 p-4 rounded-xl md:rounded-lg  ${collapsed ? '' : 'bg-[#fafafb] shadow-lg border-2 border-gray'} md:h-[90vh] md:bg-[#e0f2fe] md:border-[#7dd3fc]`}>
       <section className={`w-full space-y-4 md:hidden`}>
-        <div className='flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg' onClick={() => { setCollapsed(!collapsed) }}>
+        <div className={`flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg ${collapsed ? 'border-2 border-gray' : ''}`} onClick={() => { setCollapsed(!collapsed) }}>
           <span>My Market</span>
           <Bars3Icon className='h-8 w-8 shrink-0' />
         </div>
