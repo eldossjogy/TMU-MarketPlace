@@ -14,9 +14,9 @@ export const SearchProvider = ({ children }) =>  {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
     const [maxDays, setMaxDays] = useState(1825);
-    const [categoryFilter, setCategoryFilter] = useState(2);
+    const [categoryFilter, setCategoryFilter] = useState(6);
     const [page, setPage] = useState(0);
-    const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
+    // const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
 
 	const [searchResults, setSearchResults] = useState([]);
 
