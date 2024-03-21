@@ -13,7 +13,9 @@ export async function searchAds(req, res) {
         const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status) < 4 ? `(${parseInt(status)})` : '(1,2,3)') : '(1)';
         const searchLatLng = {lat: isNaN(parseFloat(lat)) ? 43.6577518 : parseFloat(lat), lng: isNaN(parseFloat(lng)) ? -79.3786619 : parseFloat(lng)}
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
-        const searchCategory = isNaN(parseInt(category)) ? 2 : parseInt(category)
+        const searchCategory = isNaN(parseInt(category)) ? 2 : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
+
+        console.log(searchCategory);
 
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
@@ -28,7 +30,7 @@ export async function searchAds(req, res) {
             var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .filter('price','gte', searchMinPrice)
             .filter('price','lte', searchMaxPrice)
-            .filter('category_id', 'eq', searchCategory)
+            .filter('category_id', 'in', searchCategory)
             .filter('status_id', 'in', searchStatus)
             .filter('created_at', 'gte', minDate)
             .textSearch('title', q, { type: 'websearch', config: 'english' })
@@ -37,7 +39,7 @@ export async function searchAds(req, res) {
             var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
             .filter('price','gte', searchMinPrice)
             .filter('price','lte', searchMaxPrice)
-            .filter('category_id', 'eq', searchCategory)
+            .filter('category_id', 'in', searchCategory)
             .filter('status_id', 'in', searchStatus)
             .filter('created_at', 'gte', minDate)
         }
