@@ -72,8 +72,8 @@ export default function SearchSideBar() {
         <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 m-3 p-4 bg-[#fafafb] rounded-lg shadow-lg border-2 border-gray`}>
             <section className={`w-full space-y-4 md:hidden`}>
                 <div className='flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg' onClick={() => { setCollapsed(!collapsed) }}>
-                    <Bars3Icon className='h-8 w-8 shrink-0' />
                     <span>Show Search Filters</span>
+                    <Bars3Icon className='h-8 w-8 shrink-0' />
                 </div>
             </section>
             <section className={`w-full space-y-4 mt-6 md:mt-0 md:block ${collapsed ? loaded ? 'hidden' : 'invisible' : ''}`}>

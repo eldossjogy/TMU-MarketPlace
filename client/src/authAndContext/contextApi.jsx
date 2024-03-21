@@ -308,8 +308,9 @@ export const AuthProvider = ({ children }) => {
 				updateUserListingsLocally("Add", response.data)
 				navigate("/my-market");
 			} else {
-				const error = new Error("Unauthorized access!! not a logged in user!!");
+				const error = new Error("Unauthorised");
 				error.status = 403;
+				toast.error(error.message);
 				throw error;
 			}
 		} catch (error) {

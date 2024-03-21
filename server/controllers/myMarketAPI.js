@@ -46,9 +46,9 @@ function validateFormData(formData) {
     }
 
     //location validation
-    if (formData.location.length > 150) {
-        errors.location = 'Location must be at most 150 characters long.';
-    }
+    // if (formData.location.length > 150) {
+    //     errors.location = 'Location must be at most 150 characters long.';
+    // }
 
     return errors;
 }
@@ -69,7 +69,7 @@ export async function createListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location, category_id, user_id}
+                {title, price, description, expire_time, postal_code, location: location, category_id, user_id}
             ])
             .select()
 
