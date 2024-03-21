@@ -15,7 +15,7 @@ export default function SearchPage() {
 				<SearchSideBar />
 				<div className="w-full mt-3">
 					<SortToolbar />
-					<div className={grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
+					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
 						{searchResults && searchResults.length !== 0 && !grid && searchResults.map((result) => (
 							<HorizontalCard
 								image={result.image}
@@ -51,8 +51,6 @@ export default function SearchPage() {
 								</div>
 							</div>
 							</div>
-
-							
 						))}
 					</div>
 				</div>
