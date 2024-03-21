@@ -5,6 +5,7 @@ const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) =>  {
     const [isReady, setIsReady] = useState(false);
+    const [searchingLocation, setsearchingLocation] = useState(false);
     const [location, setLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608});
     const [city, setCity] = useState("");
     const [range, setRange] = useState(30000);
@@ -41,6 +42,7 @@ export const LocationProvider = ({ children }) =>  {
 
     // Generates user location and user city from latitude and longitude {lat: number, lng: number}
     async function generateLocation(pos) {
+        let result;
         if((pos?.lat ?? null) === null  || (pos?.lng ?? null) === null){
             console.log(`Invalid coordinates provided to generate location`);
             return;
@@ -50,32 +52,46 @@ export const LocationProvider = ({ children }) =>  {
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
         fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
             setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
+            result = res.address;
         });
 
         setIsReady(true);
+        return result;
     }
 
-    // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
+    // 
+    /**
+     * This generates user location (latitude and longitude) and city (city and region) from location name (user input)
+     *
+     * @param {string} query - A string param
+     * @param {object} [options] - A optional object with a postalCode option that indicates the query is a postal code
+     * @returns {object} result - An object containing the "name", "lat" coordinate and "lng" coordinate of the search result. On error
+     * @returns {null} null - On Error
+     *
+     * @example
+     *
+     *      searchForLocation('toronto')
+     *      searchForLocation('M1G3S6', {postalCode: true})
+     */
     async function searchForLocation(query, options = {postalCode: false}) {
+        setsearchingLocation(true);
+
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1&countrycodes=ca`);
         const results = await response.json();
-
+        let res;
         try {
             let locationResult = results[0]
-
-            return([{name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}])
-            setLocationQuery()
-            setNoResults(false);
-            generateLocation({lat: locationResult['lat'], lng: locationResult['lon']});
+            res = {name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}
+            console.log(locationResult);
         } catch (error) {
-            return([])
-            toast.error("No location results.")
-            setNoResults(true);
+            res = null
         }
+        setsearchingLocation(false);
+        return res;
     }
 
     return (
-        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation, searchForLocation}} >
+        <LocationContext.Provider value={{location, city, range, searchingLocation, setRange, generateLocation, getLocation, searchForLocation}} >
             {children}
         </LocationContext.Provider>
     )
