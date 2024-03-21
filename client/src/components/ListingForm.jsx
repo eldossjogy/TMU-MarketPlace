@@ -58,19 +58,21 @@ export default function ListingForm({ formDataProp = {
 		}
 
 		// Price validation
-		const price = parseFloat(formData.price);
-		if (formData.price.length <= 0) {
-			setFormData(prev => ({ ...prev, price: "0" }))
-		}
-		else if (isNaN(price)) {
-			errors.price = 'Price must be a valid number.';
+		const price = parseInt(formData.price);
+		// if (formData.price.length <= 0) {
+		// 	setFormData(prev => ({ ...prev, price: "0" }))
+		// }
+		// else 
+		if (isNaN(price)) {
+			//errors.price = 'Price must be a valid number.';
+			setFormData(prev => ({ ...prev, price: 0 }))
 		}
 		else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
 			errors.price = 'Price must be a number between $0 and $100,000.';
 		}
-		else if (!/^\d+$/.test(formData.price.toString().trim())) {
-			errors.price = 'Price must be a valid integer > 0.';
-		}
+		// else if (!/^\d+$/.test(formData.price.toString().trim())) {
+		// 	errors.price = 'Price must be a valid integer > 0.';
+		// }
 
 		// Description validation
 		if (!formData.description.trim()) {
@@ -232,19 +234,23 @@ export default function ListingForm({ formDataProp = {
 						</div> */}
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='minPrice' maxLength={20} required
+                            <input type='text' name='price' maxLength={20} required
 								className={`ps-7 py-2 rounded-md w-full border-gray-300`} 
-								placeholder='Enter Price' value={price === 0 ? '' : price} 
+								placeholder='Enter Price' value={formData.price} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
-                                    //resetSelectedPrices();
                                     if(isNaN(val)){
-                                        //updateFilters({min: ''})
-                                        setPrice(0);
+                                        setFormData(prevState => ({
+											...prevState,
+											["price"]: ''
+										}));
                                         return;
                                     }
 
-									setPrice(val);
+									setFormData(prevState => ({
+										...prevState,
+										["price"]: val
+									}));
                                 }
                             }></input>
                         </div>
@@ -263,7 +269,6 @@ export default function ListingForm({ formDataProp = {
 								onChange={(e) => {
 									if (postCoordinates !== null) {
 										setPostCoordinates(null);
-										console.log('Resetting Post Coordinates');
 									}
 									console.log(e.target.name);
 									handleChange(e);
@@ -321,8 +326,8 @@ export default function ListingForm({ formDataProp = {
 					</div>
 				</div>
 				<form className='flex space-x-8 w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
-					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600">Post</button>
-					<button className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600">Cancel</button>
+					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
+					<button className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
 				</form>
 			</section>
 			{loadingState &&

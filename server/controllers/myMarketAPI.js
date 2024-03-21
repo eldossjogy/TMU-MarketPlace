@@ -11,20 +11,26 @@ function validateFormData(formData) {
     }
 
     // Price validation
-    const price = parseFloat(formData.price);
-    if (formData.price.length <= 0) {
+    // const price = parseFloat(formData.price);
+    // if (formData.price.length <= 0) {
+    //     formData.price = 0
+    // }
+    // else if (isNaN(price)) {
+    //     errors.price = 'Price must be a valid number.';
+    // }
+    // else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
+    //     errors.price = 'Price must be a number between $0 and $100,000.';
+    // }
+    // else if (!/^\d+$/.test(formData.price.toString().trim())) {
+    //     errors.price = 'Price must be a valid integer > 0.';
+    // }
+    const price = parseInt(formData.price);
+    if (isNaN(price)) {
         formData.price = 0
     }
-    else if (isNaN(price)) {
-        errors.price = 'Price must be a valid number.';
-    }
-    else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
+    else if (price < 0 || price > 100000) {
         errors.price = 'Price must be a number between $0 and $100,000.';
     }
-    else if (!/^\d+$/.test(formData.price.toString().trim())) {
-        errors.price = 'Price must be a valid integer > 0.';
-    }
-    
 
     // Description validation
     if (!formData.description.trim()) {
