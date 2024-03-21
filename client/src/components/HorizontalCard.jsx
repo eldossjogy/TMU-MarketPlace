@@ -47,7 +47,7 @@ export default function HorizontalCard({
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">
-						<section className="flex flex-col justify-between text-right">
+						<section className="flex flex-col justify-between text-right min-w-24">
 							<div className="overflow-hidden">
 								<h2 className="text-green-700 font-bold text-xs sm:text-sm md:text-lg line-clamp-1">C${price}</h2>
 								<h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(status?.id !== 1) ? status?.type ?? '' : ''}</h2>
@@ -64,7 +64,7 @@ export default function HorizontalCard({
 								</div>
 							</div>
 							<div className="block sm:flex sm:flex-nowrap sm:space-x-4">
-								<div className="h-auto line-clamp-1 font-bold">📍 {location}</div>
+								<div className="h-auto line-clamp-1 font-bold max-w-72">📍 {location}</div>
 								<div className="h-auto line-clamp-1">{String(age)}</div>
 								<div className="h-auto line-clamp-1">{distance ? `${parseInt(distance)} m away` : ''}</div>
 							</div>
