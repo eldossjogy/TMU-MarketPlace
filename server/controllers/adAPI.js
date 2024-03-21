@@ -21,7 +21,7 @@ export async function getByID(req, res) {
       .select(
         `
           *,
-          image!inner(file_path),
+          image!left(file_path),
           category!inner(name),
           status!inner(type),
           profile!inner(id,name,avatar_url,postal_code)
@@ -47,7 +47,7 @@ export async function homepage(req, res) {
           lng,
           lat,
           post_time,
-          image!inner(file_path),
+          image!left(file_path),
           category!inner(name),
           status!inner(type)
           `
