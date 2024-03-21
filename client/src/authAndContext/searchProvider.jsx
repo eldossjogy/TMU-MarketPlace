@@ -16,7 +16,6 @@ export const SearchProvider = ({ children }) =>  {
     const [maxDays, setMaxDays] = useState(1825);
     const [categoryFilter, setCategoryFilter] = useState(6);
     const [page, setPage] = useState(0);
-    // const [searchLocation, setSearchLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608})
 
 	const [searchResults, setSearchResults] = useState([]);
 
@@ -170,7 +169,6 @@ export const SearchProvider = ({ children }) =>  {
         }
         setSort(sortType);
         setSearchResults(tempResults);
-        
     }
 
     return (
