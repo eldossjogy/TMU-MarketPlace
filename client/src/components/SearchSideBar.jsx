@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LocationPicker from './LocationPicker'
 import { RadioGroup } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid';
+import SearchContext from '../authAndContext/searchProvider';
 
-const searchOptions = { availability: ['Available', 'Pending', 'Sold', 'All'], dateRange: ['Any', 'Last 24 Hours', 'Last 7 Days', 'Last 30 Days'], priceRange: {}, prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
+const searchOptions = { 
+    category: [{value:6, name: 'Any'}, {value:2, name: 'Items for Sale'}, {value:1, name: 'Wanted Items'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
+    availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], 
+    dateRange: [{days:1825, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
+    prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
-    const [selected, setSelected] = useState("Available");
-    const [selectedDateRange, setSelectedDateRange] = useState("Any");
+    const {minPrice, maxPrice, maxDays, statusFilter, categoryFilter, updateFilters} = useContext(SearchContext);
+
+    const [loaded, setLoaded] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
+    const [priceRangeError, setPriceRangeError] = useState(false);
+
+
     const [priceRanges, setPriceRanges] = useState([
         { id: 0, name: '$0 - $20', min: 0, max: 20, selected: false }, 
         { id: 1, name: '$20 - $50', min: 20, max: 50, selected: false }, 
         { id: 2, name: '$50 - $100', min: 50, max: 100, selected: false }, 
-        { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }])
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
-    const [collapsed, setCollapsed] = useState(false);
-    const [priceRangeError, setPriceRangeError] = useState(false);
+        { id: 3, name: '$100 - $200', min: 100, max: 200, selected: false }]);
 
     const checkPriceRange = (min, max) => {
         if(max < min ) setPriceRangeError(true);
@@ -31,7 +37,7 @@ export default function SearchSideBar() {
 
     const updateSearchPriceRange = () => {
         let selected = 0;
-        let min = 2000000;
+        let min = 20000000;
         let max = 0;
         
         priceRanges.forEach(price => {
@@ -43,10 +49,24 @@ export default function SearchSideBar() {
         });
         
         if(selected !== 0){
-            setMinPrice(min);
-            setMaxPrice(max);
+            updateFilters({min: min, max: max})
+        }
+        else{
+            updateFilters({min: '', max: ''})
         }
     }
+
+    const updateSearchLocation = (lat, lng, range = 100000) => {
+        // console.log(lat); 
+        // console.log(lng);
+        // console.log(range);
+
+        updateFilters({lat: lat, lng: lng, range: range});
+    }
+
+    useEffect(() => {
+        setLoaded(true);
+    },[])
 
     return (
         <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 m-3 p-4 bg-[#fafafb] rounded-lg shadow-lg border-2 border-gray`}>
@@ -56,7 +76,7 @@ export default function SearchSideBar() {
                     <span>Show Search Filters</span>
                 </div>
             </section>
-            <section className={`w-full space-y-4 mt-6 md:mt-0 md:block ${collapsed ? 'hidden' : ''}`}>
+            <section className={`w-full space-y-4 mt-6 md:mt-0 md:block ${collapsed ? loaded ? 'hidden' : 'invisible' : ''}`}>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Price</h3>
                     <section className='flex flex-wrap w-full justify-between items-center'>
@@ -67,12 +87,14 @@ export default function SearchSideBar() {
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        setMinPrice('');
+                                        // setMinPrice('');
+                                        updateFilters({min: ''})
                                         setPriceRangeError(false);
                                         return;
                                     }
 
-                                    setMinPrice(val);
+                                    // setMinPrice(val);
+                                    updateFilters({min: val})
                                     checkPriceRange(val, maxPrice);
                                 }
                             }></input>
@@ -85,12 +107,14 @@ export default function SearchSideBar() {
                                     let val = parseInt(e.target.value)
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        setMaxPrice('');
+                                        // setMaxPrice('');
+                                        updateFilters({max: ''})
                                         setPriceRangeError(false);
                                         return;
                                     }
 
-                                    setMaxPrice(val);
+                                    // setMaxPrice(val);
+                                    updateFilters({max: val})
                                     checkPriceRange(minPrice, val);
                                 }
                             }></input>
@@ -121,16 +145,36 @@ export default function SearchSideBar() {
                     </section>
                 </div>
                 <div className='w-full flex-col space-y-2'>
-                    <h3 className='text-xl'>Availability</h3>
-                    <RadioGroup value={selected} onChange={setSelected} className={"space-y-2"}>
-                        {searchOptions.availability.map((option) => (
-                            <RadioGroup.Option key={option} value={option} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
+                    <h3 className='text-xl'>Category</h3>
+                    <RadioGroup value={categoryFilter} onChange={(e) => {updateFilters({category: e})}} className={"space-y-2"}>
+                        {searchOptions.category.map((option) => (
+                            <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
-                                {({ active, checked }) => (
+                                {({ checked }) => (
                                     <div className="flex w-full items-center justify-between">
                                         <div className="flex items-center text-sm h-6">
                                             <RadioGroup.Label as="p" className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}>
-                                                {option}
+                                                {option.name}
+                                            </RadioGroup.Label>
+                                        </div>
+                                        {checked && (<div className="shrink-0 text-white"> <CheckIcon className="h-6 w-6" /></div>)}
+                                    </div>
+                                )}
+                            </RadioGroup.Option>
+                        ))}
+                    </RadioGroup>
+                </div>
+                <div className='w-full flex-col space-y-2'>
+                    <h3 className='text-xl'>Availability</h3>
+                    <RadioGroup value={statusFilter} onChange={(e) => {updateFilters({status: e})}} className={"space-y-2"}>
+                        {searchOptions.availability.map((option) => (
+                            <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
+                                ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
+                                {({ checked }) => (
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center text-sm h-6">
+                                            <RadioGroup.Label as="p" className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}>
+                                                {option.name}
                                             </RadioGroup.Label>
                                         </div>
                                         {checked && (<div className="shrink-0 text-white"> <CheckIcon className="h-6 w-6" /></div>)}
@@ -142,15 +186,15 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Post Time</h3>
-                    <RadioGroup value={selectedDateRange} onChange={setSelectedDateRange} className={"space-y-2"}>
+                    <RadioGroup value={maxDays} onChange={(e) => {updateFilters({maxDays: e})}} className={"space-y-2"}>
                         {searchOptions.dateRange.map((option) => (
-                            <RadioGroup.Option key={option} value={option} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
+                            <RadioGroup.Option key={option.name} value={option.days} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
-                                {({ active, checked }) => (
+                                {({checked }) => (
                                     <div className="flex w-full items-center justify-between">
                                         <div className="flex items-center text-sm h-6">
                                             <RadioGroup.Label as="p" className={`font-medium  ${checked ? 'text-white' : 'text-gray-900'}`}>
-                                                {option}
+                                                {option.name}
                                             </RadioGroup.Label>
                                         </div>
                                         {checked && (<div className="shrink-0 text-white"> <CheckIcon className="h-6 w-6" /></div>)}
@@ -165,7 +209,7 @@ export default function SearchSideBar() {
                 </div>
                 <div className='space-y-4'>
                     <h3 className='text-xl -mb-2'>Change Location</h3>
-                    <LocationPicker />
+                    <LocationPicker applyFn={updateSearchLocation}/>
                 </div>
             </section>
         </div>

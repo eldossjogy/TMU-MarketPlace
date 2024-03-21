@@ -8,6 +8,7 @@ export default function VerticalCard({
   description,
   title,
   location,
+  distance,
   postID
 }) {
   const [hovered, setHovered] = useState(false);
@@ -20,14 +21,17 @@ export default function VerticalCard({
             <CardImages image={image} setHovered={setHovered} hovered={hovered} />
           </div>
           <div className="px-4 pb-4 bg-[#fafafb]">
-            <div className="flex justify-between pb-2">
+            <div className="flex justify-between pb-2 items-center">
               <p className="line-clamp-1 font-bold text-xl">{title}</p>
-              <h2 className="text-green-600 font-bold text-lg">${price}</h2>
+              <h2 className="text-green-600 font-bold sm:text-lg md:text-sm xl:text-lg">${price}</h2>
             </div>
             <div className="min-h-16">
               <p className="line-clamp-2">{description}</p>
             </div>
-            <div className="h-auto">📍{location}</div>
+            <span className="block sm:flex sm:flex-nowrap sm:space-x-4">
+              <div className="h-auto line-clamp-1">📍{location}</div>
+              <div className="h-auto line-clamp-1">{distance ? `${parseInt(distance)} m` : ''}</div>  
+            </span>
           </div>
         </div>
       </div>

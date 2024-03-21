@@ -7,17 +7,18 @@ export const LocationProvider = ({ children }) =>  {
     const [isReady, setIsReady] = useState(false);
     const [location, setLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608});
     const [city, setCity] = useState("");
-    const [range, setRange] = useState(5000);
+    const [range, setRange] = useState(30000);
 
     useEffect(() => {
         getLocation();
-        setIsReady(true);
+        //setIsReady(true);
     }, []);
 
     // Gets IP address location from browser and forwards it to generateLocation(pos)
     async function getLocation() {
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by this browser.");
+            //generateLocation({lat: 43.6577518, lng:-79.3786619});
             generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
             return;
         }
@@ -26,7 +27,7 @@ export const LocationProvider = ({ children }) =>  {
             if (result.state === "denied") {
                 //If denied then you have to show instructions to enable location
                 toast.error(`You did not allow location access.`);
-                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608})
+                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
             } else{
                 //If prompt then the user will be asked to give permission or location was already granted 
                 navigator.geolocation.getCurrentPosition(
@@ -51,17 +52,31 @@ export const LocationProvider = ({ children }) =>  {
             setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
         });
 
-        // setIsReady(true);
+        setIsReady(true);
     }
 
     // Generates user location (latitude and longitude) and city (city and region) from location name (user input)
-    //function generateCoordinates(loc) {
-        //TODO
-    //}
+    async function searchForLocation(query, options = {postalCode: false}) {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1&countrycodes=ca`);
+        const results = await response.json();
+
+        try {
+            let locationResult = results[0]
+
+            return([{name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}])
+            setLocationQuery()
+            setNoResults(false);
+            generateLocation({lat: locationResult['lat'], lng: locationResult['lon']});
+        } catch (error) {
+            return([])
+            toast.error("No location results.")
+            setNoResults(true);
+        }
+    }
 
     return (
-        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation}} >
-            {isReady ? children : null}
+        <LocationContext.Provider value={{location, city, range, setRange, generateLocation, getLocation, searchForLocation}} >
+            {children}
         </LocationContext.Provider>
     )
 }

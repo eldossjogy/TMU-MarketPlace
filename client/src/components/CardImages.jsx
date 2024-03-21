@@ -6,7 +6,7 @@ export default function CardImages({ image, hovered, setHovered, vertical = true
   if (image.length === 0) {
     return (
       <img
-        className="rounded-md w-full h-auto object-cover  aspect-square"
+        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : ' max-w-32 lg:max-w-60'}`}
         src={noImage}
         alt="img"
       ></img>
@@ -20,7 +20,7 @@ export default function CardImages({ image, hovered, setHovered, vertical = true
   } else {
     return (
       <img
-        className="rounded-md w-full h-auto object-cover  aspect-square"
+        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : ' max-w-32 lg:max-w-60'}`}
         src={image[0].file_path}
         alt="img"
       ></img>

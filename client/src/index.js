@@ -6,15 +6,18 @@ import { LocationProvider } from "./authAndContext/locationProvider";
 import { AdProvider } from "./authAndContext/adProvider";
 import "./index.css";
 import App from "./App";
+import { SearchProvider } from "./authAndContext/searchProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <AuthProvider>
       <LocationProvider>
-        <AdProvider>
-          <App />
-        </AdProvider>
+        <SearchProvider>
+          <AdProvider>
+            <App />
+          </AdProvider>
+        </SearchProvider>
       </LocationProvider>
     </AuthProvider>
   </BrowserRouter>
