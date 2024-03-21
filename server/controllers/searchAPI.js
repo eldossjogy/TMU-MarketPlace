@@ -16,7 +16,7 @@ export async function searchAds(req, res) {
         const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
 
         // var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
-        let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
+        let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`)
 
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
