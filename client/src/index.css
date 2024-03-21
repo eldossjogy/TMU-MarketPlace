@@ -35,14 +35,14 @@
     gap: 2em;
 } */
 
-.marketSideNavbar {
+/* .marketSideNavbar {
     background-color: #e0f2fe;
     border: 3px solid #7dd3fc;
-    /* width: 20%; */
-    /* height: 90vh; */
-    /* padding: 1.5%; */
-    /* border-radius: 15px; */
-}
+    width: 20%;
+    height: 90vh;
+    padding: 1.5%;
+    border-radius: 15px;
+} */
 
 .sideNavBar-heading {
     font-size: 3em;
@@ -161,10 +161,10 @@
     gap: 2em;
 } */
 
-.bottomFormSection button{
+/* .bottomFormSection button{
     font-size: 1.5em;
     width: 20%;
-}
+} */
 
 /* .selectedImageDisplayContainer {
     width: 100%;
@@ -358,14 +358,14 @@
         font-size: 1em;
     } */
     
-    .bottomFormSection {
+    /* .bottomFormSection {
         width: 100%;
-    }
+    } */
     
-    .bottomFormSection button{
+    /* .bottomFormSection button{
         font-size: 1em;
         width: 50%;
-    }
+    } */
     .cardButtons {
         gap: 0.2em;
         width: 50%;
@@ -410,9 +410,9 @@
         margin: 0;
         gap: 5em;
     }
-    .bottomFormSection {
+    /* .bottomFormSection {
         width: 100%;
-    }
+    } */
 }
 
 /*for laptop screen*/

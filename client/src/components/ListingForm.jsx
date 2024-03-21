@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react'; import AuthContext from '../authAndContext/contextApi';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadingScreen from './LoadingScreen';
@@ -22,8 +21,6 @@ export default function ListingForm({ formDataProp = {
 	const [formErrors, setFormErrors] = useState({})
 
 	const [formData, setFormData] = useState(formDataProp);
-	const [price, setPrice] = useState(0);
-
 	const [imageList, setImageList] = useState([]);
 	const [selectedImages, setSelectedImages] = useState([]);
 
@@ -193,12 +190,15 @@ export default function ListingForm({ formDataProp = {
 
 		const form = new FormData(e.target);
 		const query = form.get('location');
-		const results = await searchForLocation(query); // Search for a map location given a user query
+		const results = await searchForLocation(query, {getAddress: true}); // Search for a map location given a user query
 
 		if (results) { // If there are results
 			// setLocationQuery(results.name) // Update the query text to be the result
 			setNoResults(false);
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
+			
+			if(results.address) console.log(results.address);
+
 			setFormData(prevState => ({
 				...prevState,
 				location: results.name,
@@ -262,7 +262,7 @@ export default function ListingForm({ formDataProp = {
 						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{formErrors.location} *</span></label>
+							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again' : ''} *</span></label>
 							<input
 								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
 								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
@@ -270,7 +270,6 @@ export default function ListingForm({ formDataProp = {
 									if (postCoordinates !== null) {
 										setPostCoordinates(null);
 									}
-									console.log(e.target.name);
 									handleChange(e);
 								}}
 								disabled={searchingLocation}

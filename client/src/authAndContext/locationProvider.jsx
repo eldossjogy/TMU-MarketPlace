@@ -41,7 +41,7 @@ export const LocationProvider = ({ children }) =>  {
     } 
 
     // Generates user location and user city from latitude and longitude {lat: number, lng: number}
-    async function generateLocation(pos) {
+    async function generateLocation(pos, updateCity = true) {
         let result;
         if((pos?.lat ?? null) === null  || (pos?.lng ?? null) === null){
             console.log(`Invalid coordinates provided to generate location`);
@@ -50,13 +50,14 @@ export const LocationProvider = ({ children }) =>  {
 
         setLocation(pos);
         const GEOCODE_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
-        fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
-            setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
-            result = res.address;
+        result = fetch(GEOCODE_URL+`${pos.lng},${pos.lat}`).then(res => res.json()).then(res => {
+            if(updateCity) setCity(`${res.address.City !== '' ? `${res.address.City},` : ''}${(res.address.RegionAbbr !== '' ? ' ' + res.address.RegionAbbr : 'Middle of nowhere ??')} `);
+            return res.address;
         });
 
         setIsReady(true);
         return result;
+
     }
 
     // 
@@ -73,18 +74,30 @@ export const LocationProvider = ({ children }) =>  {
      *      searchForLocation('toronto')
      *      searchForLocation('M1G3S6', {postalCode: true})
      */
-    async function searchForLocation(query, options = {postalCode: false}) {
+    async function searchForLocation(query, options = {postalCode: false, getAddress: false}) {
         setsearchingLocation(true);
 
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1&countrycodes=ca`);
         const results = await response.json();
+        
         let res;
-        try {
+
+        if(results[0]){
             let locationResult = results[0]
-            res = {name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}
-            console.log(locationResult);
-        } catch (error) {
-            res = null
+
+            if(options.getAddress){
+                const address = await generateLocation({lat: locationResult['lat'], lng: locationResult['lon']})
+
+                if(!address){
+                    res = null;
+                }
+                else{
+                    res = {name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon'], address: address}
+                }
+            } 
+            else{
+                res = {name: locationResult['display_name'], lat: locationResult['lat'], lng: locationResult['lon']}
+            }
         }
         setsearchingLocation(false);
         return res;
