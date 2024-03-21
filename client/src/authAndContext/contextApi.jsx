@@ -406,7 +406,7 @@ export const AuthProvider = ({ children }) => {
           },
         }
       )
-      updateUserListingsLocally('Modify', listingInfo, response.data)
+      updateUserListingsLocally('Update', listingInfo, response.data)
     }
     catch(error) {
       toast.error(error.message);
@@ -417,8 +417,7 @@ export const AuthProvider = ({ children }) => {
 
   //function to locally perform CRUD operations on user's listing aftre update for performance
   function updateUserListingsLocally(action, listingInfo, updatedData) {
-    if (action === "Modify") {
-      console.log("came to modify")
+    if (action === "Update") {
       let targetIndex = userListings.indexOf(listingInfo)
       setUserListings(prev => prev.map((item, i) => {
         if (i !== targetIndex) {
@@ -462,6 +461,38 @@ export const AuthProvider = ({ children }) => {
     setLoadingState(false)
   }
 
+  async function updateListing(listingInfo, imageList) {
+    const checkUser = await supabase.auth.getUser();
+    try {
+      if (checkUser.data.user !== null) {
+        const listOfImages = await uploadImageToBucket(
+          imageList,
+          "ad-listings"
+        );
+        const response = await axios.put(
+          `${process.env.REACT_APP_BACKEND_API_URL}/my-market/update-listing`,
+          { listingInfo: {...listingInfo, image: [...listingInfo.image.map(item => item.file_path), ...listOfImages]}
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localSession.access_token,
+            },
+          }
+        );
+        console.log("came in this dumb function")
+        //updateUserListingsLocally("Update", response.data)
+        //navigate("/my-market");
+      } else {
+        const error = new Error("Unauthorized access!! not a logged in user!!");
+        error.status = 403;
+        throw error;
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setLoadingState(false);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -483,7 +514,8 @@ export const AuthProvider = ({ children }) => {
         categories,
         statusList,
         changeListingStatusAPI,
-        deleteListing
+        deleteListing,
+        updateListing
       }}
     >
        {isLoading ? <LoadingScreen /> : children}

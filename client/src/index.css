@@ -163,7 +163,7 @@
 
 .bottomFormSection button{
     font-size: 1.5em;
-    width: 20%;
+    min-width: 20%;
 }
 
 .selectedImageDisplayContainer {
@@ -184,20 +184,16 @@
     justify-content: space-between;
 }
 
-.selectedImageBox p {
-    text-decoration: underline;
-}
-
 .selectedImageBox i {
     cursor: pointer;
-    color: #d4d4d4;
     text-decoration: none;
-    
+    font-weight: bold;
 }
 
 .selectedImageBox i:hover {
     color: red;
     background-color: rgb(255, 255, 255,0.7);
+    border-radius: 5px;
 }
 
 .cardButtons {
@@ -360,11 +356,12 @@
     
     .bottomFormSection {
         width: 100%;
+        justify-content: center;
     }
     
     .bottomFormSection button{
         font-size: 1em;
-        width: 50%;
+        min-width: 40%;
     }
     .cardButtons {
         gap: 0.2em;

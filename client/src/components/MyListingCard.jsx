@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import ImageCarousel from './ImageCarousel'
-import Logo from "../assets/logo.png"
 import AuthContext from '../authAndContext/contextApi';
 import LoadingScreen from './LoadingScreen';
 import noImage from '../assets/noImage.png'
-import ListingForm from './ListingForm';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyListingCard({listingInfo}) {
 
   const {statusList, setLoadingState, loadingState, changeListingStatusAPI, deleteListing} = useContext(AuthContext)
 
+  const navigate = useNavigate()
+
   const [isPhone, setIsPhone] = useState(false);
   const [modal, setModal] = useState(false)
-  const [editFlag, setEditFlag] = useState(false)
 
+  
   //useEffect that checks if user is on a phone/ needed for truncating text accordingly
   useEffect(() => {
       const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -89,7 +89,7 @@ export default function MyListingCard({listingInfo}) {
                 <button onClick={() => {setModal(prev => !prev)}} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
                   Remove
                 </button>
-                <button onClick={() => {setEditFlag(prev => !prev)}} className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
+                <button onClick={() => navigate(`edit-listing/${listingInfo.id}`)} className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
                   Edit
                 </button>
               </div>

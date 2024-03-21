@@ -13,7 +13,7 @@ export default function ListingForm({formDataProp = {
     category_id: null,
 }, typeOfReq="Post", editingForm=false}) {
 
-    const { createNewListing, loadingState, setLoadingState, categories } = useContext(AuthContext);
+    const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
     const navigate = useNavigate();
     const [formErrors, setFormErrors] = useState({})
 
@@ -23,19 +23,28 @@ export default function ListingForm({formDataProp = {
     const [selectedImages, setSelectedImages] = useState([]);
 
     useEffect(() => {
-        if (imageList.length !== 0) {
-            const imgList = Array.from(imageList);
-            
-            imgList.forEach((image) => {
-                const reader = new FileReader();
+      const loadImages = async () => {
+          const imageDataURLs = [];
+          for (const image of imageList) {
+              const dataURL = await readFileAsDataURL(image);
+              imageDataURLs.push(dataURL);
+          }
+          setSelectedImages(imageDataURLs);
+      };
+  
+      loadImages();
+  }, [imageList]);
 
-                reader.onload = (e) => {
-                    setSelectedImages(prev => [...prev, e.target.result]);
-                };
-                reader.readAsDataURL(image);
-            });
-        }
-    }, [imageList]);
+    // Function to read file as data URL (base64)
+    const readFileAsDataURL = (file) => {
+      return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target.result);
+          reader.onerror = (e) => reject(e);
+          reader.readAsDataURL(file);
+      });
+    };
+
 
     //function that returns array of errors for form valdation
     function validateFormData(formData) {
@@ -113,13 +122,13 @@ export default function ListingForm({formDataProp = {
         setFormErrors(err)
 
         if (Object.keys(err).length === 0) {
-            setLoadingState(true);
             if (typeOfReq === "Post") {
-                console.log("came here")
+              setLoadingState(true);
                 await createNewListing({...formData, expire_time: getCurrentDateTime(48)}, imageList);
             }
             else if (typeOfReq === "Put") {
-                alert("yet to implement this function")
+              setLoadingState(true);
+              await updateListing({...formData, expire_time: getCurrentDateTime(48)}, imageList)
             }
         }
     };
@@ -157,9 +166,7 @@ export default function ListingForm({formDataProp = {
         return formattedDateTime;
     }
 
-    function handleImageDelete(img) {
-        const index = imageList.indexOf(img)
-
+    function handleImageDelete(index) {
         setImageList(prev => prev.filter((item, i) => i !== index));
 
         const fileInput = document.getElementById('dropzone-file');
@@ -167,6 +174,18 @@ export default function ListingForm({formDataProp = {
             fileInput.value = '';
         }
     }
+
+    function handleUploadedImageDelete(index) {
+      const newImageArr = [...formData.image];
+      const filteredImageArr = newImageArr.filter((item, i) => i !== index);
+      console.log(filteredImageArr);
+      setFormData(prev => ({ ...prev, image: filteredImageArr }));
+  
+      const fileInput = document.getElementById('dropzone-file');
+      if (fileInput) {
+          fileInput.value = '';
+      }
+  }
 
     function truncateString(str, limit) {
       if (str.length <= limit) {
@@ -241,10 +260,16 @@ export default function ListingForm({formDataProp = {
           </div> 
           <ul className='selectedImageDisplayContainer'>
             <h1>Images Selected:</h1>
-            {imageList.map((elem, index) => (
+            {selectedImages.map((elem, index) => (
               <li className='relative selectedImageBox overflow-hidden' key={index}>
-                <p>{elem.name}</p>
-                <i className="absolute right-1 p-1" onClick={() => handleImageDelete(elem)}>&#x2715;</i>
+                <img className="w-full" src={elem}></img>
+                <i className="absolute right-1 p-2 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
+              </li>
+            ))}
+            {formData.image?.map((elem, index) => (
+              <li className='relative selectedImageBox overflow-hidden flex' key={index}>
+                <img className="w-full" src={elem.file_path}></img>
+                <i className="absolute right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
               </li>
             ))}
           </ul>
@@ -256,7 +281,7 @@ export default function ListingForm({formDataProp = {
       </div>
     </form>
     {loadingState &&
-      <LoadingScreen message={"Creating new Listing..."} />
+      <LoadingScreen typeOfReq={typeOfReq === "Post" ? "Creating new Listing..." : "Updating Ad Listing"} />
     }
   </>
 
