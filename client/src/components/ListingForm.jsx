@@ -199,7 +199,9 @@ export default function ListingForm({ formDataProp = {
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
 			setFormData(prevState => ({
 				...prevState,
-				location: results.name
+				location: results.name,
+				lat: results.lat,
+				lng: results.lng
 			}));
 			setPostCoordinates({ lat: results.lat, lng: results.lng });
 		}

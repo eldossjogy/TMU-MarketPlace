@@ -1,5 +1,4 @@
 import supabase from '../config/supabaseConfig.js'
-import dotenv from "dotenv";
 
 function validateFormData(formData) {
     const errors = {};
@@ -45,20 +44,23 @@ function validateFormData(formData) {
         errors.category_id = 'Category is required.';
     }
 
+    if (isNaN(parseFloat(formData.lat)) || isNaN(parseFloat(formData.lng))){
+        errors.coordinates = "Invalid coordinates";
+    }
+
     //location validation
     // if (formData.location.length > 150) {
     //     errors.location = 'Location must be at most 150 characters long.';
     // }
-
     return errors;
 }
 
 export async function createListing(req, res) {
 
-    const {title, price, description, expire_time, postal_code, location, category_id, user_id, images} = req.body
+    const {title, price, description, expire_time, postal_code, location, category_id, user_id, images, lat, lng} = req.body
     try {
         //need .select at the end to get the created data and use its id for new image POST req
-        let err = validateFormData({title, price, description, expire_time, postal_code, location, category_id})
+        let err = validateFormData({title, price, description, expire_time, postal_code, location, category_id, lat, lng})
 
         if (Object.keys(err).length !== 0) {
             const error = new Error("Bad form data !")
@@ -69,7 +71,7 @@ export async function createListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location: location, category_id, user_id}
+                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id}
             ])
             .select()
 
