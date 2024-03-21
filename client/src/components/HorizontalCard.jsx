@@ -44,7 +44,6 @@ export default function HorizontalCard({
 
 					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md bg-[#fafafb] ">
 						<CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
-
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">
