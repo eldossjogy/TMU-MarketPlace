@@ -15,8 +15,6 @@ export async function searchAds(req, res) {
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
         const searchCategory = isNaN(parseInt(category)) ? 2 : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
 
-        console.log(searchCategory);
-
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
             minDate = new Date(rawAge).toISOString().split('T')[0];

@@ -8,7 +8,6 @@ const searchOptions = {
     category: [{value:6, name: 'Any'}, {value:2, name: 'Items for Sale'}, {value:1, name: 'Wanted Items'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
     availability: [{value:1, name:'Available'}, {value:2, name:'Pending'}, {value:3, name:'Sold'}, {value:5, name:'All'}], 
     dateRange: [{days:1825, name:'Any'}, {days:1, name:'Last 24 Hours'}, {days:7, name:'Last 7 Days'}, {days:30, name:'Last 30 Days'}], 
-    priceRange: {}, 
     prices:  [{ id: 0, name: '$0-$20', min: 0, max: 20, selected: false }, { id: 1, name: '$20-$50', min: 20, max: 50, selected: false }, { id: 2, name: '$50-$100', min: 50, max: 100, selected: false }, { id: 3, name: '$100-$200', min: 100, max: 200, selected: false }]};
 
 export default function SearchSideBar() {
@@ -50,13 +49,9 @@ export default function SearchSideBar() {
         });
         
         if(selected !== 0){
-            // setMinPrice(min);
-            // setMaxPrice(max);
             updateFilters({min: min, max: max})
         }
         else{
-            // setMinPrice('');
-            // setMaxPrice('');
             updateFilters({min: '', max: ''})
         }
     }

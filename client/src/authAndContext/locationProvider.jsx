@@ -7,7 +7,7 @@ export const LocationProvider = ({ children }) =>  {
     const [isReady, setIsReady] = useState(false);
     const [location, setLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608});
     const [city, setCity] = useState("");
-    const [range, setRange] = useState(5000);
+    const [range, setRange] = useState(30000);
 
     useEffect(() => {
         getLocation();
