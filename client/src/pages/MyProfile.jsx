@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar'
 import MyProfileContainer from '../components/MyProfileContainer'
 import MyListingCard from '../components/MyListingCard'
 import AuthContext from '../authAndContext/contextApi'
-import LoadingScreen from '../components/LoadingScreen'
 import CategoryComponent from '../components/CategoryComponent'
 
 export default function MyProfile() {
@@ -30,7 +29,6 @@ export default function MyProfile() {
           ))}
         </div>
       </MyProfileContainer>
-      {loadingState && <LoadingScreen message={"Changing Ad status"}/>}
     </div>
   )
 }

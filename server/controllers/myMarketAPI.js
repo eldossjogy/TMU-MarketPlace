@@ -356,12 +356,14 @@ export async function updateListing(req, res) {
                         const file_path = imageUrl.split('/').pop()
 
                         //delete from bucket
-                        const { error } = await supabase
+                        const deleteImageFromBucket = await supabase
                             .storage
                             .from('ad-listings')
                             .remove([file_path])
                         
-                        if (error) {
+                        console.log(deleteImageFromBucket)
+                        
+                        if (deleteImageFromBucket.error?.message) {
                             const err = new Error("Unable to delete Image from the bucket")
                             err.status = 500
                             throw err;
@@ -369,10 +371,17 @@ export async function updateListing(req, res) {
 
                         //delete from image table
                         //delete the images form the image table for the ad
-                        const listingImages = await supabase
+                        const deleteImageFromImageTable = await supabase
                             .from('image')
                             .delete()
                             .eq( 'file_path', imageUrl )
+                        
+
+                        if (deleteImageFromImageTable.error?.message) {
+                            const error = new Error(deleteImageFromImageTable.error.message)
+                            error.status = 409
+                            throw error;
+                        }
                     }
                 }
 

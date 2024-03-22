@@ -12,7 +12,6 @@ export default function MyListingCard({listingInfo}) {
 
   const [isPhone, setIsPhone] = useState(false);
   const [modal, setModal] = useState(false)
-
   
   //useEffect that checks if user is on a phone/ needed for truncating text accordingly
   useEffect(() => {
@@ -49,7 +48,6 @@ export default function MyListingCard({listingInfo}) {
       setLoadingState(true)
       changeListingStatusAPI(listingInfo, event.target.value)
     }
-    
   }
 
   function handleDeleteEntry() {
@@ -97,7 +95,7 @@ export default function MyListingCard({listingInfo}) {
           </div>
       </div>
           {loadingState &&
-            <LoadingScreen message={"Changing Ad status."} />
+            <LoadingScreen message={"Changing Ad status..."} />
           }
           {modal && 
             <div className="dashboard-Item-Modal flex flex-col p-3 rounded shadow-md hover:shodow-lg bg-red-500 text-white">
@@ -123,7 +121,6 @@ export default function MyListingCard({listingInfo}) {
                     </div>
             </div>
           }
-          {/*editFlag && <ListingForm formDataProp={listingInfo} typeOfReq="Put"/>*/}
     </div>
   )
 }
