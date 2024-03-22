@@ -41,11 +41,11 @@ function App() {
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/settings" element={<AccountSettings />} />
             <Route path="/my-market">
-                <Route index element={<MyMarketContainer><MyProfile/></MyMarketContainer>} />
+                <Route index element={<MyProfile/>} />
                 <Route path="sold-listings" element={<HomePage />} />
-                <Route path="create-listing" element={<MyMarketContainer><CreateListings/></MyMarketContainer>} />
+                <Route path="create-listing" element={<CreateListings/>} />
                 <Route path="repost-listings" element={<HomePage />} />
-                <Route path="settings" element={<MyMarketContainer><AccountSettings/></MyMarketContainer>} />
+                <Route path="settings" element={<AccountSettings/>} />
             </Route>
           </Route>
         </Route>
