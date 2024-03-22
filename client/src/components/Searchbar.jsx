@@ -50,7 +50,10 @@ export default function Searchbar(searchLocation) {
         if(path.startsWith('/search')){ 
             setOnSearchPage(true);
         }  
-        else setOnSearchPage(false);
+        else{
+            setOnSearchPage(false);
+            setSearchInput('');
+        }
     }, [])
 
     return (

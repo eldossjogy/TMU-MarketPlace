@@ -1,17 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import LoadingScreen from '../components/LoadingScreen'
-import MyProfileContainer from '../components/MyProfileContainer';
+import React from 'react';
 import ListingForm from '../components/ListingForm';
+import MyMarketContainer from '../components/MyMarketContainer';
 
 export default function CreateListings() {
 
     return (
-        <div>
-            <Navbar />
-            <MyProfileContainer>
-                <ListingForm/>
-            </MyProfileContainer>
-        </div>
+        <MyMarketContainer>
+            <ListingForm/>
+        </MyMarketContainer>
     );
 }
