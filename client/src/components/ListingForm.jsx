@@ -90,9 +90,9 @@ export default function ListingForm({ formDataProp = {
 		}
 
 		//location validation
-		// if (formData.location.length > 150) {
-		// 	errors.location = 'Location must be at most 150 characters long.';
-		// }
+		if (!formData.location) {
+			errors.location = 'Location is required';
+		}
 
 
 		return errors;
@@ -190,14 +190,18 @@ export default function ListingForm({ formDataProp = {
 
 		const form = new FormData(e.target);
 		const query = form.get('location');
-		const results = await searchForLocation(query, {getAddress: true}); // Search for a map location given a user query
+		const results = await searchForLocation(query, {getAddress: false}); // Search for a map location given a user query
 
 		if (results) { // If there are results
 			// setLocationQuery(results.name) // Update the query text to be the result
 			setNoResults(false);
+			setFormErrors(prevState => ({
+				...prevState,
+				location: ''
+			}));
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
 			
-			if(results.address) console.log(results.address);
+			//if(results.address) console.log(results.address);
 
 			setFormData(prevState => ({
 				...prevState,
@@ -262,7 +266,7 @@ export default function ListingForm({ formDataProp = {
 						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again' : ''} *</span></label>
+							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again' : formErrors.location} *</span></label>
 							<input
 								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
 								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required

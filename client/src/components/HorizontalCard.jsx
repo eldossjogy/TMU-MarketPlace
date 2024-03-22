@@ -47,12 +47,12 @@ export default function HorizontalCard({
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">
-						<section className="flex flex-col justify-between text-right min-w-24">
+						<section className="flex flex-col justify-between text-right min-w-12 md:min-w-24 items-end">
 							<div className="overflow-hidden">
 								<h2 className="text-green-700 font-bold text-xs sm:text-sm md:text-lg line-clamp-1">C${price}</h2>
 								<h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(status?.id !== 1) ? status?.type ?? '' : ''}</h2>
 							</div>
-							<button className="rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-black hidden group-hover:flex justify-center items-center py-1 max-w-20"><ArrowLongRightIcon className="h-6 w-6"/></button>
+							<button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-black hidden group-hover:flex justify-center items-center py-1 max-w-20"><ArrowLongRightIcon className="h-6 w-6"/></button>
 						</section>
 						<section className="flex flex-col justify-between w-full">
 							<div>
