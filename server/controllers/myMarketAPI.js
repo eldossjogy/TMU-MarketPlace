@@ -90,7 +90,6 @@ export async function createListing(req, res) {
 
         const newlyCreatedListing = newListing.data[0]
 
-
         //adding images now to image table after getting the ad id
         const postImages = await supabase
             .from('image')

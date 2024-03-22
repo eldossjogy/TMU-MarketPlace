@@ -91,7 +91,7 @@ export default function ListingForm({ formDataProp = {
 
 		//location validation
 		if (!formData.location) {
-			errors.location = 'Location is required';
+			setNoResults(true);
 		}
 
 
@@ -222,8 +222,8 @@ export default function ListingForm({ formDataProp = {
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4">
 				<h1 className='text-5xl'>Create Listing</h1>
-				<div className='flex flex-wrap 2xl:flex-nowrap w-full space-y-4 2xl:space-x-3'>
-					<div className='w-full 2xl:w-[70%] space-y-2'>
+				<div className='flex flex-wrap w-full space-y-4'>
+					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
 						<input autoComplete='off' type="text" name="title" 
 							value={formData.title} onChange={handleChange} placeholder="Enter Title" required maxLength={150}
@@ -266,7 +266,7 @@ export default function ListingForm({ formDataProp = {
 						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again' : formErrors.location} *</span></label>
+							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again': ''} *</span></label>
 							<input
 								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
 								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
@@ -292,7 +292,7 @@ export default function ListingForm({ formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full 2xl:w-[30%] 2xl:pt-4'>
+					<div className='w-full'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
