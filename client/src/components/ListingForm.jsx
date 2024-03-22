@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react'; import AuthContext from '../authAndContext/contextApi';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadingScreen from './LoadingScreen';
@@ -22,8 +21,6 @@ export default function ListingForm({ formDataProp = {
 	const [formErrors, setFormErrors] = useState({})
 
 	const [formData, setFormData] = useState(formDataProp);
-	const [price, setPrice] = useState(0);
-
 	const [imageList, setImageList] = useState([]);
 	const [selectedImages, setSelectedImages] = useState([]);
 
@@ -58,19 +55,21 @@ export default function ListingForm({ formDataProp = {
 		}
 
 		// Price validation
-		const price = parseFloat(formData.price);
-		if (formData.price.length <= 0) {
-			setFormData(prev => ({ ...prev, price: "0" }))
-		}
-		else if (isNaN(price)) {
-			errors.price = 'Price must be a valid number.';
+		const price = parseInt(formData.price);
+		// if (formData.price.length <= 0) {
+		// 	setFormData(prev => ({ ...prev, price: "0" }))
+		// }
+		// else 
+		if (isNaN(price)) {
+			//errors.price = 'Price must be a valid number.';
+			setFormData(prev => ({ ...prev, price: 0 }))
 		}
 		else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
 			errors.price = 'Price must be a number between $0 and $100,000.';
 		}
-		else if (!/^\d+$/.test(formData.price.toString().trim())) {
-			errors.price = 'Price must be a valid integer > 0.';
-		}
+		// else if (!/^\d+$/.test(formData.price.toString().trim())) {
+		// 	errors.price = 'Price must be a valid integer > 0.';
+		// }
 
 		// Description validation
 		if (!formData.description.trim()) {
@@ -91,9 +90,9 @@ export default function ListingForm({ formDataProp = {
 		}
 
 		//location validation
-		// if (formData.location.length > 150) {
-		// 	errors.location = 'Location must be at most 150 characters long.';
-		// }
+		if (!formData.location) {
+			setNoResults(true);
+		}
 
 
 		return errors;
@@ -191,15 +190,24 @@ export default function ListingForm({ formDataProp = {
 
 		const form = new FormData(e.target);
 		const query = form.get('location');
-		const results = await searchForLocation(query); // Search for a map location given a user query
+		const results = await searchForLocation(query, {getAddress: false}); // Search for a map location given a user query
 
 		if (results) { // If there are results
 			// setLocationQuery(results.name) // Update the query text to be the result
 			setNoResults(false);
+			setFormErrors(prevState => ({
+				...prevState,
+				location: ''
+			}));
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
+			
+			//if(results.address) console.log(results.address);
+
 			setFormData(prevState => ({
 				...prevState,
-				location: results.name
+				location: results.name,
+				lat: results.lat,
+				lng: results.lng
 			}));
 			setPostCoordinates({ lat: results.lat, lng: results.lng });
 		}
@@ -214,8 +222,8 @@ export default function ListingForm({ formDataProp = {
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4">
 				<h1 className='text-5xl'>Create Listing</h1>
-				<div className='flex flex-wrap 2xl:flex-nowrap w-full space-y-4 2xl:space-x-3'>
-					<div className='w-full 2xl:w-[70%] space-y-2'>
+				<div className='flex flex-wrap w-full space-y-4'>
+					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
 						<input autoComplete='off' type="text" name="title" 
 							value={formData.title} onChange={handleChange} placeholder="Enter Title" required maxLength={150}
@@ -230,19 +238,23 @@ export default function ListingForm({ formDataProp = {
 						</div> */}
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
-                            <input type='text' name='minPrice' maxLength={20} required
-								className={`ps-7 py-2 rounded-md w-full border-gray-300 ${false ? 'focus:ring-red-600 focus:border-0' : ''}`} 
-								placeholder='Enter Price' value={price === 0 ? '' : price} 
+                            <input type='text' name='price' maxLength={20} required
+								className={`ps-7 py-2 rounded-md w-full border-gray-300`} 
+								placeholder='Enter Price' value={formData.price} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
-                                    //resetSelectedPrices();
                                     if(isNaN(val)){
-                                        //updateFilters({min: ''})
-                                        setPrice(0);
+                                        setFormData(prevState => ({
+											...prevState,
+											["price"]: ''
+										}));
                                         return;
                                     }
 
-									setPrice(val);
+									setFormData(prevState => ({
+										...prevState,
+										["price"]: val
+									}));
                                 }
                             }></input>
                         </div>
@@ -254,16 +266,14 @@ export default function ListingForm({ formDataProp = {
 						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{formErrors.location_search} *</span></label>
+							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again': ''} *</span></label>
 							<input
-								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
+								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
 								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
 								onChange={(e) => {
 									if (postCoordinates !== null) {
 										setPostCoordinates(null);
-										console.log('Resetting Post Coordinates');
 									}
-									console.log(e.target.name);
 									handleChange(e);
 								}}
 								disabled={searchingLocation}
@@ -282,7 +292,7 @@ export default function ListingForm({ formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full 2xl:w-[30%] 2xl:pt-4'>
+					<div className='w-full'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
@@ -319,8 +329,8 @@ export default function ListingForm({ formDataProp = {
 					</div>
 				</div>
 				<form className='flex space-x-8 w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
-					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600">Post</button>
-					<button className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600">Cancel</button>
+					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
+					<button className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
 				</form>
 			</section>
 			{loadingState &&
