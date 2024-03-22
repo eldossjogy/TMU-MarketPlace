@@ -39,7 +39,7 @@ export default function LocationPicker({applyFn = (a,b,c) => {}, useMap = true})
                     disabled={searchingLocation}
                 ></input>
                 <label className="w-full text-sm" htmlFor="range">Search Radius</label>
-                <select className="w-full rounded-md" name="range" value={30000} onChange={(e) => {
+                <select className="w-full rounded-md" name="range" value={range} onChange={(e) => {
                     setRange(e.target.value ?? 1000)
                 }}>
                     <option aria-label="Set range to 5 kilometers" value={5000}>5 km</option>
