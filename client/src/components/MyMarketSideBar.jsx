@@ -10,21 +10,20 @@ export default function MyMarketSideBar() {
 
   useEffect(()=> {
     setCurrentPath(location.pathname)
-    console.log('set');
   }, [])
 
   const navList = [
     {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
-        {linkText: "Archived Listings", link: "/my-market/create-listing"},
+        {linkText: "Archived Listings", link: "/my-market/archived-listing"},
         {linkText: "Create Listing", link: "/my-market/create-listing"},
-        {linkText: "Edit Listing", link: "/my-market/create-listing"},
-        {linkText: "View History", link: "/my-market/create-listing"}
+        {linkText: "Edit Listing", link: "/my-market/edit-listing"},
+        {linkText: "View History", link: "/my-market/view-listing"}
     ]},
     {title: "Messages", items:[{linkText: "Inbox", link: "/"},
         {linkText: "Unread", link: "/"}
     ]},
     {title: "Settings", items:[
-        {linkText: "Edit Settings", link: "/"},
+        {linkText: "Edit Settings", link: "/settings"},
         {linkText: "Edit Profile", link: "/my-market/profile"},
         {linkText: "Edit Preferences", link: "/"},
     ]}
@@ -45,8 +44,8 @@ export default function MyMarketSideBar() {
                 <h3 className='text-xl font-bold' key={index}>{elem.title}</h3>
                 <ul className='space-y-1 ms-2'>
                   {elem.items.map((elemLinks, index2) => (
-                    <li className={`py-1 ps-3 rounded-lg hover:bg-[#fef08a] ${elemLinks.link === currentPath && 'active bg-[#fef08a]'}`}key={index2}>
-                      <Link to={elemLinks.link}>{elemLinks.linkText}</Link>
+                    <li className={`py-1 ps-3 rounded-lg hover:bg-[#fef08a] ${elemLinks.link === currentPath ? 'bg-[#fef08a]' : ''}`}key={index2}>
+                      <Link to={elemLinks.link} onClick={(e) => {setCurrentPath(elemLinks.link); console.log(elemLinks.link);}}>{elemLinks.linkText}</Link>
                     </li>
                   ))}
                 </ul>

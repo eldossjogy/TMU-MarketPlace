@@ -20,7 +20,7 @@ export default function MyProfile() {
 
 
   return (
-      <>
+      <MyMarketContainer>
         <CategoryComponent />
         <div className='space-y-3'>
           {userListings.map((elem, index) => (
@@ -28,6 +28,7 @@ export default function MyProfile() {
           ))}
         </div>
         {loadingState && <LoadingScreen />}
-      </>
+      </MyMarketContainer>
+
   )
 }

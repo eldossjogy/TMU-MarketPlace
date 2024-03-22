@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import AuthContext from "../authAndContext/contextApi";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Loading from "../components/Loading";
+import MyMarketContainer from "../components/MyMarketContainer";
 
 export default function AccountSettings() {
 	const [selectedImage, setSelectedImage] = useState(null);
@@ -26,7 +27,7 @@ export default function AccountSettings() {
 	}
 
 	return (
-		<>
+		<MyMarketContainer>
 			{user ?
 				<div className="flex justify-center items-center mt-4 mx-3">
 					<div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md flex flex-wrap space-y-10 justify-center items-center">
@@ -111,6 +112,6 @@ export default function AccountSettings() {
 				</div>
 			: <Loading />
 			}
-		</> 
+		</MyMarketContainer>
 	);
 }
