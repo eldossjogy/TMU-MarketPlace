@@ -39,13 +39,14 @@ function App() {
           </Route>
           <Route element={<PrivateRoutes loggedIn={true}/>}>
             <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/settings" element={<AccountSettings />} />
+            {/* <Route path="/settings" element={<AccountSettings />} /> */}
             <Route path="/my-market">
                 <Route index element={<MyMarketContainer><MyProfile/></MyMarketContainer>} />
                 <Route path="sold-listings" element={<HomePage />} />
                 <Route path="create-listing" element={<MyMarketContainer><CreateListings/></MyMarketContainer>} />
                 <Route path="repost-listings" element={<HomePage />} />
-                <Route path="settings" element={<MyMarketContainer><AccountSettings/></MyMarketContainer>} />
+                <Route path="profile" element={<MyMarketContainer><AccountSettings/></MyMarketContainer>} />
+                <Route path="setting" element={<MyMarketContainer><AccountSettings/></MyMarketContainer>} />
             </Route>
           </Route>
         </Route>

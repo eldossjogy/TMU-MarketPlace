@@ -27,7 +27,6 @@ export default function AccountSettings() {
 
 	return (
 		<>
-			<Navbar />
 			{user ?
 				<div className="flex justify-center items-center mt-4 mx-3">
 					<div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md flex flex-wrap space-y-10 justify-center items-center">

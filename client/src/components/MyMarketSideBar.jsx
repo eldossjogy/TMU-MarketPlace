@@ -10,20 +10,22 @@ export default function MyMarketSideBar() {
 
   useEffect(()=> {
     setCurrentPath(location.pathname)
+    console.log('set');
   }, [])
 
   const navList = [
     {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
-        {linkText: "Sold Listings", link: "/my-market/sold-listings"},
-        {linkText: "Create Post", link: "/my-market/create-listing"},
-        {linkText: "Repost Listing", link: "/my-market/repost-listings"}
+        {linkText: "Archived Listings", link: "/my-market/create-listing"},
+        {linkText: "Create Listing", link: "/my-market/create-listing"},
+        {linkText: "Edit Listing", link: "/my-market/create-listing"},
+        {linkText: "View History", link: "/my-market/create-listing"}
     ]},
     {title: "Messages", items:[{linkText: "Inbox", link: "/"},
         {linkText: "Unread", link: "/"}
     ]},
     {title: "Settings", items:[
         {linkText: "Edit Settings", link: "/"},
-        {linkText: "Edit Profile", link: "/"},
+        {linkText: "Edit Profile", link: "/my-market/profile"},
         {linkText: "Edit Preferences", link: "/"},
     ]}
     ]
