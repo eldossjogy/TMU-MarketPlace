@@ -82,7 +82,6 @@ export async function createListing(req, res) {
 
         const newlyCreatedListing = newListing.data[0]
 
-
         //adding images now to image table after getting the ad id
         const postImages = await supabase
             .from('image')
@@ -360,9 +359,7 @@ export async function updateListing(req, res) {
                             .storage
                             .from('ad-listings')
                             .remove([file_path])
-                        
-                        console.log(deleteImageFromBucket)
-                        
+                                                
                         if (deleteImageFromBucket.error?.message) {
                             const err = new Error("Unable to delete Image from the bucket")
                             err.status = 500
