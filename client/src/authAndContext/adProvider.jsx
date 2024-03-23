@@ -6,20 +6,12 @@ const AdContext = createContext();
 
 export const AdProvider = ({ children }) => {
   // fetch ads for homepage
-  async function fetchHomePage(categorId) {
+  async function fetchHomePage() {
     try {
-      if(!categorId) {
-        const reponse = await axios.get(
-          `${process.env.REACT_APP_BACKEND_API_URL}/ad/homepage`
-        );
-        return reponse.data;
-      }
-      else {
-        const reponse = await axios.get(
-          `${process.env.REACT_APP_BACKEND_API_URL}/ad/homepage/${categorId}`
-        );
-        return reponse.data;
-      }
+      const reponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/ad/homepage`
+      );
+      return reponse.data;
     } catch (error) {
       toast.error("Error fetching ads: ", JSON.stringify(error));
       return null;

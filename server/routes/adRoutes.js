@@ -11,6 +11,5 @@ router.get("/me", getUserAds);
 
 // get homepage ads
 router.get("/homepage", homepage);
-router.get("/homepage/:categoryId", homepage);
 
 export default router;
