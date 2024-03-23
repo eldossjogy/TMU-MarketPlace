@@ -233,7 +233,7 @@ export default function ListingForm({formDataProp = {
 				console.log(results.address);
 				setFormData(prevState => ({
 					...prevState,
-					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}`,
+					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}${results.address.Postal && results.address.PostalExt ? `, ${results.address.Postal + results.address.PostalExt}` : ''}`,
 					lat: results.lat,
 					lng: results.lng
 				}));
