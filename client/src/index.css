@@ -15,7 +15,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: rgb(26, 26, 27, 0.3);
+    background-color: rgb(26, 26, 27, 0.2);
     z-index: 100;
     backdrop-filter: blur(8px);
 }
@@ -163,15 +163,16 @@
 
 /* .bottomFormSection button{
     font-size: 1.5em;
-    width: 20%;
-} */
+    min-width: 20%;
+}
+*/
 
-/* .selectedImageDisplayContainer {
+.selectedImageDisplayContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1em;
-} */
+} 
 
 .selectedImageBox {
     width: 100%;
@@ -190,14 +191,14 @@
 
 .selectedImageBox i {
     cursor: pointer;
-    color: #d4d4d4;
     text-decoration: none;
-    
+    font-weight: bold;
 }
 
 .selectedImageBox i:hover {
     color: red;
     background-color: rgb(255, 255, 255,0.7);
+    border-radius: 5px;
 }
 
 .cardButtons {
@@ -360,22 +361,24 @@
     
     /* .bottomFormSection {
         width: 100%;
-    } */
+        justify-content: center;
+    }
     
     /* .bottomFormSection button{
         font-size: 1em;
-        width: 50%;
-    } */
+        min-width: 40%;
+    }
     .cardButtons {
         gap: 0.2em;
         width: 50%;
         font-size: 0.8em;
     }
     .selectContainer {
-        width: 75%;
+        width: 100%;
         padding: 0.2em;
         font-size: 1.1em;
     }
+    */
     .categoryComponentContainer {
         font-size: 1em;
         padding: 1%;
@@ -384,6 +387,9 @@
         gap: 0.5em;
         font-size: 1em;
         flex-wrap: wrap;
+    }
+    .categoryComponentContainer ul li{
+        padding: 1%;
     }
 }
 
@@ -467,4 +473,4 @@
     100% {
       transform: translateY(0%);
     }
-  }
+}

@@ -12,9 +12,9 @@ import AccountSettings from "./pages/AccountSettings";
 import PrivateRoutes from "./util/PrivateRoutes";
 import ErrorPage from "./pages/ErrorPage";
 import Adpage from "./pages/AdPage";
+import EditListingPage from "./pages/EditListingPage";
 import MyMarketContainer from './components/MyMarketContainer';
 import CreateListings from "./pages/CreateListings";
-
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -43,7 +43,8 @@ function App() {
             <Route path="/my-market">
                 <Route index element={<MyProfile/>} />
                 <Route path="sold-listings" element={<HomePage />} />
-                <Route path="create-listing" element={<CreateListings/>} />
+                <Route path="create-listing" element={<CreateListings />} />
+                <Route path="edit-listing/:id" element={<EditListingPage />} />
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="settings" element={<AccountSettings/>} />
             </Route>
