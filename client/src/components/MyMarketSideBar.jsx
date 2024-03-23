@@ -16,7 +16,6 @@ export default function MyMarketSideBar() {
     {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
         {linkText: "Archived Listings", link: "/my-market/archived-listing"},
         {linkText: "Create Listing", link: "/my-market/create-listing"},
-        {linkText: "Edit Listing", link: "/my-market/edit-listing"},
         {linkText: "View History", link: "/my-market/view-listing"}
     ]},
     {title: "Messages", items:[{linkText: "Inbox", link: "/"},

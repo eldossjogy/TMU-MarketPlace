@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
-import ImageCarousel from './ImageCarousel'
-import Logo from "../assets/logo.png"
 import AuthContext from '../authAndContext/contextApi';
 import LoadingScreen from './LoadingScreen';
 import noImage from '../assets/noImage.png'
-import ListingForm from './ListingForm';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyListingCard({listingInfo}) {
 
   const {statusList, setLoadingState, loadingState, changeListingStatusAPI, deleteListing} = useContext(AuthContext)
 
+  const navigate = useNavigate()
+
   const [isPhone, setIsPhone] = useState(false);
   const [modal, setModal] = useState(false)
-  const [editFlag, setEditFlag] = useState(false)
-
+  
   //useEffect that checks if user is on a phone/ needed for truncating text accordingly
   useEffect(() => {
       const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -49,7 +48,6 @@ export default function MyListingCard({listingInfo}) {
       setLoadingState(true)
       changeListingStatusAPI(listingInfo, event.target.value)
     }
-    
   }
 
   function handleDeleteEntry() {
@@ -74,20 +72,22 @@ export default function MyListingCard({listingInfo}) {
               <p className='mt-2 text-[1.2em]'>{isPhone ? truncateString(listingInfo.description, 65) : truncateString(listingInfo.description, 200) } </p>
             </div>
             <div className='cardRightSection'>
-              <div className='sm:w-[50%] md:w-[80%] lg:w-[35%] relative flex flex-col md:justify-end md:items-end'>
-                <p className='font-bold text-[1.5em]'>Status:<span className={`font-bold ${listingInfo.status.type === "Available" && 'text-green-500'} ${listingInfo.status.type === "Sold" && 'text-red-500'} ${listingInfo.status.type === "Pending" && 'text-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'text-blue-400'}`}>{listingInfo.status.type}</span></p>
-                <select onChange={changeListingStatus} className="selectContainer bg-blue-500 hover:bg-blue-700 text-white font-bold rounded text-[1.5em]">
-                  <option value =''>Status</option>
+            <div className='sm:w-[50%] md:w-[80%] lg:w-[35%] relative flex flex-col md:flex-row md:gap-1 md:justify-end md:items-end sm:items-start'>
+              <p className='font-bold text-[1.5em]'>
+                Status:
+              </p>
+              <select onChange={changeListingStatus} className={`selectContainer font-bold text-black rounded text-[1.5em] ${listingInfo.status.type === "Available" && 'bg-green-400'} ${listingInfo.status.type === "Sold" && 'bg-red-400'} ${listingInfo.status.type === "Pending" && 'bg-yellow-400'} ${listingInfo.status.type === "Unavailable" && 'bg-blue-400'}`}>
+                  <option value ='' style={{ backgroundColor: listingInfo.status.type === "Available" ? '#6EE7B7' : listingInfo.status.type === "Sold" ? '#F87171' : listingInfo.status.type === "Pending" ? '#FBBF24' : listingInfo.status.type === "Unavailable" ? '#60A5FA' : '' }} >{listingInfo.status.type}</option>
                   {statusList.map((elem, index) => (
-                    <option key={index} value={elem.type}>{elem.type}</option>
+                    elem.type !== listingInfo.status.type && <option className="text-black" style={{ backgroundColor: elem.type === "Available" ? '#6EE7B7' : elem.type === "Sold" ? '#F87171' : elem.type === "Pending" ? '#FBBF24' : elem.type === "Unavailable" ? '#60A5FA' : '' }} key={index} value={elem.type}>{elem.type}</option>
                   ))}
                 </select>
-              </div>
+            </div>
               <div className='cardButtons'>
                 <button onClick={() => {setModal(prev => !prev)}} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
                   Remove
                 </button>
-                <button onClick={() => {setEditFlag(prev => !prev)}} className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
+                <button onClick={() => navigate(`edit-listing/${listingInfo.id}`)} className="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-[1.5em] 2xl:w-[35%]">
                   Edit
                 </button>
               </div>
@@ -95,7 +95,7 @@ export default function MyListingCard({listingInfo}) {
           </div>
       </div>
           {loadingState &&
-            <LoadingScreen message={"Changing Ad status."} />
+            <LoadingScreen message={"Changing Ad status..."} />
           }
           {modal && 
             <div className="dashboard-Item-Modal flex flex-col p-3 rounded shadow-md hover:shodow-lg bg-red-500 text-white">
@@ -121,7 +121,6 @@ export default function MyListingCard({listingInfo}) {
                     </div>
             </div>
           }
-          {/*editFlag && <ListingForm formDataProp={listingInfo} typeOfReq="Put"/>*/}
     </div>
   )
 }
