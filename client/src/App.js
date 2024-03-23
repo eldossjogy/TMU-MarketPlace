@@ -48,6 +48,7 @@ function App() {
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="settings" element={<AccountSettings/>} />
             </Route>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
           </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />

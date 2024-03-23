@@ -173,9 +173,7 @@ export default function ListingForm({formDataProp = {
 	}
 
 	function handleImageDelete(img) {
-		const index = imageList.indexOf(img)
-
-		setImageList(prev => prev.filter((item, i) => i !== index));
+		setImageList(prev => prev.filter((item, i) => i !== img));
 
 		const fileInput = document.getElementById('dropzone-file');
 		if (fileInput) {
@@ -186,7 +184,6 @@ export default function ListingForm({formDataProp = {
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
 		const filteredImageArr = newImageArr.filter((item, i) => i !== index);
-		console.log(filteredImageArr);
 		setFormData(prev => ({ ...prev, image: filteredImageArr }));
 	
 		const fileInput = document.getElementById('dropzone-file');
