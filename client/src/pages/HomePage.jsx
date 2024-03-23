@@ -9,16 +9,28 @@ export default function HomePage() {
   const [ads, setAds] = useState(null);
 
   useEffect(() => {
-    fetchHomePage().then((res) => {
-      setAds(res);
-    });
+    getHomePageAdsFunc()
   }, []);
+
+  function getHomePageAdsFunc(categorId) {
+    if (!categorId) {
+      console.log("came here")
+      fetchHomePage().then((res) => {
+        setAds(res);
+      });
+    }
+    else {
+      fetchHomePage(categorId).then((res) => {
+        setAds(res);
+      });
+    }
+  }
 
   return (
     <>
       <Navbar />
       <div className="mx-auto lg:max-w-[90%] mt-4">
-        <CategoryComponent />
+        <CategoryComponent getFunc={getHomePageAdsFunc}/>
       </div>
       <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">

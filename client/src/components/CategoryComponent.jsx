@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react';
 import AuthContext from '../authAndContext/contextApi';
 
-export default function CategoryComponent() {
+export default function CategoryComponent({getFunc}) {
     const { categories, fetchMyPostings } = useContext(AuthContext);
     const [activeIndex, setActiveIndex] = useState(0);
 
     function handleClick(index) {
         setActiveIndex(index === activeIndex ? null : index);
-        fetchMyPostings(index)
+        getFunc(index)
     }
 
     return (

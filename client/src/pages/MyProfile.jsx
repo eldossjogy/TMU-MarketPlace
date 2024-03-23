@@ -19,7 +19,7 @@ export default function MyProfile() {
 
   return (
       <MyMarketContainer>
-        <CategoryComponent />
+        <CategoryComponent getFunc={fetchMyPostings}/>
         <div className='space-y-3'>
           {userListings.map((elem, index) => (
             <MyListingCard listingInfo={elem} key={index}/>
