@@ -323,7 +323,7 @@ export default function ListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='sm:w-full md:w-[50%]'>
+					<div className='sm:w-full lg:w-[50%]'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
