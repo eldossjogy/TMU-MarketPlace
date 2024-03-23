@@ -231,7 +231,7 @@ export default function ListingForm({formDataProp = {
 	return (
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
-				{editingForm ? <h1 className='text-5xl'>Edit Listing "{formDataProp.title}"</h1> : <h1 className='text-5xl'>Create Listing</h1>}
+				{editingForm ? <h1 className='text-5xl'>Edit Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
 				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
