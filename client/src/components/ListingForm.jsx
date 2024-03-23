@@ -80,8 +80,8 @@ export default function ListingForm({formDataProp = {
 		if (isNaN(price)) {
 			setFormData(prev => ({ ...prev, price: 0 }))
 		}
-		else if (price < 0 || price > 100000) {
-			errors.price = 'Price must be a number between $0 and $100,000.';
+		else if (price < 0 || price > 1000000) {
+			errors.price = 'Price must be a number between $0 and $1,000,000.';
 		}
 
 		// Description validation
@@ -230,10 +230,10 @@ export default function ListingForm({formDataProp = {
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
 			
 			if(results.address){
-				console.log(results.address);
+				//console.log(results.address);
 				setFormData(prevState => ({
 					...prevState,
-					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}${results.address.Postal && results.address.PostalExt ? `, ${results.address.Postal + results.address.PostalExt}` : ''}`,
+					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}${results.address.Postal ? `, ${results.address.Postal}${results.address.PostalExt ? results.address.PostalExt : ''}` : ''}`,
 					lat: results.lat,
 					lng: results.lng
 				}));
