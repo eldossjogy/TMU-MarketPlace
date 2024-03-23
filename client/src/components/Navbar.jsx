@@ -7,6 +7,7 @@ import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
 import { useNavigate } from 'react-router-dom';
 import Logo from "../assets/logo.png"
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
@@ -39,7 +40,7 @@ export default function Navbar() {
                     </section>
                     <section id="nav-search-group" className="flex flex-wrap space-y-2 group md:flex-nowrap md:space-y-0 md:w-[30vw] md:space-x-2 md:items-center md:justify-start">
                         <Searchbar location={city}/>
-                        <section className='hidden md:flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
+                        <section className='hidden md:flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation();}}>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
                             <span className='whitespace-nowrap'>{range/1000}km range</span>
                         </section>
