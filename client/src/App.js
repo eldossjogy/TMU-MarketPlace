@@ -2,7 +2,7 @@ import "./index.css";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import MyProfile from "./pages/MyProfile";
+import MyMarketPage from "./pages/MyMarketPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
@@ -13,6 +13,7 @@ import PrivateRoutes from "./util/PrivateRoutes";
 import ErrorPage from "./pages/ErrorPage";
 import Adpage from "./pages/AdPage";
 import EditListingPage from "./pages/EditListingPage";
+import InboxPage from './pages/InboxPage';
 import MyMarketContainer from './components/MyMarketContainer';
 import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
@@ -33,20 +34,21 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/ad/:slug" element={<Adpage />} />
           <Route path="admin-dashboard" element={<AdminDashboard />} />
-          <Route element={<PrivateRoutes loggedIn={false}/>}>
+          <Route element={<PrivateRoutes loggedIn={false} />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
-          <Route element={<PrivateRoutes loggedIn={true}/>}>
+          <Route element={<PrivateRoutes loggedIn={true} />}>
             <Route path="/logout" element={<LogoutPage />} />
             {/* <Route path="/settings" element={<AccountSettings />} /> */}
             <Route path="/my-market">
-                <Route index element={<MyProfile/>} />
+                <Route index element={<MyMarketPage />} />
                 <Route path="sold-listings" element={<HomePage />} />
                 <Route path="create-listing" element={<CreateListings />} />
                 <Route path="edit-listing/:id" element={<EditListingPage />} />
                 <Route path="repost-listings" element={<HomePage />} />
-                <Route path="settings" element={<AccountSettings/>} />
+                <Route path="settings" element={<AccountSettings />} />
+                <Route path="inbox" element={<InboxPage />} />
             </Route>
           </Route>
         </Route>
