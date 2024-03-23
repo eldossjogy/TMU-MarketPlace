@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
-import MyProfileContainer from '../components/MyProfileContainer'
 import MyListingCard from '../components/MyListingCard'
 import AuthContext from '../authAndContext/contextApi'
 import CategoryComponent from '../components/CategoryComponent'
+import MyMarketContainer from '../components/MyMarketContainer'
 
 export default function MyProfile() {
 
@@ -19,16 +18,13 @@ export default function MyProfile() {
 
 
   return (
-    <div>
-      <Navbar />
-      <MyProfileContainer>
-        <div className='myListingsContainer'>
-          <CategoryComponent />
+      <MyMarketContainer>
+        <CategoryComponent />
+        <div className='space-y-3'>
           {userListings.map((elem, index) => (
             <MyListingCard listingInfo={elem} key={index}/>
           ))}
         </div>
-      </MyProfileContainer>
-    </div>
+      </MyMarketContainer>
   )
 }

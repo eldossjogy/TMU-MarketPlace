@@ -3,14 +3,6 @@ import { searchAds } from "../controllers/searchAPI.js";
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        data: {
-            data: [2],
-            message: "hi"
-        },
-        error: null
-    });
-});
-
+router.get('/', searchAds);
+   
 export default router;

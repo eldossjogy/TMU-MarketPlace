@@ -1,5 +1,4 @@
 import supabase from '../config/supabaseConfig.js'
-import dotenv from "dotenv";
 
 function validateFormData(formData) {
     const errors = {};
@@ -11,21 +10,13 @@ function validateFormData(formData) {
         errors.title = 'Title must be at most 100 characters long.';
     }
 
-    // Price validation
-    const price = parseFloat(formData.price);
-    if (formData.price.length <= 0) {
+    const price = parseInt(formData.price);
+    if (isNaN(price)) {
         formData.price = 0
     }
-    else if (isNaN(price)) {
-        errors.price = 'Price must be a valid number.';
-    }
-    else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
+    else if (price < 0 || price > 100000) {
         errors.price = 'Price must be a number between $0 and $100,000.';
     }
-    else if (!/^\d+$/.test(formData.price.toString().trim())) {
-        errors.price = 'Price must be a valid integer > 0.';
-    }
-    
 
     // Description validation
     if (!formData.description.trim()) {
@@ -45,9 +36,8 @@ function validateFormData(formData) {
         errors.category_id = 'Category is required.';
     }
 
-    //location validation
-    if (formData.location.length > 150) {
-        errors.location = 'Location must be at most 150 characters long.';
+    if (isNaN(parseFloat(formData.lat)) || isNaN(parseFloat(formData.lng))){
+        errors.coordinates = "Invalid coordinates";
     }
 
     return errors;
@@ -55,10 +45,10 @@ function validateFormData(formData) {
 
 export async function createListing(req, res) {
 
-    const {title, price, description, expire_time, postal_code, location, category_id, user_id, images} = req.body
+    const {title, price, description, expire_time, postal_code, location, category_id, user_id, images, lat, lng} = req.body
     try {
         //need .select at the end to get the created data and use its id for new image POST req
-        let err = validateFormData({title, price, description, expire_time, postal_code, location, category_id})
+        let err = validateFormData({title, price, description, expire_time, postal_code, location, category_id, lat, lng})
 
         if (Object.keys(err).length !== 0) {
             const error = new Error("Bad form data !")
@@ -69,7 +59,7 @@ export async function createListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location, category_id, user_id}
+                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id}
             ])
             .select()
 

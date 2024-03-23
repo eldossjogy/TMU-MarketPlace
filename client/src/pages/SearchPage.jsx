@@ -1,45 +1,58 @@
-import React, { useContext, useState } from "react";
+import SearchContext from "../authAndContext/searchProvider";
 import HorizontalCard from "../components/HorizontalCard";
-import Navbar from "../components/Navbar"
+import VerticalCard from "../components/VerticalCard";
 import SearchSideBar from "../components/SearchSideBar"
-import AuthContext from "../authAndContext/contextApi";
+import React, { useContext, useState } from "react";
+import Navbar from "../components/Navbar"
+import SortToolbar from "../components/SortToolbar";
 
 export default function SearchPage() {
-	const [grid, setGrid] = useState(false);
-	//const {searchResults} = useContext(AuthContext)
+	const { searchResults, grid } = useContext(SearchContext)
 	return (
 		<>
 			<Navbar />
-			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
+			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 md:min-h-[100vh] overflow-show">
 				<SearchSideBar />
-				<div className="grid grid-cols-1 w-full">
-					<HorizontalCard
-						image={[{file_path:"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}]}
-						title={"Mazda RX-7"}
-						price={"30,000"}
-						location={"Toronto, ON"}
-						description={
-							"The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
-						}
-						status={{id: 2, type: 'Pending'}}
-						postID={1}
-						key={1} 
-					/>
-					{/* { searchResults && searchResults.map((result) => (
-						<HorizontalCard
-							image={result.image}
-							title={result.title}
-							price={result.price}
-							location={"Toronto, ON"}
-							description={
-								result.description
-							}
-							status={{id: result?.status?.id ?? 1, type: result.status?.type ?? ''}}
-							postID={result.id}
-							date={result.created_at}
-							key={result.id} 
-						/>
-					))} */}
+				<div className="w-full mt-3">
+					<SortToolbar />
+					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
+						{searchResults && searchResults.length !== 0 && !grid && searchResults.map((result) => (
+							<HorizontalCard
+								image={result.image}
+								title={result.title}
+								price={result.price.toLocaleString()}
+								location={result.location}
+								description={result.description}
+								status={{ id: result?.status_id ?? 1, type: result.status?.type ?? '' }}
+								postID={result.id}
+								date={result.created_at}
+								distance={result.distance}
+								key={result.id}
+							/>
+						))}
+						{searchResults && searchResults.length !== 0 && grid && searchResults.map((result) => (
+							<VerticalCard
+								image={result.image}
+								title={result.title}
+								price={result.price.toLocaleString()}
+								location={result.location}
+								description={result.description}
+								postID={result.id}
+								distance={result.distance}
+								key={result.id}
+							/>
+						))}
+						{!searchResults || (searchResults && searchResults.length === 0) && [1].map((key) => (
+							<div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+								<div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+								<div className="flex items-center pt-8 sm:justify-start sm:pt-0">
+
+									<div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">No Results</div>
+								</div>
+							</div>
+							</div>
+						))}
+					</div>
 				</div>
 			</main>
 		</>

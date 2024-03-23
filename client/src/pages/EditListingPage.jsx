@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
-import MyProfileContainer from '../components/MyProfileContainer'
+import MyMarketContainer from '../components/MyMarketContainer';
 import AuthContext from '../authAndContext/contextApi'
 import LoadingScreen from '../components/LoadingScreen'
 import ListingForm from '../components/ListingForm'
@@ -46,12 +46,11 @@ export default function EditListingPage() {
 
     return (
         <div>
-          <Navbar />
-          <MyProfileContainer>
+          <MyMarketContainer>
             {localLoading 
             ?  <LoadingScreen message={"Fetching Listing Data"}/> 
             : <ListingForm formDataProp={listingInfo} typeOfReq={'Put'} editingForm={true}/>}
-          </MyProfileContainer>
+          </MyMarketContainer>
         </div>
     )
 }

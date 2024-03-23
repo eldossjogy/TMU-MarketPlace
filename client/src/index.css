@@ -29,20 +29,20 @@
     gap: 1em;
 }
 
-.myMarketPageContainer {
+/* .myMarketPageContainer {
     width: 90%;
     display: flex;
     gap: 2em;
-}
+} */
 
-.marketSideNavbar {
+/* .marketSideNavbar {
     background-color: #e0f2fe;
     border: 3px solid #7dd3fc;
     width: 20%;
     height: 90vh;
     padding: 1.5%;
     border-radius: 15px;
-}
+} */
 
 .sideNavBar-heading {
     font-size: 3em;
@@ -54,17 +54,17 @@
     font-size: 1.5em;
 }
 
-.sideNavLinkContainer ul {
+/* .sideNavLinkContainer ul {
     margin-left: 5%;
     font-size: 1.3em;
     margin-bottom: 3%;
-}
+} */
 
-.sideNavLinkContainer ul li {
+/* .sideNavLinkContainer ul li {
     padding: 1%;
-}
+} */
 
-.sideNavLinkContainer ul li:hover {
+/* .sideNavLinkContainer ul li:hover {
     background-color: #fef08a;
     border-radius: 10px;
 }
@@ -72,7 +72,7 @@
 .sideNavLinkContainer ul li.active {
     background-color: #fef08a;
     border-radius: 10px;
-}
+} */
 
 .myListingsContainer {
     width: 80%;
@@ -129,60 +129,65 @@
     justify-content: space-between;
 }
 
-.createListingForm {
+/* .createListingForm {
     width: 80%;
     display: flex;
     flex-direction: column;
     gap: 1em;
-}
-.formTitle {
+} */
+/* .formTitle {
     font-weight: bold;
     font-size: 3em;
-}
+} */
 
-.topFormSection {
+/* .topFormSection {
     width: 100%;
-}
-.rightFormSection {
+} */
+/* .rightFormSection {
     width: 30%;
-}
+} */
 
-.leftFormSection {
+/* .leftFormSection {
     width: 70%;
-}
+} */
 
-.leftFormSection * {
+/* .leftFormSection * {
     font-size: 1.2em;
-}
+} */
 
-.bottomFormSection {
+/* .bottomFormSection {
     width: 50%;
     display: flex;
     gap: 2em;
-}
+} */
 
-.bottomFormSection button{
+/* .bottomFormSection button{
     font-size: 1.5em;
     min-width: 20%;
 }
+*/
 
 .selectedImageDisplayContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1em;
-}
+} 
 
 .selectedImageBox {
     width: 100%;
     font-size: 1.5em;
     padding: 0.5em;
-    color: blue;
+    color: rgb(70, 70, 134);
     background-color: #e0f2fe;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
 }
+
+/* .selectedImageBox p {
+    text-decoration: underline;
+} */
 
 .selectedImageBox i {
     cursor: pointer;
@@ -247,10 +252,10 @@
 
 /*for phone screen*/
 @media all and (min-width: 100px) and (max-width: 950px) {
-    .myMarketPageContainer {
+    /* .myMarketPageContainer {
         width: 100%;
-    }
-    .marketSideNavbar {
+    } */
+    /*.marketSideNavbar {
         width: 75%;
         height: 100%;
         position: absolute;
@@ -262,16 +267,16 @@
         border-radius: 5px;
         animation-duration: 0.3s;
         animation-timing-function: ease-in;
-        animation-fill-mode: forwards; /* Ensure the navbar stays at the final position after animation */
-    }
+        animation-fill-mode: forwards;  Ensure the navbar stays at the final position after animation 
+    }*/
 
-    .marketSideNavbar.show {
-        animation-name: slideIn; /* Apply slideIn animation when the show class is present */
-    }
+    /* .marketSideNavbar.show {
+        animation-name: slideIn; //Apply slideIn animation when the show class is present 
+    } */
 
-    .marketSideNavbar.hide {
-        animation-name: slideOut; /* Apply slideOut animation when the hide class is present */
-    }
+    /*.marketSideNavbar.hide {
+        animation-name: slideOut; Apply slideOut animation when the hide class is present
+    }*/
 
     .sideNavBar-heading {
         font-size: 1.5em;
@@ -281,13 +286,13 @@
         font-size: 1em;
     }
     
-    .sideNavLinkContainer ul {
+    /* .sideNavLinkContainer ul {
         font-size: 1em;
-    }
+    } */
     
-    .sideNavLinkContainer ul li {
+    /* .sideNavLinkContainer ul li {
         padding: 2%;
-    }
+    } */
 
     .myListingsContainer {
         width: 100%;
@@ -338,28 +343,28 @@
     .cardImageContainer img {
         object-fit: cover;
     }
-    .createListingForm {
+    /* .createListingForm {
         width: 100%;
-    }
-    .formTitle {
+    } */
+    /* .formTitle {
         font-size: 1.8em;
-    }
-    .rightFormSection {
+    } */
+    /* .rightFormSection {
         width: 100%;
-    }
-    .leftFormSection {
+    } */
+    /* .leftFormSection {
         width: 100%;
-    }
-    .leftFormSection * {
+    } */
+    /* .leftFormSection * {
         font-size: 1em;
-    }
+    } */
     
-    .bottomFormSection {
+    /* .bottomFormSection {
         width: 100%;
         justify-content: center;
     }
     
-    .bottomFormSection button{
+    /* .bottomFormSection button{
         font-size: 1em;
         min-width: 40%;
     }
@@ -382,6 +387,7 @@
         font-size: 1em;
         flex-wrap: wrap;
     }
+*/
 }
 
 /*speical cases for ipads and weird devices*/
@@ -407,9 +413,9 @@
         margin: 0;
         gap: 5em;
     }
-    .bottomFormSection {
+    /* .bottomFormSection {
         width: 100%;
-    }
+    } */
 }
 
 /*for laptop screen*/
@@ -426,9 +432,9 @@
     .listingInfoContainer {
         width: 75%;
     }
-    .rightFormSection {
+    /* .rightFormSection {
         width: 100%;
-    }
+    } */
     .leftFormSection {
         width: 100%;
     }
@@ -464,4 +470,4 @@
     100% {
       transform: translateY(0%);
     }
-  }
+}
