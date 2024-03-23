@@ -190,15 +190,13 @@ export default function ListingForm({formDataProp = {
 	}
 
 	function handleImageDelete(img) {
-		const index = imageList.indexOf(img)
+        setImageList(prev => prev.filter((item, i) => i !== img));
 
-		setImageList(prev => prev.filter((item, i) => i !== index));
-
-		const fileInput = document.getElementById('dropzone-file');
-		if (fileInput) {
-			fileInput.value = '';
-		}
-	}
+        const fileInput = document.getElementById('dropzone-file');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    }
 
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
