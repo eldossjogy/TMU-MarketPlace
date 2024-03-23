@@ -14,8 +14,8 @@ function validateFormData(formData) {
     if (isNaN(price)) {
         formData.price = 0
     }
-    else if (price < 0 || price > 100000) {
-        errors.price = 'Price must be a number between $0 and $100,000.';
+    else if (price < 0 || price > 1000000) {
+        errors.price = 'Price must be a number between $0 and $1,000,000.';
     }
 
     // Description validation
