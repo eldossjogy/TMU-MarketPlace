@@ -347,17 +347,31 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	//function to get user's listings
-	async function fetchMyPostings() {
+	async function fetchMyPostings(categorId) {
 		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
-				{
-					headers: {
-						Authorization: "Bearer " + localSession.access_token,
-					},
-				}
-			)
-			setUserListings(response.data)
+			if(categorId) {
+				const response = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings/${categorId}`,
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				)
+				setUserListings(response.data)
+			}
+			else {
+				const response = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				)
+				setUserListings(response.data)
+			}
+			
 		}
 		catch (error) {
 			toast.error(error.message + ". Can't get user listings from db");
@@ -366,16 +380,13 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	//function that gets categories
-	function getCategories() {
-		axios.get(
-			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`,
-		)
-			.then(response => {
-				setCategories(response.data)
-			})
-			.catch(error => {
-				toast.error(error.message + "Erro fetching categories from db");
-			})
+	async function getCategories() {
+		try {
+			const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
+			setCategories(response.data);
+		  } catch (error) {
+			toast.error(error.message + "Error fetching categories from db");
+		  }
 
 	}
 
@@ -523,7 +534,8 @@ export const AuthProvider = ({ children }) => {
         statusList,
         changeListingStatusAPI,
         deleteListing,
-        updateListing
+        updateListing,
+		getCategories
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}

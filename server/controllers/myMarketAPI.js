@@ -107,7 +107,13 @@ export async function createListing(req, res) {
 
 export async function getMyListings(req, res) {
     let {user_id} = req.body
+    let {categoryId} = req.params
+
     try {
+        const matchCondition = {user_id}
+
+        if(categoryId) matchCondition.category_id = categoryId
+
         const myListings = await supabase
             .from('ad')
             .select(
@@ -118,7 +124,7 @@ export async function getMyListings(req, res) {
                 status!inner(type)
                 `
             )
-            .eq('user_id', user_id)
+            .match(matchCondition)
             .order('id', { ascending: false });
 
         if (myListings.status == 400) {

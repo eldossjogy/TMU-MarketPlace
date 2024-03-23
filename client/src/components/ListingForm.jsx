@@ -100,7 +100,6 @@ export default function ListingForm({formDataProp = {
 			setNoResults(true);
 		}
 
-
 		return errors;
 	}
 
@@ -126,6 +125,7 @@ export default function ListingForm({formDataProp = {
 		let err = validateFormData(formData)
 		setFormErrors(err)
 
+		console.log(err)
 		if (Object.keys(err).length === 0) {
 			
 			if (typeOfReq === "Post") {
@@ -195,15 +195,6 @@ export default function ListingForm({formDataProp = {
 		}
 	}
 
-	function truncateString(str, limit) {
-		if (str.length <= limit) {
-			return str; // Return the original string if within the limit
-		} else {
-			// Truncate the string and append "..."
-			return str.substring(0, limit) + '...';
-		}
-	}
-
 	const handleLocationSearch = async (e) => {
 		e.preventDefault();
 		toast("Searching for Location")
@@ -237,11 +228,10 @@ export default function ListingForm({formDataProp = {
 		}
 	};
 
-
 	return (
 		<>
-			<section className="flex flex-col md:px-8 rounded-lg space-y-4">
-				<h1 className='text-5xl'>Create Listing</h1>
+			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
+				{editingForm ? <h1 className='text-5xl'>Edit Listing "{formDataProp.title}"</h1> : <h1 className='text-5xl'>Create Listing</h1>}
 				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
@@ -354,7 +344,7 @@ export default function ListingForm({formDataProp = {
 						</ul>
 					</div>
 				</div>
-				<form className='flex space-x-8 w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
+				<form className='flex justify-center md:justify-start space-x-8 md:w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
 					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
 					<button type="button" onClick={() => navigate('/my-market')} className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
 				</form>

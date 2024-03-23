@@ -378,6 +378,7 @@
         padding: 0.2em;
         font-size: 1.1em;
     }
+    */
     .categoryComponentContainer {
         font-size: 1em;
         padding: 1%;
@@ -387,7 +388,9 @@
         font-size: 1em;
         flex-wrap: wrap;
     }
-*/
+    .categoryComponentContainer ul li{
+        padding: 1%;
+    }
 }
 
 /*speical cases for ipads and weird devices*/

@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/create-new-listing', verifyToken, createListing)
 router.get('/my-listings', verifyToken, getMyListings)
+router.get('/my-listings/:categoryId', verifyToken, getMyListings)
 router.get('/get-my-listing/:adId', verifyToken, getUserSpecificListingForEdit)
 router.put('/change-listing-status', verifyToken, changeListingStatus)
 router.put('/delete-listing', verifyToken, deleteMyListing)
