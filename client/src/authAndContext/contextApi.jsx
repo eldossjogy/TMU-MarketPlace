@@ -529,7 +529,6 @@ export const AuthProvider = ({ children }) => {
         fetchedUserListings,
         fetchMyPostings,
         userListings,
-        localSession,
         categories,
         statusList,
         changeListingStatusAPI,
