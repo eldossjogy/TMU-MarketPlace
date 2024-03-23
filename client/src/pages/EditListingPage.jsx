@@ -38,7 +38,8 @@ export default function EditListingPage() {
           setLocalLoading(false)
         }
         catch(error) {
-            toast.error(error.response.data.errMessage)
+            toast.error('Unable to edit listing. It may not exist.')
+            // console.log(error.response.data.errMessage);
             setLocalLoading(false)
             navigate('/my-market')
         }
