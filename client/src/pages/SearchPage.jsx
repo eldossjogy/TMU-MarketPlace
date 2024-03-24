@@ -11,11 +11,11 @@ export default function SearchPage() {
 	return (
 		<>
 			<Navbar />
-			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 md:min-h-[100vh] overflow-show">
+			<main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap p-3 pt-6 md:min-h-[100vh] overflow-show gap-3 md:gap-6">
 				<SearchSideBar />
-				<div className="w-full mt-3">
+				<div className="w-full flex flex-col gap-3">
 					<SortToolbar />
-					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
+					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : 'flex flex-col gap-3'}>
 						{searchResults && searchResults.length !== 0 && !grid && searchResults.map((result) => (
 							<HorizontalCard
 								image={result.image}

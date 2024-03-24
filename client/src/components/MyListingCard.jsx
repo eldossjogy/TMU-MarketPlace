@@ -35,7 +35,7 @@ export default function MyListingCard({ listingInfo }) {
     return (
 
         <div className="" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <div className={`bg-[#fafafb] border-2 border-gray ${modal ? 'rounded-t-lg' : 'rounded-xl'} shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72`}>
+            <div className={`bg-[#fafafb] border-2 border-gray ${modal ? 'rounded-t-lg' : 'rounded-xl'} shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-40 lg:max-h-72`}>
                 <section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
                     <CardImages image={listingInfo.image} hovered={hovered} setHovered={setHovered} vertical={false} />
                 </section>
