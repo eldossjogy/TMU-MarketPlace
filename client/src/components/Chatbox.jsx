@@ -14,7 +14,7 @@ export default function Chatbox() {
         }
     }
     return (
-        <div className='flex flex-col group w-full lg:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg m-3 h-[60vh] divide-y-2 overflow-hidden'>
+        <div className='flex flex-col group w-full lg:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg h-[60vh] divide-y-2 overflow-hidden'>
             <section className='w-full p-3 h-24 bg-[#fafafb] rounded-xl'>
                 <h1 className='text-4xl'>Mazda RX-7</h1>
                 <h3 className='text-xl'>Adam</h3>

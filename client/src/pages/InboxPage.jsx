@@ -9,9 +9,9 @@ export default function CreateListings() {
     return (
         <MyMarketContainer title={"Your Inbox"}>
             <h1 className='w-full shrink-0 text-5xl p-4'>Inbox</h1>
-            <section className='flex flex-wrap lg:flex-nowrap'>
+            <section className='flex flex-wrap lg:flex-nowrap p-3 gap-3'>
                 {/* Toolbar with sorting and title and stuff */}
-                <div className='space-y-3 w-full lg:w-[60%] p-3'> 
+                <div className='space-y-3 w-full lg:w-[60%]'> 
                     <HorizontalCardInbox
                         image={[{file_path: "https://jjcsqjjvzatkopidmaha.supabase.co/storage/v1/object/public/ad-listings/9e831992-2fbd-431f-bd89-d584c844b938_1711229796995.jpg"}]}
                         ad_id={"183"}
