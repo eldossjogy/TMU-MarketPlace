@@ -8,10 +8,11 @@ import AuthContext from './contextApi';
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
-    const {localSession, user} = useContext(AuthContext);
+    const {localSession} = useContext(AuthContext);
     const {location, range} = useContext(LocationContext);
     const [grid, setGrid] = useState(false);
     const [sort, setSort] = useState(0);
+    const [historySort, setHistorySort] = useState(0);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
@@ -175,10 +176,26 @@ export const SearchProvider = ({ children }) =>  {
         setSearchResults(tempResults);
     }
 
+    function sortHistory(sortType = -1, data = userHistory) {
+        let tempResults = [...data];
+        switch (sortType) {
+            case 0: // Sort by date Down
+                tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
+                break;
+            case 1: // Sort by date Up
+                tempResults.sort((a,b) => {return (new Date(b.created_at)).getTime() - (new Date(a.created_at)).getTime()});
+                break;
+            default: // Sort at SQL level
+                break;
+        }
+        setHistorySort(sortType);
+        setUserHistory(tempResults);
+    }
+
     async function addToHistory(ad_id) {
-		// const checkUser = await supabase.auth.getUser();
+		const checkUser = await supabase.auth.getUser();
 		try {
-			if (localSession !== null && user !== null) {
+			if (checkUser.data.user !== null && localSession !== null) {
 				const response = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
 					{
@@ -196,12 +213,59 @@ export const SearchProvider = ({ children }) =>  {
 		}
 	}
 
-	async function getUserHistory() {
-		// const checkUser = await supabase.auth.getUser();
+	async function getUserHistory(limit) {
+		const checkUser = await supabase.auth.getUser();
 		try {
-			if (localSession !== null && user !== null) {
+			if (checkUser.data.user !== null && localSession !== null) {
 				const { data, error } = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/history${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+				if(error){
+					toast.error("Error fetching your history.");
+					console.log(error);
+					setUserHistory([]);
+				}
+				else if(data){
+                    sortHistory(historySort, data?.data ?? []);
+				}
+			}
+		} catch (error) {
+			toast.error(error.message);
+		}
+	}
+
+    async function addToSaved(ad_id) {
+		const checkUser = await supabase.auth.getUser();
+		try {
+			if (checkUser.data.user !== null && localSession !== null) {
+				const response = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
+					{
+						ad_id: ad_id
+					},
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+			}
+		} catch (error) {
+			toast.error(error.message);
+		}
+	}
+
+	async function getUserSavedListings(limit) {
+		const checkUser = await supabase.auth.getUser();
+		try {
+			if (checkUser.data.user !== null && localSession !== null) {
+				const { data, error } = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/history${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
 						headers: {
 							Authorization: "Bearer " + localSession.access_token,
@@ -239,7 +303,9 @@ export const SearchProvider = ({ children }) =>  {
             sortResults,
 		    addToHistory,
             getUserHistory,
-            userHistory
+            userHistory,
+            sortHistory,
+            historySort,
         }} >
             {children}
         </SearchContext.Provider>

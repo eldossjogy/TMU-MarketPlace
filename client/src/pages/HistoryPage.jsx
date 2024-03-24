@@ -3,9 +3,10 @@ import MyMarketContainer from '../components/MyMarketContainer'
 import SearchContext from '../authAndContext/searchProvider'
 import HorizontalCard from '../components/HorizontalCard';
 import VerticalCard from '../components/VerticalCard';
+import SortToolbar from '../components/SortToolbar';
 
 export default function HistoryPage() {
-    const {userHistory, getUserHistory, grid} = useContext(SearchContext);
+    const {userHistory, getUserHistory, historySort, sortHistory, grid} = useContext(SearchContext);
     useEffect(() => {
         getUserHistory();
     }, [])
@@ -17,7 +18,7 @@ export default function HistoryPage() {
             {/* {userHistory && userHistory.map((entry) => (
                 <div key={entry.ad_id}><div>{entry.title}</div><div>{entry.created_at}</div></div>
             ))} */}
-
+            <SortToolbar customSortKey={historySort} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 0}]}/>
             <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
                 {userHistory && userHistory.length !== 0 && userHistory.map((result) => (
                     <HorizontalCard
