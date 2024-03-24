@@ -41,7 +41,7 @@ export default function SortToolbar() {
     }
 
     return (
-        <section id="search-toolbar" className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
+        <section className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
             <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 bg-white p-2 text-lg w-full overflow-auto'>
                 <div id="search-sort" className="flex space-x-2 text-xl items-center">
                     <div className='w-auto'>Sort: </div>
@@ -55,8 +55,8 @@ export default function SortToolbar() {
                         ))}
                     </RadioGroup>
                 </div>
-                <div id="search-controls" className="space-x-2 flex justify-center items-center">
-                    <button aria-label='Clear Sort' className={`flex items-center ring-0 ring-inset rounded-xl px-2 h-7 text-sm ring-blue-500 ${grid ? 'text-white bg-blue-400' : 'hover:text-white'} hover:text-white hover:bg-blue-500`} onClick={handleToggle}>
+                <div className="space-x-2 flex justify-center items-center">
+                    <button aria-label='Clear Sort' className={`flex items-center ring-0 ring-inset rounded-xl px-2 h-7 text-sm ring-blue-500 ${grid ? 'text-white bg-sky-400' : 'hover:text-white'} hover:text-white hover:bg-sky-500`} onClick={handleToggle}>
                         {grid ? <Squares2X2Icon className='w-4 h-4'/> : <ListBulletIcon className='h-4 w-4'/>}
                     </button>
                     <button className={`flex items-center ring-0 ring-inset rounded-xl px-2 py-1 text-sm ring-rose-500 hover:text-white hover:bg-rose-500`} onClick={handleResetStates}>
