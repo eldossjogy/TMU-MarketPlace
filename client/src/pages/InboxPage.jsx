@@ -7,7 +7,7 @@ export default function CreateListings() {
 
     const [chats, setChats] = useState([{id: 1, title: "Cat!"}, {id: 2, title: "Bear!"}, {id: 3, title: "Frog!"}, {id: 4, title: "Turtle!"}, {id: 5, title: "Duck!"}]);
     return (
-        <MyMarketContainer>
+        <MyMarketContainer title={"Your Inbox"}>
             <h1 className='w-full shrink-0 text-5xl p-4'>Inbox</h1>
             <section className='flex flex-wrap lg:flex-nowrap'>
                 {/* Toolbar with sorting and title and stuff */}
