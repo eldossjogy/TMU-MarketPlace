@@ -29,13 +29,13 @@ export default function SortToolbar() {
         setGrid(!grid);
     }
 
-    function ToolbarButton(props) {
+    function ToolbarButton({id, value, state, checked}) {
         return (
-            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${props.checked ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
-                    handleCycleState(props.id)
+            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${checked ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
+                    handleCycleState(id)
                 }}>
-                <span>{props.value}</span>
-                {props.state.state === 1 ? <BarsArrowDownIcon className='w-4 h-4'/> : props.state.state === 2 ? <BarsArrowUpIcon className='w-4 h-4'/> : ''}
+                <span>{value}</span>
+                {state === 1 ? <BarsArrowDownIcon className='w-4 h-4'/> : state === 2 ? <BarsArrowUpIcon className='w-4 h-4'/> : ''}
             </button>
         )
     }
@@ -49,7 +49,7 @@ export default function SortToolbar() {
                         {sortStates && sortStates.map((sortKey) => (
                             <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
                                 {({ checked }) => (
-                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id]} value={sortKey.name} checked={checked}/>
+                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id].state} value={sortKey.name} checked={checked}/>
                                 )}
                         </RadioGroup.Option>
                         ))}
