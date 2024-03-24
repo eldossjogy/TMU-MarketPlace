@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 export default function MyMarketSideBar() {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
 
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("")
+  const [currentPage, setCurrentPage] = useState("My Market")
 
   useEffect(()=> {
     setCurrentPath(location.pathname)
@@ -33,7 +34,7 @@ export default function MyMarketSideBar() {
     <div className={`mx-auto w-[98%] md:w-64 xl:w-80 h-fit shrink-0 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:h-[90vh] md:bg-[#e0f2fe] md:border-[#7dd3fc]`}>
       <section className={`w-full space-y-4 md:hidden`}>
         <div className='flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg' onClick={() => { setCollapsed(!collapsed) }}>
-          <span>My Market</span>
+          <span>{currentPage}</span>
           <Bars3Icon className='h-8 w-8 shrink-0' />
         </div>
       </section>
@@ -45,7 +46,7 @@ export default function MyMarketSideBar() {
                 <ul className='space-y-1 ms-2'>
                   {elem.items.map((elemLinks, index2) => (
                     <li className={`py-1 ps-3 rounded-lg hover:bg-[#fef08a] ${elemLinks.link === currentPath ? 'bg-[#fef08a]' : ''}`}key={index2}>
-                      <Link to={elemLinks.link} onClick={(e) => {setCurrentPath(elemLinks.link); console.log(elemLinks.link);}}>{elemLinks.linkText}</Link>
+                      <Link to={elemLinks.link} onClick={(e) => {setCurrentPath(elemLinks.link); setCurrentPage(elemLinks.linkText)}}>{elemLinks.linkText}</Link>
                     </li>
                   ))}
                 </ul>

@@ -35,7 +35,7 @@ export default function MyListingCard({ listingInfo }) {
     return (
 
         <div className="" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72">
+            <div className={`bg-[#fafafb] border-2 border-gray ${modal ? 'rounded-t-lg' : 'rounded-xl'} shadow-md hover:shadow-lg m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72`}>
                 <section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
                     <CardImages image={listingInfo.image} hovered={hovered} setHovered={setHovered} vertical={false} />
                 </section>
@@ -99,7 +99,7 @@ export default function MyListingCard({ listingInfo }) {
                                 </Listbox>
                             </div>
                             <div className='hidden sm:flex w-full gap-2'>
-                                <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white justify-center items-center text-xs sm:text-sm md:text-base p-1 lg:p-2">Delete</button>
+                                <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-md shadow-md ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 justify-center items-center text-xs sm:text-sm md:text-base p-1 lg:p-2">Delete</button>
                                 <Link to={{ pathname: `/my-market/edit-listing/${listingInfo.id}` }} className='w-full'>
                                     <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 justify-center items-center p-1 lg:p-2">Edit</button>
                                 </Link>
@@ -122,7 +122,7 @@ export default function MyListingCard({ listingInfo }) {
                         </section>
                     </section>
                     <section className='w-full flex gap-2 sm:hidden justify-end'>
-                        <button onClick={() => { setModal(prev => !prev) }} className="w-full max-w-16 rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white justify-center items-center text-xs p-1">Delete</button>
+                        <button onClick={() => { setModal(prev => !prev) }} className="w-full max-w-16 rounded-md shadow-md ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 justify-center items-center text-xs p-1">Delete</button>
                         <Link to={{ pathname: `/my-market/edit-listing/${listingInfo.id}` }} className='w-full max-w-16 '>
                             <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 justify-center items-center text-xs p-1">Edit</button>
                         </Link>
@@ -144,7 +144,7 @@ export default function MyListingCard({ listingInfo }) {
                 leaveTo="opacity-0 -translate-y-full"
                 show={modal}
             >
-                <div className="flex flex-col -mt-3 mx-3 p-3 rounded shadow-md hover:shadow-lg bg-rose-600 text-white">
+                <div className="flex flex-col -mt-3 mx-3 p-3 rounded-b-xl shadow-md hover:shadow-lg ring-inset ring-2 ring-rose-600 bg-white text-gray-900">
                     <div className="w-full flex items-center flex-col md:gap-5 gap-2">
                         <div className="flex items-center w-full">
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -155,13 +155,13 @@ export default function MyListingCard({ listingInfo }) {
                             </svg>
                             <div className="flex flex-col ml-3">
                                 <div className="md:text-xl leading-none">Delete Ad '{listingInfo.title}' ?</div>
-                                <p style={{ color: 'white' }} className="md:text-lg leading-none mt-1">Your listing will be removed and wont be active for others!
+                                <p className="md:text-lg leading-none mt-1">Your listing will be removed and wont be active for others!
                                 </p>
                             </div>
                         </div>
                         <div className='flex md:gap-5 gap-2'>
-                            <button onClick={handleDeleteEntry} className="w-full rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white text-lg justify-center items-center p-1 md:p-2">Delete</button>
-                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-lg justify-center items-center p-1 md:p-2">Cancel</button>
+                            <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-lg justify-center items-center p-1 md:px-4">Cancel</button>
+                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-lg justify-center items-center p-1 md:px-4">Confirm</button>
                         </div>
                     </div>
                 </div>
