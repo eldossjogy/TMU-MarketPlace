@@ -7,11 +7,8 @@ import SortToolbar from '../components/SortToolbar';
 
 export default function HistoryPage() {
     const {userHistory, getUserHistory, historySort, sortHistory, grid} = useContext(SearchContext);
-    useEffect(() => {
-        getUserHistory();
-    }, [])
 
-
+    getUserHistory();
     
     return (
         <MyMarketContainer>
@@ -46,7 +43,7 @@ export default function HistoryPage() {
                         key={result.id}
                     />
                 ))}
-                {!userHistory || (userHistory && userHistory.length === 0) && [1].map((key) => (
+                {(!userHistory || (userHistory && userHistory.length === 0)) && [1].map((key) => (
                     <div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
                         <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
                             <div className="flex items-center pt-8 sm:justify-start sm:pt-0">
