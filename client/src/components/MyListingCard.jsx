@@ -40,7 +40,7 @@ export default function MyListingCard({ listingInfo }) {
                     <CardImages image={listingInfo.image} hovered={hovered} setHovered={setHovered} vertical={false} />
                 </section>
 
-                <section className="w-full flex flex-col gap-2 sm:flex-row">
+                <section className="w-full flex flex-col justify-between sm:justify-normal sm:flex-row">
                     <section className="w-full flex flex-row-reverse">
                         <section className="flex flex-col justify-between text-right min-w-16 sm:min-w-24 md:min-w-32 lg:min-w-40 xl:min-w-64 items-end">
                             <div className="w-full ps-1 sm:ps-0">
@@ -121,9 +121,9 @@ export default function MyListingCard({ listingInfo }) {
                             </div>
                         </section>
                     </section>
-                    <section className='w-full flex gap-2 sm:hidden'>
-                        <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white justify-center items-center text-xs p-1">Delete</button>
-                        <Link to={{ pathname: `/my-market/edit-listing/${listingInfo.id}` }} className='w-full'>
+                    <section className='w-full flex gap-2 sm:hidden justify-end'>
+                        <button onClick={() => { setModal(prev => !prev) }} className="w-full max-w-16 rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white justify-center items-center text-xs p-1">Delete</button>
+                        <Link to={{ pathname: `/my-market/edit-listing/${listingInfo.id}` }} className='w-full max-w-16 '>
                             <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 justify-center items-center text-xs p-1">Edit</button>
                         </Link>
                     </section>    
