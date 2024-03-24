@@ -11,7 +11,7 @@ export default function HistoryPage() {
     getUserHistory();
     
     return (
-        <MyMarketContainer>
+        <MyMarketContainer title={"View History"}>
             {/* {userHistory && userHistory.map((entry) => (
                 <div key={entry.ad_id}><div>{entry.title}</div><div>{entry.created_at}</div></div>
             ))} */}
