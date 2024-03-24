@@ -396,6 +396,7 @@ export const AuthProvider = ({ children }) => {
 			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
 		)
 			.then(response => {
+				console.log(response.data);
 				setStatusList(response.data)
 			})
 			.catch(error => {

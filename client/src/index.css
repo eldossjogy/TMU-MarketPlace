@@ -244,10 +244,9 @@
     color: black;
 }
 
-.dashboard-Item-Modal {
+/* .dashboard-Item-Modal {
     animation: slide-down 0.2s ease-in-out;
-    z-index: 1;
-}
+} */
 
 
 /*for phone screen*/
