@@ -3,8 +3,8 @@ import AuthContext from '../authAndContext/contextApi';
 import { RadioGroup } from '@headlessui/react'
 
 export default function CategoryToolbar({getFunc}) {
-    const { categories, fetchMyPostings } = useContext(AuthContext);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const { categories } = useContext(AuthContext);
+    const [activeIndex, setActiveIndex] = useState(null);
 
 
     function handleClick(index) {
