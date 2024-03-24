@@ -18,7 +18,7 @@ export default function MyProfile() {
 
 
   return (
-      <MyMarketContainer>
+      <MyMarketContainer title="Your Listings">
         <CategoryToolbar getFunc={fetchMyPostings}/>
         <div className='space-y-3'>
           {userListings.map((elem, index) => (
