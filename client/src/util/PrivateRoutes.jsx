@@ -1,25 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import AuthContext from "../authAndContext/contextApi";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
+import Navbar from "../components/Navbar";
 
-const PrivateRoutes = () => {
-  const { user, isLoading } = useContext(AuthContext);
+const PrivateRoutes = ({loggedIn}) => {
+  const { localSession, isLoading } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setLoading(false);
-    }
-  }, [isLoading]);
-  if (loading) {
+  if (isLoading) {
     return (
       <>
+        <Navbar />
         <Loading />
       </>
     );
   }
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  if (loggedIn) {
+    return localSession ? <Outlet /> : <Navigate to="/login" />;
+  }
+  else {
+    return !localSession ? <Outlet /> : <Navigate to="/" />;
+  }
 };
 
 export default PrivateRoutes;

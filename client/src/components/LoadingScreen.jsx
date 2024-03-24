@@ -5,7 +5,7 @@ export default function LoadingScreen({message}) {
     <div className="itemModalContainer flex justify-center items-center flex-col">
       <svg
         aria-hidden="true"
-        className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
+        className="inline w-20 h-20 mr-2 text-shadow-md text-white animate-spin dark:text-gray-600 fill-blue-500"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@ export default function LoadingScreen({message}) {
           fill="currentFill"
         />
       </svg>
-      <div className="text-white mt-[5%] text-2xl md:text-3xl md:mt-[2%]">
+      <div className="text-white text-shadow-md mt-[5%] text-2xl md:text-3xl md:mt-[2%]">
         {message}
       </div>
     </div>

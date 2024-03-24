@@ -4,6 +4,8 @@ import http from 'http'
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import homeRoutes from "./routes/homeRoutes.js";
+import adRoutes from "./routes/adRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 import myMarketRoutes from "./routes/myMarketRoutes.js";
 
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/home', homeRoutes);
+app.use('/ad', adRoutes);
+app.use('/search', searchRoutes);
 app.use('/my-market', myMarketRoutes);
 
 server.listen(port, () => {

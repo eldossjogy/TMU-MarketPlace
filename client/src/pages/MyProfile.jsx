@@ -1,13 +1,30 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import React, { useContext, useEffect, useState } from 'react'
+import MyListingCard from '../components/MyListingCard'
+import AuthContext from '../authAndContext/contextApi'
+import CategoryComponent from '../components/CategoryComponent'
+import MyMarketContainer from '../components/MyMarketContainer'
 
 export default function MyProfile() {
+
+  const {fetchedUserListings, setFetchedUserListings, setLoadingState, loadingState, fetchMyPostings, userListings} = useContext(AuthContext)
+  
+  useEffect(() => {
+    if (!fetchedUserListings) {
+      setFetchedUserListings(!fetchedUserListings)
+      setLoadingState(true)
+      fetchMyPostings()
+    }
+  },[])
+
+
   return (
-    <div>
-      <Navbar />
-      <h1>My Profile</h1>
-      <Link to='/my-market/create-listing'>Create new listing (Click me)</Link>
-    </div>
+      <MyMarketContainer>
+        <CategoryComponent getFunc={fetchMyPostings}/>
+        <div className='space-y-3'>
+          {userListings.map((elem, index) => (
+            <MyListingCard listingInfo={elem} key={index}/>
+          ))}
+        </div>
+      </MyMarketContainer>
   )
 }
