@@ -256,7 +256,7 @@ export default function ListingForm({formDataProp = {
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
 				{editingForm ? <h1 className='text-5xl'>Edit Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
-				<div className='flex flex-wrap w-full space-y-4'>
+				<div className='flex flex-wrap w-full gap-4'>
 					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
 						<input autoComplete='off' type="text" name="title" 
@@ -321,7 +321,7 @@ export default function ListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='sm:w-full lg:w-[50%]'>
+					<div className='w-full lg:w-[50%]'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
