@@ -16,8 +16,8 @@ export default function HistoryPage() {
                 <div key={entry.ad_id}><div>{entry.title}</div><div>{entry.created_at}</div></div>
             ))} */}
             <SortToolbar customSortKey={historySort} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 0}]}/>
-            <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : ''}>
-                {userHistory && userHistory.length !== 0 && userHistory.map((result) => (
+            <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
+                {userHistory && !grid && userHistory.length !== 0 && userHistory.map((result) => (
                     <HorizontalCard
                         image={result.ad?.image ?? []}
                         title={result.ad?.title ?? result.ad_id}
