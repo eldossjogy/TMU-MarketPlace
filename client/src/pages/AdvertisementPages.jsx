@@ -10,7 +10,7 @@ export default function () {
             <Navbar />
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
                     <AdvertisementCard
-                        image={["https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492", "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492", "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"]}
+                        image={[{file_path : "https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}, {file_path : "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492"}, { file_path: "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"}]}
                         title={"Mazda RX-7"}
                         price={"30,000"}
                         dateposted={"December 31 2023"}
