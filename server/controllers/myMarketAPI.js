@@ -148,13 +148,13 @@ export async function getMyListings(req, res) {
 export async function changeListingStatus(req, res) {
     let {user_id, listing, status} = req.body
     try {
-        const getStatusId = await supabase
-            .from('status')
-            .select('id')
-            .eq('type', status)
+        // const getStatusId = await supabase
+        //     .from('status')
+        //     .select('id')
+        //     .eq('type', status)
         
-        //get chosen status status.id from status table
-        const statusId = getStatusId.data[0].id
+        // //get chosen status status.id from status table
+        // const statusId = getStatusId.data[0].id
         
         //confirm if to be updated lisiting is indeed by owner of listing
         const getListing = await supabase
@@ -170,7 +170,7 @@ export async function changeListingStatus(req, res) {
         else {
             const updatedListing = await supabase
             .from('ad')
-            .update({status_id: statusId})
+            .update({status_id: status})
             .eq('id', listing.id)
             .select(
                 `
