@@ -23,7 +23,7 @@ export default function CategoryToolbar({getFunc}) {
     }
 
     return (
-        <section className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center mx-3">
+        <section className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center">
             <div className='flex justify-center items-center px-2 py-2 rounded-xl shadow-md border-neutral-400/30 bg-white text-lg w-full overflow-auto'>
                 <RadioGroup value={activeIndex} onChange={(e) => {}} className={"flex flex-wrap items-center"}>
                     <RadioGroup.Option key={-1} value={null} >
