@@ -5,7 +5,7 @@ import AuthContext from '../authAndContext/contextApi';
 import LocationContext from '../authAndContext/locationProvider';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from "../assets/logo.png"
 import toast from 'react-hot-toast';
 
@@ -31,9 +31,11 @@ export default function Navbar() {
             <div className="container mx-auto flex flex-col justify-center p-4 md:flex-row md:justify-between md:items-center md:h-full md:p-0 md:py-1 md:pr-[3vw] lg:max-w-[90%]">
                 <section className='md:flex md:flex-row md:w-auto space-y-4 md:space-y-0'>
                     <section className='flex w-full items-center justify-between flex-wrap md:block md:w-auto'>
-                        <section id="nav-logo" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer md:w-64 xl:w-80 md:mx-3 md:me-6" onClick={() => {navigate('/');}}>
-                            <img src={Logo} alt="logo" className="h-full w-auto md:m-auto"></img>
-                        </section>
+                        <Link to={'/'}>
+                            <section id="nav-logo" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer md:w-64 xl:w-80 md:mx-3 md:me-6">
+                                <img src={Logo} alt="logo" className="h-full w-auto md:m-auto"></img>
+                            </section>
+                        </Link>
                         <section id="nav-account-mobile" className="flex md:hidden space-x-2">
                             <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
                         </section>
