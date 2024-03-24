@@ -19,7 +19,7 @@ export default function HomePage() {
       <div className="mx-auto lg:max-w-[90%] mt-4">
       </div>
       <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6 gap-3">
           {ads ? (
             ads.map((element) => (
               <VerticalCard

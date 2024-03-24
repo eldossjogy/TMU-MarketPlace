@@ -16,7 +16,7 @@ export default function VerticalCard({
     <Link to={{ pathname: `/ad/${postID}` }}
     >
       <div id="card" className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-        <div className="bg-[#fafafb] m-3 rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
+        <div className="bg-[#fafafb] rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
           <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-4">
             <CardImages image={image} setHovered={setHovered} hovered={hovered} />
           </div>
