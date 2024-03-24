@@ -57,7 +57,7 @@ export default function MyListingCard({listingInfo}) {
   }
 
   return (
-    <div className='w-full relative z-10'>
+    <div className='w-full relative z-10 px-3'>
       <div className='myListingCardContainer'>
           <div className='cardImageContainer'>
             <img src={(listingInfo.image.length !== 0) ? listingInfo.image[0].file_path : noImage }></img>
