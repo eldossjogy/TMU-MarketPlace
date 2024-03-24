@@ -19,6 +19,7 @@ import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import HistoryPage from "./pages/HistoryPage";
 
 
 
@@ -49,6 +50,7 @@ function App() {
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="settings" element={<AccountSettings />} />
                 <Route path="inbox" element={<InboxPage />} />
+                <Route path="history" element={<HistoryPage />} />
             </Route>
           </Route>
         </Route>

@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
 	//caching/performance useStates:
 	const [fetchedUserListings, setFetchedUserListings] = useState(false);
 
-
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -534,7 +533,7 @@ export const AuthProvider = ({ children }) => {
         changeListingStatusAPI,
         deleteListing,
         updateListing,
-		getCategories
+		getCategories,
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}

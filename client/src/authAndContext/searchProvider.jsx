@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 import LocationContext from '../authAndContext/locationProvider';
+import supabase from "./supabaseConfig";
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import AuthContext from './contextApi';
 
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
+    const {localSession, user} = useContext(AuthContext);
     const {location, range} = useContext(LocationContext);
     const [grid, setGrid] = useState(false);
     const [sort, setSort] = useState(0);
@@ -18,6 +21,7 @@ export const SearchProvider = ({ children }) =>  {
     const [page, setPage] = useState(0);
 
 	const [searchResults, setSearchResults] = useState([]);
+    const [userHistory, setUserHistory] = useState([]);
 
     async function searchForAds(options = {}) {
 		try {
@@ -171,6 +175,53 @@ export const SearchProvider = ({ children }) =>  {
         setSearchResults(tempResults);
     }
 
+    async function addToHistory(ad_id) {
+		// const checkUser = await supabase.auth.getUser();
+		try {
+			if (localSession !== null && user !== null) {
+				const response = await axios.post(
+					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
+					{
+						ad_id: ad_id
+					},
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+			}
+		} catch (error) {
+			toast.error(error.message);
+		}
+	}
+
+	async function getUserHistory() {
+		// const checkUser = await supabase.auth.getUser();
+		try {
+			if (localSession !== null && user !== null) {
+				const { data, error } = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+				if(error){
+					toast.error("Error fetching your history.");
+					console.log(error);
+					setUserHistory([]);
+				}
+				else if(data){
+					setUserHistory(data.data);
+				}
+			}
+		} catch (error) {
+			toast.error(error.message);
+		}
+	}
+
     return (
         <SearchContext.Provider value={{
             searchResults,
@@ -185,7 +236,10 @@ export const SearchProvider = ({ children }) =>  {
             grid,
             setGrid,
             sort, 
-            sortResults
+            sortResults,
+		    addToHistory,
+            getUserHistory,
+            userHistory
         }} >
             {children}
         </SearchContext.Provider>

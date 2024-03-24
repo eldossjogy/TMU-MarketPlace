@@ -15,7 +15,6 @@ export async function searchAds(req, res) {
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
         const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
 
-        // var { data, error } = await supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!inner(file_path), category!inner(name), status!inner(type)`)
         let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`)
 
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
@@ -86,12 +85,97 @@ export async function searchAds(req, res) {
     }
 } 
 
-export async function addToHistory(req, res1) {
+export async function addToHistory(req, res) {
     //TODO add {ad_id, user_id} to history with created_at
+    const {ad_id, user_id} = req.body;
+    try {
+        var { data, error } = await supabase.from('history').select('id').match({ad_id: ad_id, user_id: user_id});
+
+        if (error) {
+            console.log(error);
+            return;
+        }
+        // console.log(data);
+
+        if(data[0]){
+            let history_id = data[0].id;
+            // console.log(history_id);
+            var { data, error } = await supabase.from('history').update({'created_at': new Date().toISOString()}).eq('id', history_id);
+        }
+        else{
+            var { data, error } = await supabase.from('history').insert({ad_id: ad_id, user_id: user_id});
+        }
+
+        if(data) console.log(data);
+        else if (error) console.log(error);
+    } catch (error) {
+        console.log(error)
+        if(error.status === 401) {
+            res.status(401).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else {
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+    }
 }
 
-export async function getHistory(req, res) {
+export async function getUserHistory(req, res) {
     //TODO get {ad_id, created_at} from history with user_id  
+    const {user_id} = req.body;
+    try {
+        const { data, error } = await supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`, { distinct: true })
+        .eq('user_id', user_id).order('created_at', {ascending: false}); // , )
+        //const { data, error } = await supabase.from('history').select('ad_id'); // , )
+
+        if(error){
+            console.log(error);
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: "History Search Failed.", 
+                    error: error 
+                }
+            });
+            return;
+        }
+
+        res.status(200).json({
+            data: data,
+            error: null
+        });
+    } catch (error) {
+        console.log(error)
+        if(error.status === 401) {
+            res.status(401).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else {
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+    }
 }
 
 function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
