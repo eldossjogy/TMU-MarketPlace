@@ -8,7 +8,9 @@ import SortToolbar from '../components/SortToolbar';
 export default function HistoryPage() {
     const {userHistory, getUserHistory, historySort, sortHistory, grid} = useContext(SearchContext);
 
-    getUserHistory();
+    useEffect(() => {
+        getUserHistory();
+    }, [])
     
     return (
         <MyMarketContainer title={"View History"}>
