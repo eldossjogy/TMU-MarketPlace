@@ -15,7 +15,7 @@ export default function SearchPage() {
 				<SearchSideBar />
 				<div className="w-full flex flex-col gap-3">
 					<SortToolbar />
-					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5' : 'flex flex-col gap-3'}>
+					<div className={grid && searchResults?.length !== 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
 						{searchResults && searchResults.length !== 0 && !grid && searchResults.map((result) => (
 							<HorizontalCard
 								image={result.image}
