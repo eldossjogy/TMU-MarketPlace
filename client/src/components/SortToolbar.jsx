@@ -4,20 +4,21 @@ import SearchContext from '../authAndContext/searchProvider';
 import { RadioGroup } from '@headlessui/react'
 
 const states = ['Disabled','Descending','Ascending']
-export default function SortToolbar() {
+export default function SortToolbar({customSortKey, sortResultsFn, defaultSortState = [{id: 0, name:'Name', state: 0}, {id: 1, name:'Price', state: 0}, {id: 2, name:'Date', state: 0}, {id: 3, name:'Distance', state: 0}]}) {
     const {grid, setGrid, sort, sortResults} = useContext(SearchContext);
-    const [sortStates, setSortStates] = useState([{id: 0, name:'Name', state: 0}, {id: 1, name:'Price', state: 0}, {id: 2, name:'Date', state: 0}, {id: 3, name:'Distance', state: 0}]);
+    const [sortStates, setSortStates] = useState(defaultSortState);
 
     const handleResetStates = () => {
-        setSortStates([{id: 0, name:'Name', state: 0}, {id: 1, name:'Price', state: 0}, {id: 2, name:'Date', state: 0}, {id: 3, name:'Distance', state: 0}]);
-        sortResults(-1);
+        setSortStates(defaultSortState);
+        sortResultsFn ? sortResultsFn(-1) : sortResults(-1);
     }
 
     const handleCycleState = (idx) => {
         setSortStates(
             sortStates.map((sortKey) => {
                 if(sortKey.id === idx) {
-                    sortResults(sortStates[idx].state === 2 ? idx * 2 : idx * 2 + 1);
+                    
+                    sortResultsFn ? sortResultsFn(sortStates[idx].state === 2 ? idx * 2 : idx * 2 + 1) : sortResults(sortStates[idx].state === 2 ? idx * 2 : idx * 2 + 1);
                     return { ...sortKey, state: sortStates[idx].state === 2 ? 1 : 2}
                 }
                 else return { ...sortKey, state: 0};
@@ -31,7 +32,7 @@ export default function SortToolbar() {
 
     function ToolbarButton({id, value, state, checked}) {
         return (
-            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${checked ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
+            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${state !== 0 ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
                     handleCycleState(id)
                 }}>
                 <span>{value}</span>
@@ -45,11 +46,11 @@ export default function SortToolbar() {
             <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 bg-white p-2 text-lg w-full overflow-auto'>
                 <div id="search-sort" className="flex space-x-2 text-xl items-center">
                     <div className='w-auto'>Sort: </div>
-                    <RadioGroup value={Math.floor(sort / 2)} onChange={(e) => {}} className={"flex flex-wrap text-xl items-center"}>
+                    <RadioGroup value={Math.floor(!isNaN(parseInt(customSortKey)) ? parseInt(customSortKey) / 2 : sort / 2)} onChange={(e) => {}} className={"flex flex-wrap text-xl items-center"}>
                         {sortStates && sortStates.map((sortKey) => (
                             <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
                                 {({ checked }) => (
-                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id].state} value={sortKey.name} checked={checked}/>
+                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id].state} value={sortKey.name}/>
                                 )}
                         </RadioGroup.Option>
                         ))}
