@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import MyListingCard from '../components/MyListingCard'
 import AuthContext from '../authAndContext/contextApi'
-import CategoryComponent from '../components/CategoryComponent'
+import CategoryToolbar from '../components/CategoryToolbar'
 import MyMarketContainer from '../components/MyMarketContainer'
 
 export default function MyProfile() {
@@ -19,7 +19,7 @@ export default function MyProfile() {
 
   return (
       <MyMarketContainer>
-        <CategoryComponent getFunc={fetchMyPostings}/>
+        <CategoryToolbar getFunc={fetchMyPostings}/>
         <div className='space-y-3'>
           {userListings.map((elem, index) => (
             <MyListingCard listingInfo={elem} key={index}/>
