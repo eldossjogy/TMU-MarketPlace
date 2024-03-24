@@ -17,6 +17,7 @@ import ErrorPage from "./pages/ErrorPage";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import AdvertisementPages from "./pages/AdvertisementPages";
 
 library.add(fas);
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/ads" element={<AdvertisementPages />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/settings" element={<AccountSettings />} />
             <Route path="/my-market">
