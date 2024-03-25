@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
 			}
 		}
 		async function downloadImage(avatar_url) {
+			if(!avatar_url){return}
 			try {
 				const timestamp = new Date().getTime();
 				const { data, error } = await supabase.storage
@@ -192,6 +193,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function that returns link for pfp from supabase bucket
 	async function downloadImage(filePath) {
+		if (!filePath){return}
 		try {
 			const timestamp = new Date().getTime();
 			const { data, error } = await supabase.storage
@@ -331,6 +333,7 @@ export const AuthProvider = ({ children }) => {
 			if (tempError != null) {
 				throw tempError;
 			}
+			if (!filePath){return}
 			const timestamp = new Date().getTime();
 			const { data, error } = await supabase.storage
 				.from("avatars")
