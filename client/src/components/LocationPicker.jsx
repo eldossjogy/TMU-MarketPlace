@@ -68,6 +68,12 @@ export default function LocationPicker({applyFn = (a,b,c) => {}, useMap = true})
                 }}>
                     Apply Location
                 </button>
+
+                {/* <button className="py-2 px-4 rounded-lg hover:bg-sky-500 ring-sky-500 ring-2 text-neutral-900 hover:text-white" onClick={() => {//bg-[#F9B300]
+                    applyFn(location.lat, location.lng, range); // Use generated location and range for feature specified in props (such as updating search results or changing user location)
+                }}>
+                    Apply Location
+                </button> */}
             </div>
         </>
     );

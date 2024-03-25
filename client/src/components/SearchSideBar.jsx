@@ -137,11 +137,16 @@ export default function SearchSideBar() {
                         ))}
                     </section>
                     <section className='flex w-full justify-end items-center py-2'>
-                        <button className="py-1 px-2 rounded-lg hover:bg-sky-600 ring-sky-500 ring-2 text-neutral-900 hover:text-white text-sm" onClick={(e) => {
+                        <button className="py-2 px-4 rounded-lg hover:bg-sky-500 ring-sky-500 ring-2 text-neutral-900 hover:text-white text-sm" onClick={(e) => {
                             updateSearchPriceRange();
                         }}>
                             Apply Price
                         </button>
+                        {/* <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={() => {//bg-[#F9B300]
+                            updateSearchPriceRange();
+                        }}>
+                            Apply Price
+                        </button> */}
                     </section>
                 </div>
                 <div className='w-full flex-col space-y-2'>
