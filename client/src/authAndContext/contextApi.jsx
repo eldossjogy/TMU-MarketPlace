@@ -69,22 +69,6 @@ export const AuthProvider = ({ children }) => {
 				return null;
 			}
 		}
-		async function downloadImage(avatar_url) {
-			if(!avatar_url){return}
-			try {
-				const timestamp = new Date().getTime();
-				const { data, error } = await supabase.storage
-					.from("avatars")
-					.download(`${avatar_url}?timestamp=${timestamp}`);
-				if (error) {
-					throw error;
-				}
-				const url = URL.createObjectURL(data);
-				return url;
-			} catch (error) {
-				toast.error("Error downloading image: ", error);
-			}
-		}
 		async function fetchProfile() {
 			if (user) {
 				const profileData = await getProfile(user.id);
@@ -333,15 +317,7 @@ export const AuthProvider = ({ children }) => {
 			if (tempError != null) {
 				throw tempError;
 			}
-			if (!filePath){return}
-			const timestamp = new Date().getTime();
-			const { data, error } = await supabase.storage
-				.from("avatars")
-				.download(`${filePath}?timestamp=${timestamp}`);
-			if (error) {
-				throw error;
-			}
-			const url = URL.createObjectURL(data);
+			const url = await downloadImage(filePath)
 			return url;
 		} catch (error) {
 			toast.error("Error downloading image: ", JSON.stringify(error));
