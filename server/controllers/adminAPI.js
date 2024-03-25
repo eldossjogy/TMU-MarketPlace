@@ -50,6 +50,23 @@ function validateFormData(formData) {
     return errors;
 }
 
+export async function verifyAdmin(req, res) {
+    const {user_id} = req.body
+    try {
+        const checkAdmin = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('user_id', user_id)
+            .order('id', { ascending: false });
+        
+        res.status(200).json(checkAdmin.data[0])
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
 export async function adminGetAllListings(req, res) {
 
     try {
@@ -244,6 +261,98 @@ export async function adminDeleteListing(req, res) {
 
         res.status(200).json({message: "Listings Deleted Successfully!"})
     }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminUpdateListing(req, res) {
+    const {listingInfo} = req.body
+
+    try {
+
+        let err = validateFormData({...listingInfo})
+
+        if (Object.keys(err).length !== 0) {
+            const error = new Error("Bad form data !")
+            error.status = 422
+            throw error;
+        }
+
+        const getOrigninalListingInfo = await supabase
+            .from('ad')
+            .select(
+                `
+                *,
+                image!left(file_path),
+                category!inner(name),
+                status!inner(type)
+                `
+            )
+            .eq('id', listingInfo.id)
+
+            
+        const originalListingImages = await supabase
+            .from('image')
+            .select('file_path')
+            .eq( 'ad_id', listingInfo.id )
+        
+            //update the ad listing from ad table
+            const newListing = await supabase
+            .from('ad')
+            .update({title: listingInfo.title, price: listingInfo.price, description: listingInfo.description, expire_time: listingInfo.expire_time, postal_code: listingInfo.postal_code, location: listingInfo.location, category_id: listingInfo.category_id})
+            .eq('id', listingInfo.id)
+            .select()
+
+        //adding newly uploaded images now to image table
+        const newImagesWithoutUrls = listingInfo.image.filter(singleNewImage => typeof singleNewImage === 'string' && !singleNewImage.startsWith('http')) 
+        const postNewUpdatedImages = await supabase
+            .from('image')
+            .insert(newImagesWithoutUrls.map(imagePath => ({ ad_id: listingInfo.id, file_path: `${process.env.SUPABASE_STORAGE_CDN_URL}/${imagePath}` })));
+        
+
+            
+        //get the original images in array form and deleting the oringalimages by comparing it with new images
+        //add any new images that dont have the http url yet as url in image table. new image are sent as bucket path only
+        const originalImages = [...originalListingImages.data.map(item => item.file_path)]
+        
+        for (let imageUrl of originalImages) {
+            if (listingInfo.image.indexOf(imageUrl) === -1) {
+
+                const file_path = imageUrl.split('/').pop()
+
+                //delete from bucket
+                const deleteImageFromBucket = await supabase
+                    .storage
+                    .from('ad-listings')
+                    .remove([file_path])
+                                        
+                if (deleteImageFromBucket.error?.message) {
+                    const err = new Error("Unable to delete Image from the bucket")
+                    err.status = 500
+                    throw err;
+                }
+
+                //delete from image table
+                //delete the images form the image table for the ad
+                const deleteImageFromImageTable = await supabase
+                    .from('image')
+                    .delete()
+                    .eq( 'file_path', imageUrl )
+                
+
+                if (deleteImageFromImageTable.error?.message) {
+                    const error = new Error(deleteImageFromImageTable.error.message)
+                    error.status = 409
+                    throw error;
+                }
+            }
+        }
+
+        res.status(200).json({message: "Post Updated Successfully!"})
+    }
+
     catch(error) {
         const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
         res.status(status).json({ message: error.message });

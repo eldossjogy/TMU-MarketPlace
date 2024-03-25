@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
 	//caching/performance useStates:
 	const [fetchedUserListings, setFetchedUserListings] = useState(false);
 
-
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -41,8 +40,8 @@ export const AuthProvider = ({ children }) => {
 			} else {
 				setLocalSession(session);
 			}
+			
 			setIsLoading(false)
-
 		});
 
 		return () => data.subscription.unsubscribe();
@@ -106,10 +105,30 @@ export const AuthProvider = ({ children }) => {
 		getStatusLists()
 	}, [])
 
-	// use effect for when profileData changes
-	// useEffect(() => {
-	// 	console.log(profileData);
-	// }, [profileData]);
+
+	async function checkIfAdmin() {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_BACKEND_API_URL}/admin/verify-admin-privilege`,
+				{
+					headers: {
+						Authorization: "Bearer " + localSession.access_token,
+					},
+				}
+			)
+
+			if(response.data) {
+				toast.success("Logged in as Admin user!")
+				return true
+			}
+		}
+		catch(error) {
+			toast.error(error.message)
+			return false
+		}
+
+		return false
+	}
 
 	// function for registering new account
 	async function registerNewAccount(email, password, username) {
@@ -535,7 +554,8 @@ export const AuthProvider = ({ children }) => {
         deleteListing,
         updateListing,
 		getCategories,
-		uploadImageToBucket
+		uploadImageToBucket,
+		checkIfAdmin
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}

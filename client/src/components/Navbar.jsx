@@ -11,18 +11,37 @@ import Logo from "../assets/logo.png"
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const {city, range, getLocation} = useContext(LocationContext);
-    const { user } = useContext(AuthContext);
+    const { user, checkIfAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const authOptions = [{name: 'Your Market', url: '/my-market'},{name: 'Your Profile', url: '/settings'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
-        const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
-
-        if(!user){
-            setDropdownOptions(unauthOptions);
-        } else{
-            setDropdownOptions(authOptions);
-        }
+        const fetchDropdownOptions = async () => {
+            // Perform asynchronous operation to determine authentication status
+            const isAdmin = await checkIfAdmin();
+    
+            const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
+            const authOptions = isAdmin
+                ? [
+                      { name: 'Your Market', url: '/my-market' },
+                      { name: 'Your Profile', url: '/settings' },
+                      { name: 'Your Inbox', url: '/' },
+                      { name: 'Saved Listings', url: '/' },
+                      { name: 'Admin Dashboard', url: '/admin-dashboard' },
+                      { name: 'Log out', url: '/logout' },
+                  ]
+                : [
+                      { name: 'Your Market', url: '/my-market' },
+                      { name: 'Your Profile', url: '/settings' },
+                      { name: 'Your Inbox', url: '/' },
+                      { name: 'Saved Listings', url: '/' },
+                      { name: 'Log out', url: '/logout' },
+                  ];
+    
+            const dropdownOptions = !user ? unauthOptions : authOptions;
+            setDropdownOptions(dropdownOptions);
+        };
+    
+        fetchDropdownOptions();
       }, [user]);
     
     return (

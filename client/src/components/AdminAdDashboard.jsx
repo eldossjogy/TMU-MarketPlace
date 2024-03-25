@@ -5,6 +5,7 @@ import LoadingScreen from './LoadingScreen'
 import ImageCarousel from '../components/ImageCarousel'
 import AdminListingForm from './AdminListingForm'
 import supabase from '../authAndContext/supabaseConfig'
+import toast from 'react-hot-toast'
 
 export default function AdminAdDashboard() {
 
@@ -72,9 +73,10 @@ export default function AdminAdDashboard() {
             )
             setAllAdListings(response.data)
             setColoumns(Object.keys(response.data[0]))
+            toast.success("Ad Listing Records fetched!")
         }
         catch(error) {
-            alert(error.response.data.message)
+            toast.error(error.response.data.message)
         }
     }
 
@@ -93,7 +95,7 @@ export default function AdminAdDashboard() {
             setAllAdListings(response.data)
         }
         catch(error) {
-            alert(error.response.data.message)
+            toast.error(error.response.data.message)
         }
     }
 
@@ -250,8 +252,37 @@ export default function AdminAdDashboard() {
 		}
 	}
 
-    async function putReqAsAdmin() {
+    async function putReqAsAdmin(listingInfo, imageList) {
+        const checkUser = await supabase.auth.getUser();
+		try {
+            if (checkUser.data.user !== null) {
+                const listOfImages = await uploadImageToBucket(
+                imageList,
+                "ad-listings"
+                );
+                const response = await axios.put(
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/update-listing`,
+                { listingInfo: {...listingInfo, image: [...listingInfo.image.map(item => item.file_path), ...listOfImages]}
+                },
+                {
+                    headers: {
+                    Authorization: "Bearer " + localSession.access_token,
+                    },
+                }
+                );
+                updateListingsLocally("Update", listingInfo)
+                setEditModalFlag(false)
+                toast.success("Listing updated!")
+		} else {
+			const error = new Error("Unauthorized access!! not a logged in user!!");
+			error.status = 403;
+			throw error;
+		}
+		} catch (error) {
+			toast.error(error.response.data.message);
+		}
 
+		setLoadingState(false);
     }
 
     async function postReqAsAdmin(listingInfo, imageList) {
@@ -281,15 +312,16 @@ export default function AdminAdDashboard() {
                 //reload the get req to fetch new data // or add the new data to current list below:
                 updateListingsLocally("Add", response.data)
                 setaddNewToggle(false)
+                toast.success("New Listing Posted!")
 
 			} else {
 				const error = new Error("Unauthorised");
 				error.status = 403;
-				alert(error.message);
+				toast.error(error.message);
 				throw error;
 			}
 		} catch (error) {
-			alert(error.response.data.message);
+			toast.error(error.response.data.message);
 		}
 
 
@@ -323,10 +355,10 @@ export default function AdminAdDashboard() {
             setSingleDeleteListing([])
             setEditItemButtons(Array(allAdListings.length).fill(false))
 
-            alert(response.data.message)
+            toast.success(response.data.message)
         }
             catch(error) {
-                alert(error.response.data.message);
+                toast.error(error.response.data.message);
             }
     
             setLoadingState(false)
