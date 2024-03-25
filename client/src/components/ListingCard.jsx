@@ -7,7 +7,7 @@ import CardImages from './CardImages';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 
-export default function MyListingCard({ listingInfo }) {
+export default function ListingCard({ listingInfo }) {
 
     const { statusList, setLoadingState, loadingState, changeListingStatusAPI, deleteListing } = useContext(AuthContext)
     const [isShowing, setIsShowing] = useState(false)
