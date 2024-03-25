@@ -39,8 +39,8 @@ export default function RegisterPage() {
             const first = form.get("first-name");
             const last = form.get("last-name");
             const studentNum = form.get("student-num");
-            const [data, error] = await registerNewAccount(email, password, username);
-             
+            const [data, error] = await registerNewAccount(email, password, username, studentNum, first, last);
+
             // console.log(data);
             // console.log(error);
             if(! error && data.success == true) {

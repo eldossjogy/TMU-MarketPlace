@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     
 
 
-    async function registerNewAccount(email, password, username) {
+    async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
         console.log(`${email} ${password}`);
         try {
             const { data, error } = await supabase.auth.signUp({
@@ -46,6 +46,9 @@ export const AuthProvider = ({ children }) => {
                     data: {
                         avatar_url: '',
                         name: username,
+                        first_name: firstName,
+                        last_name: lastName,
+                        student_number: studentNum,
                         postal_code: '',
                         role_id: 1
                     },
