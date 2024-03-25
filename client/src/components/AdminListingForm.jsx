@@ -12,10 +12,12 @@ export default function AdminListingForm({formDataProp = {
     expire_time: null,
     postal_code: '',
     location: '',
-    category_id: 1,
+	lat: null,
+	lng: null,
+    category_id: 2,
 }, typeOfReq="Post", editingForm=false, postReqAsAdmin, putReqAsAdmin}) {
 
-    const { loadingState, setLoadingState, categories} = useContext(AuthContext);
+    const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
 	const { location, city, generateLocation, searchForLocation, searchingLocation } = useContext(LocationContext);
 	
     const navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function AdminListingForm({formDataProp = {
 
 	// Location Search Variables
 	const [noResults, setNoResults] = useState(false);
-	const [postCoordinates, setPostCoordinates] = useState(location);
+	// const [postCoordinates, setPostCoordinates] = useState(location);
 
     useEffect(() => {
       const loadImages = async () => {
@@ -40,7 +42,18 @@ export default function AdminListingForm({formDataProp = {
       };
   
       loadImages();
-  }, [imageList]);
+  	}, [imageList]);
+
+	useEffect(() => {
+		if (!formDataProp.location) {
+			setFormData(prevState => ({
+				...prevState,
+				location: city,
+				lat: location.lat,
+				lng: location.lng
+			}));
+		}
+	}, [])
 
     // Function to read file as data URL (base64)
     const readFileAsDataURL = (file) => {
@@ -65,16 +78,11 @@ export default function AdminListingForm({formDataProp = {
 
 		// Price validation
 		const price = parseInt(formData.price);
-		// if (formData.price.length <= 0) {
-		// 	setFormData(prev => ({ ...prev, price: "0" }))
-		// }
-		// else 
 		if (isNaN(price)) {
-			//errors.price = 'Price must be a valid number.';
 			setFormData(prev => ({ ...prev, price: 0 }))
 		}
-		else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
-			errors.price = 'Price must be a number between $0 and $100,000.';
+		else if (price < 0 || price > 1000000) {
+			errors.price = 'Price must be a number between $0 and $1,000,000.';
 		}
 
 		// Description validation
@@ -96,11 +104,17 @@ export default function AdminListingForm({formDataProp = {
 		}
 
 		//location validation
-		if (!formData.location) {
+		if(!formData.lat || !formData.lng){
+			errors.coordinates = 'Coords missing.'
+			console.log('Coords missing');
 			setNoResults(true);
 		}
-        else if (formData.location.length > 250) {
-			errors.description = 'Location must be at most 250 characters long.';
+		else if(!formDataProp.location && !formData.location) {
+			// console.log('have coords but dont have a user input location, and there was no given location so set to default')
+		}
+		else if(!formData.location){
+			// console.log('have coords but dont have a user input location, but there was given location so something is wrong')
+			errors.location = 'Location is required.'
 		}
 
 		return errors;
@@ -132,11 +146,11 @@ export default function AdminListingForm({formDataProp = {
 			
 			if (typeOfReq === "Post") {
 				setLoadingState(true);
-				await postReqAsAdmin({ ...formData, ...postCoordinates, expire_time: getCurrentDateTime(48) }, imageList);
+				await postReqAsAdmin({ ...formData, location: !formDataProp.location && !formData.location ? city : formData.location,  expire_time: getCurrentDateTime(48) }, imageList);
 			}
 			else if (typeOfReq === "Put") {
 				setLoadingState(true);
-				await putReqAsAdmin({...formData, ...postCoordinates, expire_time: getCurrentDateTime(48)}, imageList)
+				await putReqAsAdmin({...formData, expire_time: getCurrentDateTime(48)}, imageList)
 			}
 		}
 	};
@@ -175,17 +189,18 @@ export default function AdminListingForm({formDataProp = {
 	}
 
 	function handleImageDelete(img) {
-		setImageList(prev => prev.filter((item, i) => i !== img));
+        setImageList(prev => prev.filter((item, i) => i !== img));
 
-		const fileInput = document.getElementById('dropzone-file');
-		if (fileInput) {
-			fileInput.value = '';
-		}
-	}
+        const fileInput = document.getElementById('dropzone-file');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    }
 
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
 		const filteredImageArr = newImageArr.filter((item, i) => i !== index);
+		console.log(filteredImageArr);
 		setFormData(prev => ({ ...prev, image: filteredImageArr }));
 	
 		const fileInput = document.getElementById('dropzone-file');
@@ -200,26 +215,35 @@ export default function AdminListingForm({formDataProp = {
 
 		const form = new FormData(e.target);
 		const query = form.get('location');
-		const results = await searchForLocation(query, {getAddress: false}); // Search for a map location given a user query
+		const results = await searchForLocation(query, {getAddress: true}); // Search for a map location given a user query
 
 		if (results) { // If there are results
-			// setLocationQuery(results.name) // Update the query text to be the result
 			setNoResults(false);
 			setFormErrors(prevState => ({
 				...prevState,
-				location: ''
+				location: '',
+				coordinates: ''
 			}));
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
 			
-			//if(results.address) console.log(results.address);
-
-			setFormData(prevState => ({
-				...prevState,
-				location: results.name,
-				lat: results.lat,
-				lng: results.lng
-			}));
-			setPostCoordinates({ lat: results.lat, lng: results.lng });
+			if(results.address){
+				//console.log(results.address);
+				setFormData(prevState => ({
+					...prevState,
+					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}${results.address.Postal ? `, ${results.address.Postal}${results.address.PostalExt ? results.address.PostalExt : ''}` : ''}`,
+					lat: results.lat,
+					lng: results.lng
+				}));
+			}
+			else{
+				setFormData(prevState => ({
+					...prevState,
+					location: results.name,
+					lat: results.lat,
+					lng: results.lng
+				}));
+			}
+			// setPostCoordinates({ lat: results.lat, lng: results.lng });
 		}
 		else { // No search results for user location query
 			toast.error("No location results.")
@@ -230,16 +254,16 @@ export default function AdminListingForm({formDataProp = {
 	return (
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
+				{editingForm ? <h1 className='text-5xl'>Edit Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
 				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
-						<label className="block">Title: <span className='text-red-500'>{formErrors.title}*</span></label>
+						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
 						<input autoComplete='off' type="text" name="title" 
 							value={formData.title} onChange={handleChange} placeholder="Enter Title" required maxLength={150}
 							className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" 
 						/>
 
 						<label className="block">Price: <span className='text-red-500'>{formErrors.price} *</span></label>
-
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
                             <input type='text' name='price' maxLength={20} required
@@ -262,15 +286,22 @@ export default function AdminListingForm({formDataProp = {
                                 }
                             }></input>
                         </div>
-
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again': ''} *</span></label>
+							<label className="block">
+								Set Location&nbsp;
+								<span className='text-neutral-400'>{noResults || formErrors.location ? '' : '(press enter to search)'}</span>:
+								<span className='text-red-500'>{noResults ? 'Invalid location, try again': formErrors.location} *</span>
+							</label>
 							<input
-								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
-								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
+								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || formData.lat === null || formData.lng === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
+								type="text" name="location" placeholder={formData.lat ? formData.location ? formData.location : city : 'Not Set'} value={formData.location} required
 								onChange={(e) => {
-									if (postCoordinates !== null) {
-										setPostCoordinates(null);
+									if (formData.lat || formData.lng) {
+										setFormData(prevState => ({
+											...prevState,
+											lat: null,
+											lng: null
+										}));
 									}
 									handleChange(e);
 								}}
@@ -279,7 +310,6 @@ export default function AdminListingForm({formDataProp = {
 						</form>
 
 						<label className="block">Category: <span className="text-red-500">{formErrors.category_id} *</span></label>
-
 						<select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4">
 							{categories.map((elem, index) => (
 								<option key={index} value={elem.id}>{elem.name}</option>
@@ -295,7 +325,8 @@ export default function AdminListingForm({formDataProp = {
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
 							bg-gray-50 hover:bg-gray-100 `}>
-					
+							{/* dark:border-gray-600 dark:hover:border-gray-500
+							dark:bg-gray-700 dark:hover:bg-gray-600 */}
 								<div className="flex flex-col items-center justify-center pt-5 pb-6">
 									<svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
 										<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
@@ -333,9 +364,12 @@ export default function AdminListingForm({formDataProp = {
 				</div>
 				<form className='flex justify-center md:justify-start space-x-8 md:w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
 					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
-					<button type="button" onClick={() => navigate('/admin-dashboard')} className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
+					<button type="button" onClick={() => navigate('/my-market')} className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
 				</form>
 			</section>
+			{loadingState &&
+				(editingForm==false ? <LoadingScreen message={"Creating new Listing..."} /> : <LoadingScreen message={"Updating Listing..."} />)
+			}
 		</>
 
 	)

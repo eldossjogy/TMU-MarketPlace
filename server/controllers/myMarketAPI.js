@@ -14,8 +14,8 @@ function validateFormData(formData) {
     if (isNaN(price)) {
         formData.price = 0
     }
-    else if (price < 0 || price > 100000) {
-        errors.price = 'Price must be a number between $0 and $100,000.';
+    else if (price < 0 || price > 1000000) {
+        errors.price = 'Price must be a number between $0 and $1,000,000.';
     }
 
     // Description validation
@@ -34,6 +34,13 @@ function validateFormData(formData) {
     // Category ID validation
     if (formData.category_id === null) {
         errors.category_id = 'Category is required.';
+    }
+
+    if(!formData.location){
+        errors.location = "Missing location."
+    }
+    else if (formData.location.length > 250) {
+        errors.description = 'Location must be at most 250 characters long.';
     }
 
     if (isNaN(parseFloat(formData.lat)) || isNaN(parseFloat(formData.lng))){
@@ -59,7 +66,7 @@ export async function createListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id}
+                {title, price, description, expire_time, postal_code, location, category_id, lat, lng, user_id}
             ])
             .select()
 

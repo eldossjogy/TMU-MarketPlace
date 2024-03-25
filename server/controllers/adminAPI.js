@@ -185,3 +185,67 @@ export async function adminPostNewListing(req, res) {
         res.status(status).json({ message: error.message });
     }
 }
+
+export async function adminDeleteListing(req, res) {
+    let {user_id, listingInfoArr} = req.body
+
+    try {
+        listingInfoArr.forEach(async (listing, index) => {
+            const getListing = await supabase
+                .from('ad')
+                .select(
+                    `
+                    *,
+                    image!left(file_path)
+                    `
+                )
+                .eq('id', listing.id)
+
+            //delete the ad listing from ad table
+            const deleteListing = await supabase
+                .from('ad')
+                .delete()
+                .match({ 'id': listing.id });
+
+            if (deleteListing.error?.message) {
+                const error = new Error(deleteListing.error.message)
+                error.status = 409
+                throw error;
+            }
+
+            //delete the images form the image table for the ad
+            const listingImages = await supabase
+                .from('image')
+                .delete()
+                .eq( 'ad_id', listing.id )
+
+            if (listingImages.error?.message) {
+                const error = new Error(listingImages.error.message)
+                error.status = 409
+                throw error;
+            }
+            
+            //delete the images from the supabase bucket/storage
+            for (let i of getListing.data[0].image) {
+                const file_path = i.file_path.split('/').pop()
+
+                const { error } = await supabase
+                    .storage
+                    .from('ad-listings')
+                    .remove([file_path])
+                
+                if (error) {
+                    const err = new Error("Unable to delete Image from the bucket")
+                    err.status = 500
+                    throw err;
+                }
+            }
+        })
+
+        res.status(200).json({message: "Listings Deleted Successfully!"})
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}

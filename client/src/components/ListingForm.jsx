@@ -12,9 +12,10 @@ export default function ListingForm({formDataProp = {
     expire_time: null,
     postal_code: '',
     location: '',
-    category_id: null,
+	lat: null,
+	lng: null,
+    category_id: 2,
 }, typeOfReq="Post", editingForm=false}) {
-
     const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
 	const { location, city, generateLocation, searchForLocation, searchingLocation } = useContext(LocationContext);
 	
@@ -27,7 +28,7 @@ export default function ListingForm({formDataProp = {
 
 	// Location Search Variables
 	const [noResults, setNoResults] = useState(false);
-	const [postCoordinates, setPostCoordinates] = useState(location);
+	// const [postCoordinates, setPostCoordinates] = useState(location);
 
     useEffect(() => {
       const loadImages = async () => {
@@ -40,7 +41,18 @@ export default function ListingForm({formDataProp = {
       };
   
       loadImages();
-  }, [imageList]);
+  	}, [imageList]);
+
+	useEffect(() => {
+		if (!formDataProp.location) {
+			setFormData(prevState => ({
+				...prevState,
+				location: city,
+				lat: location.lat,
+				lng: location.lng
+			}));
+		}
+	}, [])
 
     // Function to read file as data URL (base64)
     const readFileAsDataURL = (file) => {
@@ -65,16 +77,11 @@ export default function ListingForm({formDataProp = {
 
 		// Price validation
 		const price = parseInt(formData.price);
-		// if (formData.price.length <= 0) {
-		// 	setFormData(prev => ({ ...prev, price: "0" }))
-		// }
-		// else 
 		if (isNaN(price)) {
-			//errors.price = 'Price must be a valid number.';
 			setFormData(prev => ({ ...prev, price: 0 }))
 		}
-		else if (price < 0 || price > 100000 || !formData.price.toString().trim()) {
-			errors.price = 'Price must be a number between $0 and $100,000.';
+		else if (price < 0 || price > 1000000) {
+			errors.price = 'Price must be a number between $0 and $1,000,000.';
 		}
 
 		// Description validation
@@ -96,11 +103,17 @@ export default function ListingForm({formDataProp = {
 		}
 
 		//location validation
-		if (!formData.location) {
+		if(!formData.lat || !formData.lng){
+			errors.coordinates = 'Coords missing.'
+			console.log('Coords missing');
 			setNoResults(true);
 		}
-		else if (formData.location.length > 250) {
-			errors.description = 'Location must be at most 250 characters long.';
+		else if(!formDataProp.location && !formData.location) {
+			// console.log('have coords but dont have a user input location, and there was no given location so set to default')
+		}
+		else if(!formData.location){
+			// console.log('have coords but dont have a user input location, but there was given location so something is wrong')
+			errors.location = 'Location is required.'
 		}
 
 		return errors;
@@ -128,16 +141,15 @@ export default function ListingForm({formDataProp = {
 		let err = validateFormData(formData)
 		setFormErrors(err)
 
-		console.log(err)
 		if (Object.keys(err).length === 0) {
 			
 			if (typeOfReq === "Post") {
 				setLoadingState(true);
-				await createNewListing({ ...formData, ...postCoordinates, expire_time: getCurrentDateTime(48) }, imageList);
+				await createNewListing({ ...formData, location: !formDataProp.location && !formData.location ? city : formData.location,  expire_time: getCurrentDateTime(48) }, imageList);
 			}
 			else if (typeOfReq === "Put") {
 				setLoadingState(true);
-				await updateListing({...formData, ...postCoordinates, expire_time: getCurrentDateTime(48)}, imageList)
+				await updateListing({...formData, expire_time: getCurrentDateTime(48)}, imageList)
 			}
 		}
 	};
@@ -176,17 +188,18 @@ export default function ListingForm({formDataProp = {
 	}
 
 	function handleImageDelete(img) {
-		setImageList(prev => prev.filter((item, i) => i !== img));
+        setImageList(prev => prev.filter((item, i) => i !== img));
 
-		const fileInput = document.getElementById('dropzone-file');
-		if (fileInput) {
-			fileInput.value = '';
-		}
-	}
+        const fileInput = document.getElementById('dropzone-file');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    }
 
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
 		const filteredImageArr = newImageArr.filter((item, i) => i !== index);
+		console.log(filteredImageArr);
 		setFormData(prev => ({ ...prev, image: filteredImageArr }));
 	
 		const fileInput = document.getElementById('dropzone-file');
@@ -201,26 +214,35 @@ export default function ListingForm({formDataProp = {
 
 		const form = new FormData(e.target);
 		const query = form.get('location');
-		const results = await searchForLocation(query, {getAddress: false}); // Search for a map location given a user query
+		const results = await searchForLocation(query, {getAddress: true}); // Search for a map location given a user query
 
 		if (results) { // If there are results
-			// setLocationQuery(results.name) // Update the query text to be the result
 			setNoResults(false);
 			setFormErrors(prevState => ({
 				...prevState,
-				location: ''
+				location: '',
+				coordinates: ''
 			}));
 			generateLocation({ lat: results.lat, lng: results.lng }); // Set user location to search result
 			
-			//if(results.address) console.log(results.address);
-
-			setFormData(prevState => ({
-				...prevState,
-				location: results.name,
-				lat: results.lat,
-				lng: results.lng
-			}));
-			setPostCoordinates({ lat: results.lat, lng: results.lng });
+			if(results.address){
+				//console.log(results.address);
+				setFormData(prevState => ({
+					...prevState,
+					location: `${results.address.City ? `${results.address.City}, ` : ''}${results.address.RegionAbbr}${results.address.Postal ? `, ${results.address.Postal}${results.address.PostalExt ? results.address.PostalExt : ''}` : ''}`,
+					lat: results.lat,
+					lng: results.lng
+				}));
+			}
+			else{
+				setFormData(prevState => ({
+					...prevState,
+					location: results.name,
+					lat: results.lat,
+					lng: results.lng
+				}));
+			}
+			// setPostCoordinates({ lat: results.lat, lng: results.lng });
 		}
 		else { // No search results for user location query
 			toast.error("No location results.")
@@ -231,7 +253,7 @@ export default function ListingForm({formDataProp = {
 	return (
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
-				{editingForm ? <h1 className='text-5xl'>Update Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
+				{editingForm ? <h1 className='text-5xl'>Edit Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
 				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
@@ -241,11 +263,6 @@ export default function ListingForm({formDataProp = {
 						/>
 
 						<label className="block">Price: <span className='text-red-500'>{formErrors.price} *</span></label>
-						{/* <div className="relative">
-							<span className="rounded-md absolute inset-y-0 left-0 p-3 flex items-center bg-gray-200 text-gray-600">$</span>
-							<input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price ($0 if not set)" className="rounded-md pl-10 pr-12 block w-full border border-gray-300 rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" style={{ backgroundColor: 'white' }} />
-							<span className="rounded-md absolute inset-y-0 right-0 p-3 flex items-center bg-gray-200 text-gray-600">.00</span>
-						</div> */}
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
                             <input type='text' name='price' maxLength={20} required
@@ -268,21 +285,22 @@ export default function ListingForm({formDataProp = {
                                 }
                             }></input>
                         </div>
-
-						{/* <label className="block">Postal Code:{formErrors.postal_code && <span className='text-red-500'>{formErrors.postal_code}</span>}</label> */}
-						{/* <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code (Example: A1AA1A)" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
-
-						{/* <label className="block">Location:</label> */}
-						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
-
 						<form onSubmit={handleLocationSearch}>
-							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again': ''} *</span></label>
+							<label className="block">
+								Set Location&nbsp;
+								<span className='text-neutral-400'>{noResults || formErrors.location ? '' : '(press enter to search)'}</span>:
+								<span className='text-red-500'>{noResults ? 'Invalid location, try again': formErrors.location} *</span>
+							</label>
 							<input
-								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || postCoordinates === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
-								type="text" name="location" placeholder={postCoordinates ? city : 'Not Set'} value={formData.location} required
+								className={`w-full rounded-md border-gray-300 ring-red-600 ring-opacity-30 ${noResults || formData.lat === null || formData.lng === null ? 'ring-2 border-red-600 focus:ring-red-400 focus:border-red-600' : searchingLocation ? 'ring-2 border-amber-500 focus:ring-amber-400 focus:border-amber-600' : ''}`}
+								type="text" name="location" placeholder={formData.lat ? formData.location ? formData.location : city : 'Not Set'} value={formData.location} required
 								onChange={(e) => {
-									if (postCoordinates !== null) {
-										setPostCoordinates(null);
+									if (formData.lat || formData.lng) {
+										setFormData(prevState => ({
+											...prevState,
+											lat: null,
+											lng: null
+										}));
 									}
 									handleChange(e);
 								}}
@@ -291,7 +309,6 @@ export default function ListingForm({formDataProp = {
 						</form>
 
 						<label className="block">Category: <span className="text-red-500">{formErrors.category_id} *</span></label>
-
 						<select name="category_id" value={formData.category_id} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4">
 							{categories.map((elem, index) => (
 								<option key={index} value={elem.id}>{elem.name}</option>
@@ -302,7 +319,7 @@ export default function ListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full md:w-[50%]'>
+					<div className='sm:w-full lg:w-[50%]'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
