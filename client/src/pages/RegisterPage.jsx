@@ -83,7 +83,7 @@ export default function RegisterPage() {
                         </input>
                     </div>
                     <div className='flex-col w-[90%]'>
-                        <label htmlFor={"username"} className={"block mb-2 text-sm font-medium text-gray-900"}>Username <span className='text-neutral-400 text-xs'>(No spaces)</span></label>
+                        <label htmlFor={"username"} className={"block mb-2 text-sm font-medium text-gray-900"}>Username <span className='text-neutral-400 text-xs'>(No spaces, letters and numbers only)</span></label>
                         <input  type="text" name="username"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
                             placeholder="Enter username" required pattern='[A-Za-z0-9]{4,16}' minLength={4} maxLength={16}>
