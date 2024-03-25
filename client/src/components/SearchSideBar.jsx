@@ -53,14 +53,11 @@ export default function SearchSideBar() {
             options = {min: min, max: max};
         }
 
-        toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price.', error: 'Filtering Failed.'});
+        toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
     }
 
     const updateSearchLocation = (lat, lng, range = 100000) => {
-        // console.log(lat); 
-        // console.log(lng);
-        // console.log(range);
-        toast.promise( updateFilters({lat: lat, lng: lng, range: range}), {loading: 'Filtering by Location...', success: 'Filtered by Location.', error: 'Filtering Failed.'});
+        toast.promise( updateFilters({lat: lat, lng: lng, range: range}), {loading: 'Filtering by Location...', success: 'Filtered by Location', error: 'Filtering Failed'});
     }
 
     useEffect(() => {
@@ -94,7 +91,7 @@ export default function SearchSideBar() {
                                         options = {min: val};
                                     }
 
-                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price.', error: 'Filtering Failed.'});
+                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
                                 }
                             }></input>
                         </div>
@@ -114,7 +111,7 @@ export default function SearchSideBar() {
                                         options = {max: val}
                                     }
 
-                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price.', error: 'Filtering Failed.'});
+                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
                                 }
                             }></input>
                         </div>
@@ -151,7 +148,7 @@ export default function SearchSideBar() {
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Category</h3>
                     <RadioGroup value={categoryFilter} onChange={(e) => {
-                            toast.promise( updateFilters({category: e}), {loading: 'Filtering by Category...', success: 'Filtered by Category.', error: 'Filtering Failed.'});
+                            toast.promise( updateFilters({category: e}), {loading: 'Filtering by Category...', success: 'Filtered by Category', error: 'Filtering Failed'});
                         }} 
                         className={"space-y-2"}>
                         {searchOptions.category.map((option) => (
@@ -174,7 +171,7 @@ export default function SearchSideBar() {
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Availability</h3>
                     <RadioGroup value={statusFilter} onChange={(e) => {
-                            toast.promise( updateFilters({status: e}), {loading: 'Filtering by Availability...', success: 'Filtered by Availability.', error: 'Filtering Failed.'});
+                            toast.promise( updateFilters({status: e}), {loading: 'Filtering by Availability...', success: 'Filtered by Availability', error: 'Filtering Failed'});
                         }} 
                         className={"space-y-2"}>
                         {searchOptions.availability.map((option) => (
@@ -197,7 +194,7 @@ export default function SearchSideBar() {
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Post Time</h3>
                     <RadioGroup value={maxDays} onChange={(e) => {
-                            toast.promise( updateFilters({maxDays: e}), {loading: 'Filtering by Post Time...', success: 'Filtered by Post Time.', error: 'Filtering Failed.'});
+                            toast.promise( updateFilters({maxDays: e}), {loading: 'Filtering by Post Time...', success: 'Filtered by Post Time', error: 'Filtering Failed'});
                         }} 
                         className={"space-y-2"}>
                         {searchOptions.dateRange.map((option) => (
