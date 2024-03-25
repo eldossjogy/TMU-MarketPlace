@@ -3,6 +3,7 @@ import LocationPicker from './LocationPicker'
 import { RadioGroup } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import SearchContext from '../authAndContext/searchProvider';
+import toast from 'react-hot-toast';
 
 const searchOptions = { 
     category: [{value:6, name: 'Any'}, {value:2, name: 'Items for Sale'}, {value:1, name: 'Wanted Items'}, {value:3, name: 'Tutoring Services'}, {value:4, name: 'Textbook Exchanges'}, {value:5, name: 'Study Groups'}],
@@ -39,7 +40,7 @@ export default function SearchSideBar() {
         let selected = 0;
         let min = 20000000;
         let max = 0;
-        
+        let options = {min: '', max: ''};
         priceRanges.forEach(price => {
             if(price.selected){
                 min = Math.min(min, price.min);
@@ -49,19 +50,14 @@ export default function SearchSideBar() {
         });
         
         if(selected !== 0){
-            updateFilters({min: min, max: max})
+            options = {min: min, max: max};
         }
-        else{
-            updateFilters({min: '', max: ''})
-        }
+
+        toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
     }
 
     const updateSearchLocation = (lat, lng, range = 100000) => {
-        // console.log(lat); 
-        // console.log(lng);
-        // console.log(range);
-
-        updateFilters({lat: lat, lng: lng, range: range});
+        toast.promise( updateFilters({lat: lat, lng: lng, range: range}), {loading: 'Filtering by Location...', success: 'Filtered by Location', error: 'Filtering Failed'});
     }
 
     useEffect(() => {
@@ -85,17 +81,17 @@ export default function SearchSideBar() {
                             <input type='text' name='minPrice' maxLength={5} className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Min' value={minPrice} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
+                                    let options = {min: ''};
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        // setMinPrice('');
-                                        updateFilters({min: ''})
                                         setPriceRangeError(false);
-                                        return;
+                                    }
+                                    else{
+                                        checkPriceRange(val, maxPrice);
+                                        options = {min: val};
                                     }
 
-                                    // setMinPrice(val);
-                                    updateFilters({min: val})
-                                    checkPriceRange(val, maxPrice);
+                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
                                 }
                             }></input>
                         </div>
@@ -105,17 +101,17 @@ export default function SearchSideBar() {
                             <input type='text' name='maxPrice' maxLength={5} className={`ps-7 py-2 rounded-md shadow-md w-full ${priceRangeError ? 'focus:ring-red-600 focus:border-0' : ''}`} placeholder='Max' value={maxPrice} 
                                 onChange={(e) => { 
                                     let val = parseInt(e.target.value)
+                                    let options = {max: ''};
                                     resetSelectedPrices();
                                     if(isNaN(val)){
-                                        // setMaxPrice('');
-                                        updateFilters({max: ''})
                                         setPriceRangeError(false);
-                                        return;
+                                    }
+                                    else{
+                                        checkPriceRange(minPrice, val);
+                                        options = {max: val}
                                     }
 
-                                    // setMaxPrice(val);
-                                    updateFilters({max: val})
-                                    checkPriceRange(minPrice, val);
+                                    toast.promise( updateFilters(options), {loading: 'Filtering by Price...', success: 'Filtered by Price', error: 'Filtering Failed'});
                                 }
                             }></input>
                         </div>
@@ -137,16 +133,24 @@ export default function SearchSideBar() {
                         ))}
                     </section>
                     <section className='flex w-full justify-end items-center py-2'>
-                        <button className="py-1 px-2 rounded-lg hover:bg-sky-600 ring-sky-500 ring-2 text-neutral-900 hover:text-white text-sm" onClick={(e) => {
+                        <button className="py-2 px-4 rounded-lg hover:bg-sky-500 ring-sky-500 ring-2 text-neutral-900 hover:text-white text-sm" onClick={(e) => {
                             updateSearchPriceRange();
                         }}>
                             Apply Price
                         </button>
+                        {/* <button className="py-2 px-4 rounded-lg hover:bg-sky-600 bg-sky-500 text-white" onClick={() => {//bg-[#F9B300]
+                            updateSearchPriceRange();
+                        }}>
+                            Apply Price
+                        </button> */}
                     </section>
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Category</h3>
-                    <RadioGroup value={categoryFilter} onChange={(e) => {updateFilters({category: e})}} className={"space-y-2"}>
+                    <RadioGroup value={categoryFilter} onChange={(e) => {
+                            toast.promise( updateFilters({category: e}), {loading: 'Filtering by Category...', success: 'Filtered by Category', error: 'Filtering Failed'});
+                        }} 
+                        className={"space-y-2"}>
                         {searchOptions.category.map((option) => (
                             <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
@@ -166,7 +170,10 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Availability</h3>
-                    <RadioGroup value={statusFilter} onChange={(e) => {updateFilters({status: e})}} className={"space-y-2"}>
+                    <RadioGroup value={statusFilter} onChange={(e) => {
+                            toast.promise( updateFilters({status: e}), {loading: 'Filtering by Availability...', success: 'Filtered by Availability', error: 'Filtering Failed'});
+                        }} 
+                        className={"space-y-2"}>
                         {searchOptions.availability.map((option) => (
                             <RadioGroup.Option key={option.name} value={option.value} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>
@@ -186,7 +193,10 @@ export default function SearchSideBar() {
                 </div>
                 <div className='w-full flex-col space-y-2'>
                     <h3 className='text-xl'>Post Time</h3>
-                    <RadioGroup value={maxDays} onChange={(e) => {updateFilters({maxDays: e})}} className={"space-y-2"}>
+                    <RadioGroup value={maxDays} onChange={(e) => {
+                            toast.promise( updateFilters({maxDays: e}), {loading: 'Filtering by Post Time...', success: 'Filtered by Post Time', error: 'Filtering Failed'});
+                        }} 
+                        className={"space-y-2"}>
                         {searchOptions.dateRange.map((option) => (
                             <RadioGroup.Option key={option.name} value={option.days} className={({ active, checked }) => `${active ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300' : ''}
                                 ${checked ? 'bg-sky-500/75 text-white' : 'bg-white'} relative flex cursor-pointer rounded-lg px-4 py-2 shadow-md focus:outline-none`}>

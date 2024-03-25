@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import MyListingCard from '../components/MyListingCard'
+import ListingCard from '../components/ListingCard'
 import AuthContext from '../authAndContext/contextApi'
 import CategoryToolbar from '../components/CategoryToolbar'
 import MyMarketContainer from '../components/MyMarketContainer'
@@ -22,7 +22,7 @@ export default function MyProfile() {
         <CategoryToolbar getFunc={fetchMyPostings}/>
         <div className='space-y-3'>
           {userListings.map((elem, index) => (
-            <MyListingCard listingInfo={elem} key={index}/>
+            <ListingCard listingInfo={elem} key={index}/>
           ))}
         </div>
       </MyMarketContainer>

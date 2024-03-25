@@ -17,10 +17,10 @@ export default function VerticalCard({
     >
       <div id="card" className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="bg-[#fafafb] rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
-          <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-4">
+          <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-3">
             <CardImages image={image} setHovered={setHovered} hovered={hovered} />
           </div>
-          <div className="px-4 pb-4 bg-[#fafafb]">
+          <div className="px-3 pb-3 bg-[#fafafb]">
             <div className="flex justify-between pb-2 items-center">
               <p className="line-clamp-1 font-bold text-xl">{title}</p>
               <h2 className="text-green-600 font-bold sm:text-lg md:text-sm xl:text-lg">${price}</h2>

@@ -346,18 +346,18 @@ export default function ListingForm({formDataProp = {
 								/>
 							</label>
 						</div>
-						<ul className='selectedImageDisplayContainer'>
+						<ul className='w-full flex flex-col gap-4'>
 							<h1>Images Selected:</h1>
 							{selectedImages.map((elem, index) => (
-								<li className='relative selectedImageBox overflow-hidden' key={index}>
+								<li className='relative w-full text-xl p-2 text-[#464686] bg-[#e0f2fe] rounded-xl flex justify-between overflow-hidden' key={index}>
 									<img className="w-full" src={elem}></img>
-									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
+									<i className="absolute cursor-pointer font-bold right-1 p-2 hover:text-red-600 hover:bg-gray-300/75 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
 								</li>
 							))}
 							{formData.image?.map((elem, index) => (
-								<li className='relative selectedImageBox overflow-hidden flex' key={index}>
+								<li className='relative w-full text-xl p-2 text-[#464686] bg-[#e0f2fe] rounded-xl flex justify-between overflow-hidden' key={index}>
 									<img className="w-full" src={elem.file_path}></img>
-									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
+									<i className="absolute cursor-pointer font-bold hover:text-red-600 hover:bg-gray-300/75 right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
 								</li>
 							))}
 						</ul>
