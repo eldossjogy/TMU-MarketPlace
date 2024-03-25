@@ -99,6 +99,9 @@ export default function AdminListingForm({formDataProp = {
 		if (!formData.location) {
 			setNoResults(true);
 		}
+        else if (formData.location.length > 250) {
+			errors.description = 'Location must be at most 250 characters long.';
+		}
 
 		return errors;
 	}
