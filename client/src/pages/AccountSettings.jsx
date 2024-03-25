@@ -4,6 +4,7 @@ import AuthContext from "../authAndContext/contextApi";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Loading from "../components/Loading";
 import MyMarketContainer from "../components/MyMarketContainer";
+import NoAvatar from "../assets/noAvatar.jpg"
 
 export default function AccountSettings() {
 	const [selectedImage, setSelectedImage] = useState(null);
@@ -43,7 +44,7 @@ export default function AccountSettings() {
 							{user && (
 								<div className="flex w-[250px] flex-wrap justify-center space-y-4">
 									<span className="p-1 shadow-md ring-2 rounded-md ring-sky-200">{"Database Image"}</span>
-									<img alt="Not Found" width={"250px"} src={user.avatar_url}
+									<img alt="Not Found" width={"250px"} src={user.avatar_url ? user.avatar_url : NoAvatar}
 										className="h-[250px] rounded-full ring-2 ring-sky-600/60 shadow-lg shrink-0 object-cover object-center"
 									/>
 								</div>
