@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../authAndContext/contextApi";
+import noImage from '../assets/noAvatar.jpg'
 
 export default function Avatar({ userID }) {
   const [url, setURL] = useState("");
@@ -13,15 +14,21 @@ export default function Avatar({ userID }) {
     }
   }, [userID]);
 
-  if (url) {
+  if (url && !(url === 'error')) {
     return (
       <img
-        src={`${url}`}
+      src={`${url}`}
+      className="h-6 w-6 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
+      alt="profile"
+      ></img>
+      );
+    } else {
+      return (
+      <img
+        src={noImage}
         className="h-6 w-6 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
         alt="profile"
       ></img>
     );
-  } else {
-    return <></>;
   }
 }

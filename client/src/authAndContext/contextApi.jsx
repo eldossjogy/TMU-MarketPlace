@@ -68,21 +68,6 @@ export const AuthProvider = ({ children }) => {
 				return null;
 			}
 		}
-		async function downloadImage(avatar_url) {
-			try {
-				const timestamp = new Date().getTime();
-				const { data, error } = await supabase.storage
-					.from("avatars")
-					.download(`${avatar_url}?timestamp=${timestamp}`);
-				if (error) {
-					throw error;
-				}
-				const url = URL.createObjectURL(data);
-				return url;
-			} catch (error) {
-				toast.error("Error downloading image: ", error);
-			}
-		}
 		async function fetchProfile() {
 			if (user) {
 				const profileData = await getProfile(user.id);
@@ -191,6 +176,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function that returns link for pfp from supabase bucket
 	async function downloadImage(filePath) {
+		if (!filePath){return}
 		try {
 			const timestamp = new Date().getTime();
 			const { data, error } = await supabase.storage
@@ -330,14 +316,7 @@ export const AuthProvider = ({ children }) => {
 			if (tempError != null) {
 				throw tempError;
 			}
-			const timestamp = new Date().getTime();
-			const { data, error } = await supabase.storage
-				.from("avatars")
-				.download(`${filePath}?timestamp=${timestamp}`);
-			if (error) {
-				throw error;
-			}
-			const url = URL.createObjectURL(data);
+			const url = await downloadImage(filePath)
 			return url;
 		} catch (error) {
 			toast.error("Error downloading image: ", JSON.stringify(error));
@@ -395,7 +374,6 @@ export const AuthProvider = ({ children }) => {
 			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
 		)
 			.then(response => {
-				console.log(response.data);
 				setStatusList(response.data)
 			})
 			.catch(error => {
