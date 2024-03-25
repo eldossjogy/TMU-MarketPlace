@@ -38,10 +38,10 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
 }
 
 function DropdownOption({index, content, count}) {
-    let roundedStyle = index === count - 1 ? 'rounded-b-md' : 'rounded-t-md';
+    let roundedStyle = index === count - 1 ? 'rounded-b-md border-gray-300 border-t-2' : '';
 
     return(
-        <span className={"text-gray-700 block px-4 py-2 text-sm hover:bg-neutral-200 " + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">
+        <span className={`${index == 0 ? 'rounded-t-md font-bold text-neutral-900 hover:bg-[#F9B300] border-[#F9B300] border-b-2' : 'text-gray-700 hover:bg-neutral-200'} block px-4 py-2 text-sm  ` + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">
             <Link to={content.url ?? '/'} className='flex w-full h-full'>{content.name ?? ''}</Link>
         </span>
     )
@@ -49,7 +49,7 @@ function DropdownOption({index, content, count}) {
 
 function DropDownSection({children}) {
     return (
-        <div className="" role="none">
+        <div className=" rounded-md shadow-md" role="navigation">
             {children}
         </div>
     )
