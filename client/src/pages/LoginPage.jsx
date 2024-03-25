@@ -28,7 +28,7 @@ export default function LoginPage() {
              
             // console.log(data);
             // console.log(error);
-            if(! error && data.success == true) {
+            if(! error && data.success === true) {
                 toast.success(`Logged in ${email}`);
                 navigate('/');
             }
@@ -38,14 +38,7 @@ export default function LoginPage() {
             }
         }
     }
-
-    useEffect(() => {
-        if (user != null) {
-            navigate('/');
-        }
-    }, [user])
     
-
     return (
         <section className='flex justify-center items-center h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 m-4 flex-wrap space-y-4 justify-center'>

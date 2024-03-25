@@ -12,9 +12,9 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
                 <button type="button" className="flex text-lg text-white space-x-2 items-center w-auto" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(!show)}}>
                     <span className='pl-2 truncate shrink'>{text}</span>
                     {image}
-                    <ChevronDownIcon className='w-7 h-7 ml-1 shrink-0'/>
+                    <ChevronDownIcon className='w-8 h-8 md:w-7 md:h-7 ml-1 shrink-0'/>
                 </button>
-                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-300" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
+                <div className="absolute right-0 z-30 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-300" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                     <DropDownSection>
                         {options.map((element, index) => {
                             return (<DropdownOption key={index} index={index} content={element} count={options.length}/>);
@@ -30,7 +30,7 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
                 <button type="button" className="flex text-lg text-white space-x-2 items-center w-auto" aria-expanded="true" aria-haspopup="true" onClick={() => {setShow(true)}}>
                     <span className='pl-2 truncate'>{text}</span>
                     {image}
-                    <ChevronDownIcon className='w-7 h-7 ml-1 shrink-0'/>
+                    <ChevronDownIcon className='w-8 h-8 md:w-7 md:h-7 ml-1 shrink-0'/>
                 </button>
             </div>
         )
@@ -38,7 +38,7 @@ export default function Dropdown({options, text = 'Log In', image = <ProfilePict
 }
 
 function DropdownOption({index, content, count}) {
-    let roundedStyle = index == count - 1 ? 'rounded-b-md' : 'rounded-t-md';
+    let roundedStyle = index === count - 1 ? 'rounded-b-md' : 'rounded-t-md';
 
     return(
         <span className={"text-gray-700 block px-4 py-2 text-sm hover:bg-neutral-200 " + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">

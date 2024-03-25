@@ -9,11 +9,6 @@ export default function RegisterPage() {
     const [errors, setErrors] = useState({})
     const navigate = useNavigate();
 
-    const registerAttempt = async () => {
-        const response = await registerNewAccount('email', 'passwoird12324');
-        alert(user);
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = new FormData(e.target);
@@ -43,7 +38,7 @@ export default function RegisterPage() {
 
             // console.log(data);
             // console.log(error);
-            if(! error && data.success == true) {
+            if(! error && data.success === true) {
                 toast.success(`Successfully registered as ${email}`);
                 navigate('/');
             }
@@ -57,7 +52,7 @@ export default function RegisterPage() {
         if (user != null) {
             navigate('/');
         }
-    }, [user])
+    }, [user, navigate])
 
     return (
         <section className='flex justify-center items-center h-auto sm:h-[100vh] bg-neutral-100'>
