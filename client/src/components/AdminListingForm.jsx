@@ -5,17 +5,17 @@ import LoadingScreen from './LoadingScreen';
 import LocationContext from '../authAndContext/locationProvider';
 import "../index.css";
 
-export default function ListingForm({formDataProp = {
+export default function AdminListingForm({formDataProp = {
     title: '',
     price: '',
     description: '',
     expire_time: null,
     postal_code: '',
     location: '',
-    category_id: null,
-}, typeOfReq="Post", editingForm=false}) {
+    category_id: 1,
+}, typeOfReq="Post", editingForm=false, postReqAsAdmin, putReqAsAdmin}) {
 
-    const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
+    const { loadingState, setLoadingState, categories} = useContext(AuthContext);
 	const { location, city, generateLocation, searchForLocation, searchingLocation } = useContext(LocationContext);
 	
     const navigate = useNavigate();
@@ -125,16 +125,15 @@ export default function ListingForm({formDataProp = {
 		let err = validateFormData(formData)
 		setFormErrors(err)
 
-		console.log(err)
 		if (Object.keys(err).length === 0) {
 			
 			if (typeOfReq === "Post") {
 				setLoadingState(true);
-				await createNewListing({ ...formData, ...postCoordinates, expire_time: getCurrentDateTime(48) }, imageList);
+				await postReqAsAdmin({ ...formData, ...postCoordinates, expire_time: getCurrentDateTime(48) }, imageList);
 			}
 			else if (typeOfReq === "Put") {
 				setLoadingState(true);
-				await updateListing({...formData, ...postCoordinates, expire_time: getCurrentDateTime(48)}, imageList)
+				await putReqAsAdmin({...formData, ...postCoordinates, expire_time: getCurrentDateTime(48)}, imageList)
 			}
 		}
 	};
@@ -228,21 +227,16 @@ export default function ListingForm({formDataProp = {
 	return (
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
-				{editingForm ? <h1 className='text-5xl'>Update Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
 				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
-						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
+						<label className="block">Title: <span className='text-red-500'>{formErrors.title}*</span></label>
 						<input autoComplete='off' type="text" name="title" 
 							value={formData.title} onChange={handleChange} placeholder="Enter Title" required maxLength={150}
 							className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" 
 						/>
 
 						<label className="block">Price: <span className='text-red-500'>{formErrors.price} *</span></label>
-						{/* <div className="relative">
-							<span className="rounded-md absolute inset-y-0 left-0 p-3 flex items-center bg-gray-200 text-gray-600">$</span>
-							<input autoComplete="off" type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Enter Price ($0 if not set)" className="rounded-md pl-10 pr-12 block w-full border border-gray-300 rounded-r-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" style={{ backgroundColor: 'white' }} />
-							<span className="rounded-md absolute inset-y-0 right-0 p-3 flex items-center bg-gray-200 text-gray-600">.00</span>
-						</div> */}
+
 						<div className="relative">
                             <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none ">$</div>
                             <input type='text' name='price' maxLength={20} required
@@ -265,12 +259,6 @@ export default function ListingForm({formDataProp = {
                                 }
                             }></input>
                         </div>
-
-						{/* <label className="block">Postal Code:{formErrors.postal_code && <span className='text-red-500'>{formErrors.postal_code}</span>}</label> */}
-						{/* <input autoComplete="off" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} placeholder="Enter Postal Code (Example: A1AA1A)" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
-
-						{/* <label className="block">Location:</label> */}
-						{/* <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Enter Location" className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4" /> */}
 
 						<form onSubmit={handleLocationSearch}>
 							<label className="block">Set Location: <span className='text-red-500'>{noResults ? 'Invalid location, try again': ''} *</span></label>
@@ -299,13 +287,12 @@ export default function ListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full md:w-[50%]'>
+					<div className='w-full'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
 							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
 							bg-gray-50 hover:bg-gray-100 `}>
-							{/* dark:border-gray-600 dark:hover:border-gray-500
-							dark:bg-gray-700 dark:hover:bg-gray-600 */}
+					
 								<div className="flex flex-col items-center justify-center pt-5 pb-6">
 									<svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
 										<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
@@ -343,12 +330,9 @@ export default function ListingForm({formDataProp = {
 				</div>
 				<form className='flex justify-center md:justify-start space-x-8 md:w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
 					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
-					<button type="button" onClick={() => navigate('/my-market')} className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
+					<button type="button" onClick={() => navigate('/admin-dashboard')} className="bg-red-500 text-white py-2 px-8 rounded-md hover:bg-red-600 mb-3">Cancel</button>
 				</form>
 			</section>
-			{loadingState &&
-				(editingForm==false ? <LoadingScreen message={"Creating new Listing..."} /> : <LoadingScreen message={"Updating Listing..."} />)
-			}
 		</>
 
 	)

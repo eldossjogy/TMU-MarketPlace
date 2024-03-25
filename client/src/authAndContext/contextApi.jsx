@@ -529,13 +529,13 @@ export const AuthProvider = ({ children }) => {
         fetchedUserListings,
         fetchMyPostings,
         userListings,
-        localSession,
         categories,
         statusList,
         changeListingStatusAPI,
         deleteListing,
         updateListing,
-		getCategories
+		getCategories,
+		uploadImageToBucket
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
