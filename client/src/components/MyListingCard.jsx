@@ -160,8 +160,8 @@ export default function MyListingCard({ listingInfo }) {
                             </div>
                         </div>
                         <div className='flex md:gap-5 gap-2'>
-                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-lg justify-center items-center p-1 md:px-4">Cancel</button>
-                            <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-lg justify-center items-center p-1 md:px-4">Confirm</button>
+                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-lg justify-center items-center p-1 px-2 md:px-4">Cancel</button>
+                            <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-lg justify-center items-center p-1 px-2 md:px-4">Confirm</button>
                         </div>
                     </div>
                 </div>
