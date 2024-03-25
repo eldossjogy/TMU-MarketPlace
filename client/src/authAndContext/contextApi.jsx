@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }) => {
                         name: username,
                         first_name: firstName,
                         last_name: lastName,
-                        student_number: studentNum,
+                        student_number: parseInt(studentNum),
                         postal_code: '',
                         role_id: 1
                     },
