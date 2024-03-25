@@ -144,7 +144,7 @@ export default function MyListingCard({ listingInfo }) {
                 leaveTo="opacity-0 -translate-y-full"
                 show={modal}
             >
-                <div className="flex flex-col -mt-3 p-3 rounded-b-xl shadow-md hover:shadow-lg ring-inset ring-2 ring-rose-600 bg-white text-gray-900">
+                <div className="flex flex-col p-3 rounded-b-xl shadow-md hover:shadow-lg ring-inset ring-2 ring-rose-600 bg-white text-gray-900">
                     <div className="w-full flex items-center flex-col md:gap-5 gap-2">
                         <div className="flex items-center w-full">
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -154,14 +154,14 @@ export default function MyListingCard({ listingInfo }) {
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div className="flex flex-col ml-3">
-                                <div className="md:text-xl leading-none">Delete Ad '{listingInfo.title}' ?</div>
-                                <p className="md:text-lg leading-none mt-1">Your listing will be removed and wont be active for others!
-                                </p>
+                                <div className="text-sm md:text-xl leading-none">Delete Ad '{listingInfo.title}' ?</div>
+                                <div className="text-xs md:text-lg leading-none mt-1">Your listing will be removed and wont be active for others!
+                                </div>
                             </div>
                         </div>
                         <div className='flex md:gap-5 gap-2'>
-                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-lg justify-center items-center p-1 px-2 md:px-4">Cancel</button>
-                            <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-lg justify-center items-center p-1 px-2 md:px-4">Confirm</button>
+                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-sm md:text-lg justify-center items-center p-1 px-2 md:px-4">Cancel</button>
+                            <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-sm md:text-lg justify-center items-center p-1 px-2 md:px-4">Confirm</button>
                         </div>
                     </div>
                 </div>
