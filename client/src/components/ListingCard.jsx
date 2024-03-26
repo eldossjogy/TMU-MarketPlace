@@ -10,23 +10,23 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 export default function ListingCard({ listingInfo }) {
 
     const { statusList, setLoadingState, loadingState, changeListingStatusAPI, deleteListing } = useContext(AuthContext)
-    const [isShowing, setIsShowing] = useState(false)
     const [modal, setModal] = useState(false)
 	const [hovered, setHovered] = useState(false);
-    //function to quickly change status of a post
+    
+    // Change the status of an ad
     function changeListingStatus(e) {
-        //start the loading
-        //pass the listing id and as well status chosen
+        if (modal) setModal(false);
         if (e) {
-            setLoadingState(true)
-            changeListingStatusAPI(listingInfo, e)
+            //pass the listing id and chosen status 
+            setLoadingState(true);
+            changeListingStatusAPI(listingInfo, e);
         }
     }
 
     function handleDeleteEntry() {
-        setLoadingState(true)
-        setModal(false)
-        deleteListing(listingInfo)
+        setLoadingState(true);
+        setModal(false);
+        deleteListing(listingInfo);
     }
     
     const rawDate = new Date(listingInfo.created_at ?? '01/16/2024');
