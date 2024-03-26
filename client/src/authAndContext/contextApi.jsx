@@ -126,7 +126,6 @@ export const AuthProvider = ({ children }) => {
 			toast.error(error.message)
 			return false
 		}
-
 		return false
 	}
 
