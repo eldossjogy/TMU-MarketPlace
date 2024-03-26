@@ -45,7 +45,7 @@ export default function MyMarketSideBar({title}) {
                 <ul className='space-y-1 ms-2'>
                   {elem.items.map((elemLinks, index2) => (
                     <li className={`py-1 ps-3 rounded-lg hover:bg-[#fef08a] ${elemLinks.link === currentPath ? 'bg-[#fef08a]' : ''}`} key={index2}>
-                      <Link to={elemLinks.link} onClick={() => {setCurrentPath(elemLinks.link); }}>{elemLinks.linkText}</Link>
+                      <Link to={elemLinks.link} onClick={() => {setCurrentPath(elemLinks.link); }} className='w-full h-full block'>{elemLinks.linkText}</Link>
                     </li>
                   ))}
                 </ul>
