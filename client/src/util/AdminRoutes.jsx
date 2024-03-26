@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 const AdminRoutes = () => {
   const { localSession, isLoading, checkIfAdmin } = useContext(AuthContext);
 
-  const [localLoading, setLocalLoading] = useState(false)
+  const [localLoading, setLocalLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false);
 
 
@@ -23,7 +23,6 @@ const AdminRoutes = () => {
       setLocalLoading(false)
     };
 
-    setLocalLoading(true)
     fetchData()
   }, [isLoading]);
 
