@@ -1,8 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import AuthContext from '../authAndContext/contextApi';
 import LoadingScreen from './LoadingScreen';
-import noImage from '../assets/noImage.png'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CardImages from './CardImages';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
@@ -18,13 +17,11 @@ export default function ListingCard({ listingInfo }) {
         if (modal) setModal(false);
         if (e) {
             //pass the listing id and chosen status 
-            setLoadingState(true);
             changeListingStatusAPI(listingInfo, e);
         }
     }
 
     function handleDeleteEntry() {
-        setLoadingState(true);
         setModal(false);
         deleteListing(listingInfo);
     }
@@ -132,7 +129,7 @@ export default function ListingCard({ listingInfo }) {
             </div>
                                                         
             {loadingState &&
-                <LoadingScreen message={"Changing Ad status..."} />
+                <LoadingScreen message={"Loading Listings..."} />
             }
             <Transition
                 as={Fragment}
@@ -154,13 +151,13 @@ export default function ListingCard({ listingInfo }) {
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div className="flex flex-col ml-3">
-                                <div className="text-sm md:text-xl leading-none">Delete Ad '{listingInfo.title}' ?</div>
+                                <div className="text-sm md:text-xl leading-none">Delete Ad '{listingInfo.id}' ?</div>
                                 <div className="text-xs md:text-lg leading-none mt-1">Your listing will be removed and wont be active for others!
                                 </div>
                             </div>
                         </div>
                         <div className='flex md:gap-5 gap-2'>
-                            <button onClick={() => { setModal(prev => !prev) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-sm md:text-lg justify-center items-center p-1 px-2 md:px-4">Cancel</button>
+                            <button onClick={() => { setModal(false) }} className="w-full rounded-xl shadow-xl ring-inset ring-1 ring-rose-500 hover:bg-rose-400 text-gray-900 text-sm md:text-lg justify-center items-center p-1 px-2 md:px-4">Cancel</button>
                             <button onClick={handleDeleteEntry} className="w-full rounded-xl shadow-xl bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 text-sm md:text-lg justify-center items-center p-1 px-2 md:px-4">Confirm</button>
                         </div>
                     </div>
