@@ -105,7 +105,7 @@ export default function ListingCard({ listingInfo }) {
                                 </Link>
                             </div>
                         </section>
-                        <section className="flex flex-col justify-between w-full">
+                        <section className="flex flex-col justify-between w-full pe-2">
                             <div>
                                 <div className="flex justify-between pb-2">
                                     <p className="line-clamp-1 font-bold text-sm md:text-xl">{listingInfo.title}</p>
