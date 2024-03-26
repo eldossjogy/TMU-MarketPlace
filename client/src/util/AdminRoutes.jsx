@@ -13,34 +13,37 @@ const AdminRoutes = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-        console.log("came here")
       try {
         const adminBool = await checkIfAdmin();
         setIsAdmin(adminBool);
-        setLocalLoading(false)
       } catch (error) {
         console.error("Error checking admin status:", error);
       }
+
+      setLocalLoading(false)
     };
 
     setLocalLoading(true)
     fetchData()
   }, [isLoading]);
 
-  if (isLoading || localLoading) {
+  if (isLoading) {
     return (
       <>
         <Navbar />
         <Loading />
       </>
     );
+  } else {
+    return !localLoading && (
+      localSession ? (
+        isAdmin ? <Outlet /> : <Navigate to="/unauthorized" replace />
+      ) : (
+        <Navigate to="/login" replace />
+      )
+    );
+  }
   }
   
-  return localSession ? (
-    isAdmin ? <Outlet /> : <Navigate to="/unauthorized" replace />
-  ) : (
-    <Navigate to="/login" replace />
-  );
-};
 
 export default AdminRoutes;
