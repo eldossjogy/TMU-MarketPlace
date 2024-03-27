@@ -58,7 +58,7 @@ export default function RegisterPage() {
         <section className='flex justify-center items-center h-auto sm:h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 m-4 flex-wrap space-y-4 justify-center'>
                 <section className="h-12 w-auto md:w-64 xl:w-80 m-auto">
-                    <img src="../assets/logo-light.png" alt="Logo" className="h-full w-auto m-auto"></img>
+                    <img src="../assets/logo-transparent.png" alt="Logo" className="h-full w-auto m-auto"></img>
                 </section>
                 <section className='w-[90%] space-y-2 m-auto'>
                     <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%]'>
@@ -66,14 +66,14 @@ export default function RegisterPage() {
                             <label htmlFor={"first-name"} className={"block mb-2 text-sm font-medium text-gray-900"}>First Name <span className='text-neutral-400 text-xs'>(Letters Only)</span></label>
                             <input  type="text" name="first-name"
                                 className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
-                                placeholder="Enter First Name" required pattern='[A-Za-z]+' minLength={2}>
+                                placeholder="Enter First Name" required pattern='[A-Za-z]+' minLength={2} maxLength={25}>
                             </input>
                         </div>
                         <div className='flex-col w-full sm:w-[47%]'>
                             <label htmlFor={"last-name"} className={"block mb-2 text-sm font-medium text-gray-900"}>Last Name <span className='text-neutral-400 text-xs'>(Letters Only)</span></label>
                             <input  type="text" name="last-name"
                                 className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
-                                placeholder="Enter Last Name" required pattern='[A-Za-z]+' minLength={2}>
+                                placeholder="Enter Last Name" required pattern='[A-Za-z]+' minLength={2} maxLength={25}>
                             </input>
                         </div>
                     </div>
