@@ -43,13 +43,11 @@ export default function ListingCard({ listingInfo }) {
                     <section className="w-full flex flex-row-reverse">
                         <section className="flex flex-col justify-between text-right min-w-16 sm:min-w-24 md:min-w-32 lg:min-w-40 xl:min-w-64 items-end">
                             <div className="w-full ps-1 sm:ps-0">
-                                <h2 className="text-green-700 font-bold text-xs sm:text-sm md:text-lg line-clamp-1">C${listingInfo.price}</h2>
-                                {/* <h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(listingInfo.status?.id !== 1) ? listingInfo.status?.type ?? '' : ''}</h2> */}
+                                <h2 className="text-green-700 font-bold text-xs sm:text-sm md:text-lg line-clamp-1">C${listingInfo.price.toLocaleString()}</h2>
                                 <Listbox value={listingInfo.status_id} onChange={changeListingStatus}>
                                     <div className="relative mt-1 w-full">
                                         <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white p-1 md:py-2 md:pl-3 md:pr-10 sm:text-left ring-gray-200 ring-2 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                                             <h2 className={`${listingInfo.status_id !== 1 ? 'text-rose-700 ' : ''} text-xs sm:text-sm md:text-base line-clamp-1`}>{listingInfo.status.type}</h2>
-                                            {/* <span className="block truncate">{listingInfo.status.type}</span> */}
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                             <ChevronUpDownIcon
                                                 className="hidden sm:block h-5 w-5 text-gray-400"
