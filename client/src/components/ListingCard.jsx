@@ -17,11 +17,13 @@ export default function ListingCard({ listingInfo }) {
         if (modal) setModal(false);
         if (e) {
             //pass the listing id and chosen status 
+            setLoadingState(true);
             changeListingStatusAPI(listingInfo, e);
         }
     }
 
     function handleDeleteEntry() {
+        setLoadingState(true);
         setModal(false);
         deleteListing(listingInfo);
     }
@@ -129,7 +131,7 @@ export default function ListingCard({ listingInfo }) {
             </div>
                                                         
             {loadingState &&
-                <LoadingScreen message={"Loading Listings..."} />
+                <LoadingScreen message={"Changing Ad status..."} />
             }
             <Transition
                 as={Fragment}

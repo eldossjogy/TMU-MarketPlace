@@ -20,10 +20,10 @@ export default function MyProfile() {
       <MyMarketContainer title="Your Listings">
         <CategoryToolbar getFunc={(index) => {fetchMyPostings(index); }}/>
         <div className='space-y-3'>
-          {loadingState &&
+          {loadingState && 
             <Loading message={"Loading Listings..."} />
           }
-          {!loadingState && (userListings.map((elem, index) => (
+          {(userListings.map((elem, index) => (
             <ListingCard listingInfo={elem} key={index}/>
           )))}
         </div>
