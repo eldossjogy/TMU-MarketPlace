@@ -57,9 +57,11 @@ export default function RegisterPage() {
     return (
         <section className='flex justify-center items-center h-auto sm:h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 m-4 flex-wrap space-y-4 justify-center'>
-                <img src="../assets/logo-light.png" alt="Logo" className="h-full w-[30%] m-auto"></img>
-                <section className='w-full space-y-2'>
-                    <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%] w-[90%]'>
+                <section className="h-12 w-auto md:w-64 xl:w-80 m-auto">
+                    <img src="../assets/logo-light.png" alt="Logo" className="h-full w-auto m-auto"></img>
+                </section>
+                <section className='w-[90%] space-y-2 m-auto'>
+                    <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%]'>
                         <div className='flex-col w-full sm:w-[47%]'>
                             <label htmlFor={"first-name"} className={"block mb-2 text-sm font-medium text-gray-900"}>First Name <span className='text-neutral-400 text-xs'>(Letters Only)</span></label>
                             <input  type="text" name="first-name"
@@ -75,14 +77,14 @@ export default function RegisterPage() {
                             </input>
                         </div>
                     </div>
-                    <div className='flex-col w-[90%]'>
+                    <div className='flex-col'>
                         <label htmlFor={"student-num"} className={"block mb-2 text-sm font-medium text-gray-900"}>Student Number <span className='text-neutral-400 text-xs'>(9 digits, no spaces)</span></label>
                         <input  type="text" name="student-num"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
                             placeholder="Enter Student Number" required pattern='[0-9]{9}' minLength={9} maxLength={9}>
                         </input>
                     </div>
-                    <div className='flex-col w-[90%]'>
+                    <div className='flex-col'>
                         <label htmlFor={"username"} className={"block mb-2 text-sm font-medium text-gray-900"}>Username <span className='text-neutral-400 text-xs'>(No spaces, letters and numbers only)</span></label>
                         <input  type="text" name="username"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
@@ -90,7 +92,7 @@ export default function RegisterPage() {
                         </input>
                         {errors.username && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-600"}>{errors.username}</div>}
                     </div>
-                    <div className='flex-col w-[90%]'>
+                    <div className='flex-col'>
                         <label htmlFor={"email"} className={"block mb-2 text-sm font-medium text-gray-900"}>Email <span className='text-neutral-400 text-xs'>(Must use TMU Email)</span></label>
                         <input  type="email" name="email"
                             className={"bg-gray-50 border border-gray-300 text-gray-900 text-xs sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5"} 
@@ -98,7 +100,7 @@ export default function RegisterPage() {
                         </input>
                         {errors.email && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-600"}>{errors.email}</div>} 
                     </div>
-                    <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%] w-[90%]'>
+                    <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%]'>
                         <div className='flex-col w-full sm:w-[47%]'>
                             <label htmlFor={"password"} className={"block mb-2 text-sm font-medium text-gray-900"}>Password</label>
                             <input  type="password" name="password"
