@@ -17,8 +17,46 @@ export const AuthProvider = ({ children }) => {
 	const [userListings, setUserListings] = useState([]);
 
 	//usestates for global use acquired from db (categories, etc)
-	const [categories, setCategories] = useState([]);
-	const [statusList, setStatusList] = useState([]);
+	const categories = [
+		{
+			"id": 1,
+			"name": "Items Wanted"
+		},
+		{
+			"id": 2,
+			"name": "Items for Sale"
+		},
+		{
+			"id": 3,
+			"name": "Tutoring"
+		},
+		{
+			"id": 4,
+			"name": "Textbook Exchanges"
+		},
+		{
+			"id": 5,
+			"name": "Study Group"
+		}
+	];
+	const statusList = [
+		{
+			"id": 1,
+			"type": "Available"
+		},
+		{
+			"id": 2,
+			"type": "Pending"
+		},
+		{
+			"id": 4,
+			"type": "Unavailable"
+		},
+		{
+			"id": 3,
+			"type": "Sold"
+		}
+	];
 
 	// API req loading useState. set it true before api req, and at the end of server req function set it to false
 	const [loadingState, setLoadingState] = useState(false);
@@ -85,10 +123,10 @@ export const AuthProvider = ({ children }) => {
 	}, [user]);
 
 	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	useEffect(() => {
-		getCategories()
-		getStatusLists()
-	}, [])
+	// useEffect(() => {
+	// 	getCategories()
+	// 	getStatusLists()
+	// }, [])
 
 	// use effect for when profileData changes
 	// useEffect(() => {
@@ -326,7 +364,9 @@ export const AuthProvider = ({ children }) => {
 
 	//function to get user's listings
 	async function fetchMyPostings(categorId) {
+		setLoadingState(true);
 		try {
+			setUserListings([]);
 			if(categorId) {
 				const response = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings/${categorId}`,
@@ -337,49 +377,51 @@ export const AuthProvider = ({ children }) => {
 					}
 				)
 				setUserListings(response.data)
+				setLoadingState(false);
 			}
 			else {
-				const response = await axios.get(
-					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
-					{
-						headers: {
-							Authorization: "Bearer " + localSession.access_token,
-						},
-					}
-				)
-				setUserListings(response.data)
+				axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`, { headers: { Authorization: "Bearer " + localSession.access_token},}).then((response) => {
+					setUserListings(response.data)
+					setLoadingState(false);
+				})
 			}
 			
 		}
 		catch (error) {
 			toast.error(error.message + ". Can't get user listings from db");
+			setLoadingState(false);
 		}
-		setLoadingState(false)
 	}
+	
+	useEffect(() => {
+		console.log(`Set loading state to ${loadingState} at ${Date.now()}`);
+	}, [loadingState])
+	
 
 	//function that gets categories
 	async function getCategories() {
-		try {
-			const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
-			setCategories(response.data);
-		  } catch (error) {
-			toast.error(error.message + "Error fetching categories from db");
-		  }
-
+		// try {
+		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
+		// 	setCategories();
+		//   } catch (error) {
+		// 	toast.error(error.message + "Error fetching categories from db");
+		//   }
+		return categories;
 	}
 
 	//function that gets status' list
 	function getStatusLists() {
-		axios.get(
-			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
-		)
-			.then(response => {
-				setStatusList(response.data)
-			})
-			.catch(error => {
-				toast.error(error.message + "Erro fetching status Lists from db");
-			})
-
+		// axios.get(
+		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+		// )
+		// 	.then(response => {
+		// 		setStatusList(response.data)
+		// 	})
+		// 	.catch(error => {
+		// 		toast.error(error.message + "Erro fetching status Lists from db");
+		// 	})
+		// setStatusList();
+		return statusList;
 	}
 
 	//function to qickly change status of listing
@@ -437,6 +479,7 @@ export const AuthProvider = ({ children }) => {
 
   	//function to delete lisitng
 	async function deleteListing(listingInfo) {
+        setLoadingState(true);
 		try{
 		const response = await axios.put(
 			`${process.env.REACT_APP_BACKEND_API_URL}/my-market/delete-listing`,{
@@ -512,7 +555,6 @@ export const AuthProvider = ({ children }) => {
         changeListingStatusAPI,
         deleteListing,
         updateListing,
-		getCategories,
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
