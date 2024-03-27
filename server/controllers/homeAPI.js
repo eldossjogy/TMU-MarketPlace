@@ -5,7 +5,7 @@ export async function getCategories(req, res) {
     try {
         const categories = await supabase
             .from('category')
-            .select('name, id')
+            .select('id, name')
 
         res.status(200).json(categories.data)
     }
@@ -18,7 +18,7 @@ export async function getStatusList(req, res) {
     try {
         const statusList = await supabase
             .from('status')
-            .select('type')
+            .select('id, type')
 
         res.status(200).json(statusList.data)
     }

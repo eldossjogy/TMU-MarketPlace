@@ -6,9 +6,7 @@ export const verifyToken = async (req, res, next) => {
     if (userToken) {
         const token = userToken.split(' ')[1]
         try {
-            const output = await supabase.auth.getUser(token)
-            
-            const user = output.data.user
+            const { data: { user } } = await supabase.auth.getUser(token)
             
             req.body.user_id = user.id
 
@@ -16,7 +14,7 @@ export const verifyToken = async (req, res, next) => {
         }
         catch(error) {
             console.log(error)
-            res.status(403).json({ message: "Access Denied - Unauthorized!!" })
+            res.status(403).json({ message: "Access Denied - Unauthorized!!"})
         }
     }
     else {

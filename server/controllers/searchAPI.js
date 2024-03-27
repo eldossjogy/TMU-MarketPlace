@@ -86,6 +86,14 @@ export async function searchAds(req, res) {
     }
 } 
 
+export async function addToHistory(req, res1) {
+    //TODO add {ad_id, user_id} to history with created_at
+}
+
+export async function getHistory(req, res) {
+    //TODO get {ad_id, created_at} from history with user_id  
+}
+
 function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
     const p1 = lat1 * Math.PI/180;

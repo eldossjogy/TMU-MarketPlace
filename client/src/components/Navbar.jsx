@@ -5,8 +5,9 @@ import AuthContext from '../authAndContext/contextApi';
 import LocationContext from '../authAndContext/locationProvider';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from "../assets/logo.png"
+import toast from 'react-hot-toast';
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
@@ -15,7 +16,7 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const authOptions = [{name: 'Your Market', url: '/my-market'},{name: 'Your Profile', url: '/settings'},{name: 'Your Inbox', url: '/'},{name: 'Saved Listings', url: '/'},{name: 'Log out', url: '/logout'}];
+        const authOptions = [{name: 'Post New Ad', url: '/my-market/create-listing'}, {name: 'My Market', url: '/my-market'},{name: 'Profile', url: '/my-market/profile'},{name: 'Inbox', url: '/my-market/inbox'},{name: 'Saved Listings', url: '/my-market/saved'},{name: 'Log out', url: '/logout'}];
         const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
 
         if(!user){
@@ -30,16 +31,18 @@ export default function Navbar() {
             <div className="container mx-auto flex flex-col justify-center p-4 md:flex-row md:justify-between md:items-center md:h-full md:p-0 md:py-1 md:pr-[3vw] lg:max-w-[90%]">
                 <section className='md:flex md:flex-row md:w-auto space-y-4 md:space-y-0'>
                     <section className='flex w-full items-center justify-between flex-wrap md:block md:w-auto'>
-                        <section id="nav-logo" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer md:w-64 xl:w-80 md:mx-3 md:me-6" onClick={() => {navigate('/');}}>
-                            <img src={Logo} alt="logo" className="h-full w-auto md:m-auto"></img>
-                        </section>
+                        <Link to={'/'}>
+                            <section id="nav-logo" className="w-auto h-12 flex justify-start items-center shrink-0 cursor-pointer md:w-64 xl:w-80 md:mx-3 md:me-6">
+                                <img src={Logo} alt="logo" className="h-full w-auto md:m-auto"></img>
+                            </section>
+                        </Link>
                         <section id="nav-account-mobile" className="flex md:hidden space-x-2">
                             <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
                         </section>
                     </section>
                     <section id="nav-search-group" className="flex flex-wrap space-y-2 group md:flex-nowrap md:space-y-0 md:w-[30vw] md:space-x-2 md:items-center md:justify-start">
                         <Searchbar location={city}/>
-                        <section className='hidden md:flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation()}}>
+                        <section className='hidden md:flex space-x-1 text-white text-sm items-center hover:text-red-400' onClick={() => {getLocation();}}>
                             <MapPinIcon className='h-6 w-6 shrink-0'/>
                             <span className='whitespace-nowrap'>{range/1000}km range</span>
                         </section>
