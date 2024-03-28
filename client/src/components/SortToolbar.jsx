@@ -1,7 +1,8 @@
-import { BarsArrowDownIcon, BarsArrowUpIcon, ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
+import { ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import React, { useContext, useState } from 'react'
 import SearchContext from '../authAndContext/searchProvider';
 import { RadioGroup } from '@headlessui/react'
+import ToolbarButton from './ToolbarButton';
 
 const states = ['Disabled','Descending','Ascending']
 export default function SortToolbar({customSortKey, sortResultsFn, defaultSortState = [{id: 0, name:'Name', state: 0}, {id: 1, name:'Price', state: 0}, {id: 2, name:'Date', state: 0}, {id: 3, name:'Distance', state: 0}]}) {
@@ -30,17 +31,6 @@ export default function SortToolbar({customSortKey, sortResultsFn, defaultSortSt
         setGrid(!grid);
     }
 
-    function ToolbarButton({id, value, state, checked}) {
-        return (
-            <button className={`flex items-center justify-center ring-2 ring-inset rounded-2xl px-4 py-1 my-1 me-2 text-sm ${state !== 0 ? `ring-yellow-500 hover:bg-yellow-400 bg-amber-400` : `ring-sky-600 hover:text-white hover:bg-sky-500`}`} onClick={() => {
-                    handleCycleState(id)
-                }}>
-                <span>{value}</span>
-                {state === 1 ? <BarsArrowDownIcon className='w-4 h-4'/> : state === 2 ? <BarsArrowUpIcon className='w-4 h-4'/> : ''}
-            </button>
-        )
-    }
-
     return (
         <section className="flex bg-[#fafafb] rounded-lg shadow-md border-2 border-gray justify-between p-4 items-center">
             <div className='flex justify-between items-center ps-4 pe-2 rounded-xl shadow-md border-neutral-400/30 bg-white p-2 text-lg w-full overflow-auto'>
@@ -50,7 +40,7 @@ export default function SortToolbar({customSortKey, sortResultsFn, defaultSortSt
                         {sortStates && sortStates.map((sortKey) => (
                             <RadioGroup.Option key={sortKey.id} value={sortKey.id} >
                                 {({ checked }) => (
-                                    <ToolbarButton key={sortKey.id} id={sortKey.id} state={sortStates[sortKey.id].state} value={sortKey.name}/>
+                                    <ToolbarButton key={sortKey.id} stateID={sortKey.id} stateValue={sortStates[sortKey.id].state} value={sortKey.name} useIcon={true} checked={checked} onClick={handleCycleState}/>
                                 )}
                         </RadioGroup.Option>
                         ))}
