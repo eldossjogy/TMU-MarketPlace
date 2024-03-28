@@ -16,7 +16,8 @@ export default function HorizontalCard({
 	postID,
 	date,
 	distance,
-	isSaved
+	show_saved = false,
+	saved_id
 }) {
     const {addToSaved, deleteFromSaved} = useContext(SearchContext);
 	const [hovered, setHovered] = useState(false);
@@ -33,7 +34,7 @@ export default function HorizontalCard({
 
 	const handleSaved = (e) => {
 		if(e) e.preventDefault();
-		if(isSaved){
+		if(saved_id){
 			toast.promise(deleteFromSaved(postID), {loading: 'Removing from Saved...', success: 'Removed', error: 'Unable to remove'})
 		}
 		else{
@@ -45,7 +46,7 @@ export default function HorizontalCard({
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
 				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-40 lg:max-h-72 relative overflow-hidden">
-					<HeartIcon className={`absolute top-3 start-6 w-8 h-8 -rotate-6 hover:rotate-6 ${isSaved ? 'text-rose-500' : 'text-white/75 stroke-rose-500'} hover:text-rose-700`} onClick={handleSaved}/>
+					{show_saved && (<HeartIcon className={`absolute top-3 start-6 w-8 h-8 -rotate-6 hover:rotate-6 ${saved_id ? 'text-rose-500' : 'text-white/75 stroke-rose-500'} hover:text-rose-700`} onClick={handleSaved}/>)}
 					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
 						<CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
 					</section>
