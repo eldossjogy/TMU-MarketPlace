@@ -4,9 +4,11 @@ import { useLocation } from "react-router-dom";
 import AdCard from "../components/AdCard";
 import { useParams } from "react-router-dom";
 import AdContext from "../authAndContext/adProvider";
+import SearchContext from "../authAndContext/searchProvider";
 
 export default function Adpage() {
   const { fetchAdPage } = useContext(AdContext);
+  const { addToHistory } = useContext(SearchContext);
   const location = useLocation();
   const passed = location.state || {};
   const [dbData, setData] = useState(null);
@@ -14,7 +16,12 @@ export default function Adpage() {
 
   useEffect(() => {
     if (slug) {
-      fetchAdPage(slug).then((res)=>{setData(res)})
+      fetchAdPage(slug).then((res)=>{
+        setData(res)
+        if(res.id){
+          addToHistory(res.id)
+        }
+      })
     }
   }, [slug]);
 
