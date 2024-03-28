@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLongRightIcon, HeartIcon } from "@heroicons/react/24/solid";
 import CardImages from "./CardImages";
+import SearchContext from "../authAndContext/searchProvider";
+import toast from "react-hot-toast";
 
 
 export default function HorizontalCard({
@@ -13,8 +15,10 @@ export default function HorizontalCard({
 	location,
 	postID,
 	date,
-	distance
+	distance,
+	isSaved
 }) {
+    const {addToSaved, deleteFromSaved} = useContext(SearchContext);
 	const [hovered, setHovered] = useState(false);
 	const rawDate = new Date(date ?? '01/16/2024');
 	const rawAge = Date.now() - rawDate.getTime();
@@ -26,12 +30,22 @@ export default function HorizontalCard({
 	const seconds = Math.round(rawAge / (1000));
 
 	const age = weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''} ago` : days > 0 ? `${days} day${days > 1 ? 's' : ''} ago` : hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
+
+	const handleSaved = (e) => {
+		if(e) e.preventDefault();
+		if(isSaved){
+			toast.promise(deleteFromSaved(postID), {loading: 'Removing from Saved...', success: 'Removed', error: 'Unable to remove'})
+		}
+		else{
+			toast.promise(addToSaved(postID), {loading: 'Saving...', success: 'Saved', error: 'Unable to save'})
+		}
+	}
 	return (
 		<Link to={{ pathname: `/ad/${postID}` }}
 		>
 			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
 				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-40 lg:max-h-72 relative overflow-hidden">
-					<HeartIcon className="absolute top-3 start-6 w-8 h-8 -rotate-6 text-rose-500 hover:text-rose-700" onClick={(e) => {e?.preventDefault()}}/>
+					<HeartIcon className={`absolute top-3 start-6 w-8 h-8 -rotate-6 hover:rotate-6 ${isSaved ? 'text-rose-500' : 'text-white/75 stroke-rose-500'} hover:text-rose-700`} onClick={handleSaved}/>
 					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
 						<CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
 					</section>
