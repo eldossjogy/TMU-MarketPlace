@@ -357,11 +357,7 @@ export const SearchProvider = ({ children }) =>  {
 					console.log(error);
 					setUserSavedListings([]);
 				}
-				else if(data){
-                    return sortSaved(savedListingsSortState, data?.data ?? []);
-				}
-
-                return [];
+				return getUserSavedIDs().then(sortSaved(savedListingsSortState, data?.data ?? []));
 			}
             else return [];
 		} catch (error) {

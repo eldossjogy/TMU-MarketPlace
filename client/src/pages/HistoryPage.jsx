@@ -36,6 +36,7 @@ export default function HistoryPage() {
                         title={result.ad.title}
                         price={result.ad.price.toLocaleString()}
                         location={''}
+                        date={result.created_at}
                         description={result.ad.description}
                         postID={result.ad_id}
                         distance={0}
