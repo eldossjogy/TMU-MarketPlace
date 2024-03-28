@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../authAndContext/contextApi'
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import transparentLogo from "../assets/logo-transparent.png";
 
 export default function RegisterPage() {
 
@@ -58,7 +59,7 @@ export default function RegisterPage() {
         <section className='flex justify-center items-center h-auto sm:h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 m-4 flex-wrap space-y-4 justify-center'>
                 <section className="h-12 w-auto md:w-64 xl:w-80 m-auto">
-                    <img src="../assets/logo-transparent.png" alt="Logo" className="h-full w-auto m-auto"></img>
+                    <img src={transparentLogo} alt="Logo" className="h-full w-auto m-auto"></img>
                 </section>
                 <section className='w-[90%] space-y-2 m-auto'>
                     <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-[6%]'>
