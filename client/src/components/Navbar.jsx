@@ -7,7 +7,6 @@ import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from "../assets/logo.png"
-import toast from 'react-hot-toast';
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);

@@ -14,19 +14,18 @@ export default function MyMarketSideBar({title}) {
 
   const navList = [
     {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
-        {linkText: "Archived Listings", link: "/my-market/archived-listing"},
         {linkText: "Create Listing", link: "/my-market/create-listing"},
         {linkText: "View History", link: "/my-market/history"},
         {linkText: "View Saved", link: "/my-market/saved"}
     ]},
     {title: "Messages", items:[
         {linkText: "Inbox", link: "/my-market/inbox"},
+        {linkText: "Outbox", link: "/my-market/inbox"},
         {linkText: "Unread", link: "/my-market/inbox?unread=true"}
     ]},
     {title: "Settings", items:[
         {linkText: "Edit Settings", link: "/my-market/settings"},
         {linkText: "Edit Profile", link: "/my-market/profile"},
-        {linkText: "Edit Preferences", link: "/"},
     ]}
     ]
 

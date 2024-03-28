@@ -19,6 +19,7 @@ import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import HistoryPage from "./pages/HistoryPage";
+import SavedPage from "./pages/SavedPage";
 
 library.add(fas);
 
@@ -48,6 +49,7 @@ function App() {
                 <Route path="profile" element={<EditProfile />} />
                 <Route path="inbox" element={<InboxPage />} />
                 <Route path="history" element={<HistoryPage />} />
+                <Route path="saved" element={<SavedPage />} />
             </Route>
           </Route>
         </Route>

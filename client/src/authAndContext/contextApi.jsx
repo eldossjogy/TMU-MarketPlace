@@ -392,37 +392,6 @@ export const AuthProvider = ({ children }) => {
 			setLoadingState(false);
 		}
 	}
-	
-	useEffect(() => {
-		console.log(`Set loading state to ${loadingState} at ${Date.now()}`);
-	}, [loadingState])
-	
-
-	//function that gets categories
-	async function getCategories() {
-		// try {
-		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
-		// 	setCategories();
-		//   } catch (error) {
-		// 	toast.error(error.message + "Error fetching categories from db");
-		//   }
-		return categories;
-	}
-
-	//function that gets status' list
-	function getStatusLists() {
-		// axios.get(
-		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
-		// )
-		// 	.then(response => {
-		// 		setStatusList(response.data)
-		// 	})
-		// 	.catch(error => {
-		// 		toast.error(error.message + "Erro fetching status Lists from db");
-		// 	})
-		// setStatusList();
-		return statusList;
-	}
 
 	//function to qickly change status of listing
 	async function changeListingStatusAPI(listingInfo, status) {

@@ -8,11 +8,12 @@ import AuthContext from './contextApi';
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) =>  {
-    const {localSession} = useContext(AuthContext);
+    const {localSession, user} = useContext(AuthContext);
     const {location, range} = useContext(LocationContext);
     const [grid, setGrid] = useState(false);
     const [sort, setSort] = useState(0);
-    const [historySort, setHistorySort] = useState(0);
+    const [historySortState, setHistorySortState] = useState(0);
+    const [savedListingsSortState, setSavedListingsSortState] = useState(0);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
@@ -23,6 +24,7 @@ export const SearchProvider = ({ children }) =>  {
 
 	const [searchResults, setSearchResults] = useState([]);
     const [userHistory, setUserHistory] = useState([]);
+    const [userSaved, setUserSaved] = useState([]);
 
     async function searchForAds(options = {}) {
 		try {
@@ -188,6 +190,18 @@ export const SearchProvider = ({ children }) =>  {
     }
 
     function sortHistory(sortType = -1, data = userHistory) {
+        let tempResults = sortByDate(sortType, data);
+        setHistorySortState(sortType);
+        setUserHistory(tempResults);
+    }
+
+    function sortSaved(sortType = -1, data = userSaved) {
+        let tempResults = sortByDate(sortType, data);
+        setSavedListingsSortState(sortType);
+        setUserSaved(tempResults);
+    }
+
+    function sortByDate(sortType = -1, data = []) {
         let tempResults = [...data];
         switch (sortType) {
             case 0: // Sort by date Down
@@ -199,14 +213,13 @@ export const SearchProvider = ({ children }) =>  {
             default: // Sort at SQL level
                 break;
         }
-        setHistorySort(sortType);
-        setUserHistory(tempResults);
+
+        return tempResults;
     }
 
     async function addToHistory(ad_id) {
-		const checkUser = await supabase.auth.getUser();
 		try {
-			if (checkUser.data.user !== null && localSession !== null) {
+			if (localSession !== null && user !== null) {
 				const response = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
 					{
@@ -225,9 +238,8 @@ export const SearchProvider = ({ children }) =>  {
 	}
 
 	async function getUserHistory(limit) {
-		const checkUser = await supabase.auth.getUser();
 		try {
-			if (checkUser.data.user !== null && localSession !== null) {
+			if (localSession !== null && user !== null) {
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
@@ -242,7 +254,7 @@ export const SearchProvider = ({ children }) =>  {
 					setUserHistory([]);
 				}
 				else if(data){
-                    sortHistory(historySort, data?.data ?? []);
+                    sortHistory(historySortState, data?.data ?? []);
 				}
 			}
 		} catch (error) {
@@ -251,9 +263,8 @@ export const SearchProvider = ({ children }) =>  {
 	}
 
     async function addToSaved(ad_id) {
-		const checkUser = await supabase.auth.getUser();
 		try {
-			if (checkUser.data.user !== null && localSession !== null) {
+			if (localSession !== null && user !== null) {
 				const response = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
 					{
@@ -272,11 +283,10 @@ export const SearchProvider = ({ children }) =>  {
 	}
 
 	async function getUserSavedListings(limit) {
-		const checkUser = await supabase.auth.getUser();
 		try {
-			if (checkUser.data.user !== null && localSession !== null) {
+			if (localSession !== null && user !== null) {
 				const { data, error } = await axios.get(
-					`${process.env.REACT_APP_BACKEND_API_URL}/history${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
+					`${process.env.REACT_APP_BACKEND_API_URL}/saved${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
 						headers: {
 							Authorization: "Bearer " + localSession.access_token,
@@ -284,12 +294,12 @@ export const SearchProvider = ({ children }) =>  {
 					}
 				);
 				if(error){
-					toast.error("Error fetching your history.");
+					toast.error("Error fetching your saved listings.");
 					console.log(error);
-					setUserHistory([]);
+					setUserSaved([]);
 				}
 				else if(data){
-					setUserHistory(data.data);
+					setUserSaved(data.data);
 				}
 			}
 		} catch (error) {
@@ -316,7 +326,12 @@ export const SearchProvider = ({ children }) =>  {
             getUserHistory,
             userHistory,
             sortHistory,
-            historySort,
+            historySortState,
+            addToSaved,
+            getUserSavedListings,
+            userSaved,
+            sortSaved,
+            savedListingsSortState,
         }} >
             {children}
         </SearchContext.Provider>

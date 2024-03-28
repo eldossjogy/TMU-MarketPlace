@@ -184,7 +184,7 @@ export async function addToSaved(req, res) {
     //TODO add {ad_id, user_id} to history with created_at
     const {ad_id, user_id} = req.body;
     try {
-        var { data, error } = await supabase.from('history').select('id').match({ad_id: ad_id, user_id: user_id});
+        var { data, error } = await supabase.from('saved').select('id').match({ad_id: ad_id, user_id: user_id});
 
         if (error) {
             console.log(error);
@@ -195,10 +195,10 @@ export async function addToSaved(req, res) {
         if(data[0]){
             let history_id = data[0].id;
             // console.log(history_id);
-            var { data, error } = await supabase.from('history').update({'created_at': new Date().toISOString()}).eq('id', history_id);
+            var { data, error } = await supabase.from('saved').update({'created_at': new Date().toISOString()}).eq('id', history_id);
         }
         else{
-            var { data, error } = await supabase.from('history').insert({ad_id: ad_id, user_id: user_id});
+            var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id});
         }
 
         if(data) console.log(data);
@@ -285,4 +285,4 @@ function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
               Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
     const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
     return d;
-  }
+}

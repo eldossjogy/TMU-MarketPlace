@@ -6,17 +6,17 @@ import VerticalCard from '../components/VerticalCard';
 import SortToolbar from '../components/SortToolbar';
 
 export default function HistoryPage() {
-    const {userHistory, getUserHistory, historySortState, sortHistory, grid} = useContext(SearchContext);
+    const {userSaved, getUserSavedListings, savedListingsSortState, sortSaved, grid} = useContext(SearchContext);
 
     useEffect(() => {
-        getUserHistory();
+        getUserSavedListings();
     }, [])
     
     return (
-        <MyMarketContainer title={"View History"}>
-            <SortToolbar customSortKey={historySortState} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 1}]}/>
-            <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
-                {userHistory && !grid && userHistory.length !== 0 && userHistory.map((result) => (
+        <MyMarketContainer title={"View Saved"}>
+            <SortToolbar customSortKey={savedListingsSortState} sortResultsFn={sortSaved} defaultSortState={[{id: 0, name:'Date', state: 1}]}/>
+            <div className={userSaved?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
+                {userSaved && !grid && userSaved.length !== 0 && userSaved.map((result) => (
                     <HorizontalCard
                         image={result.ad?.image ?? []}
                         title={result.ad?.title ?? result.ad_id}
@@ -30,7 +30,7 @@ export default function HistoryPage() {
                         key={result.ad_id}
                     />
                 ))}
-                {userHistory && grid && userHistory.length !== 0 && userHistory.map((result) => (
+                {userSaved && grid && userSaved.length !== 0 && userSaved.map((result) => (
                     <VerticalCard
                         image={result.ad.image}
                         title={result.ad.title}
@@ -42,7 +42,7 @@ export default function HistoryPage() {
                         key={result.id}
                     />
                 ))}
-                {(!userHistory || (userHistory && userHistory.length === 0)) && [1].map((key) => (
+                {(!userSaved || (userSaved && userSaved.length === 0)) && [1].map((key) => (
                     <div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
                         <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
                             <div className="flex items-center pt-8 sm:justify-start sm:pt-0">
