@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar"
 import SortToolbar from "../components/SortToolbar";
 
 export default function SearchPage() {
-	const { searchResults, grid } = useContext(SearchContext)
+	const { searchResults, userSavedIDs, grid } = useContext(SearchContext)
 	return (
 		<>
 			<Navbar />
@@ -28,6 +28,8 @@ export default function SearchPage() {
 								date={result.created_at}
 								distance={result.distance}
 								key={result.id}
+								is_saved={userSavedIDs[result.id] ? true : false}
+								show_saved={true}
 							/>
 						))}
 						{searchResults && searchResults.length !== 0 && grid && searchResults.map((result) => (

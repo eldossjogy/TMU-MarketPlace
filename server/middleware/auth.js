@@ -1,7 +1,6 @@
 import supabase from "../config/supabaseConfig.js"
 
 export const verifyToken = async (req, res, next) => {
-
     const userToken = req.header("Authorization")
     if (userToken) {
         const token = userToken.split(' ')[1]

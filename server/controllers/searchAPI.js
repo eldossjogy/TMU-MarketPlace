@@ -3,7 +3,6 @@ import supabase from '../config/supabaseConfig.js'
 export async function searchAds(req, res) {
 
     const {q, user, lng, lat, min, max, category, status, maxDays, page, range} = req.query;
-    const {user_id} = req.body;
     try {
 
         let minDate = new Date(0).toISOString().split('T')[0];
@@ -49,17 +48,11 @@ export async function searchAds(req, res) {
 
         let parsedData = []
 
-        console.log(user_id);
-
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
-            const savedResponse = user_id ? await getSpecificUserEntry(element.id, user_id, 'saved') : null;
-
-            console.log(savedResponse);
             const distance = cosineDistanceBetweenPoints(element.lat, element.lng, searchLatLng.lat, searchLatLng.lng);
             if(distance <= searchRange){
                 element.distance = distance;
-                element.saved_id = savedResponse ? savedResponse : null;
                 parsedData.push(element);
             }
         }
@@ -207,23 +200,11 @@ export async function addToSaved(req, res) {
     //TODO add {ad_id, user_id} to history with created_at
     const {ad_id, user_id} = req.body;
     try {
-        const {exists, existsError} = await checkIfExists(ad_id, user_id, 'saved');
+        const existing_id = await checkIfExists(ad_id, user_id, 'saved');
         
-        if(existsError) throw new Error(existsError.message);
-
-        if(exists === false){
-            var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id}).select();
-
-            if(error) throw new Error(error.message);
-            
+        if(existing_id !== -1){
             res.status(200).json({
-                data: data,
-                error: null
-            });
-        }
-        else{
-            res.status(200).json({
-                data: true,
+                data: existing_id,
                 error: {
                     message: 'Already saved', 
                     error: error 
@@ -231,6 +212,15 @@ export async function addToSaved(req, res) {
             });
             return;
         }
+
+        var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id}).select('id');
+
+        if(error) throw new Error(error.message);
+        
+        res.status(200).json({
+            data: data[0]?.id ?? null,
+            error: null
+        });
     } catch (error) {
         console.log(error)
         if(error.status === 401) {
@@ -299,12 +289,35 @@ export async function getUserSavedListings(req, res) {
     }
 }
 
-export async function deleteFromSaved(req, res) {
-    const {ad_id, user_id} = req.body;
+export async function getUserSavedIDs(req, res) {
+    const {user_id} = req.body;
     try {
-        var { error } = await supabase.from('saved').delete().match({ad_id: ad_id, user_id: user_id});
+        var { data, error } = await supabase.from('saved').select('id, ad_id').eq('user_id',user_id);
+        if(error) throw new Error(error.message);
 
-        if (error){
+        let parsedData = {};
+
+        for (let i = 0; i < data.length; i++) {
+            let element = data[i];
+            parsedData[element.ad_id] = element.id;
+        }
+
+        res.status(200).json({
+            data: parsedData,
+            error: null
+        });
+    } catch (error) {
+        console.log(error)
+        if(error.status === 401) {
+            res.status(401).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else {
             res.status(500).json({
                 data: null,
                 error: {
@@ -313,6 +326,16 @@ export async function deleteFromSaved(req, res) {
                 }
             });
         }
+    }
+}
+
+export async function deleteFromSaved(req, res) {
+    const {ad_id, user_id} = req.body;
+    try {
+        var { data, error } = await supabase.from('saved').delete().match({ad_id: ad_id, user_id: user_id});
+
+        if(error) throw new Error(error.message);
+
         else{
             res.status(204).json({
                 data: null,
@@ -348,24 +371,12 @@ async function checkIfExists(ad_id, user_id, table) {
 
         if(error) throw new Error(error.message);
 
-        if(data[0]) return {exists: true, error: null};
-        else return {exists: false, error: null};
-    } catch (error) {
-        return {exists: null, existsError: error}
-    }
-}
-
-async function getSpecificUserEntry(ad_id, user_id, table){
-    try {
-        var { data, error } = await supabase.from(table).select('id').match({ad_id: ad_id, user_id: user_id});
-
-        if(error) throw new Error(error.message);
-
         if(data[0]?.id) return data[0].id;
 
-        return null;
+        return -1;
     } catch (error) {
-        return null;
+        console.log(error.message);
+        return -1;
     }
 }
 

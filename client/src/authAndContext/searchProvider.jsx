@@ -24,7 +24,8 @@ export const SearchProvider = ({ children }) =>  {
 
 	const [searchResults, setSearchResults] = useState([]);
     const [userHistory, setUserHistory] = useState([]);
-    const [userSaved, setUserSaved] = useState([]);
+    const [userSavedListings, setUserSavedListings] = useState([]);
+    const [userSavedIDs, setUserSavedIDs] = useState({});
 
     async function searchForAds(options = {}) {
 		try {
@@ -39,14 +40,6 @@ export const SearchProvider = ({ children }) =>  {
                     - Page Number
                     - Location (lat lng) and Range
             */
-
-            let headers = {};
-
-            if (localSession !== null && user !== null) {
-                headers = {headers: {
-                    Authorization: "Bearer " + localSession.access_token,
-                }}
-            }
 
             let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}`;
             let searchQuery = `/search?q=${encodeURI(options.query !== null ? options.query : searchInput)}`
@@ -74,13 +67,14 @@ export const SearchProvider = ({ children }) =>  {
 
             window.history.replaceState(null, "TMMU Marketplace", searchQuery)
 
-			const { data, error } = await axios.get(searchURL + searchQuery, headers)
+			const { data, error } = await axios.get(searchURL + searchQuery)
 
 			if (error) {
 				// toast.error(error.message);
 				console.log(error);
                 return Promise.reject(new Error(error));
 			}
+            await getUserSavedIDs();
 
 			return sortResults(-1, data?.data ?? []);
 		} catch (error) {
@@ -204,10 +198,10 @@ export const SearchProvider = ({ children }) =>  {
         return tempResults;
     }
 
-    function sortSaved(sortType = -1, data = userSaved) {
+    function sortSaved(sortType = -1, data = userSavedListings) {
         let tempResults = sortByDate(sortType, data);
         setSavedListingsSortState(sortType);
-        setUserSaved(tempResults);
+        setUserSavedListings(tempResults);
         return tempResults;
     }
 
@@ -284,10 +278,10 @@ export const SearchProvider = ({ children }) =>  {
 		}
 	}
 
-    async function addToSaved(ad_id) {
+    async function addToSaved(ad_id, add) {
 		try {
 			if (localSession !== null && user !== null) {
-				const {error} = await axios.post(
+				const {data, error} = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved`,
 					{
 						ad_id: ad_id
@@ -300,7 +294,13 @@ export const SearchProvider = ({ children }) =>  {
 				);
 
                 if(error) return Promise.reject(error);
-                return Promise.resolve();
+                
+                let tempSavedIDs = userSavedIDs;
+
+                tempSavedIDs[ad_id] = data.data;
+                setUserSavedIDs(tempSavedIDs)
+
+                return Promise.resolve(tempSavedIDs);
 			}
 		} catch (error) {
 			toast.error(error.message);
@@ -311,7 +311,7 @@ export const SearchProvider = ({ children }) =>  {
     async function deleteFromSaved(ad_id) {
 		try {
 			if (localSession !== null && user !== null) {
-				const {error} = await axios.delete(
+				const {error} = await axios.put(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved`,
 					{
 						ad_id: ad_id
@@ -324,7 +324,13 @@ export const SearchProvider = ({ children }) =>  {
 				);
 
                 if(error) return Promise.reject(error);
-                return Promise.resolve();
+
+                let tempSavedIDs = userSavedIDs;
+
+                delete tempSavedIDs[ad_id];
+                setUserSavedIDs(tempSavedIDs);
+
+                return Promise.resolve(tempSavedIDs);
 			}
 		} catch (error) {
 			toast.error(error.message);
@@ -349,7 +355,7 @@ export const SearchProvider = ({ children }) =>  {
 				if(error){
 					toast.error("Error fetching your saved listings.");
 					console.log(error);
-					setUserSaved([]);
+					setUserSavedListings([]);
 				}
 				else if(data){
                     return sortSaved(savedListingsSortState, data?.data ?? []);
@@ -361,6 +367,32 @@ export const SearchProvider = ({ children }) =>  {
 		} catch (error) {
 			toast.error(error.message);
             return [];
+		}
+	}
+
+    async function getUserSavedIDs() {
+        let checkUser = user;
+		try {
+            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
+
+			if (checkUser !== null) {
+				const { data, error } = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/saved/ids`,
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+
+				if(error) throw new Error(error.message);
+                setUserSavedIDs(data?.data ?? {})
+                return data?.data ?? {};
+			}
+            else return {};
+		} catch (error) {
+			toast.error(error.message);
+            return {};
 		}
 	}
 
@@ -386,10 +418,12 @@ export const SearchProvider = ({ children }) =>  {
             historySortState,
             addToSaved,
             getUserSavedListings,
-            userSaved,
+            userSavedListings,
             sortSaved,
             savedListingsSortState,
-            deleteFromSaved
+            deleteFromSaved,
+            getUserSavedIDs,
+            userSavedIDs
         }} >
             {children}
         </SearchContext.Provider>
