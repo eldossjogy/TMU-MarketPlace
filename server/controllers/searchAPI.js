@@ -3,6 +3,7 @@ import supabase from '../config/supabaseConfig.js'
 export async function searchAds(req, res) {
 
     const {q, user, lng, lat, min, max, category, status, maxDays, page, range} = req.query;
+    const {user_id} = req.body;
     try {
 
         let minDate = new Date(0).toISOString().split('T')[0];
@@ -15,14 +16,14 @@ export async function searchAds(req, res) {
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
         const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
 
-        let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`)
+        let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`);
 
         if(! isNaN(parseInt(maxDays)) && parseInt(maxDays) !== 0){
             const rawAge = Date.now() - (1000 * 3600 * 24 * parseInt(maxDays));
             minDate = new Date(rawAge).toISOString().split('T')[0];
         }
 
-        if(user)  supabaseQuery = supabaseQuery.eq('user_id', user)
+        if(user) supabaseQuery = supabaseQuery.eq('user_id', user)
 
         supabaseQuery = supabaseQuery.filter('price','gte', searchMinPrice)
             .filter('price','lte', searchMaxPrice)
@@ -48,11 +49,17 @@ export async function searchAds(req, res) {
 
         let parsedData = []
 
+        console.log(user_id);
+
         for (let i = 0; i < data.length; i++) {
             let element = data[i];
-            const distance = cosineDistanceBetweenPoints(element.lat, element.lng, searchLatLng.lat, searchLatLng.lng)
+            const savedResponse = user_id ? await getSpecificUserEntry(element.id, user_id, 'saved') : null;
+
+            console.log(savedResponse);
+            const distance = cosineDistanceBetweenPoints(element.lat, element.lng, searchLatLng.lat, searchLatLng.lng);
             if(distance <= searchRange){
                 element.distance = distance;
+                element.saved_id = savedResponse ? savedResponse : null;
                 parsedData.push(element);
             }
         }
@@ -89,7 +96,7 @@ export async function addToHistory(req, res) {
     //TODO add {ad_id, user_id} to history with created_at
     const {ad_id, user_id} = req.body;
     try {
-        var { data, error } = await supabase.from('history').select('id').match({ad_id: ad_id, user_id: user_id});
+        var { data, error } = await supabase.from('history').select('id, view_count').match({ad_id: ad_id, user_id: user_id});
 
         if (error) {
             console.log(error);
@@ -98,15 +105,31 @@ export async function addToHistory(req, res) {
 
         if(data[0]){
             let history_id = data[0].id;
+            let last_view_count = data[0].view_count;
+            
             // console.log(history_id);
-            var { data, error } = await supabase.from('history').update({'created_at': new Date().toISOString()}).eq('id', history_id);
+            var { data, error } = await supabase.from('history').update({'created_at': new Date().toISOString(), 'view_count': last_view_count + 1}).eq('id', history_id);
         }
         else{
             var { data, error } = await supabase.from('history').insert({ad_id: ad_id, user_id: user_id});
         }
 
-        if(data) console.log(data);
-        else if (error) console.log(error);
+        if (error){
+            console.log(error);
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else{
+            res.status(200).json({
+                data: null,
+                error: null
+            });
+        }
     } catch (error) {
         console.log(error)
         if(error.status === 401) {
@@ -184,25 +207,30 @@ export async function addToSaved(req, res) {
     //TODO add {ad_id, user_id} to history with created_at
     const {ad_id, user_id} = req.body;
     try {
-        var { data, error } = await supabase.from('saved').select('id').match({ad_id: ad_id, user_id: user_id});
+        const {exists, existsError} = await checkIfExists(ad_id, user_id, 'saved');
+        
+        if(existsError) throw new Error(existsError.message);
 
-        if (error) {
-            console.log(error);
-            return;
-        }
-        // console.log(data);
+        if(exists === false){
+            var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id}).select();
 
-        if(data[0]){
-            let history_id = data[0].id;
-            // console.log(history_id);
-            var { data, error } = await supabase.from('saved').update({'created_at': new Date().toISOString()}).eq('id', history_id);
+            if(error) throw new Error(error.message);
+            
+            res.status(200).json({
+                data: data,
+                error: null
+            });
         }
         else{
-            var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id});
+            res.status(200).json({
+                data: true,
+                error: {
+                    message: 'Already saved', 
+                    error: error 
+                }
+            });
+            return;
         }
-
-        if(data) console.log(data);
-        else if (error) console.log(error);
     } catch (error) {
         console.log(error)
         if(error.status === 401) {
@@ -227,19 +255,17 @@ export async function addToSaved(req, res) {
 }
 
 export async function getUserSavedListings(req, res) {
-    //TODO get {ad_id, created_at} from history with user_id  
     const {user_id} = req.body;
     try {
-        const { data, error } = await supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`, { distinct: true })
+        const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`, { distinct: true })
         .eq('user_id', user_id).order('created_at', {ascending: false}); // , )
-        //const { data, error } = await supabase.from('history').select('ad_id'); // , )
 
         if(error){
             console.log(error);
             res.status(500).json({
                 data: null,
                 error: {
-                    message: "History Search Failed.", 
+                    message: "Saved Search Failed.", 
                     error: error 
                 }
             });
@@ -270,6 +296,76 @@ export async function getUserSavedListings(req, res) {
                 }
             });
         }
+    }
+}
+
+export async function deleteFromSaved(req, res) {
+    const {ad_id, user_id} = req.body;
+    try {
+        var { error } = await supabase.from('saved').delete().match({ad_id: ad_id, user_id: user_id});
+
+        if (error){
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else{
+            res.status(204).json({
+                data: null,
+                error: null
+            });
+        };
+    } catch (error) {
+        console.log(error)
+        if(error.status === 401) {
+            res.status(401).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+        else {
+            res.status(500).json({
+                data: null,
+                error: {
+                    message: error.message, 
+                    error: error 
+                }
+            });
+        }
+    }
+}
+
+async function checkIfExists(ad_id, user_id, table) {
+    try {
+        var { data, error } = await supabase.from(table).select('id').match({ad_id: ad_id, user_id: user_id});
+
+        if(error) throw new Error(error.message);
+
+        if(data[0]) return {exists: true, error: null};
+        else return {exists: false, error: null};
+    } catch (error) {
+        return {exists: null, existsError: error}
+    }
+}
+
+async function getSpecificUserEntry(ad_id, user_id, table){
+    try {
+        var { data, error } = await supabase.from(table).select('id').match({ad_id: ad_id, user_id: user_id});
+
+        if(error) throw new Error(error.message);
+
+        if(data[0]?.id) return data[0].id;
+
+        return null;
+    } catch (error) {
+        return null;
     }
 }
 

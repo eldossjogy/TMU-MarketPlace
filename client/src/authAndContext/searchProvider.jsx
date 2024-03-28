@@ -40,6 +40,14 @@ export const SearchProvider = ({ children }) =>  {
                     - Location (lat lng) and Range
             */
 
+            let headers = {};
+
+            if (localSession !== null && user !== null) {
+                headers = {headers: {
+                    Authorization: "Bearer " + localSession.access_token,
+                }}
+            }
+
             let searchURL = `${process.env.REACT_APP_BACKEND_API_URL}`;
             let searchQuery = `/search?q=${encodeURI(options.query !== null ? options.query : searchInput)}`
 
@@ -66,7 +74,7 @@ export const SearchProvider = ({ children }) =>  {
 
             window.history.replaceState(null, "TMMU Marketplace", searchQuery)
 
-			const { data, error } = await axios.get(searchURL + searchQuery)
+			const { data, error } = await axios.get(searchURL + searchQuery, headers)
 
 			if (error) {
 				// toast.error(error.message);
@@ -193,12 +201,14 @@ export const SearchProvider = ({ children }) =>  {
         let tempResults = sortByDate(sortType, data);
         setHistorySortState(sortType);
         setUserHistory(tempResults);
+        return tempResults;
     }
 
     function sortSaved(sortType = -1, data = userSaved) {
         let tempResults = sortByDate(sortType, data);
         setSavedListingsSortState(sortType);
         setUserSaved(tempResults);
+        return tempResults;
     }
 
     function sortByDate(sortType = -1, data = []) {
@@ -220,7 +230,7 @@ export const SearchProvider = ({ children }) =>  {
     async function addToHistory(ad_id) {
 		try {
 			if (localSession !== null && user !== null) {
-				const response = await axios.post(
+				const {error} = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
 					{
 						ad_id: ad_id
@@ -231,15 +241,21 @@ export const SearchProvider = ({ children }) =>  {
 						},
 					}
 				);
+                if(error) return Promise.reject(error);
+                return Promise.resolve();
 			}
 		} catch (error) {
 			toast.error(error.message);
+            return Promise.reject(error.message);
 		}
 	}
 
 	async function getUserHistory(limit) {
+        let checkUser = user
 		try {
-			if (localSession !== null && user !== null) {
+            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
+
+			if (checkUser !== null) {
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/history${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
@@ -254,19 +270,25 @@ export const SearchProvider = ({ children }) =>  {
 					setUserHistory([]);
 				}
 				else if(data){
-                    sortHistory(historySortState, data?.data ?? []);
+                    return sortHistory(historySortState, data?.data ?? []);
 				}
+
+                return [];
 			}
+            else{
+                return [];
+            }
 		} catch (error) {
 			toast.error(error.message);
+            return [];
 		}
 	}
 
     async function addToSaved(ad_id) {
 		try {
 			if (localSession !== null && user !== null) {
-				const response = await axios.post(
-					`${process.env.REACT_APP_BACKEND_API_URL}/history`,
+				const {error} = await axios.post(
+					`${process.env.REACT_APP_BACKEND_API_URL}/saved`,
 					{
 						ad_id: ad_id
 					},
@@ -276,15 +298,46 @@ export const SearchProvider = ({ children }) =>  {
 						},
 					}
 				);
+
+                if(error) return Promise.reject(error);
+                return Promise.resolve();
 			}
 		} catch (error) {
 			toast.error(error.message);
+            return Promise.reject(error.message);
+		}
+	}
+
+    async function deleteFromSaved(ad_id) {
+		try {
+			if (localSession !== null && user !== null) {
+				const {error} = await axios.delete(
+					`${process.env.REACT_APP_BACKEND_API_URL}/saved`,
+					{
+						ad_id: ad_id
+					},
+					{
+						headers: {
+							Authorization: "Bearer " + localSession.access_token,
+						},
+					}
+				);
+
+                if(error) return Promise.reject(error);
+                return Promise.resolve();
+			}
+		} catch (error) {
+			toast.error(error.message);
+            return Promise.reject(error.message);
 		}
 	}
 
 	async function getUserSavedListings(limit) {
+        let checkUser = user
 		try {
-			if (localSession !== null && user !== null) {
+            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
+
+			if (checkUser !== null) {
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
@@ -299,11 +352,15 @@ export const SearchProvider = ({ children }) =>  {
 					setUserSaved([]);
 				}
 				else if(data){
-					setUserSaved(data.data);
+                    return sortSaved(savedListingsSortState, data?.data ?? []);
 				}
+
+                return [];
 			}
+            else return [];
 		} catch (error) {
 			toast.error(error.message);
+            return [];
 		}
 	}
 
@@ -332,6 +389,7 @@ export const SearchProvider = ({ children }) =>  {
             userSaved,
             sortSaved,
             savedListingsSortState,
+            deleteFromSaved
         }} >
             {children}
         </SearchContext.Provider>
