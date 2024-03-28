@@ -30,7 +30,7 @@ export default function MyMarketSideBar({title}) {
     ]
 
   return (
-    <div className={`mx-auto w-full md:w-64 xl:w-80 h-fit shrink-0 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:h-[90vh] md:bg-[#e0f2fe] md:border-[#7dd3fc]`}>
+    <div className={`mx-auto w-full md:w-64 xl:w-80 h-fit shrink-0 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:h-[90vh] `}> {/* md:bg-[#e0f2fe] md:border-[#7dd3fc] */}
       <section className={`w-full space-y-4 md:hidden`}>
         <div className='flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg' onClick={() => { setCollapsed(!collapsed) }}>
           <span>{title ? title : 'My Market'}</span>
@@ -42,9 +42,9 @@ export default function MyMarketSideBar({title}) {
         {navList.map((elem, index) => (
             <div className='sideNavLinkContainer space-y-2' key={index}>
                 <h3 className='text-xl font-bold' key={index}>{elem.title}</h3>
-                <ul className='space-y-1 ms-2'>
+                <ul className='space-y-1.5 ms-2'>
                   {elem.items.map((elemLinks, index2) => (
-                    <li className={`py-1 ps-3 rounded-lg hover:bg-[#fef08a] ${elemLinks.link === currentPath ? 'bg-[#fef08a]' : ''}`} key={index2}>
+                    <li className={`py-1.5 ps-3 rounded-lg ${elemLinks.link === currentPath ? 'bg-amber-100 text-amber-900' : 'hover:bg-amber-100 hover:text-amber-900'}`} key={index2}>
                       <Link to={elemLinks.link} onClick={() => {setCurrentPath(elemLinks.link); }} className='w-full h-full block'>{elemLinks.linkText}</Link>
                     </li>
                   ))}
