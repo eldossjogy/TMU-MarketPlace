@@ -2,12 +2,16 @@ import SearchContext from "../authAndContext/searchProvider";
 import HorizontalCard from "../components/HorizontalCard";
 import VerticalCard from "../components/VerticalCard";
 import SearchSideBar from "../components/SearchSideBar"
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/Navbar"
 import SortToolbar from "../components/SortToolbar";
 
 export default function SearchPage() {
 	const { searchResults, grid } = useContext(SearchContext)
+	useEffect(() => {
+		window.scrollTo(0, 0); 
+	  }, []); 
+
 	return (
 		<>
 			<Navbar />
