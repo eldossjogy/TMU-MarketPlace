@@ -122,17 +122,6 @@ export const AuthProvider = ({ children }) => {
 		fetchProfile();
 	}, [user]);
 
-	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	// useEffect(() => {
-	// 	getCategories()
-	// 	getStatusLists()
-	// }, [])
-
-	// use effect for when profileData changes
-	// useEffect(() => {
-	// 	console.log(profileData);
-	// }, [profileData]);
-
 	// function for registering new account
 	async function registerNewAccount(email, password, username) {
 		console.log(`${email} ${password}`);
