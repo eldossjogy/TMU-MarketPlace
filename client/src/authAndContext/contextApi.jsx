@@ -17,14 +17,53 @@ export const AuthProvider = ({ children }) => {
 	const [userListings, setUserListings] = useState([]);
 
 	//usestates for global use acquired from db (categories, etc)
-	const [categories, setCategories] = useState([]);
-	const [statusList, setStatusList] = useState([]);
+	const categories = [
+		{
+			"id": 1,
+			"name": "Items Wanted"
+		},
+		{
+			"id": 2,
+			"name": "Items for Sale"
+		},
+		{
+			"id": 3,
+			"name": "Tutoring"
+		},
+		{
+			"id": 4,
+			"name": "Textbook Exchanges"
+		},
+		{
+			"id": 5,
+			"name": "Study Group"
+		}
+	];
+	const statusList = [
+		{
+			"id": 1,
+			"type": "Available"
+		},
+		{
+			"id": 2,
+			"type": "Pending"
+		},
+		{
+			"id": 4,
+			"type": "Unavailable"
+		},
+		{
+			"id": 3,
+			"type": "Sold"
+		}
+	];
 
 	// API req loading useState. set it true before api req, and at the end of server req function set it to false
 	const [loadingState, setLoadingState] = useState(false);
 
 	//caching/performance useStates:
 	const [fetchedUserListings, setFetchedUserListings] = useState(false);
+
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
@@ -68,21 +107,6 @@ export const AuthProvider = ({ children }) => {
 				return null;
 			}
 		}
-		async function downloadImage(avatar_url) {
-			try {
-				const timestamp = new Date().getTime();
-				const { data, error } = await supabase.storage
-					.from("avatars")
-					.download(`${avatar_url}?timestamp=${timestamp}`);
-				if (error) {
-					throw error;
-				}
-				const url = URL.createObjectURL(data);
-				return url;
-			} catch (error) {
-				toast.error("Error downloading image: ", error);
-			}
-		}
 		async function fetchProfile() {
 			if (user) {
 				const profileData = await getProfile(user.id);
@@ -100,10 +124,10 @@ export const AuthProvider = ({ children }) => {
 	}, [user]);
 
 	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	useEffect(() => {
-		getCategories()
-		getStatusLists()
-	}, [])
+	// useEffect(() => {
+	// 	getCategories()
+	// 	getStatusLists()
+	// }, [])
 
 
 	async function checkIfAdmin() {
@@ -129,7 +153,7 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	// function for registering new account
-	async function registerNewAccount(email, password, username) {
+	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
 		console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
@@ -137,11 +161,14 @@ export const AuthProvider = ({ children }) => {
 				password: password,
 				options: {
 					data: {
-						avatar_url: "",
-						name: username,
-						postal_code: "",
-						role_id: 1,
-					},
+                        avatar_url: '',
+                        name: username,
+                        first_name: firstName,
+                        last_name: lastName,
+                        student_number: parseInt(studentNum),
+                        postal_code: '',
+                        role_id: 1
+                    },
 				},
 			});
 			if (error)
@@ -209,6 +236,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function that returns link for pfp from supabase bucket
 	async function downloadImage(filePath) {
+		if (!filePath){return}
 		try {
 			const timestamp = new Date().getTime();
 			const { data, error } = await supabase.storage
@@ -348,14 +376,7 @@ export const AuthProvider = ({ children }) => {
 			if (tempError != null) {
 				throw tempError;
 			}
-			const timestamp = new Date().getTime();
-			const { data, error } = await supabase.storage
-				.from("avatars")
-				.download(`${filePath}?timestamp=${timestamp}`);
-			if (error) {
-				throw error;
-			}
-			const url = URL.createObjectURL(data);
+			const url = await downloadImage(filePath)
 			return url;
 		} catch (error) {
 			toast.error("Error downloading image: ", JSON.stringify(error));
@@ -365,7 +386,9 @@ export const AuthProvider = ({ children }) => {
 
 	//function to get user's listings
 	async function fetchMyPostings(categorId) {
+		setLoadingState(true);
 		try {
+			setUserListings([]);
 			if(categorId) {
 				const response = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings/${categorId}`,
@@ -376,49 +399,51 @@ export const AuthProvider = ({ children }) => {
 					}
 				)
 				setUserListings(response.data)
+				setLoadingState(false);
 			}
 			else {
-				const response = await axios.get(
-					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
-					{
-						headers: {
-							Authorization: "Bearer " + localSession.access_token,
-						},
-					}
-				)
-				setUserListings(response.data)
+				axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`, { headers: { Authorization: "Bearer " + localSession.access_token},}).then((response) => {
+					setUserListings(response.data)
+					setLoadingState(false);
+				})
 			}
 			
 		}
 		catch (error) {
 			toast.error(error.message + ". Can't get user listings from db");
+			setLoadingState(false);
 		}
-		setLoadingState(false)
 	}
+	
+	useEffect(() => {
+		console.log(`Set loading state to ${loadingState} at ${Date.now()}`);
+	}, [loadingState])
+	
 
 	//function that gets categories
 	async function getCategories() {
-		try {
-			const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
-			setCategories(response.data);
-		  } catch (error) {
-			toast.error(error.message + "Error fetching categories from db");
-		  }
-
+		// try {
+		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
+		// 	setCategories();
+		//   } catch (error) {
+		// 	toast.error(error.message + "Error fetching categories from db");
+		//   }
+		return categories;
 	}
 
 	//function that gets status' list
 	function getStatusLists() {
-		axios.get(
-			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
-		)
-			.then(response => {
-				setStatusList(response.data)
-			})
-			.catch(error => {
-				toast.error(error.message + "Erro fetching status Lists from db");
-			})
-
+		// axios.get(
+		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+		// )
+		// 	.then(response => {
+		// 		setStatusList(response.data)
+		// 	})
+		// 	.catch(error => {
+		// 		toast.error(error.message + "Erro fetching status Lists from db");
+		// 	})
+		// setStatusList();
+		return statusList;
 	}
 
 	//function to qickly change status of listing
@@ -476,6 +501,7 @@ export const AuthProvider = ({ children }) => {
 
   	//function to delete lisitng
 	async function deleteListing(listingInfo) {
+        setLoadingState(true);
 		try{
 		const response = await axios.put(
 			`${process.env.REACT_APP_BACKEND_API_URL}/my-market/delete-listing`,{

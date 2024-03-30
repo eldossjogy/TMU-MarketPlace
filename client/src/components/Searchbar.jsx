@@ -16,7 +16,7 @@ export default function Searchbar(searchLocation) {
     };
 
     const search = (e, options = {}) => {
-        if(e) e.preventDefault()
+        if(e) e.preventDefault();
         if(onSearchPage === null) return;
         if(onSearchPage === false){
             navigate(`/search${searchInput && searchInput !== '' ? `?q=${searchInput}` : (options.query && options.query !== '' ? `?q=${options.query}` : '')}`);
@@ -25,21 +25,22 @@ export default function Searchbar(searchLocation) {
             return;
         }
 
-        toast(`Searching for ${searchInput === '' ? (options.query ? options.query : 'all posts') : searchInput}`);
-        updateFilters(options);
+        let searchMessage = `Searching for ${searchInput === '' ? (options.query ? options.query : 'all ads') : searchInput}`;
+        toast.promise(updateFilters(options), {loading: searchMessage + '...', success: searchMessage, error: 'Search failed'});
     }
 
     useEffect(() => {
         if(onSearchPage === true) {
+            window.scrollTo(0, 0); 
             const searchParams = new URLSearchParams(location.search);
             let options = {};
             if(searchParams.get('q')) options.query = (searchParams.get('q'));
-            if(!isNaN(parseInt(searchParams.get('min')))) options.min = (parseInt(searchParams.get('min')));
-            if(!isNaN(parseInt(searchParams.get('max')))) options.max = (parseInt(searchParams.get('max')));
-            if(!isNaN(parseInt(searchParams.get('status')))) options.status = (parseInt(searchParams.get('status')));
-            if(!isNaN(parseInt(searchParams.get('maxDaysOld')))) options.maxDays = (parseInt(searchParams.get('maxDaysOld')))
-            if(!isNaN(parseInt(searchParams.get('page')))) options.page = (parseInt(searchParams.get('page')))
-            if(!isNaN(parseInt(searchParams.get('category')))) options.category = (parseInt(searchParams.get('category')));
+            options.min = !isNaN(parseInt(searchParams.get('min'))) ? parseInt(searchParams.get('min')) : '';
+            options.max = !isNaN(parseInt(searchParams.get('max'))) ? parseInt(searchParams.get('max')) : '';
+            options.status = !isNaN(parseInt(searchParams.get('status'))) ? parseInt(searchParams.get('status')) : 1;
+            options.maxDays = !isNaN(parseInt(searchParams.get('maxDaysOld'))) ? parseInt(searchParams.get('maxDaysOld')) : 1825;
+            // if(!isNaN(parseInt(searchParams.get('page')))) options.page = (parseInt(searchParams.get('page')));
+            options.category = !isNaN(parseInt(searchParams.get('category'))) ? parseInt(searchParams.get('category')) : 6;
 
             search(null, options);
         }
