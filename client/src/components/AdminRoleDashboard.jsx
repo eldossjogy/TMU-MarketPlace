@@ -236,6 +236,8 @@ export default function AdminRoleDashboard() {
 
     async function postReqAsAdmin(newUser_id) {
 
+        setLoadingState(true);
+
 		try {
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/add-new-admin`,
@@ -261,7 +263,6 @@ export default function AdminRoleDashboard() {
 		setLoadingState(false);
     }
 
-    //users=[{id: xx, user_id}]
     async function deleteAdminPriv(users) {
         
         setLoadingState(true)
@@ -290,11 +291,11 @@ export default function AdminRoleDashboard() {
 
             toast.success(response.data.message)
         }
-            catch(error) {
+        catch(error) {
                 toast.error(error.response.data.message);
-            }
+        }
     
-            setLoadingState(false)
+        setLoadingState(false)
     }
 
   return (
@@ -337,7 +338,7 @@ export default function AdminRoleDashboard() {
                                 <svg className="h-4 w-4 mr-2 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path clipRule="evenodd" fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                 </svg>
-                              Add New User
+                              Add New Admin
                           </button>
                           <div className="flex items-center space-x-3 w-full md:w-auto">    
                               <div className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
@@ -572,7 +573,7 @@ export default function AdminRoleDashboard() {
                         <svg className="text-gray-400 dark:text-gray-500 w-16 h-16 mb-3.5 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <p className="mb-4 text-gray-500 dark:text-gray-300">{selectedItems.length > 1 ? `Are you sure you want to delete these ${selectedItems.length} listings?` : `Are you sure you want to delete listing "${selectedItems[0].title}"?`}</p>
+                        <p className="mb-4 text-gray-500 dark:text-gray-300">{selectedItems.length > 1 ? `Are you sure you want to revoke admin privileges from the ${selectedItems.length} users?` : `Are you sure you want to revoke admin privileges from user "${selectedItems[0].profile.name}"?`}</p>
                         <div className="flex justify-center items-center space-x-4">
                             <button onClick={() => {deleteAdminPriv(selectedItems)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
                             <button onClick={() => setDeleteModalToggle(prev => !prev)} type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
@@ -596,7 +597,7 @@ export default function AdminRoleDashboard() {
                         <svg className="text-gray-400 dark:text-gray-500 w-16 h-16 mb-3.5 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <p className="mb-4 text-gray-500 dark:text-gray-300">{`Are you sure you want to revoke admin privileges from user "${singleDeleteListing[0].user_id}"?`}</p>
+                        <p className="mb-4 text-gray-500 dark:text-gray-300">{`Are you sure you want to revoke admin privileges from user "${singleDeleteListing[0].profile.name}"?`}</p>
                         <div className="flex justify-center items-center space-x-4">
                             <button onClick={() => {deleteAdminPriv(singleDeleteListing)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
                             <button onClick={() => setSecondaryDeleteToggle(prev => !prev)} type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>

@@ -12,7 +12,7 @@ export const adminVerifyToken = async (req, res, next) => {
 
             const checkIfUserIsAdmin = await verifyAdmin(user.id)
             
-            if (checkIfUserIsAdmin) req.body.user_id = user.id
+            if (checkIfUserIsAdmin) req.body.admin_id = user.id
             else {
                 const error = new Error("Access Denied! You do not have Admin Priviliges!")
                 error.status = 403

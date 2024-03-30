@@ -147,7 +147,7 @@ export async function adminGetQueryListing(req, res) {
 
 export async function adminPostNewListing(req, res) {
 
-    const {title, price, description, expire_time, postal_code, location, category_id, user_id, images, lat, lng} = req.body
+    const {title, price, description, expire_time, postal_code, location, category_id, admin_id, images, lat, lng} = req.body
     try {
         
         //error checking
@@ -164,7 +164,7 @@ export async function adminPostNewListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id}
+                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id: admin_id}
             ])
             .select()
         
@@ -265,7 +265,7 @@ export async function adminDeleteListing(req, res) {
             }
         })
 
-        res.status(200).json({message: "Listings Deleted Successfully!"})
+        res.status(204).json({message: "Listings Deleted Successfully!"})
     }
     catch(error) {
         const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
@@ -355,7 +355,7 @@ export async function adminUpdateListing(req, res) {
             }
         }
 
-        res.status(200).json({message: "Post Updated Successfully!"})
+        res.status(201).json({message: "Post Updated Successfully!"})
     }
 
     catch(error) {
@@ -378,6 +378,35 @@ export async function adminGetAllUsers(req, res) {
         }
 
         res.status(200).json(allUsers.data)
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminUpdateUser(req, res) {
+    let {updatedUser} = req.body
+
+    try {
+        const allUsers = await supabase
+            .from('profile')
+            .select('*')
+            .order('id', { ascending: false });
+        
+        const updateUser = await supabase
+            .from('profile')
+            .update({name: updatedUser.name, postal_code: updatedUser.postal_code, first_name: updatedUser.first_name, last_name: updatedUser.last_name, student_number: updatedUser.student_number})
+            .eq('id', updatedUser.id)
+            .select()
+
+        if (updateUser.status == 400) {
+            const error = new Error(updateUser.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(201).json(updateUser.data[0])
     }
     catch(error) {
         const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
@@ -532,10 +561,50 @@ export async function adminDeleteAdminAccess(req, res) {
                 .match({ 'id': user.id });
         }
 
-        res.status(200).json({ message: "Admin Privileges revoked for user!" });
+        res.status(204).json({ message: "Admin Privileges revoked for user!" });
     }
     catch(error) {
         const status = error?.status || 500;
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminDeleteUser(req, res) {
+
+    let {userArr} = req.body
+
+    try {
+
+        for (let user of userArr) {
+
+            const deleteFromUsersTable = await supabase.auth.admin.deleteUser(
+                user.id
+            )
+    
+            if (deleteFromUsersTable.status == 500 || deleteFromUsersTable.status == 409) {
+                const error = new Error(deleteFromUsersTable.error.message)
+                error.status = 500
+                throw error;
+            }
+    
+            const deleteUserFromProfileTable = await supabase
+                .from('profile')
+                .delete()
+                .eq('id', user.id )
+            
+            if (deleteUserFromProfileTable.status == 409) {
+                const error = new Error(deleteUserFromProfileTable.error.message)
+                error.status = 409
+                throw error;
+            }
+        }
+        
+
+        if (userArr.length === 1) res.status(200).json({message: `User ${userArr[0].name} successfully deleted!`})
+        else res.status(204).json({message: `All selected users successfully deleted!`})
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
         res.status(status).json({ message: error.message });
     }
 }

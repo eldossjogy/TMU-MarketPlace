@@ -16,13 +16,12 @@ export default function AdminUserDashboard() {
 
     const [localLoading, setLocalLoading] = useState(false)
     
-    const [addNewToggle, setaddNewToggle] = useState(false)
     const [filterToggle, setFilterToggle] = useState(false)
     const [deleteModalToggle, setDeleteModalToggle] = useState(false)
     const [secondaryDeleteToggle, setSecondaryDeleteToggle] = useState(false)
 
     //contains single item selected for deleting
-    const [singleDeleteListing, setSingleDeleteListing] = useState([])
+    const [singledeleteUserRecord, setSingledeleteUserRecord] = useState([])
 
     //string to store query value
     const [searchQuery, setSearchQuery] = useState("")
@@ -40,8 +39,8 @@ export default function AdminUserDashboard() {
     const [editModalFlag, setEditModalFlag] = useState(false)
     const [editModalInfo, setEditModalInfo] = useState(null)
 
-    const [previewListingFlag, setPreviewListingFlag] = useState(false)
-    const [previewListing, setPreviewListing] = useState(null)
+    const [previewUserFlag, setPreviewUserFlag] = useState(false)
+    const [previewUser, setPreviewUser] = useState(null)
 
     useEffect(() => {
         async function fetchData() {
@@ -145,8 +144,8 @@ export default function AdminUserDashboard() {
     function handleRowActionClick(action, elem) {
         setEditItemButtons(prev => [false])
         if(action === "Preview") {
-            setPreviewListingFlag(prev => !prev)
-            setPreviewListing(elem)
+            setPreviewUserFlag(prev => !prev)
+            setPreviewUser(elem)
             setEditModalInfo(elem)
         }
         else if(action === "Edit") {
@@ -157,8 +156,8 @@ export default function AdminUserDashboard() {
 
     function handleModalActionClick(action) {
         if(action === "Preview") {
-            setPreviewListingFlag(prev => !prev)
-            setPreviewListing(null)
+            setPreviewUserFlag(prev => !prev)
+            setPreviewUser(null)
             setEditModalInfo(null)
         }
         else if(action === "Edit") {
@@ -246,32 +245,26 @@ export default function AdminUserDashboard() {
 		}
 	}
 
-    async function putReqAsAdmin(listingInfo, imageList) {
-        const checkUser = await supabase.auth.getUser();
+    async function putReqAsAdmin(updatedUser) {
+        setLoadingState(true);
+
 		try {
-            if (checkUser.data.user !== null) {
-                const listOfImages = await uploadImageToBucket(
-                imageList,
-                "avatar"
-                );
-                const response = await axios.put(
+            const response = await axios.put(
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/update-user-record`,
-                { listingInfo: {...listingInfo, image: [...listingInfo.image.map(item => item.file_path), ...listOfImages]}
-                },
+                { 
+                    updatedUser
+                }
+                ,
                 {
                     headers: {
                     Authorization: "Bearer " + localSession.access_token,
                     },
                 }
                 );
-                updateRecordsLocally("Update", listingInfo)
-                setEditModalFlag(false)
-                toast.success("Listing updated!")
-		} else {
-			const error = new Error("Unauthorized access!! not a logged in user!!");
-			error.status = 403;
-			throw error;
-		}
+            updateRecordsLocally("Update", response.data)
+            setEditModalFlag(false)
+            toast.success("User Record updated!")
+
 		} catch (error) {
 			toast.error(error.response.data.message);
 		}
@@ -279,45 +272,14 @@ export default function AdminUserDashboard() {
 		setLoadingState(false);
     }
 
-    async function postReqAsAdmin(listingInfo) {
-
-        //change this to check for admin prvilege
-        const checkUser = await supabase.auth.getUser();
-        
-		try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND_API_URL}/admin/create-new-account`,
-                {
-                    ...listingInfo,
-                },
-                {
-                    headers: {
-                        Authorization: "Bearer " + localSession.access_token,
-                    },
-                }
-            );
-
-            //reload the get req to fetch new data // or add the new data to current list below:
-            updateRecordsLocally("Add", response.data)
-            setaddNewToggle(false)
-            toast.success("New User Record created!")
-
-		} catch (error) {
-			toast.error(error.response.data.message);
-		}
-
-
-		setLoadingState(false);
-    }
-
-    async function deleteListing(listingArr) {
+    async function deleteUserRecord(userArr) {
         
         setLoadingState(true)
 
         try{
             const response = await axios.put(
-                `${process.env.REACT_APP_BACKEND_API_URL}/admin/delete-listing`,{
-                    listingInfoArr: listingArr
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/delete-user`,{
+                    userArr
                 },
                 {
                 headers: {
@@ -325,25 +287,34 @@ export default function AdminUserDashboard() {
                 },
                 }
             )
-            listingArr.forEach((listingInfo, index) => {
-                updateRecordsLocally('Delete', listingInfo)
+
+            userArr.forEach((userEleme, index) => {
+                updateRecordsLocally('Delete', userEleme)
             })
             
-            setPreviewListingFlag(false)
+            setPreviewUserFlag(false)
             setEditModalFlag(false)
             setSelectedItems([])
             setDeleteModalToggle(false)
             setSecondaryDeleteToggle(false)
-            setSingleDeleteListing([])
+            setSingledeleteUserRecord([])
             setEditItemButtons(Array(allUserRecords.length).fill(false))
 
             toast.success(response.data.message)
         }
-            catch(error) {
-                toast.error(error.response.data.message);
-            }
+        catch(error) {
+            toast.error(error.response.data.message);
+        }
     
-            setLoadingState(false)
+        setLoadingState(false)
+    }
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setEditModalInfo(prevState => ({
+        ...prevState,
+        [name]: value
+        }))
     }
 
   return (
@@ -382,12 +353,6 @@ export default function AdminUserDashboard() {
                             </svg>
                                 Reload
                             </button>
-                          <button onClick={() => setaddNewToggle(prev => !prev)} type="button" data-modal-target="createProductModal" data-modal-toggle="createProductModal" className="flex items-center justify-center text-white bg-blue-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                                <svg className="h-4 w-4 mr-2 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path clipRule="evenodd" fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                                </svg>
-                              Add New User
-                          </button>
                           <div className="flex items-center space-x-3 w-full md:w-auto">    
                               <div className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                                   <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="actionsDropdownButton">
@@ -489,7 +454,7 @@ export default function AdminUserDashboard() {
                                                         </li>
                                                         <li>
                                                             <button onClick={() => {
-                                                                setSingleDeleteListing([elem])
+                                                                setSingledeleteUserRecord([elem])
                                                                 setSecondaryDeleteToggle(prev => !prev)
                                                             }} type="button" data-modal-target="deleteModal" data-modal-toggle="deleteModal" className="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400">
                                                                 <svg className="w-4 h-4 mr-2" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" >
@@ -551,25 +516,6 @@ export default function AdminUserDashboard() {
                   </nav>
               </div>
 
-        {addNewToggle && 
-            <div className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
-                <div className="relative p-4 w-full max-w-2xl max-h-full md:max-h-[75%] z-100 overflow-y-auto scrollbar scrollbar-hide">
-                    <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add New Listing</h3>
-                            <button onClick={() => setaddNewToggle(prev => !prev)} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="updateProductModal">
-                                <svg  className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                                <span className="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <AdminListingForm typeOfReq='Post' editingForm={false} postReqAsAdmin={postReqAsAdmin} putReqAsAdmin={putReqAsAdmin}/>
-                    </div>
-                </div>
-            </div>
-        }
-
         {editModalFlag &&
             <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
                 <div className="relative p-4 w-full max-w-2xl max-h-full">
@@ -587,29 +533,32 @@ export default function AdminUserDashboard() {
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                         <div>
                             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                            <input type="text" name="name" id="name" value={editModalInfo.name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                            <input type="text" onChange={handleChange} name="name" id="name" value={editModalInfo.name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                         </div>
                         <div>
                             <label htmlFor="student_number" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">student_number</label>
-                            <input type="text" name="student_number"value={editModalInfo.student_number} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                            <input type="text" onChange={handleChange} name="student_number"value={editModalInfo.student_number} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                         </div>
                         <div>
                             <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
-                            <input type="text" value={editModalInfo.first_name} name="first_name" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                            <input type="text" onChange={handleChange} value={editModalInfo.first_name} name="first_name" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                         </div>
                         <div>
                             <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
-                            <input type="text" value={editModalInfo.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                            <input type="text" onChange={handleChange} value={editModalInfo.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                         </div>
                         <div>
                             <label htmlFor="postal_code" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Postal Code</label>
-                            <input type="text" value={editModalInfo.postal_code} name="postal_code" id="postal_code" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                            <input type="text" onChange={handleChange} value={editModalInfo.postal_code} name="postal_code" id="postal_code" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                         </div>
 
                         </div>
                         <div className="flex items-center space-x-4">
-                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update product</button>
-                        <button type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        <button onClick={(event) => {
+                            event.preventDefault();
+                            putReqAsAdmin(editModalInfo)
+                        }} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update User</button>
+                        <button onClick={() => {deleteUserRecord(singledeleteUserRecord)}} type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                             <svg  className="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                             </svg>
@@ -623,7 +572,7 @@ export default function AdminUserDashboard() {
 
         }
 
-        {previewListingFlag &&
+        {previewUserFlag &&
             <div className="overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
                 <div className="relative p-4 w-full max-w-xl md:max-w-[40%] max-h-full md:max-h-[70%] overflow-y-auto scrollbar scrollbar-hide">
             
@@ -644,30 +593,30 @@ export default function AdminUserDashboard() {
                         </div>
                         <dl>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Name</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.name}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.name}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">First Name</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.first_name ? previewListing.first_name : "N/A"}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.first_name ? previewUser.first_name : "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Last Name</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.last_name ? previewListing.last_name : "N/A"}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.last_name ? previewUser.last_name : "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Avatar</dt>
                             <dd className="mb-2 font-semibold leading-none text-gray-900 dark:text-white w-[40%]">
-                                {previewListing.avatar_url ? <ImageCarousel images={[{file_path: `https://jjcsqjjvzatkopidmaha.supabase.co/storage/v1/object/public/avatars/${previewListing.avatar_url}`}]} hovered={true} />
+                                {previewUser.avatar_url ? <ImageCarousel images={[{file_path: `${process.env.REACT_APP_SUPABASE_STORAGE_AVATAR_BUCKET}/${previewUser.avatar_url}`}]} hovered={true} />
                                 :
                                 <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">No Avatar set</dd>
                                 }
                             </dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Student Number</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.student_number ? previewListing.student_number : "N/A"}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.student_number ? previewUser.student_number : "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">User ID</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.id}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.id}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Account Created at</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{formatDate(previewListing.created_at)}</dd>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{formatDate(previewUser.created_at)}</dd>
                         </dl>
                         <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-3 sm:space-x-4">
                                 <button onClick={() => {
-                                    handleRowActionClick("Edit", previewListing)
-                                    setPreviewListingFlag(prev => !prev)
+                                    handleRowActionClick("Edit", previewUser)
+                                    setPreviewUserFlag(prev => !prev)
                                 }} type="button" className="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-900">
                                     <svg  className="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -675,10 +624,10 @@ export default function AdminUserDashboard() {
                                     </svg>
                                     Edit
                                 </button>
-                                <button onClick={() => navigate(`/ad/${previewListing.id}`)} type="button" className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">User view</button>
+                                <button type="button" className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">User view</button>
                             </div>
                             <button onClick={() => {
-                                setSingleDeleteListing([previewListing])
+                                setSingledeleteUserRecord([previewUser])
                                 setSecondaryDeleteToggle(prev => !prev)
                                 }} type="button" className="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
                                 <svg  className="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -706,9 +655,9 @@ export default function AdminUserDashboard() {
                         <svg className="text-gray-400 dark:text-gray-500 w-16 h-16 mb-3.5 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <p className="mb-4 text-gray-500 dark:text-gray-300">{selectedItems.length > 1 ? `Are you sure you want to delete these ${selectedItems.length} listings?` : `Are you sure you want to delete listing "${selectedItems[0].title}"?`}</p>
+                        <p className="mb-4 text-gray-500 dark:text-gray-300">{selectedItems.length > 1 ? `Are you sure you want to delete selected ${selectedItems.length} users?` : `Are you sure you want to delete user "${selectedItems[0].name}"?`}</p>
                         <div className="flex justify-center items-center space-x-4">
-                            <button onClick={() => {deleteListing(selectedItems)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
+                            <button onClick={() => {deleteUserRecord(selectedItems)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
                             <button onClick={() => setDeleteModalToggle(prev => !prev)} type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
                         </div>
                     </div>
@@ -730,9 +679,9 @@ export default function AdminUserDashboard() {
                         <svg className="text-gray-400 dark:text-gray-500 w-16 h-16 mb-3.5 mx-auto" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        <p className="mb-4 text-gray-500 dark:text-gray-300">{`Are you sure you want to delete listing "${singleDeleteListing[0].title}"?`}</p>
+                        <p className="mb-4 text-gray-500 dark:text-gray-300">{`Are you sure you want to delete user "${singledeleteUserRecord[0].name}"?`}</p>
                         <div className="flex justify-center items-center space-x-4">
-                            <button onClick={() => {deleteListing(singleDeleteListing)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
+                            <button onClick={() => {deleteUserRecord(singledeleteUserRecord)}} className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">Yes, I'm sure</button>
                             <button onClick={() => setSecondaryDeleteToggle(prev => !prev)} type="button" className="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
                         </div>
                     </div>

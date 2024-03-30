@@ -26,7 +26,7 @@ export default function AdminDashboard() {
               <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={selectedOption} onChange={handleSelectChange}>
                 <option value="">Choose a Table</option>
                 <option value="ad_listings">Ad Listings</option>
-                <option value="profiles">Profiles</option>
+                <option value="profiles">Profile</option>
                 <option value="admin_users">Admin Users</option>
               </select>
             </form>
