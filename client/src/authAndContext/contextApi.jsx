@@ -131,24 +131,28 @@ export const AuthProvider = ({ children }) => {
 
 
 	async function checkIfAdmin() {
-		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_BACKEND_API_URL}/admin/verify-admin-privilege`,
-				{
-					headers: {
-						Authorization: "Bearer " + localSession.access_token,
-					},
+		const checkUser = await supabase.auth.getUser();
+		if (checkUser.data.user !== null) {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/admin/verify-admin-privilege`,
+					{
+						headers: {
+							Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
+						},
+					}
+				)
+	
+				if(response.data) {
+					return true
 				}
-			)
-
-			if(response.data) {
-				return true
+			}
+			catch(error) {
+				toast.error(error.message)
+				return false
 			}
 		}
-		catch(error) {
-			toast.error(error.message)
-			return false
-		}
+		
 		return false
 	}
 
