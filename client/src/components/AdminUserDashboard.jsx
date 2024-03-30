@@ -8,7 +8,7 @@ import supabase from '../authAndContext/supabaseConfig'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
-export default function AdminAdDashboard() {
+export default function AdminUserDashboard() {
 
     const {loadingState, setLoadingState, localSession, uploadImageToBucket} = useContext(AuthContext)
 
@@ -32,10 +32,10 @@ export default function AdminAdDashboard() {
 
     //to build table data
     const [coloumns, setColoumns] = useState([])
-    const [allAdListings, setAllAdListings] = useState([])
+    const [allUserRecords, setAllUserRecords] = useState([])
 
     //row action button (ellipsis)
-    const [editItemButtons, setEditItemButtons] = useState(Array(allAdListings.length).fill(false));
+    const [editItemButtons, setEditItemButtons] = useState(Array(allUserRecords.length).fill(false));
 
     const [editModalFlag, setEditModalFlag] = useState(false)
     const [editModalInfo, setEditModalInfo] = useState(null)
@@ -47,7 +47,7 @@ export default function AdminAdDashboard() {
         async function fetchData() {
             setLocalLoading(true);
             try {
-                await getAdDatabase();
+                await getUserDatabase();
             } finally {
                 setLocalLoading(false);
             }
@@ -55,38 +55,38 @@ export default function AdminAdDashboard() {
         fetchData();
     }, []);
 
-    async function getAdDatabase() {
+    async function getUserDatabase() {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-listings`,
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-users`,
                 {
                     headers: {
                         Authorization: "Bearer " + localSession.access_token,
                     },
                 }
             )
-            setAllAdListings(response.data)
+            setAllUserRecords(response.data)
             setColoumns(Object.keys(response.data[0]))
-            toast.success("Ad Listing Records fetched!")
+            toast.success("All User Records fetched!")
         }
         catch(error) {
             toast.error(error.response.data.message)
         }
     }
 
-    async function getAdDatabaseQuery(queryObject) {
+    async function getUserDatabaseQuery(queryObject) {
         try {
-            const queryParams = coloumns.slice(0, coloumns.length-4).map(column => `${column}=${queryObject[column]}`).join('&');
+            const queryParams = coloumns.map(column => `${column}=${queryObject[column]}`).join('&');
 
             const response = await axios.get(
-                `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-listings/query?${queryParams}`,
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-users/query?${queryParams}`,
                 {
                     headers: {
                         Authorization: "Bearer " + localSession.access_token,
                     },
                 }
             )
-            setAllAdListings(response.data)
+            setAllUserRecords(response.data)
         }
         catch(error) {
             toast.error(error.response.data.message)
@@ -114,7 +114,7 @@ export default function AdminAdDashboard() {
     }
 
     function handleAllCheckBoxButton() {
-        if (selectedItems.length === 0 || selectedItems.length < allAdListings.length) setSelectedItems(allAdListings)
+        if (selectedItems.length === 0 || selectedItems.length < allUserRecords.length) setSelectedItems(allUserRecords)
         else setSelectedItems([])
 
     }
@@ -214,13 +214,13 @@ export default function AdminAdDashboard() {
     async function searchDatabaseQuery(event) {
         event.preventDefault()
         const queryObject = parseQueryString(searchQuery)
-        await getAdDatabaseQuery(queryObject)
+        await getUserDatabaseQuery(queryObject)
     }
 
-    function updateListingsLocally(action, listingInfo, updatedData) {
+    function updateRecordsLocally(action, listingInfo, updatedData) {
 		if (action === "Modify") {
-			let targetIndex = allAdListings.indexOf(listingInfo)
-			setAllAdListings(prev => prev.map((item, i) => {
+			let targetIndex = allUserRecords.indexOf(listingInfo)
+			setAllUserRecords(prev => prev.map((item, i) => {
 				if (i !== targetIndex) {
 					return item; // Keep the item unchanged if the index doesn't match
 				} else {
@@ -229,20 +229,20 @@ export default function AdminAdDashboard() {
 			}));
 		}
 		else if (action === "Delete") {
-			let targetIndex = allAdListings.indexOf(listingInfo)
-			setAllAdListings(prev => prev.filter((item, i) => i !== targetIndex));
+			let targetIndex = allUserRecords.indexOf(listingInfo)
+			setAllUserRecords(prev => prev.filter((item, i) => i !== targetIndex));
 		}
 		else if (action === "Add") {
-			setAllAdListings(prev => [listingInfo, ...prev])
+			setAllUserRecords(prev => [listingInfo, ...prev])
 		}
 		else if (action === "Update") {
-			const updatedUserListings = allAdListings.map((elem, index) => {
+			const updatedUserListings = allUserRecords.map((elem, index) => {
 				if (elem.id === listingInfo.id) {
 					return listingInfo
 				}
 				else return elem
 			})
-			setAllAdListings(updatedUserListings)
+			setAllUserRecords(updatedUserListings)
 		}
 	}
 
@@ -252,10 +252,10 @@ export default function AdminAdDashboard() {
             if (checkUser.data.user !== null) {
                 const listOfImages = await uploadImageToBucket(
                 imageList,
-                "ad-listings"
+                "avatar"
                 );
                 const response = await axios.put(
-                `${process.env.REACT_APP_BACKEND_API_URL}/admin/update-listing`,
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/update-user-record`,
                 { listingInfo: {...listingInfo, image: [...listingInfo.image.map(item => item.file_path), ...listOfImages]}
                 },
                 {
@@ -264,7 +264,7 @@ export default function AdminAdDashboard() {
                     },
                 }
                 );
-                updateListingsLocally("Update", listingInfo)
+                updateRecordsLocally("Update", listingInfo)
                 setEditModalFlag(false)
                 toast.success("Listing updated!")
 		} else {
@@ -279,41 +279,29 @@ export default function AdminAdDashboard() {
 		setLoadingState(false);
     }
 
-    async function postReqAsAdmin(listingInfo, imageList) {
+    async function postReqAsAdmin(listingInfo) {
 
         //change this to check for admin prvilege
         const checkUser = await supabase.auth.getUser();
         
 		try {
-			if (checkUser.data.user !== null) {
-				const listOfImages = await uploadImageToBucket(
-					imageList,
-					"ad-listings"
-				);
-				const response = await axios.post(
-					`${process.env.REACT_APP_BACKEND_API_URL}/admin/create-new-listing`,
-					{
-						...listingInfo,
-						images: listOfImages,
-					},
-					{
-						headers: {
-							Authorization: "Bearer " + localSession.access_token,
-						},
-					}
-				);
+            const response = await axios.post(
+                `${process.env.REACT_APP_BACKEND_API_URL}/admin/create-new-account`,
+                {
+                    ...listingInfo,
+                },
+                {
+                    headers: {
+                        Authorization: "Bearer " + localSession.access_token,
+                    },
+                }
+            );
 
-                //reload the get req to fetch new data // or add the new data to current list below:
-                updateListingsLocally("Add", response.data)
-                setaddNewToggle(false)
-                toast.success("New Listing Posted!")
+            //reload the get req to fetch new data // or add the new data to current list below:
+            updateRecordsLocally("Add", response.data)
+            setaddNewToggle(false)
+            toast.success("New User Record created!")
 
-			} else {
-				const error = new Error("Unauthorised");
-				error.status = 403;
-				toast.error(error.message);
-				throw error;
-			}
 		} catch (error) {
 			toast.error(error.response.data.message);
 		}
@@ -338,7 +326,7 @@ export default function AdminAdDashboard() {
                 }
             )
             listingArr.forEach((listingInfo, index) => {
-                updateListingsLocally('Delete', listingInfo)
+                updateRecordsLocally('Delete', listingInfo)
             })
             
             setPreviewListingFlag(false)
@@ -347,7 +335,7 @@ export default function AdminAdDashboard() {
             setDeleteModalToggle(false)
             setSecondaryDeleteToggle(false)
             setSingleDeleteListing([])
-            setEditItemButtons(Array(allAdListings.length).fill(false))
+            setEditItemButtons(Array(allUserRecords.length).fill(false))
 
             toast.success(response.data.message)
         }
@@ -362,7 +350,7 @@ export default function AdminAdDashboard() {
     <>
             <h5 className='mt-5'>
                     <span className="text-gray-500">Table:</span>
-                    <span className="dark:text-white">Ad (image, status, category profile joined)</span>
+                    <span className="dark:text-white">Profile</span>
             </h5>
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -388,7 +376,7 @@ export default function AdminAdDashboard() {
                                     Delete
                                 </button>
                             }
-                            <button onClick={() => getAdDatabase()} type="button" data-modal-target="createProductModal" data-modal-toggle="createProductModal" className="flex items-center justify-center text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 font-medium rounded-lg text-sm px-4 py-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600 focus:outline-none">
+                            <button onClick={() => getUserDatabase()} type="button" data-modal-target="createProductModal" data-modal-toggle="createProductModal" className="flex items-center justify-center text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 font-medium rounded-lg text-sm px-4 py-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-gray-600 focus:outline-none">
                             <svg className="w-5 h-5 mx-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
                             </svg>
@@ -398,7 +386,7 @@ export default function AdminAdDashboard() {
                                 <svg className="h-4 w-4 mr-2 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path clipRule="evenodd" fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                 </svg>
-                              Add Listing
+                              Add New User
                           </button>
                           <div className="flex items-center space-x-3 w-full md:w-auto">    
                               <div className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
@@ -454,7 +442,7 @@ export default function AdminAdDashboard() {
                           </thead>
                           <tbody>
                               {/*Each <tr> is a row*/}
-                              {allAdListings.map((elem, index) => (
+                              {allUserRecords.map((elem, index) => (
                                     <tr className={`dark:border-gray-700 ${isRowSelected(elem) ? 'bg-blue-100 border-white' : 'border-b'}`}>
                                         <td className="p-4 w-4">
                                             <div className="flex items-center">
@@ -464,22 +452,13 @@ export default function AdminAdDashboard() {
                                         </td>
                                         <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{elem.id}</th>
                                         <td className="px-4 py-3">{formatDate(elem.created_at)}</td>
-                                        <td className="px-4 py-3">{elem.category_id}</td>
-                                        <td className="px-4 py-3">{elem.status_id}</td>
-                                        <td className="px-4 py-3 max-w-[12rem]">{elem.title}</td>
-                                        <td className="px-4 py-3">{elem.price}</td>
-                                        <td className="px-4 py-3 truncate max-w-[20rem]">{elem.description}</td>
-                                        <td className="px-4 py-3">{formatDate(elem.post_time)}</td>
-                                        <td className="px-4 py-3">{formatDate(elem.expire_time)}</td>
+                                        <td className="px-4 py-3">{elem.name}</td>
                                         <td className="px-4 py-3">{elem.postal_code}</td>
-                                        <td className="px-4 py-3 truncate max-w-[15rem]">{elem.location}</td>
-                                        <td className="px-4 py-3">{elem.user_id}</td>
-                                        <td className="px-4 py-3">{elem.lng}</td>
-                                        <td className="px-4 py-3">{elem.lat}</td>
-                                        <td className="px-4 py-3">{elem.image.length}</td>
-                                        <td className="px-4 py-3">{elem.category.name}</td>
-                                        <td className="px-4 py-3">{elem.status.type}</td>
-                                        <td className="px-4 py-3">{elem.profile.name}</td>
+                                        <td className="px-4 py-3 max-w-[12rem]">{elem.avatar_url}</td>
+                                        <td className="px-4 py-3">{elem.first_name}</td>
+                                        <td className="px-4 py-3 truncate max-w-[20rem]">{elem.last_name}</td>
+                                        <td className="px-4 py-3">{elem.student_number}</td>
+
 
                                         <td className="px-4 py-3 flex flex-col items-end relative">
                                             <button onClick={() => toggleEditItemButton(index)} className="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
@@ -532,9 +511,9 @@ export default function AdminAdDashboard() {
                   <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
                       <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                           Showing&nbsp;
-                          <span className="font-semibold text-gray-900 dark:text-white">{allAdListings.length}&nbsp;</span>
+                          <span className="font-semibold text-gray-900 dark:text-white">{allUserRecords.length}&nbsp;</span>
                           of&nbsp;
-                          <span className="font-semibold text-gray-900 dark:text-white">{allAdListings.length}&nbsp;</span>
+                          <span className="font-semibold text-gray-900 dark:text-white">{allUserRecords.length}&nbsp;</span>
                       </span>
                       <ul className="inline-flex items-stretch -space-x-px">
                           <li>
@@ -592,22 +571,56 @@ export default function AdminAdDashboard() {
         }
 
         {editModalFlag &&
-            <div className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
-                <div className="relative p-4 w-full max-w-2xl max-h-full md:max-h-[75%] z-100 overflow-y-auto scrollbar scrollbar-hide">
+            <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
+                <div className="relative p-4 w-full max-w-2xl max-h-full">
                     <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Update Listing</h3>
-                            <button onClick={() => handleModalActionClick("Edit")} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="updateProductModal">
-                                <svg  className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                                <span className="sr-only">Close modal</span>
-                            </button>
+                    <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Update User Record</h3>
+                        <button onClick={() => handleModalActionClick("Edit")} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                            <span className="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <form>
+                        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                        <div>
+                            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                            <input type="text" name="name" id="name" value={editModalInfo.name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                         </div>
-                        <AdminListingForm formDataProp={editModalInfo} typeOfReq='Put' editingForm={true} postReqAsAdmin={postReqAsAdmin} putReqAsAdmin={putReqAsAdmin}/>
+                        <div>
+                            <label htmlFor="student_number" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">student_number</label>
+                            <input type="text" name="student_number"value={editModalInfo.student_number} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                        </div>
+                        <div>
+                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
+                            <input type="text" value={editModalInfo.first_name} name="first_name" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                        </div>
+                        <div>
+                            <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
+                            <input type="text" value={editModalInfo.last_name} name="last_name" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                        </div>
+                        <div>
+                            <label htmlFor="postal_code" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Postal Code</label>
+                            <input type="text" value={editModalInfo.postal_code} name="postal_code" id="postal_code" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                        </div>
+
+                        </div>
+                        <div className="flex items-center space-x-4">
+                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update product</button>
+                        <button type="button" className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                            <svg  className="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            Delete
+                        </button>
+                        </div>
+                    </form>
                     </div>
                 </div>
-            </div>
+                </div>
+
         }
 
         {previewListingFlag &&
@@ -618,11 +631,10 @@ export default function AdminAdDashboard() {
 
                         <div className="flex justify-between mb-4 rounded-t sm:mb-5">
                             <div className="text-lg text-gray-900 md:text-xl dark:text-white">
-                                <h3 className="font-semibold ">{previewListing.title}</h3>
-                                <p className="font-bold">${previewListing.price}</p>
+                                <h3 className="font-semibold ">User Record</h3>
                             </div>
                             <div>
-                                <button onClick={() => handleModalActionClick("Preview")} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
+                                <button onClick={() => handleModalActionClick("Preview")} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white">
                                     <svg  className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                                     </svg>
@@ -631,22 +643,24 @@ export default function AdminAdDashboard() {
                             </div>
                         </div>
                         <dl>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Status</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.status.type}</dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.description}</dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Images</dt>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Name</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.name}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">First Name</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.first_name ? previewListing.first_name : "N/A"}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Last Name</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.last_name ? previewListing.last_name : "N/A"}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Avatar</dt>
                             <dd className="mb-2 font-semibold leading-none text-gray-900 dark:text-white w-[40%]">
-                                <ImageCarousel images={previewListing.image} hovered={true} />
+                                {previewListing.avatar_url ? <ImageCarousel images={[{file_path: `https://jjcsqjjvzatkopidmaha.supabase.co/storage/v1/object/public/avatars/${previewListing.avatar_url}`}]} hovered={true} />
+                                :
+                                <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">No Avatar set</dd>
+                                }
                             </dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Category</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.category.name}</dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Location</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.location}</dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Created By</dt>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.profile.name}</dd>
-                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">user_id: {previewListing.user_id}</dd>
-                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Created at</dt>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Student Number</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.student_number ? previewListing.student_number : "N/A"}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">User ID</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.id}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Account Created at</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{formatDate(previewListing.created_at)}</dd>
                         </dl>
                         <div className="flex justify-between items-center">

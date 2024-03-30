@@ -167,6 +167,12 @@ export async function adminPostNewListing(req, res) {
                 {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id}
             ])
             .select()
+        
+        if (newListing.status == 400) {
+            const error = new Error(newListing.error.message)
+            error.status = 400
+            throw error;
+        }   
 
         const newlyCreatedListing = newListing.data[0]
 
@@ -290,8 +296,7 @@ export async function adminUpdateListing(req, res) {
                 status!inner(type)
                 `
             )
-            .eq('id', listingInfo.id)
-
+            .eq('id', listingInfo.id);
             
         const originalListingImages = await supabase
             .from('image')
@@ -355,6 +360,182 @@ export async function adminUpdateListing(req, res) {
 
     catch(error) {
         const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminGetAllUsers(req, res) {
+    try {
+        const allUsers = await supabase
+            .from('profile')
+            .select('*')
+            .order('id', { ascending: false });
+        
+        if (allUsers.status == 400) {
+            const error = new Error(allUsers.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(allUsers.data)
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminGetQueryUsers(req, res) {
+    let queryValues = req.query
+
+    try {
+
+        const matchingQuery = {}
+
+         //filter the records based on the query params
+         if (queryValues) {
+            // Loop through the queryParams object and add filters
+            Object.entries(queryValues).forEach(([key, value]) => {
+                if (value !== 'undefined') {
+                    matchingQuery[key] = value
+                }
+            });
+        }
+        
+        //selecting all records
+        const queriedListing = await supabase
+            .from('profile')
+            .select('*')
+            .match(matchingQuery)
+            .order('id', { ascending: false });
+
+        if (queriedListing.status == 400) {
+            const error = new Error(queriedListing.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(queriedListing.data)
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminGetAllAdminUsers(req, res) {
+    try {
+        const allUsers = await supabase
+            .from('admin_users')
+            .select('*, profile (name)')
+            .order('id', { ascending: false });
+        
+        if (allUsers.status == 400) {
+            const error = new Error(allUsers.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(allUsers.data)
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminGetQueryAdminUsers(req, res) {
+    let queryValues = req.query
+
+    try {
+
+        const matchingQuery = {}
+
+         //filter the records based on the query params
+         if (queryValues) {
+            // Loop through the queryParams object and add filters
+            Object.entries(queryValues).forEach(([key, value]) => {
+                if (value !== 'undefined') {
+                    matchingQuery[key] = value
+                }
+            });
+        }
+        
+        //selecting all records
+        const queriedListing = await supabase
+            .from('admin_users')
+            .select('*, profile (name)')
+            .match(matchingQuery)
+            .order('id', { ascending: false });
+
+        if (queriedListing.status == 400) {
+            const error = new Error(queriedListing.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(queriedListing.data)
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+}
+
+export async function adminAddNewAdmin(req, res) {
+
+
+    let {newUser_id} = req.body
+
+    try {        
+        const newAdmin = await supabase
+            .from('admin_users')
+            .insert([
+                {user_id: newUser_id}
+            ])
+        .select('*, profile (name)')
+
+        if (newAdmin.status == 400) {
+            const error = new Error(newAdmin.error.message)
+            error.status = 400
+            throw error;
+        }
+
+        res.status(200).json(newAdmin.data[0])
+    }
+    catch(error) {
+        const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
+        res.status(status).json({ message: error.message });
+    }
+
+}
+
+export async function adminDeleteAdminAccess(req, res) {
+    let { users } = req.body;
+
+    try {
+        for (const user of users) {
+            const findAdminRecord = await supabase
+                .from('admin_users')
+                .select('*')
+                .eq('id', user.id);
+
+            if (findAdminRecord.data[0].user_id !== user.user_id) {
+                const error = new Error("Invalid Deletion Check!");
+                error.status = 422;
+                throw error;
+            }
+
+            const deleteAdminAccess = await supabase
+                .from('admin_users')
+                .delete()
+                .match({ 'id': user.id });
+        }
+
+        res.status(200).json({ message: "Admin Privileges revoked for user!" });
+    }
+    catch(error) {
+        const status = error?.status || 500;
         res.status(status).json({ message: error.message });
     }
 }

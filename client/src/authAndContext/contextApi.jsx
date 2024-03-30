@@ -118,7 +118,6 @@ export const AuthProvider = ({ children }) => {
 			)
 
 			if(response.data) {
-				toast.success("Logged in as Admin user!")
 				return true
 			}
 		}
