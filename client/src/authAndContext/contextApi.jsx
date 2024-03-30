@@ -134,7 +134,7 @@ export const AuthProvider = ({ children }) => {
 	// }, [profileData]);
 
 	// function for registering new account
-	async function registerNewAccount(email, password, username) {
+	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
 		console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
@@ -142,11 +142,14 @@ export const AuthProvider = ({ children }) => {
 				password: password,
 				options: {
 					data: {
-						avatar_url: "",
-						name: username,
-						postal_code: "",
-						role_id: 1,
-					},
+                        avatar_url: '',
+                        name: username,
+                        first_name: firstName,
+                        last_name: lastName,
+                        student_number: parseInt(studentNum),
+                        postal_code: '',
+                        role_id: 1
+                    },
 				},
 			});
 			if (error)
