@@ -151,7 +151,7 @@ export async function getUserHistory(req, res) {
     const {user_id} = req.body;
     const {limit} = req.query;
     try {
-        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, image!left(file_path), location, lng, lat)`)
+        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, status!inner(type), image!left(file_path), location, lng, lat)`)
         .eq('user_id', user_id).filter('ad.status_id', 'in', '(1,2,3)').order('created_at');
 
         if(!isNaN(parseInt(limit))) query = query.limit(parseInt(limit));
