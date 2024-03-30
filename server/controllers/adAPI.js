@@ -55,7 +55,7 @@ export async function homepage(req, res) {
       throw error;
     }
 
-    const availableAds = ads.filter(ad => ad.status.type !== "Unavailable");
+    const availableAds = ads.filter(ad => ad.status.type == "Available");
 
     const adsByCategory = availableAds.reduce((acc, ad) => {
       const categoryID = ad.category_id.toString();
