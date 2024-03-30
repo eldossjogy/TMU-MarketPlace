@@ -45,11 +45,11 @@ export default function VerticalCard({
   return (
     <Link to={{ pathname: `/ad/${postID}` }}
     >
-      <div id="card" className="hover:cursor-pointer relative group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-				<HeartIcon className={`${show_saved ? '' : `hidden group-hover:block ${saved ? '-rotate-6' : ''}`} absolute top-4 start-4 w-12 h-12 md:w-6 md:h-6 hover:rotate-6 ${saved ? 'text-rose-500' : 'text-white/25 stroke-rose-500'} hover:text-rose-600`} onClick={handleSaved}/>
+      <div id="card" className="hover:cursor-pointer group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="bg-[#fafafb] rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
-          <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-3">
+          <div className="mr-auto ml-auto rounded-md bg-[#fafafb] p-3 relative">
             <CardImages image={image} setHovered={setHovered} hovered={hovered} />
+				    <HeartIcon className={`${show_saved ? '' : `hidden group-hover:block ${saved ? '-rotate-6' : ''}`} absolute top-4 start-4 w-12 h-12 md:w-6 md:h-6 hover:rotate-6 ${saved ? 'text-rose-500 hover:text-white/25 hover:stroke-rose-500' : 'text-white/25 stroke-rose-500'} hover:text-rose-600`} onClick={handleSaved}/>
           </div>
           <div className="px-3 pb-3 bg-[#fafafb]">
             <div className="flex justify-between pb-2 items-center">
