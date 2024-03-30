@@ -47,7 +47,7 @@ export default function HomePage() {
 
                 <Link
                   to={`/search?category=${key}`}
-                  className="hover:cursor-pointer bg-[#fafafb] rounded-lg border-2 shadow-md hover:shadow-lg overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-amber-300 hover:border-none">
+                  className="hover:cursor-pointer bg-[#fafafb] rounded-lg border-2 shadow-md hover:shadow-lg overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-amber-100 hover:border-none">
                   <div className="text-black text-6xl">→</div>
                   <div className="text-gray-700 text-base mt-2">show more</div>
                 </Link>
