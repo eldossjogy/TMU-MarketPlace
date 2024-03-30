@@ -11,9 +11,9 @@ export const SearchProvider = ({ children }) =>  {
     const {localSession, user} = useContext(AuthContext);
     const {location, range} = useContext(LocationContext);
     const [grid, setGrid] = useState(false);
-    const [sort, setSort] = useState(0);
-    const [historySortState, setHistorySortState] = useState(0);
-    const [savedListingsSortState, setSavedListingsSortState] = useState(0);
+    const [sort, setSort] = useState(-1);
+    const [historySortState, setHistorySortState] = useState(-1);
+    const [savedListingsSortState, setSavedListingsSortState] = useState(-1);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
@@ -167,7 +167,7 @@ export const SearchProvider = ({ children }) =>  {
                 case 3: // Sort by price Up
                     tempResults.sort((a,b) => {return b.price - a.price});
                     break;
-                case 4: // Sort by date Down
+                case 4: // Sort by date Down 
                     tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
                     break;
                 case 5: // Sort by date Up
@@ -208,7 +208,7 @@ export const SearchProvider = ({ children }) =>  {
     function sortByDate(sortType = -1, data = []) {
         let tempResults = [...data];
         switch (sortType) {
-            case 0: // Sort by date Down
+            case 0: // Sort by date Down (Recent to later)
                 tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
                 break;
             case 1: // Sort by date Up
@@ -357,6 +357,7 @@ export const SearchProvider = ({ children }) =>  {
 					console.log(error);
 					setUserSavedListings([]);
 				}
+
 				return getUserSavedIDs().then(sortSaved(savedListingsSortState, data?.data ?? []));
 			}
             else return [];

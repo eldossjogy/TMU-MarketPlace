@@ -4,17 +4,23 @@ import SearchContext from '../authAndContext/searchProvider'
 import HorizontalCard from '../components/HorizontalCard';
 import VerticalCard from '../components/VerticalCard';
 import SortToolbar from '../components/SortToolbar';
+import toast from 'react-hot-toast';
 
 export default function HistoryPage() {
     const {userSavedListings, getUserSavedListings, savedListingsSortState, sortSaved, userSavedIDs, grid} = useContext(SearchContext);
 
     useEffect(() => {
-        getUserSavedListings();
+        // getUserSavedListings();
+        toast('saved changed')
     }, [userSavedIDs])
+
+    useEffect(() => {
+        getUserSavedListings();
+    }, []) 
     
     return (
         <MyMarketContainer title={"View Saved"}>
-            <SortToolbar customSortKey={savedListingsSortState} sortResultsFn={sortSaved} defaultSortState={[{id: 0, name:'Date', state: 1}]}/>
+            <SortToolbar customSortKey={savedListingsSortState} sortResultsFn={sortSaved} defaultSortState={[{id: 0, name:'Date', state: 0}]}/>
             <div className={userSavedListings?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
                 {userSavedListings?.length > 0 && !grid && userSavedListings.map((result) => (
                     <HorizontalCard
@@ -23,7 +29,7 @@ export default function HistoryPage() {
                         price={result.ad?.price.toLocaleString()}
                         location={''}
                         description={result.ad?.description}
-                        status={{ id: result?.ad?.status_id ?? 1, type: result.ad?.status?.type ?? '' }}
+                        status={{ id: result.ad?.status_id ?? 1, type: result.ad?.status?.type ?? ''}}
                         postID={result.ad_id}
                         date={result.created_at}
                         distance={''}

@@ -13,7 +13,7 @@ export async function searchAds(req, res) {
         const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status) < 4 ? `(${parseInt(status)})` : '(1,2,3)') : '(1)';
         const searchLatLng = {lat: isNaN(parseFloat(lat)) ? 43.6577518 : parseFloat(lat), lng: isNaN(parseFloat(lng)) ? -79.3786619 : parseFloat(lng)}
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
-        const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
+        const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 4 ? `(${parseInt(category)})` : '(1,2,3)');
 
         let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`);
 
@@ -151,7 +151,8 @@ export async function getUserHistory(req, res) {
     const {user_id} = req.body;
     const {limit} = req.query;
     try {
-        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`).eq('user_id', user_id).order('created_at', {ascending: false});
+        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, image!left(file_path), location, lng, lat)`)
+        .eq('user_id', user_id).filter('ad.status_id', 'in', '(1,2,3)').order('created_at');
 
         if(!isNaN(parseInt(limit))) query = query.limit(parseInt(limit));
 
@@ -170,7 +171,7 @@ export async function getUserHistory(req, res) {
         }
 
         res.status(200).json({
-            data: data,
+            data: data.reverse(),
             error: null
         });
     } catch (error) {
@@ -247,8 +248,8 @@ export async function addToSaved(req, res) {
 export async function getUserSavedListings(req, res) {
     const {user_id} = req.body;
     try {
-        const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`, { distinct: true })
-        .eq('user_id', user_id).order('created_at', {ascending: false}); // , )
+        const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, status!inner(type), image!left(file_path), location, lng, lat)`)
+        .filter('ad.status_id', 'in', '(1,2,3)').eq('user_id', user_id).order('created_at'); // , )
 
         if(error){
             console.log(error);
@@ -263,7 +264,7 @@ export async function getUserSavedListings(req, res) {
         }
 
         res.status(200).json({
-            data: data,
+            data: data.reverse(),
             error: null
         });
     } catch (error) {

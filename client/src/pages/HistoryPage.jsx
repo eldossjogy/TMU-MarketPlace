@@ -14,7 +14,7 @@ export default function HistoryPage() {
     
     return (
         <MyMarketContainer title={"View History"}>
-            <SortToolbar customSortKey={historySortState} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 1}]}/>
+            <SortToolbar customSortKey={historySortState} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 0}]}/>
             <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
                 {userHistory && !grid && userHistory.length !== 0 && userHistory.map((result) => (
                     <HorizontalCard
