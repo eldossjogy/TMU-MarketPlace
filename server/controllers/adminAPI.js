@@ -306,7 +306,7 @@ export async function adminUpdateListing(req, res) {
             //update the ad listing from ad table
             const newListing = await supabase
             .from('ad')
-            .update({title: listingInfo.title, price: listingInfo.price, description: listingInfo.description, expire_time: listingInfo.expire_time, postal_code: listingInfo.postal_code, location: listingInfo.location, category_id: listingInfo.category_id})
+            .update({title: listingInfo.title, price: listingInfo.price, description: listingInfo.description, expire_time: listingInfo.expire_time, postal_code: listingInfo.postal_code, location: listingInfo.location, category_id: listingInfo.category_id, status_id: listingInfo.status_id})
             .eq('id', listingInfo.id)
             .select()
 

@@ -1,9 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react'; import AuthContext from '../authAndContext/contextApi';
+import React, { useContext, useState, useEffect, Fragment } from 'react'; import AuthContext from '../authAndContext/contextApi';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadingScreen from './LoadingScreen';
 import LocationContext from '../authAndContext/locationProvider';
 import "../index.css";
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 
 export default function AdminListingForm({formDataProp = {
     title: '',
@@ -15,9 +17,10 @@ export default function AdminListingForm({formDataProp = {
 	lat: null,
 	lng: null,
     category_id: 2,
+	status_id: 1,
 }, typeOfReq="Post", editingForm=false, postReqAsAdmin, putReqAsAdmin}) {
 
-    const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
+    const { loadingState, setLoadingState, categories, statusList } = useContext(AuthContext);
 	const { location, city, generateLocation, searchForLocation, searchingLocation } = useContext(LocationContext);
 	
     const navigate = useNavigate();
@@ -361,6 +364,56 @@ export default function AdminListingForm({formDataProp = {
 							))}
 						</ul>
 					</div>
+					<Listbox value={formData.status_id} onChange={(e) => setFormData(prev => ({...prev, status_id: e}))}>
+						<div className="relative mt-1 w-full">
+							<Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white p-1 md:py-2 md:pl-3 md:pr-10 sm:text-left ring-gray-200 ring-2 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+								<h2 className={`${formData.status_id !== 1 ? 'text-rose-700 ' : ''} text-xs sm:text-sm md:text-base line-clamp-1`}>{statusList.find(item => item.id === formData.status_id).type}</h2>
+								<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+									<ChevronUpDownIcon
+										className="hidden sm:block h-5 w-5 text-gray-400"
+										aria-hidden="true"
+									/>
+								</span>
+							</Listbox.Button>
+							<Transition
+								as={Fragment}
+								leave="transition ease-in duration-100"
+								leaveFrom="opacity-100"
+								leaveTo="opacity-0"
+							>
+								<Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-xs sm:text-sm md:text-base z-50">
+									{statusList.map((status) => (
+										<Listbox.Option
+											key={status.id}
+											className={({ active }) =>
+												`relative cursor-default select-none p-1 sm:py-2 sm:pl-10 sm:pr-4 ${
+													active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+												}`
+											}
+											value={status.id}
+										>
+											{({ selected }) => (
+												<div className='flex'>
+													<span
+														className={`block truncate ${
+															selected ? 'font-medium' : 'font-normal'
+														}`}
+													>
+														{status.type}
+													</span>
+													{selected ? (
+														<span className="hidden sm:flex absolute inset-y-0 left-0  items-center pl-3 text-amber-600">
+															<CheckIcon className="h-5 w-5" aria-hidden="true" />
+														</span>
+													) : null}
+												</div>
+											)}
+										</Listbox.Option>
+									))}
+								</Listbox.Options>
+							</Transition>
+						</div>
+				</Listbox>
 				</div>
 				<form className='flex justify-center md:justify-start space-x-8 md:w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
 					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>
