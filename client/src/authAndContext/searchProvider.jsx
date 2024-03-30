@@ -27,12 +27,6 @@ export const SearchProvider = ({ children }) =>  {
     const [userSavedListings, setUserSavedListings] = useState([]);
     const [userSavedIDs, setUserSavedIDs] = useState({});
 
-    useEffect(() => {
-        // getUserSavedListings();
-        toast('saved changed root')
-    }, [userSavedIDs])
-
-
     async function searchForAds(options = {}) {
 		try {
 
