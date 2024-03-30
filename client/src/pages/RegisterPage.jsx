@@ -56,7 +56,7 @@ export default function RegisterPage() {
     }, [user, navigate])
 
     return (
-        <section className='flex justify-center items-center h-auto sm:h-[100vh] bg-neutral-100'>
+        <section className='flex justify-center items-center min-h-[100vh] bg-neutral-100'>
             <form onSubmit={handleSubmit} className='flex bg-amber-50 shadow-lg rounded-xl border-2 border-amber-200 w-[70%] sm:w-[55%] md:w-[45%] lg:w-[35%] px-8 py-4 m-4 flex-wrap space-y-4 justify-center'>
                 <section className="h-12 w-auto md:w-64 xl:w-80 m-auto">
                     <img src={transparentLogo} alt="Logo" className="h-full w-auto m-auto"></img>
