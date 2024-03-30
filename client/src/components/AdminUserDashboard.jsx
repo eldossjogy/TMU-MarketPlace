@@ -408,7 +408,7 @@ export default function AdminUserDashboard() {
                           <tbody>
                               {/*Each <tr> is a row*/}
                               {allUserRecords.map((elem, index) => (
-                                    <tr className={`dark:border-gray-700 ${isRowSelected(elem) ? 'bg-blue-100 border-white' : 'border-b'}`}>
+                                    <tr key={index} className={`dark:border-gray-700 ${isRowSelected(elem) ? 'bg-blue-100 border-white' : 'border-b'}`}>
                                         <td className="p-4 w-4">
                                             <div className="flex items-center">
                                                 <input checked={isRowSelected(elem)} type="checkbox" onChange={() => handleCheckboxChange(elem)} className="w-4 h-4 text-primary-600 bg-gray-100 rounded border-gray-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -423,6 +423,7 @@ export default function AdminUserDashboard() {
                                         <td className="px-4 py-3">{elem.first_name}</td>
                                         <td className="px-4 py-3 truncate max-w-[20rem]">{elem.last_name}</td>
                                         <td className="px-4 py-3">{elem.student_number}</td>
+                                        <td className="px-4 py-3">{elem.email}</td>
 
 
                                         <td className="px-4 py-3 flex flex-col items-end relative">

@@ -14,7 +14,6 @@ import AdminRoutes from "./util/AdminRoutes";
 import ErrorPage from "./pages/ErrorPage";
 import Adpage from "./pages/AdPage";
 import EditListingPage from "./pages/EditListingPage";
-import MyMarketContainer from './components/MyMarketContainer';
 import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -46,7 +45,6 @@ function App() {
                 <Route path="edit-listing/:id" element={<EditListingPage />} />
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="profile" element={<EditProfile />} />
-                <Route path="inbox" element={<InboxPage />} />
             </Route>
           </Route>
           <Route element={<AdminRoutes/>}>

@@ -415,11 +415,6 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 	
-	useEffect(() => {
-		console.log(`Set loading state to ${loadingState} at ${Date.now()}`);
-	}, [loadingState])
-	
-
 	//function that gets categories
 	async function getCategories() {
 		// try {
