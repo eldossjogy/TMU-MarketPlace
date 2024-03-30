@@ -8,6 +8,7 @@ export const verifyToken = async (req, res, next) => {
         try {
             const { data: { user } } = await supabase.auth.getUser(token)
             
+            console.log(user)
             req.body.user_id = user.id
 
             return next()

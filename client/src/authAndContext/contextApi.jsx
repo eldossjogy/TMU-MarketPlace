@@ -167,7 +167,8 @@ export const AuthProvider = ({ children }) => {
                         last_name: lastName,
                         student_number: parseInt(studentNum),
                         postal_code: '',
-                        role_id: 1
+                        role_id: 1,
+						email: email
                     },
 				},
 			});
