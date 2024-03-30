@@ -31,6 +31,7 @@ export default function Searchbar(searchLocation) {
 
     useEffect(() => {
         if(onSearchPage === true) {
+            window.scrollTo(0, 0); 
             const searchParams = new URLSearchParams(location.search);
             let options = {};
             if(searchParams.get('q')) options.query = (searchParams.get('q'));
