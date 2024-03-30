@@ -55,7 +55,9 @@ export async function homepage(req, res) {
       throw error;
     }
 
-    const adsByCategory = ads.reduce((acc, ad) => {
+    const availableAds = ads.filter(ad => ad.status.type !== "Unavailable");
+
+    const adsByCategory = availableAds.reduce((acc, ad) => {
       const categoryID = ad.category_id.toString();
       if (!acc[categoryID]) {
         acc[categoryID] = [];
