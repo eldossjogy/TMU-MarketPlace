@@ -355,7 +355,20 @@ export async function adminUpdateListing(req, res) {
             }
         }
 
-        res.status(201).json({message: "Post Updated Successfully!"})
+        const returnupdatedListing = await supabase
+        .from('ad')
+        .select(
+            `
+            *,
+            image!left(file_path),
+            category!inner(name),
+            status!inner(type),
+            profile!inner(name)
+            `
+        )
+        .eq('id', listingInfo.id);
+
+        res.status(201).json(returnupdatedListing.data[0])
     }
 
     catch(error) {

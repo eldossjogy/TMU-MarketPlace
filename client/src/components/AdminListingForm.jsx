@@ -323,50 +323,12 @@ export default function AdminListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full'>
-						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
-							border-2 border-gray-300 border-dashed
-							bg-gray-50 hover:bg-gray-100 `}>
-							{/* dark:border-gray-600 dark:hover:border-gray-500
-							dark:bg-gray-700 dark:hover:bg-gray-600 */}
-								<div className="flex flex-col items-center justify-center pt-5 pb-6">
-									<svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-										<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-									</svg>
-									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-									<p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG</p>
-								</div>
-								<input
-									type="file"
-									id="dropzone-file"
-                					name="avatar"
-									accept=".jpg, .png, .jpeg"
-									multiple
-									onChange={(e) => checkFileForImage(e.target.files)}
-									className='hidden'
-								/>
-							</label>
-						</div>
-						<ul className='selectedImageDisplayContainer'>
-							<h1>Images Selected:</h1>
-							{selectedImages.map((elem, index) => (
-								<li className='relative selectedImageBox overflow-hidden' key={index}>
-									<img className="w-full" src={elem}></img>
-									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
-								</li>
-							))}
-							{formData.image?.map((elem, index) => (
-								<li className='relative selectedImageBox overflow-hidden flex' key={index}>
-									<img className="w-full" src={elem.file_path}></img>
-									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
-								</li>
-							))}
-						</ul>
-					</div>
 					<Listbox value={formData.status_id} onChange={(e) => setFormData(prev => ({...prev, status_id: e}))}>
-						<div className="relative mt-1 w-full">
-							<Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white p-1 md:py-2 md:pl-3 md:pr-10 sm:text-left ring-gray-200 ring-2 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+						<div className="relative w-full">
+						<label className="block">
+							Set Status:
+						</label>
+							<Listbox.Button className="mt-2 relative w-full cursor-pointer rounded-lg bg-white p-1 md:py-2 md:pl-3 md:pr-10 sm:text-left ring-gray-200 ring-2 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
 								<h2 className={`${formData.status_id !== 1 ? 'text-rose-700 ' : ''} text-xs sm:text-sm md:text-base line-clamp-1`}>{statusList.find(item => item.id === formData.status_id).type}</h2>
 								<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
 									<ChevronUpDownIcon
@@ -414,6 +376,48 @@ export default function AdminListingForm({formDataProp = {
 							</Transition>
 						</div>
 				</Listbox>
+
+					<div className='w-full'>
+						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+							<label htmlFor="dropzone-file" className={`mt-5 flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
+							border-2 border-gray-300 border-dashed
+							bg-gray-50 hover:bg-gray-100 `}>
+							{/* dark:border-gray-600 dark:hover:border-gray-500
+							dark:bg-gray-700 dark:hover:bg-gray-600 */}
+								<div className="flex flex-col items-center justify-center pt-5 pb-6">
+									<svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+										<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+									</svg>
+									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG</p>
+								</div>
+								<input
+									type="file"
+									id="dropzone-file"
+                					name="avatar"
+									accept=".jpg, .png, .jpeg"
+									multiple
+									onChange={(e) => checkFileForImage(e.target.files)}
+									className='hidden'
+								/>
+							</label>
+						</div>
+						<ul className='selectedImageDisplayContainer'>
+							<h1>Images Selected:</h1>
+							{selectedImages.map((elem, index) => (
+								<li className='relative selectedImageBox overflow-hidden' key={index}>
+									<img className="w-full" src={elem}></img>
+									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
+								</li>
+							))}
+							{formData.image?.map((elem, index) => (
+								<li className='relative selectedImageBox overflow-hidden flex' key={index}>
+									<img className="w-full" src={elem.file_path}></img>
+									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
 				<form className='flex justify-center md:justify-start space-x-8 md:w-[50%] text-xl mb-3' onSubmit={handleNewPost} >
 					<button type="submit" className="bg-indigo-500 text-white py-2 px-8 rounded-md hover:bg-indigo-600 mb-3">Post</button>

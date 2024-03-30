@@ -264,7 +264,7 @@ export default function AdminAdDashboard() {
                     },
                 }
                 );
-                updateListingsLocally("Update", listingInfo)
+                updateListingsLocally("Update", response.data)
                 setEditModalFlag(false)
                 toast.success("Listing updated!")
 		} else {
