@@ -27,6 +27,12 @@ export const SearchProvider = ({ children }) =>  {
     const [userSavedListings, setUserSavedListings] = useState([]);
     const [userSavedIDs, setUserSavedIDs] = useState({});
 
+    useEffect(() => {
+        // getUserSavedListings();
+        toast('saved changed root')
+    }, [userSavedIDs])
+
+
     async function searchForAds(options = {}) {
 		try {
 
@@ -295,10 +301,9 @@ export const SearchProvider = ({ children }) =>  {
 
                 if(error) return Promise.reject(error);
                 
-                let tempSavedIDs = userSavedIDs;
-
+                let tempSavedIDs = {...userSavedIDs};
                 tempSavedIDs[ad_id] = data.data;
-                setUserSavedIDs(tempSavedIDs)
+                setUserSavedIDs(tempSavedIDs);
 
                 return Promise.resolve(tempSavedIDs);
 			}
@@ -324,9 +329,7 @@ export const SearchProvider = ({ children }) =>  {
 				);
 
                 if(error) return Promise.reject(error);
-
-                let tempSavedIDs = userSavedIDs;
-
+                let tempSavedIDs = {...userSavedIDs};
                 delete tempSavedIDs[ad_id];
                 setUserSavedIDs(tempSavedIDs);
 
