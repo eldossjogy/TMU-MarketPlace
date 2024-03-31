@@ -568,6 +568,11 @@ export default function AdminUserDashboard() {
                             <label htmlFor="postal_code" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Postal Code</label>
                             <input type="text" onChange={handleChange} value={editModalInfo.postal_code} name="postal_code" id="postal_code" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                         </div>
+                        <div className='relative'>
+                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                            <input disabled type="text" onChange={handleChange} value={editModalInfo.email} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                            <div className="absolute inset-y-3 end-0 h-full flex items-center pointer-events-none px-2.5">🔒</div>
+                        </div>
 
                         </div>
                         <div className="flex items-center space-x-4">
