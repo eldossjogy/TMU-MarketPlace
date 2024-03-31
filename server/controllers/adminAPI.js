@@ -50,6 +50,47 @@ function validateFormData(formData) {
     return errors;
 }
 
+async function queryVerifier(tableName, queryCols) {
+
+    if(tableName === 'ad') {
+        const sample = await supabase
+            .from('ad')
+            .select(
+                `
+                *,
+                image (file_path),
+                category (name),
+                status (type),
+                profile (name)
+                `
+            )
+            .limit(1);
+
+        const columns = Object.keys(sample.data[0])
+        return queryCols.length === columns.length && queryCols.every(val => columns.includes(val));
+    }
+    else if(tableName === 'profile') {
+        const sample = await supabase
+            .from('profile')
+            .select('*')
+            .limit(1);
+
+        const columns = Object.keys(sample.data[0])
+        return queryCols.length === columns.length && queryCols.every(val => columns.includes(val));
+    }
+    else if(tableName === 'admin_users') {
+        const sample = await supabase
+            .from('admin_users')
+            .select('*, profile (name)')
+            .limit(1);
+
+        const columns = Object.keys(sample.data[0])
+        return queryCols.length === columns.length && queryCols.every(val => columns.includes(val));
+    }
+
+    return false
+}
+
 export async function verifyAdmin(req, res) {
     const {user_id} = req.body
     try {
@@ -106,6 +147,14 @@ export async function adminGetQueryListing(req, res) {
         //error validation:
         if ((queryValues.status_id !== 'undefined' && queryValues.status !== 'undefined') || (queryValues.category_id !== 'undefined' && queryValues.category !== 'undefined') || (queryValues.profile !== 'undefined' && queryValues.user_id !== 'undefined')) {
             const error = new Error("Invalid Query! Selecting same column value more than once!")
+            error.status = 400
+            throw error;
+        }
+
+        //check for valid columns
+        const checkAndVerifyQuery = await queryVerifier('ad', Object.keys(queryValues))
+        if (!checkAndVerifyQuery) {
+            const error = new Error("Invalid query!")
             error.status = 400
             throw error;
         }
@@ -486,6 +535,14 @@ export async function adminGetQueryUsers(req, res) {
 
         const matchingQuery = {}
 
+        //check for valid columns
+        const checkAndVerifyQuery = await queryVerifier('profile', Object.keys(queryValues))
+        if (!checkAndVerifyQuery) {
+            const error = new Error("Invalid query!")
+            error.status = 400
+            throw error;
+        }
+
          //filter the records based on the query params
          if (queryValues) {
             // Loop through the queryParams object and add filters
@@ -544,12 +601,20 @@ export async function adminGetQueryAdminUsers(req, res) {
     try {
         const matchingQuery = {}
 
-            //error validation:
-            if ((queryValues.profile !== 'undefined' && queryValues.user_id !== 'undefined')) {
-                const error = new Error("Invalid Query! Selecting same column value more than once!")
-                error.status = 400
-                throw error;
+        //error validation:
+        if ((queryValues.profile !== 'undefined' && queryValues.user_id !== 'undefined')) {
+            const error = new Error("Invalid Query! Selecting same column value more than once!")
+            error.status = 400
+            throw error;
             }
+
+        //check for valid columns
+        const checkAndVerifyQuery = await queryVerifier('admin_users', Object.keys(queryValues))
+        if (!checkAndVerifyQuery) {
+            const error = new Error("Invalid query!")
+            error.status = 400
+            throw error;
+        }
         
             //filter the records based on the query params
             if (queryValues) {
