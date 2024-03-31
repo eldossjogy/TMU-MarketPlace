@@ -65,7 +65,12 @@ export default function AdminUserDashboard() {
                 }
             )
             setAllUserRecords(response.data)
-            setColoumns(Object.keys(response.data[0]))
+            setColoumns(() => {
+                return Object.keys(response.data[0]).map(key => ({
+                    name: key,
+                    active: true
+                }));
+            });
             toast.success("All User Records fetched!")
         }
         catch(error) {
@@ -75,7 +80,7 @@ export default function AdminUserDashboard() {
 
     async function getUserDatabaseQuery(queryObject) {
         try {
-            const queryParams = coloumns.map(column => `${column}=${queryObject[column]}`).join('&');
+            const queryParams = coloumns.map(column => `${column.name}=${queryObject[column.name]}`).join('&');
 
             const response = await axios.get(
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-users/query?${queryParams}`,
@@ -198,7 +203,7 @@ export default function AdminUserDashboard() {
             }
     
             // Check if the trimmedKey exists in the columns array
-            if (coloumns.includes(trimmedKey)) {
+            if (coloumns.find(elem => elem.name === trimmedKey)) {
                 // Add key-value pair to the queryObject
                 queryObject[trimmedKey] = trimmedValue;
             } else {
@@ -317,6 +322,18 @@ export default function AdminUserDashboard() {
         }))
     }
 
+    function handleFilterChange(e) {
+        setColoumns(prev => {
+            return prev.map(elem => {
+                if (elem.name === e.target.value) {
+                    return {...elem, active:!elem.active}
+                }
+                else return elem
+            })
+        })
+    }
+
+
   return (
     <>
             <h5 className='mt-5'>
@@ -341,7 +358,7 @@ export default function AdminUserDashboard() {
                               </div>
                           </form>
                       </div>
-                      <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                      <div className="relative w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                             {selectedItems.length > 0 &&
                                 <button onClick={() => setDeleteModalToggle(prev => !prev)} type="button" data-modal-target="createProductModal" data-modal-toggle="createProductModal" className="flex items-center justify-center text-white bg-red-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                     <svg className="w-4 h-4 mr-2" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -357,16 +374,6 @@ export default function AdminUserDashboard() {
                                 Reload
                             </button>
                           <div className="flex items-center space-x-3 w-full md:w-auto">    
-                              <div className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                  <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="actionsDropdownButton">
-                                      <li>
-                                          <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mass Edit</a>
-                                      </li>
-                                  </ul>
-                                  <div className="py-1">
-                                      <a href="#" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete all</a>
-                                  </div>
-                              </div>
                               <button onClick={() => setFilterToggle(prev => !prev)} data-dropdown-toggle="filterDropdown" className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                       <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
@@ -376,17 +383,23 @@ export default function AdminUserDashboard() {
                                       <path clipRule="evenodd" fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                                   </svg>
                               </button>
-                              <div className="z-10 hidden w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                  <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
-                                  <ul className="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                      <li className="flex items-center">
-                                          <input type="checkbox" value="" className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                          <label htmlFor="apple" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Apple (56)</label>
-                                      </li>
-                                    
-                                  </ul>
-                              </div>
                           </div>
+                          {filterToggle && 
+                                <div className="md:absolute md:top-10 md:right-0 z-10 md:w-56 w-full p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
+                                    <ul className="space-y-2 text-sm">
+                                    {coloumns.map((col, index) => (
+                                        <>
+                                            <li className="flex items-center">
+                                                <input onChange={handleFilterChange} checked={col.active} type="checkbox" value={`${col.name}`} className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                                                <label htmlFor={`${col.name}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">{col.name}</label>
+                                            </li>
+                                        </>
+                                    ))}
+                                        
+                                    </ul>
+                                </div>
+                            }        
                       </div>
                   </div>
                   <div className="overflow-x-auto scroll-container">
@@ -401,7 +414,7 @@ export default function AdminUserDashboard() {
                                     </div>
                                 </th>
                                 {coloumns.map((col, index) => (
-                                    <th key={index} scope="col" className="px-4 py-3">{col}</th>
+                                    col.active && <th key={index} scope="col" className="px-4 py-3">{col.name}</th>
                                 ))}
                                 <th key={999} scope="col" className="px-4 py-3">
                                     <span className="sr-only">Actions</span>
@@ -602,6 +615,8 @@ export default function AdminUserDashboard() {
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.first_name ? previewUser.first_name : "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Last Name</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.last_name ? previewUser.last_name : "N/A"}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Email</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewUser.email}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Avatar</dt>
                             <dd className="mb-2 font-semibold leading-none text-gray-900 dark:text-white w-[40%]">
                                 {previewUser.avatar_url ? <ImageCarousel images={[{file_path: `${process.env.REACT_APP_SUPABASE_STORAGE_AVATAR_BUCKET}/${previewUser.avatar_url}`}]} hovered={true} />
@@ -628,7 +643,7 @@ export default function AdminUserDashboard() {
                                     </svg>
                                     Edit
                                 </button>
-                                <button type="button" className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">User view</button>
+                                <button onClick={() => navigate(`/user/${previewUser.id}`)} type="button" className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">User view</button>
                             </div>
                             <button onClick={() => {
                                 setSingledeleteUserRecord([previewUser])

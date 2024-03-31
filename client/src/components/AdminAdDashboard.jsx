@@ -81,7 +81,7 @@ export default function AdminAdDashboard() {
 
     async function getAdDatabaseQuery(queryObject) {
         try {
-            const queryParams = coloumns.map(column => `${column}=${queryObject[column]}`).join('&');
+            const queryParams = coloumns.map(column => `${column.name}=${queryObject[column.name]}`).join('&');
 
             const response = await axios.get(
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-listings/query?${queryParams}`,
@@ -204,7 +204,7 @@ export default function AdminAdDashboard() {
             }
     
             // Check if the trimmedKey exists in the columns array
-            if (coloumns.includes(trimmedKey)) {
+            if (coloumns.find(elem => elem.name === trimmedKey)) {
                 // Add key-value pair to the queryObject
                 queryObject[trimmedKey] = trimmedValue;
             } else {
@@ -382,7 +382,7 @@ export default function AdminAdDashboard() {
             </h5>
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 <h5 className='mt-5 pl-4'>
-                    <span className="text-gray-500">Example: id=32, category_id=2</span>
+                    <span className="text-gray-500">Example: profile=John, category_id=2</span>
                 </h5>
                   <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                       <div className="w-full md:w-1/2">

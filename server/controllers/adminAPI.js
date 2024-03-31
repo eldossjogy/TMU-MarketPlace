@@ -482,7 +482,6 @@ export async function adminUpdateUser(req, res) {
 
 export async function adminGetQueryUsers(req, res) {
     let queryValues = req.query
-
     try {
 
         const matchingQuery = {}
@@ -543,19 +542,42 @@ export async function adminGetQueryAdminUsers(req, res) {
     let queryValues = req.query
 
     try {
-
         const matchingQuery = {}
 
-         //filter the records based on the query params
-         if (queryValues) {
-            // Loop through the queryParams object and add filters
-            Object.entries(queryValues).forEach(([key, value]) => {
-                if (value !== 'undefined') {
-                    matchingQuery[key] = value
-                }
-            });
-        }
+            //error validation:
+            if ((queryValues.profile !== 'undefined' && queryValues.user_id !== 'undefined')) {
+                const error = new Error("Invalid Query! Selecting same column value more than once!")
+                error.status = 400
+                throw error;
+            }
         
+            //filter the records based on the query params
+            if (queryValues) {
+                // Loop through the queryParams object and add filters
+                for (const [key, value] of Object.entries(queryValues)) {
+                    if (value !== 'undefined') {
+
+                        if (key === "profile") {
+                            const { data: profiles, error } = await supabase
+                                .from('profile')
+                                .select('id')
+                                .eq('name', queryValues.profile);
+                    
+                            if (error) {
+                                const newError = new Error(error.message)
+                                error.status = 400
+                                throw newError;
+                            }
+                            matchingQuery.user_id = profiles[0]?.id;
+                        }
+
+                        else {
+                            matchingQuery[key] = value
+                        }
+                    } 
+                }
+            }
+
         //selecting all records
         const queriedListing = await supabase
             .from('admin_users')
