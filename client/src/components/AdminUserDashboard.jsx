@@ -324,6 +324,9 @@ export default function AdminUserDashboard() {
                     <span className="dark:text-white">Profile</span>
             </h5>
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <h5 className='mt-5 pl-4'>
+                    <span className="text-gray-500">Example: name=John, student_number=123</span>
+                </h5>
                   <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                       <div className="w-full md:w-1/2">
                           <form className="flex items-center" onSubmit={searchDatabaseQuery}>

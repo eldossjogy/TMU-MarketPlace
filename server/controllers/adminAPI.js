@@ -103,16 +103,67 @@ export async function adminGetQueryListing(req, res) {
 
     try {
 
+        //error validation:
+        if ((queryValues.status_id !== 'undefined' && queryValues.status !== 'undefined') || (queryValues.category_id !== 'undefined' && queryValues.category !== 'undefined') || (queryValues.profile !== 'undefined' && queryValues.user_id !== 'undefined')) {
+            const error = new Error("Invalid Query! Selecting same column value more than once!")
+            error.status = 400
+            throw error;
+        }
+
         const matchingQuery = {}
 
          //filter the records based on the query params
          if (queryValues) {
             // Loop through the queryParams object and add filters
-            Object.entries(queryValues).forEach(([key, value]) => {
+            for (const [key, value] of Object.entries(queryValues)) {
                 if (value !== 'undefined') {
-                    matchingQuery[key] = value
+                    if (key === "profile") {
+                        const { data: profiles, error } = await supabase
+                            .from('profile')
+                            .select('id')
+                            .eq('name', queryValues.profile);
+            
+                        if (error) {
+                            const newError = new Error(error.message)
+                            error.status = 400
+                            throw newError;
+                        }
+            
+                        matchingQuery.user_id = profiles[0]?.id;
+                    }
+                    else if (key === "category") {
+                        const { data: cat, error } = await supabase
+                            .from('category')
+                            .select('id')
+                            .eq('name', queryValues.category);
+            
+                        if (error) {
+                            const newError = new Error(error.message)
+                            error.status = 400
+                            throw newError;
+                        }
+            
+                        matchingQuery.category_id = cat[0]?.id; 
+                    }
+                    else if (key === "status") {
+                        const { data: stat, error } = await supabase
+                            .from('status')
+                            .select('id')
+                            .eq('type', queryValues.status);
+            
+                        if (error) {
+                            const newError = new Error(error.message)
+                            error.status = 400
+                            throw newError;
+                        }
+            
+                        matchingQuery.status_id = stat[0]?.id; 
+                    }
+                    else {
+                        matchingQuery[key] = value
+                    }
                 }
-            });
+            }
         }
         
         //selecting all records
@@ -142,6 +193,8 @@ export async function adminGetQueryListing(req, res) {
         const status = error?.status || 500; // Check if error.status exists, default to 500 if it doesn't
         res.status(status).json({ message: error.message });
     }
+    
+    //res.status(200).json([]);
 
 }
 

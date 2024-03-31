@@ -302,9 +302,12 @@ export default function AdminRoleDashboard() {
     <>
             <h5 className='mt-5'>
                     <span className="text-gray-500">Table:</span>
-                    <span className="dark:text-white">Profile</span>
+                    <span className="dark:text-white">Admin Users</span>
             </h5>
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <h5 className='mt-5 pl-4'>
+                        <span className="text-gray-500">Example: user_id=2</span>
+                </h5>
                   <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                       <div className="w-full md:w-1/2">
                           <form className="flex items-center" onSubmit={searchDatabaseQuery}>
