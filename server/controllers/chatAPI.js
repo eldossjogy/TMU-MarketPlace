@@ -69,7 +69,6 @@ export async function updateReadStatus(req, res) {
             .eq("recipient_id", user_id)
             .eq("ad_post", ad_post)
             .select();
-        console.log(data,error)
         if (error) throw new Error(error.message)
         res.status(200).json(data)
     }

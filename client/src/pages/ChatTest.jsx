@@ -4,9 +4,9 @@ import ChatContext from "../authAndContext/chatProvider";
 import AuthContext from "../authAndContext/contextApi";
 
 export default function ChatTest() {
-  const { sentMsg, getChat, messages, removeNotification, currentChat, gotMail, exitChat } = useContext(ChatContext) 
+  const { sentMsg, getChat, messages, removeNotification, currentChat, gotMail, exitChat } = useContext(ChatContext)
   const { user } = useContext(AuthContext)
-  
+
   useEffect(() => { getChat() }, [user])
 
   /* call on unmount */
@@ -94,71 +94,38 @@ export default function ChatTest() {
             Create/Send Chat
           </button>
         </form>
-
-        {/* <form onSubmit={readChat}>
-          <h2 className="text-lg font-semibold mb-4">Read/Send Chat</h2>
-          <div className="mb-4">
-            <label htmlFor="user_id" className="block mb-1 text-sm">
-              user_id
-            </label>
-            <input
-              type="text"
-              id="user_id"
-              name="user_id"
-              onChange={handle2Change}
-              value={form2Data.user_id}
-              placeholder="Enter user_id"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg "
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg"
-          >
-            Read/Send Chat
-          </button>
-        </form> */}
       </div>
 
       Currently reading {currentChat}
 
       {messages && Array.from(new Set(messages.map(message => message.ad_post))).map((adPost, index) => {
+        return (
+          <button
+            type="submit"
+            className={`text-white font-semibold py-2 px-4 rounded-lg mr-2 ${currentChat === adPost
+                ? 'bg-amber-400 hover:bg-amber-700'
+                : gotMail.some(obj => obj.ad_post === adPost)
+                  ? 'bg-red-500 hover:bg-red-700'
+                  : 'bg-blue-500 hover:bg-blue-700'
+              }`}
 
-        if (gotMail.some(obj => obj.ad_post === adPost)) {
-          return (
-            <button
-              type="submit"
-              className="bg-red-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mr-2"
-              key={index}
-              onClick={() => {
-                removeNotification(user.id, adPost)
-              }}
-            >{adPost}</button>
-          )
-        }
-        else {
-          return (
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mr-2"
-              key={index}
-              onClick={() => {
-                removeNotification(user.id, adPost)
-              }}
-            >{adPost}</button>
-          )
-        }
-
-
+            key={index}
+            onClick={() => {
+              removeNotification(user.id, adPost)
+            }}
+          >{adPost}</button>
+        )
       })}
 
       {messages && messages.map((ele) => {
         // console.log(ele)
-        return (
-          <div key={ele.id}>
-            {ele.ad_post} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
-          </div>
-        );
+        if (currentChat == ele.ad_post) {
+          return (
+            <div key={ele.id}>
+              {ele.ad_post} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
+            </div>
+          );
+        }
       })}
     </>
   );
