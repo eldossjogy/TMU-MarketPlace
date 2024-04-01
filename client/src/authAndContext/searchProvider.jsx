@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import AuthContext from './contextApi';
 import { useNavigate } from 'react-router-dom';
-import { useCallback } from "react";
 
 const SearchContext = createContext();
 
@@ -33,6 +32,9 @@ export const SearchProvider = ({ children }) =>  {
 
     useEffect(() => {
         if(user) getUserSavedIDs();
+        else{
+            setUserSavedIDs({});
+        }
     }, [user])
 
     async function searchForAds(options = {}) {

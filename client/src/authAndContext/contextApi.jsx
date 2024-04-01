@@ -66,30 +66,43 @@ export const AuthProvider = ({ children }) => {
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, session) => {
+
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setLocalSession(session);
+			setIsLoading(false);
+		})
+
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
 			if (event === "INITIAL_SESSION") {
 				// if not logged in
 				if (session !== null) {
 					setLocalSession(session);
 				}
 			}
-			else if (event === "SIGNED_OUT") {
-				setLocalSession(null);
-			} else {
+			else {
 				setLocalSession(session);
 			}
 			setIsLoading(false)
-
 		});
 
 		return () => data.subscription.unsubscribe();
+
 	}, []);
 
 	// use effect that updates the user state when local session exists
 	useEffect(() => {
-		setUser(
-			localSession ? (localSession.user ? localSession.user : null) : null
-		);
+		if(localSession?.user){ // if local session and it has a user and user hasnt been set,
+			if(!user){
+				setUser( localSession.user ); // set user
+				console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
+			}
+		}
+		else { 
+			if(user){
+				setUser(null);
+				console.log('update user unset');
+			} 
+		}
 	}, [localSession]);
 
 	// use effect that updates the profileData with data from profile db and pfp link
@@ -122,17 +135,6 @@ export const AuthProvider = ({ children }) => {
 		fetchProfile();
 	}, [user]);
 
-	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	// useEffect(() => {
-	// 	getCategories()
-	// 	getStatusLists()
-	// }, [])
-
-	// use effect for when profileData changes
-	// useEffect(() => {
-	// 	console.log(profileData);
-	// }, [profileData]);
-
 	// function for registering new account
 	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
 		console.log(`${email} ${password}`);
@@ -158,8 +160,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not Registered", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data ? (data.user ? data.user : null) : null);
+				// setLocalSession(data);
+				// setUser(data ? (data.user ? data.user : null) : null);
 				return [{ success: true, message: "Registered", error: null }, null];
 			}
 		} catch (error) {
@@ -180,8 +182,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged in", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data.user ? data.user : null);
+				// setLocalSession(data);
+				// setUser(data.user ? data.user : null);
 				return [{ success: true, message: "Logged in", error: null }, null];
 			}
 		} catch (error) {
@@ -202,8 +204,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged out", error: error },
 				];
 			else {
-				setLocalSession(null);
-				setUser(null);
+				//setLocalSession(null);
+				// setUser(null);
 				setProfileData(null);
 				return [{ success: true, message: "Logged out", error: null }, null];
 			}
