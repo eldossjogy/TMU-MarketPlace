@@ -378,7 +378,7 @@ export default function AdminAdDashboard() {
     <>
             <h5 className='mt-5'>
                     <span className="text-gray-500">Table:</span>
-                    <span className="dark:text-white">Ad (image, status, category profile joined)</span>
+                    <span className="dark:text-white">Ad</span>
             </h5>
               <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 <h5 className='mt-5 pl-4'>
