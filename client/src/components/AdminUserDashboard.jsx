@@ -60,7 +60,7 @@ export default function AdminUserDashboard() {
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-users`,
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             )

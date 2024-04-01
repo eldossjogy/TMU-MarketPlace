@@ -61,7 +61,7 @@ export default function AdminAdDashboard() {
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-listings`,
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             )
