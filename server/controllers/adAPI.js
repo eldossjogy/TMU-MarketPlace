@@ -48,16 +48,15 @@ export async function homepage(req, res) {
           post_time,
           image!left(file_path),
           category_id,
-          status!inner(type)
-          `);
+          status!inner(type),
+          status_id
+          `).eq("status_id", "1");
 
     if (error) {
       throw error;
     }
 
-    const availableAds = ads.filter(ad => ad.status.type == "Available");
-
-    const adsByCategory = availableAds.reduce((acc, ad) => {
+    const adsByCategory = ads.reduce((acc, ad) => {
       const categoryID = ad.category_id.toString();
       if (!acc[categoryID]) {
         acc[categoryID] = [];
