@@ -8,9 +8,9 @@ const router = express.Router();
 router.get("/all", verifyToken, getUserChat);
 
 // send a message
-router.get("/message", verifyToken, sendMessage);
+router.post("/message", verifyToken, sendMessage);
 
 // update a read-status
-router.get("/read-status", verifyToken, updateReadStatus);
+router.post("/read-status", verifyToken, updateReadStatus);
 
 export default router;

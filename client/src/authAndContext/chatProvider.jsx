@@ -2,12 +2,13 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import supabase from "./supabaseConfig";
 import AuthContext from "./contextApi";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   // fetch the current logged in user
-  const { user } = useContext(AuthContext);
+  const { user, localSession } = useContext(AuthContext);
   // create a supabase channel for them
   const [currentChannel, setChannel] = useState(null);
   // collects all the messages from and sent by the user
@@ -58,31 +59,29 @@ export const ChatProvider = ({ children }) => {
 
   // onMount of the chatpage we can read all chats
   async function getChat() {
-    if (!user) {
+    if (!user || messages.length > 0) {
       return toast.error("Chat :> No user data at the moment")
     }
-    const { data, error } = await supabase
-    .from("messages")
-    .select(`
-    id,
-    message,
-    sender_id,
-    sender:profile!public_messages_sender_id_fkey(name),
-    recipient_id,
-    recipient:profile!public_messages_recipient_id_fkey(name),
-    created_at,
-    ad_post,
-    is_read
-    `)
-  
-    .or(`recipient_id.eq.${user.id},sender_id.eq.${user.id}`)
-    .order('created_at', { ascending: true });
-    data.forEach((ele) => {
-      if (!ele.is_read && ele.recipient_id === user.id) {
-        setGotMail((prev) => [...prev, ele]);
-      }
-    });
-    setMessages(data);
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/chat/all`,
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      );
+      response.data.forEach((ele) => {
+        if (!ele.is_read && ele.recipient_id === user.id) {
+          setGotMail((prev) => [...prev, ele]);
+        }
+      });
+      setMessages(response.data)
+    } catch (error) {
+      toast.error("Error fetching ads: ", JSON.stringify(error));
+      return null;
+    }
   }
 
   // send message
@@ -90,18 +89,27 @@ export const ChatProvider = ({ children }) => {
     if (!user) {
       return toast.error("Chat :> No user data at the moment")
     }
-    const { data, error } = await supabase
-      .from("messages")
-      .insert([
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_API_URL}/chat/message`,
         {
           recipient_id: recipient_id,
-          sender_id: user.id,
-          ad_post: list_id,
-          message: init_msg,
+          list_id: list_id,
+          init_msg: init_msg
         },
-      ])
-      .select();
-      return toast.success("Chat :> Send Message")
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      );
+      console.log(response)
+      if (response.data) {
+        return toast.success("Chat :> Send Message")
+      }
+    } catch (error) {
+      return toast.error("Chat :> Failed to send message", error.message)
+    }
   }
 
   // setCurrentChat
@@ -121,12 +129,30 @@ export const ChatProvider = ({ children }) => {
   }, [messages, newMsg]);
 
   // set a current chat which will remove notifications
-  async function updateDBReadStatus(user_id, ad_post) {
-    const { data, error } = await supabase
-      .from("messages")
-      .update({ is_read: true })
-      .eq("recipient_id", user_id)
-      .eq("ad_post", ad_post);
+  async function updateDBReadStatus(user_id,ad_post) {
+    if (!user) {
+      return toast.error("Chat :> No user data at the moment")
+    }
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_API_URL}/chat/read-status`,
+        {
+          ad_post: ad_post
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      );
+      console.log(response)
+      if (response.data) {
+        return toast.success("Chat :> DB Read Status Updated")
+      }
+    } catch (error) {
+      return toast.error("Chat :> Failed to send message", error.message)
+    }
+
   }
 
   /* remove notification */

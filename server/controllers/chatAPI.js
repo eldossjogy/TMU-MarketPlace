@@ -1,7 +1,7 @@
 import supabase from "../config/supabaseConfig.js";
 
 export async function getUserChat(req, res) {
-    let { user_id } = req.query;
+    let { user_id } = req.body;
     try {
         if (!user_id) {
             throw new Error("Missing an input query");
@@ -32,7 +32,7 @@ export async function getUserChat(req, res) {
 
 // send message
 export async function sendMessage(req, res) {
-    let { recipient_id, list_id, init_msg, user_id } = req.query;
+    let { recipient_id, list_id, init_msg, user_id } = req.body;
     try {
         if (!recipient_id || !list_id || !init_msg || !user_id) {
             throw new Error("Missing an input query");
@@ -58,7 +58,7 @@ export async function sendMessage(req, res) {
 
 // set a current chat which will remove notifications
 export async function updateReadStatus(req, res) {
-    let { user_id, ad_post } = req.query
+    let { user_id, ad_post } = req.body
     try {
         if (!user_id || !ad_post) {
             throw new Error("Missing an input query");
@@ -69,6 +69,7 @@ export async function updateReadStatus(req, res) {
             .eq("recipient_id", user_id)
             .eq("ad_post", ad_post)
             .select();
+        console.log(data,error)
         if (error) throw new Error(error.message)
         res.status(200).json(data)
     }
