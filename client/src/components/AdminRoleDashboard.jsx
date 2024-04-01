@@ -85,7 +85,7 @@ export default function AdminRoleDashboard() {
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-admin-users/query?${queryParams}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             )
@@ -251,7 +251,7 @@ export default function AdminRoleDashboard() {
                 },
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             );
@@ -279,7 +279,7 @@ export default function AdminRoleDashboard() {
                 },
                 {
                 headers: {
-                    Authorization: "Bearer " + localSession.access_token,
+                    Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                 },
                 }
             )

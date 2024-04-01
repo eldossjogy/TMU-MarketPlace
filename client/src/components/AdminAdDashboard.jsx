@@ -87,7 +87,7 @@ export default function AdminAdDashboard() {
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-listings/query?${queryParams}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             )
@@ -265,7 +265,7 @@ export default function AdminAdDashboard() {
                 },
                 {
                     headers: {
-                    Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
                 );
@@ -303,7 +303,7 @@ export default function AdminAdDashboard() {
 					},
 					{
 						headers: {
-							Authorization: "Bearer " + localSession.access_token,
+                            Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
 						},
 					}
 				);
@@ -339,7 +339,7 @@ export default function AdminAdDashboard() {
                 },
                 {
                 headers: {
-                    Authorization: "Bearer " + localSession.access_token,
+                    Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                 },
                 }
             )
@@ -541,6 +541,7 @@ export default function AdminAdDashboard() {
                                         </td>
                                     </tr>
                                 ))}
+                                <tr className=''><td className='pb-[10%] md:pb-[3%]'></td></tr>
                           </tbody>
                       </table>
                   </div>

@@ -86,7 +86,7 @@ export default function AdminUserDashboard() {
                 `${process.env.REACT_APP_BACKEND_API_URL}/admin/get-all-users/query?${queryParams}`,
                 {
                     headers: {
-                        Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
             )
@@ -262,7 +262,7 @@ export default function AdminUserDashboard() {
                 ,
                 {
                     headers: {
-                    Authorization: "Bearer " + localSession.access_token,
+                        Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                     },
                 }
                 );
@@ -288,7 +288,7 @@ export default function AdminUserDashboard() {
                 },
                 {
                 headers: {
-                    Authorization: "Bearer " + localSession.access_token,
+                    Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
                 },
                 }
             )
@@ -486,6 +486,8 @@ export default function AdminUserDashboard() {
                                         </td>
                                     </tr>
                                 ))}
+                                <tr className=''><td className='pb-[10%] md:pb-[5%]'></td></tr>
+
                           </tbody>
                       </table>
                   </div>
