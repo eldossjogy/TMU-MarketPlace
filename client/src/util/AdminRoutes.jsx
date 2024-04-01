@@ -42,9 +42,9 @@ const AdminRoutes = () => {
     return !localLoading && (
       localSession ? (
         isAdmin ? <Outlet /> : <Navigate to="/unauthorized" replace />
-      ) : (
-        <Navigate to="/login" replace />
-      )
+      ) 
+      : 
+      <Navigate to="/login" replace />
     );
   }
   }

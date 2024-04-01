@@ -30,7 +30,6 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/ad/:slug" element={<Adpage />} />
-          <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route element={<PrivateRoutes loggedIn={false}/>}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
