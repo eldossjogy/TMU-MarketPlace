@@ -33,7 +33,7 @@ export default function ChatTest() {
   function createChat(e) {
     e.preventDefault();
 
-    sentMsg(formData.recipient_id, formData.list_id, formData.user_id);
+    sentMsg(formData.recipient_id, formData.list_id, formData.init_msg);
   }
 
   async function readChat(e) {
