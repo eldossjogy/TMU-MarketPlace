@@ -652,9 +652,13 @@ export default function AdminAdDashboard() {
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.description}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Images</dt>
+                            {previewListing.image.length > 0 ?
                             <dd className="mb-2 font-semibold leading-none text-gray-900 dark:text-white w-[40%]">
                                 <ImageCarousel images={previewListing.image} hovered={true} />
                             </dd>
+                            :
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">No Images Provided!</dd>
+                            }
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Category</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{previewListing.category.name}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Location</dt>

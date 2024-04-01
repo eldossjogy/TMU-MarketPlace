@@ -67,23 +67,21 @@ export const AuthProvider = ({ children }) => {
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, session) => {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
 			if (event === "INITIAL_SESSION") {
 				// if not logged in
 				if (session !== null) {
 					setLocalSession(session);
 				}
 			}
-			else if (event === "SIGNED_OUT") {
-				setLocalSession(null);
-			} else {
+			else {
 				setLocalSession(session);
 			}
-			
 			setIsLoading(false)
 		});
 
 		return () => data.subscription.unsubscribe();
+
 	}, []);
 
 	// use effect that updates the user state when local session exists
