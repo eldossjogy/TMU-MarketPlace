@@ -249,7 +249,7 @@ export async function adminGetQueryListing(req, res) {
 
 export async function adminPostNewListing(req, res) {
 
-    const {title, price, description, expire_time, postal_code, location, category_id, admin_id, images, lat, lng} = req.body
+    const {title, price, description, expire_time, postal_code, location, category_id, admin_id, images, lat, lng, status_id} = req.body
     try {
         
         //error checking
@@ -266,7 +266,7 @@ export async function adminPostNewListing(req, res) {
         const newListing = await supabase
             .from('ad')
             .insert([
-                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id: admin_id}
+                {title, price, description, expire_time, postal_code, location: location, category_id, lat, lng, user_id: admin_id, status_id}
             ])
             .select()
         
