@@ -13,7 +13,7 @@ export async function searchAds(req, res) {
         const searchStatus = !isNaN(parseInt(status)) ? (parseInt(status) > 0 && parseInt(status) < 4 ? `(${parseInt(status)})` : '(1,2,3)') : '(1)';
         const searchLatLng = {lat: isNaN(parseFloat(lat)) ? 43.6577518 : parseFloat(lat), lng: isNaN(parseFloat(lng)) ? -79.3786619 : parseFloat(lng)}
         const searchRange = isNaN(parseInt(range)) ? 100000 : parseInt(range);
-        const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 6 ? `(${parseInt(category)})` : '(1,2,3,4,5)');
+        const searchCategory = isNaN(parseInt(category)) ? '(2)' : (parseInt(category) > 0 && parseInt(category) < 4 ? `(${parseInt(category)})` : '(1,2,3)');
 
         let supabaseQuery = supabase.from('ad').select(`id, title, price, description, location, lng, lat, created_at, status_id, image!left(file_path), category!inner(name), status!inner(type)`);
 
@@ -91,34 +91,22 @@ export async function addToHistory(req, res) {
     try {
         var { data, error } = await supabase.from('history').select('id, view_count').match({ad_id: ad_id, user_id: user_id});
 
-        if (error) {
-            console.log(error);
-            return;
-        }
+        if (error) throw new Error(error);
 
         if(data[0]){
             let history_id = data[0].id;
             let last_view_count = data[0].view_count;
             
-            // console.log(history_id);
             var { data, error } = await supabase.from('history').update({'created_at': new Date().toISOString(), 'view_count': last_view_count + 1}).eq('id', history_id);
         }
         else{
             var { data, error } = await supabase.from('history').insert({ad_id: ad_id, user_id: user_id});
         }
 
-        if (error){
-            console.log(error);
-            res.status(500).json({
-                data: null,
-                error: {
-                    message: error.message, 
-                    error: error 
-                }
-            });
-        }
+        if (error) throw new Error(error);
+
         else{
-            res.status(200).json({
+            res.status(201).json({
                 data: null,
                 error: null
             });
@@ -151,26 +139,17 @@ export async function getUserHistory(req, res) {
     const {user_id} = req.body;
     const {limit} = req.query;
     try {
-        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`).eq('user_id', user_id).order('created_at', {ascending: false});
+        let query = supabase.from('history').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, status!inner(type), image!left(file_path), location, lng, lat)`)
+        .eq('user_id', user_id).filter('ad.status_id', 'in', '(1,2,3)').order('created_at');
 
         if(!isNaN(parseInt(limit))) query = query.limit(parseInt(limit));
 
         const { data, error } = await query;
 
-        if(error){
-            console.log(error);
-            res.status(500).json({
-                data: null,
-                error: {
-                    message: "History Search Failed.", 
-                    error: error 
-                }
-            });
-            return;
-        }
+        if(error) throw new Error(error);
 
         res.status(200).json({
-            data: data,
+            data: data.reverse(),
             error: null
         });
     } catch (error) {
@@ -188,7 +167,7 @@ export async function getUserHistory(req, res) {
             res.status(500).json({
                 data: null,
                 error: {
-                    message: error.message, 
+                    message: 'History Search Failed.', 
                     error: error 
                 }
             });
@@ -197,13 +176,13 @@ export async function getUserHistory(req, res) {
 }
 
 export async function addToSaved(req, res) {
-    //TODO add {ad_id, user_id} to history with created_at
+    // add {ad_id, user_id} to history with created_at
     const {ad_id, user_id} = req.body;
     try {
         const existing_id = await checkIfExists(ad_id, user_id, 'saved');
         
         if(existing_id !== -1){
-            res.status(200).json({
+            res.status(201).json({
                 data: existing_id,
                 error: {
                     message: 'Already saved', 
@@ -215,9 +194,9 @@ export async function addToSaved(req, res) {
 
         var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id}).select('id');
 
-        if(error) throw new Error(error.message);
+        if(error) throw new Error(error);
         
-        res.status(200).json({
+        res.status(201).json({
             data: data[0]?.id ?? null,
             error: null
         });
@@ -247,23 +226,13 @@ export async function addToSaved(req, res) {
 export async function getUserSavedListings(req, res) {
     const {user_id} = req.body;
     try {
-        const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status!inner(type), image!left(file_path), location, lng, lat)`, { distinct: true })
-        .eq('user_id', user_id).order('created_at', {ascending: false}); // , )
+        const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, status!inner(type), image!left(file_path), location, lng, lat)`)
+        .filter('ad.status_id', 'in', '(1,2,3)').eq('user_id', user_id).order('created_at'); // , )
 
-        if(error){
-            console.log(error);
-            res.status(500).json({
-                data: null,
-                error: {
-                    message: "Saved Search Failed.", 
-                    error: error 
-                }
-            });
-            return;
-        }
+        if(error) throw new Error(error);
 
         res.status(200).json({
-            data: data,
+            data: data.reverse(),
             error: null
         });
     } catch (error) {
@@ -272,7 +241,7 @@ export async function getUserSavedListings(req, res) {
             res.status(401).json({
                 data: null,
                 error: {
-                    message: error.message, 
+                    message: "Saved Search Failed.", 
                     error: error 
                 }
             });
@@ -293,7 +262,7 @@ export async function getUserSavedIDs(req, res) {
     const {user_id} = req.body;
     try {
         var { data, error } = await supabase.from('saved').select('id, ad_id').eq('user_id',user_id);
-        if(error) throw new Error(error.message);
+        if(error) throw new Error(error);
 
         let parsedData = {};
 
@@ -334,14 +303,12 @@ export async function deleteFromSaved(req, res) {
     try {
         var { data, error } = await supabase.from('saved').delete().match({ad_id: ad_id, user_id: user_id});
 
-        if(error) throw new Error(error.message);
+        if(error) throw new Error(error);
 
-        else{
-            res.status(204).json({
-                data: null,
-                error: null
-            });
-        };
+        res.status(204).json({
+            data: null,
+            error: null
+        });
     } catch (error) {
         console.log(error)
         if(error.status === 401) {
@@ -369,7 +336,7 @@ async function checkIfExists(ad_id, user_id, table) {
     try {
         var { data, error } = await supabase.from(table).select('id').match({ad_id: ad_id, user_id: user_id});
 
-        if(error) throw new Error(error.message);
+        if(error) throw new Error(error);
 
         if(data[0]?.id) return data[0].id;
 

@@ -6,7 +6,7 @@ import VerticalCard from '../components/VerticalCard';
 import SortToolbar from '../components/SortToolbar';
 
 export default function HistoryPage() {
-    const {userHistory, getUserHistory, historySortState, sortHistory, grid} = useContext(SearchContext);
+    const {userSavedIDs, userHistory, getUserHistory, historySortState, sortHistory, grid} = useContext(SearchContext);
 
     useEffect(() => {
         getUserHistory();
@@ -14,7 +14,7 @@ export default function HistoryPage() {
     
     return (
         <MyMarketContainer title={"View History"}>
-            <SortToolbar customSortKey={historySortState} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 1}]}/>
+            <SortToolbar customSortKey={historySortState} sortResultsFn={sortHistory} defaultSortState={[{id: 0, name:'Date', state: 0}]}/>
             <div className={userHistory?.length !== 0 && grid ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-3' : 'flex flex-col gap-3'}>
                 {userHistory && !grid && userHistory.length !== 0 && userHistory.map((result) => (
                     <HorizontalCard
@@ -28,6 +28,8 @@ export default function HistoryPage() {
                         date={result.created_at}
                         distance={''}
                         key={result.ad_id}
+                        is_saved={userSavedIDs[result.ad_id] !== undefined}
+                        show_saved={true}
                     />
                 ))}
                 {userHistory && grid && userHistory.length !== 0 && userHistory.map((result) => (
@@ -41,6 +43,8 @@ export default function HistoryPage() {
                         postID={result.ad_id}
                         distance={0}
                         key={result.id}
+                        is_saved={userSavedIDs[result.ad_id] !== undefined}
+                        show_saved={true}
                     />
                 ))}
                 {(!userHistory || (userHistory && userHistory.length === 0)) && [1].map((key) => (

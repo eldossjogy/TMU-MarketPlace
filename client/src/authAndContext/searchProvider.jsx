@@ -4,6 +4,7 @@ import supabase from "./supabaseConfig";
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import AuthContext from './contextApi';
+import { useNavigate } from 'react-router-dom';
 
 const SearchContext = createContext();
 
@@ -11,9 +12,9 @@ export const SearchProvider = ({ children }) =>  {
     const {localSession, user} = useContext(AuthContext);
     const {location, range} = useContext(LocationContext);
     const [grid, setGrid] = useState(false);
-    const [sort, setSort] = useState(0);
-    const [historySortState, setHistorySortState] = useState(0);
-    const [savedListingsSortState, setSavedListingsSortState] = useState(0);
+    const [sort, setSort] = useState(-1);
+    const [historySortState, setHistorySortState] = useState(-1);
+    const [savedListingsSortState, setSavedListingsSortState] = useState(-1);
     const [searchInput, setSearchInput] = useState("");
     const [statusFilter, setStatusFilter] = useState(1);
     const [minPrice, setMinPrice] = useState('');
@@ -26,6 +27,15 @@ export const SearchProvider = ({ children }) =>  {
     const [userHistory, setUserHistory] = useState([]);
     const [userSavedListings, setUserSavedListings] = useState([]);
     const [userSavedIDs, setUserSavedIDs] = useState({});
+
+	const navigate = useNavigate();
+
+    useEffect(() => {
+        if(user) getUserSavedIDs();
+        else{
+            setUserSavedIDs({});
+        }
+    }, [user])
 
     async function searchForAds(options = {}) {
 		try {
@@ -167,7 +177,7 @@ export const SearchProvider = ({ children }) =>  {
                 case 3: // Sort by price Up
                     tempResults.sort((a,b) => {return b.price - a.price});
                     break;
-                case 4: // Sort by date Down
+                case 4: // Sort by date Down 
                     tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
                     break;
                 case 5: // Sort by date Up
@@ -208,7 +218,7 @@ export const SearchProvider = ({ children }) =>  {
     function sortByDate(sortType = -1, data = []) {
         let tempResults = [...data];
         switch (sortType) {
-            case 0: // Sort by date Down
+            case 0: // Sort by date Down (Recent to later)
                 tempResults.sort((a,b) => {return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime()});
                 break;
             case 1: // Sort by date Up
@@ -247,7 +257,7 @@ export const SearchProvider = ({ children }) =>  {
 	async function getUserHistory(limit) {
         let checkUser = user
 		try {
-            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
+            if(user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
 
 			if (checkUser !== null) {
 				const { data, error } = await axios.get(
@@ -264,7 +274,7 @@ export const SearchProvider = ({ children }) =>  {
 					setUserHistory([]);
 				}
 				else if(data){
-                    return sortHistory(historySortState, data?.data ?? []);
+                    return getUserSavedIDs().then(sortHistory(historySortState, data?.data ?? []));
 				}
 
                 return [];
@@ -280,7 +290,7 @@ export const SearchProvider = ({ children }) =>  {
 
     async function addToSaved(ad_id, add) {
 		try {
-			if (localSession !== null && user !== null) {
+			if (localSession && user) {
 				const {data, error} = await axios.post(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved`,
 					{
@@ -295,13 +305,16 @@ export const SearchProvider = ({ children }) =>  {
 
                 if(error) return Promise.reject(error);
                 
-                let tempSavedIDs = userSavedIDs;
-
+                let tempSavedIDs = {...userSavedIDs};
                 tempSavedIDs[ad_id] = data.data;
-                setUserSavedIDs(tempSavedIDs)
+                setUserSavedIDs(tempSavedIDs);
 
                 return Promise.resolve(tempSavedIDs);
 			}
+            else{
+                navigate("/login");
+                return Promise.reject('Not logged in');
+            }
 		} catch (error) {
 			toast.error(error.message);
             return Promise.reject(error.message);
@@ -324,26 +337,26 @@ export const SearchProvider = ({ children }) =>  {
 				);
 
                 if(error) return Promise.reject(error);
-
-                let tempSavedIDs = userSavedIDs;
-
+                let tempSavedIDs = {...userSavedIDs};
                 delete tempSavedIDs[ad_id];
                 setUserSavedIDs(tempSavedIDs);
 
                 return Promise.resolve(tempSavedIDs);
 			}
+            else{
+                navigate("/login");
+                return Promise.reject('Not logged in')
+            }
 		} catch (error) {
-			toast.error(error.message);
+			toast.error('deleteFromSaved ' + error.message);
             return Promise.reject(error.message);
 		}
 	}
 
 	async function getUserSavedListings(limit) {
-        let checkUser = user
+        let checkUser = user ? user : await supabase.auth.getUser().then((data) => {return data?.user});
 		try {
-            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
-
-			if (checkUser !== null) {
+			if (checkUser) {
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved${!isNaN(parseInt(limit)) ? `?limit=` + parseInt(limit) : ''}`,
 					{
@@ -357,11 +370,11 @@ export const SearchProvider = ({ children }) =>  {
 					console.log(error);
 					setUserSavedListings([]);
 				}
+
 				return getUserSavedIDs().then(sortSaved(savedListingsSortState, data?.data ?? []));
 			}
-            else return [];
 		} catch (error) {
-			toast.error(error.message);
+			toast.error('getUserSavedListings ' + error.message);
             return [];
 		}
 	}
@@ -369,9 +382,9 @@ export const SearchProvider = ({ children }) =>  {
     async function getUserSavedIDs() {
         let checkUser = user;
 		try {
-            if(localSession === null || user === null) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
+            if(!user) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
 
-			if (checkUser !== null) {
+			if (checkUser) {
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved/ids`,
 					{
@@ -387,7 +400,7 @@ export const SearchProvider = ({ children }) =>  {
 			}
             else return {};
 		} catch (error) {
-			toast.error(error.message);
+			toast.error('getUserSavedIDs ' + error.message);
             return {};
 		}
 	}
