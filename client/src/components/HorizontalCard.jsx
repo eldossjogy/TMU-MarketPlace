@@ -21,7 +21,6 @@ export default function HorizontalCard({
 }) {
     const {addToSaved, deleteFromSaved, userSavedIDs} = useContext(SearchContext);
 	const [hovered, setHovered] = useState(false);
-	const [saved, setSaved] = useState(is_saved);
 	const rawDate = new Date(date ?? '01/16/2024');
 	const rawAge = Date.now() - rawDate.getTime();
 
@@ -36,13 +35,13 @@ export default function HorizontalCard({
 	const handleSaved = (e) => {
 		if(e) e.preventDefault();
 		if(userSavedIDs[postID]){
-			toast.promise(deleteFromSaved(postID), {loading: 'Removing from Saved...', success: 'Unsaved', error: 'Unable to unsave'}).then((val) => {setSaved(!isNaN(val[postID]) ? true : false);});
+			toast.promise(deleteFromSaved(postID), {loading: 'Removing from Saved...', success: 'Unsaved', error: 'Unable to unsave'});
 		}
 		else{
-			toast.promise(addToSaved(postID), {loading: 'Saving...', success: 'Saved', error: 'Unable to save'}).then((val) => {setSaved(!isNaN(val[postID]) ? true : false)});
+			toast.promise(addToSaved(postID), {loading: 'Saving...', success: 'Saved', error: 'Unable to save'});
 		}
 	}
-	
+
 	return (
 		<Link to={{ pathname: `/ad/${postID}` }}
 		>
@@ -50,7 +49,7 @@ export default function HorizontalCard({
 				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex  max-h-40 lg:max-h-72 overflow-hidden">
 					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md relative">
 						<CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
-						<HeartIcon className={`${show_saved ? '' : `hidden group-hover:block ${saved ? '-rotate-6' : ''}`} absolute top-1 start-1 w-6 h-6 md:w-8 md:h-8 hover:rotate-6 ${saved ? 'text-rose-500 hover:text-white/25 hover:stroke-rose-500' : 'text-white/25 stroke-rose-500'} hover:text-rose-600`} onClick={handleSaved}/>
+						<HeartIcon className={`${show_saved ? '' : `hidden group-hover:block ${is_saved ? '-rotate-6' : ''}`} absolute top-1 start-1 w-6 h-6 md:w-8 md:h-8 hover:rotate-6 ${is_saved ? 'text-rose-500 hover:text-white/25 hover:stroke-rose-500' : 'text-white/25 stroke-rose-500'} hover:text-rose-600`} onClick={handleSaved}/>
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">
