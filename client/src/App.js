@@ -21,13 +21,14 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import HistoryPage from "./pages/HistoryPage";
 import SavedPage from "./pages/SavedPage";
+import ChatTest from "./pages/ChatTest";
 
 library.add(fas);
 
 function App() {
   return (
     <div id="app" className="">
-      <Toaster position="bottom-right" reverseOrder={true} toastOptions={{duration: 5000}} />
+      <Toaster position="bottom-right" reverseOrder={true} toastOptions={{ duration: 5000 }} />
       <Routes>
         <Route path="/">
           <Route index element={<HomePage />} />
@@ -50,6 +51,7 @@ function App() {
                 <Route path="inbox" element={<InboxPage />} />
                 <Route path="history" element={<HistoryPage />} />
                 <Route path="saved" element={<SavedPage />} />
+                <Route path="chat" element={<ChatTest />} />
             </Route>
           </Route>
           <Route element={<AdminRoutes/>}>

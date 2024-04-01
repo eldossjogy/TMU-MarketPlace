@@ -2,6 +2,7 @@ import React from "react";
 import Loading from "./Loading";
 import Avatar from "./Avatar";
 import CardImages from "./CardImages"
+import ChatModal from "./ChatModal";
 export default function AdCard({ adData }) {
   if (adData === null) {
     return <Loading />;
@@ -37,6 +38,8 @@ export default function AdCard({ adData }) {
           <Avatar userID={adData.profile.id} />
         </div>
         <h1>Posted at {adData.post_time}</h1>
+        {/* Shouldn't be able to message on your own ads */}
+        <ChatModal recipient_id={adData.profile.id} ad_post={adData.id}/>
       </div>
     </div>
   );
