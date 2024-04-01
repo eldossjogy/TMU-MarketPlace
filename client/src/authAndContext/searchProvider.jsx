@@ -373,9 +373,6 @@ export const SearchProvider = ({ children }) =>  {
 
 				return getUserSavedIDs().then(sortSaved(savedListingsSortState, data?.data ?? []));
 			}
-            else{
-                console.log('cck');
-            };
 		} catch (error) {
 			toast.error('getUserSavedListings ' + error.message);
             return [];
@@ -388,7 +385,6 @@ export const SearchProvider = ({ children }) =>  {
             if(!user) checkUser = await supabase.auth.getUser().then((data) => {return data?.user});
 
 			if (checkUser) {
-                console.log(checkUser);
 				const { data, error } = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/saved/ids`,
 					{

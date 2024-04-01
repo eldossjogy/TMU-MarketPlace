@@ -88,13 +88,13 @@ export const AuthProvider = ({ children }) => {
 		if(localSession?.user){ // if local session and it has a user and user hasnt been set,
 			if(!user){
 				setUser( localSession.user ); // set user
-				console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
+				// console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
 			}
 		}
 		else { 
 			if(user){
 				setUser(null);
-				console.log('update user unset');
+				// console.log('update user unset');
 			} 
 		}
 	}, [localSession]);
@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function for registering new account
 	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
-		console.log(`${email} ${password}`);
+		// console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
 				email: email,

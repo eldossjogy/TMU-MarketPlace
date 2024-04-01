@@ -20,16 +20,6 @@ export default function Profile() {
 		}
 	}, [user]);
 
-
-	function handleDrop(e) {
-		e.preventDefault();
-		const files = e.dataTransfer.files;
-
-		//check if files are images or not:
-		// checkFileForImage(files)
-		console.log(files);
-	}
-
 	function updateUserData() {
 		if (selectedImage) {
 			uploadProfilePicture(selectedImage)
