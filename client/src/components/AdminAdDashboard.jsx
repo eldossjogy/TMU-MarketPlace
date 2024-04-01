@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function AdminAdDashboard() {
 
-    const {loadingState, setLoadingState, localSession, uploadImageToBucket} = useContext(AuthContext)
+    const {loadingState, setLoadingState, localSession, uploadImageToBucket, fetchMyPostings} = useContext(AuthContext)
 
     const navigate = useNavigate()
 
@@ -312,6 +312,7 @@ export default function AdminAdDashboard() {
                 updateListingsLocally("Add", response.data)
                 setaddNewToggle(false)
                 toast.success("New Listing Posted!")
+                fetchMyPostings()
 
 			} else {
 				const error = new Error("Unauthorised");
