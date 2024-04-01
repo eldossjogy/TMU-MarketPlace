@@ -4,10 +4,12 @@ import Navbar from "../components/Navbar";
 import AdContext from "../authAndContext/adProvider";
 import AuthContext from "../authAndContext/contextApi";
 import { Link } from "react-router-dom";
+import SearchContext from "../authAndContext/searchProvider";
 
 export default function HomePage() {
   const { fetchHomePage } = useContext(AdContext);
   const { categories } = useContext(AuthContext);
+  const {userSavedIDs} = useContext(SearchContext);
   const [ads, setAds] = useState(null);
 
   useEffect(() => {
@@ -42,6 +44,8 @@ export default function HomePage() {
                       description={element.description}
                       postID={element.id}
                       key={element.id}
+                      is_saved={userSavedIDs[element.id] !== undefined}
+                      show_saved={true}
                     />
                   ))}
 

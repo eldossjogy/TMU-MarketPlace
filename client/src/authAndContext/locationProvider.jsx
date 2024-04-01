@@ -44,8 +44,6 @@ export const LocationProvider = ({ children }) =>  {
 
     // Generates user location and user city from latitude and longitude {lat: number, lng: number}
     async function generateLocation(pos, updateCity = true) {
-        
-
         let result;
         if((pos?.lat ?? null) === null  || (pos?.lng ?? null) === null){
             console.log(`Invalid coordinates provided to generate location`);

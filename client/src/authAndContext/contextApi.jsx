@@ -64,34 +64,39 @@ export const AuthProvider = ({ children }) => {
 	//caching/performance useStates:
 	const [fetchedUserListings, setFetchedUserListings] = useState(false);
 
-
-
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, session) => {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
 			if (event === "INITIAL_SESSION") {
 				// if not logged in
 				if (session !== null) {
 					setLocalSession(session);
 				}
 			}
-			else if (event === "SIGNED_OUT") {
-				setLocalSession(null);
-			} else {
+			else {
 				setLocalSession(session);
 			}
 			setIsLoading(false)
-
 		});
 
 		return () => data.subscription.unsubscribe();
+
 	}, []);
 
 	// use effect that updates the user state when local session exists
 	useEffect(() => {
-		setUser(
-			localSession ? (localSession.user ? localSession.user : null) : null
-		);
+		if(localSession?.user){ // if local session and it has a user and user hasnt been set,
+			if(!user){
+				setUser( localSession.user ); // set user
+				// console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
+			}
+		}
+		else { 
+			if(user){
+				setUser(null);
+				// console.log('update user unset');
+			} 
+		}
 	}, [localSession]);
 
 	// use effect that updates the profileData with data from profile db and pfp link
@@ -124,20 +129,9 @@ export const AuthProvider = ({ children }) => {
 		fetchProfile();
 	}, [user]);
 
-	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	// useEffect(() => {
-	// 	getCategories()
-	// 	getStatusLists()
-	// }, [])
-
-	// use effect for when profileData changes
-	// useEffect(() => {
-	// 	console.log(profileData);
-	// }, [profileData]);
-
 	// function for registering new account
 	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
-		console.log(`${email} ${password}`);
+		// console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
 				email: email,
@@ -160,8 +154,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not Registered", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data ? (data.user ? data.user : null) : null);
+				// setLocalSession(data);
+				// setUser(data ? (data.user ? data.user : null) : null);
 				return [{ success: true, message: "Registered", error: null }, null];
 			}
 		} catch (error) {
@@ -182,8 +176,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged in", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data.user ? data.user : null);
+				// setLocalSession(data);
+				// setUser(data.user ? data.user : null);
 				return [{ success: true, message: "Logged in", error: null }, null];
 			}
 		} catch (error) {
@@ -204,8 +198,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged out", error: error },
 				];
 			else {
-				setLocalSession(null);
-				setUser(null);
+				//setLocalSession(null);
+				// setUser(null);
 				setProfileData(null);
 				return [{ success: true, message: "Logged out", error: null }, null];
 			}
@@ -396,37 +390,6 @@ export const AuthProvider = ({ children }) => {
 			toast.error(error.message + ". Can't get user listings from db");
 			setLoadingState(false);
 		}
-	}
-	
-	useEffect(() => {
-		console.log(`Set loading state to ${loadingState} at ${Date.now()}`);
-	}, [loadingState])
-	
-
-	//function that gets categories
-	async function getCategories() {
-		// try {
-		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
-		// 	setCategories();
-		//   } catch (error) {
-		// 	toast.error(error.message + "Error fetching categories from db");
-		//   }
-		return categories;
-	}
-
-	//function that gets status' list
-	function getStatusLists() {
-		// axios.get(
-		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
-		// )
-		// 	.then(response => {
-		// 		setStatusList(response.data)
-		// 	})
-		// 	.catch(error => {
-		// 		toast.error(error.message + "Erro fetching status Lists from db");
-		// 	})
-		// setStatusList();
-		return statusList;
 	}
 
 	//function to qickly change status of listing

@@ -20,16 +20,6 @@ export default function Profile() {
 		}
 	}, [user]);
 
-
-	function handleDrop(e) {
-		e.preventDefault();
-		const files = e.dataTransfer.files;
-
-		//check if files are images or not:
-		// checkFileForImage(files)
-		console.log(files);
-	}
-
 	function updateUserData() {
 		if (selectedImage) {
 			uploadProfilePicture(selectedImage)
@@ -39,7 +29,7 @@ export default function Profile() {
 	return (
 		<MyMarketContainer>
 			{user ?
-				<div className="bg-card p-6 rounded-lg w-full border border-gray-200 shadow-md flex flex-col space-y-10 justify-center">
+				<div className="bg-card p-6 rounded-lg w-full border border-gray-200 shadow-md flex flex-col space-y-10 justify-center md:min-h-[90vh]">
 					<div className="flex flex-wrap sm:flex-nowrap justify-center items-center sm:justify-evenly gap-12 w-full mb-8">
 						{selectedImage && (
 							<div className="flex max-w-32 lg:max-w-64 flex-wrap justify-center space-y-4">
@@ -58,7 +48,7 @@ export default function Profile() {
 							</div>
 						)}
 					</div>
-					<div className="w-full md:w-96 space-y-4 text-sm md:text-base">
+					<div className="w-full md:w-96 space-y-4 text-sm md:text-base m-auto">
 						<div className='w-full flex flex-col gap-2'>
 							<div className="w-full">
 								<label htmlFor="avatar" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
@@ -147,7 +137,7 @@ export default function Profile() {
 							
 						</div>
 					</div>
-					<div className="w-full md:w-96 justify-end flex">
+					<div className="w-full md:w-96 justify-end flex m-auto">
 						<button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-md shadow-md" onClick={updateUserData}>
 							Update
 						</button>
