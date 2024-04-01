@@ -5,9 +5,22 @@ export async function getUserAds(req, res) {
   try {
     const myListings = await supabase
       .from("ad")
-      .select("*")
+      .select(
+        `      id,
+      title,
+      price,
+      description,
+      postal_code,
+      location,
+      lng,
+      lat,
+      post_time,
+      image!inner(file_path),
+      category_id,
+      status!inner(type)`
+      )
       .eq("user_id", user_id);
-    res.status(200).json(myListings);
+    res.status(200).json(myListings.data);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
