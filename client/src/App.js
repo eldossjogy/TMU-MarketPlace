@@ -38,7 +38,7 @@ function App() {
         <Route path="/">
           <Route index element={<Suspense fallback={<h1>Loading...</h1>}><HomePage /></Suspense>} />
           <Route path="/search" element={<Suspense fallback={<h1>Loading...</h1>}><SearchPage /></Suspense>} />
-          <Route path="/ad/:slug" element={<Adpage />} />
+          <Route path="/ad/:slug" element={<Suspense fallback={<h1>Loading...</h1>}><Adpage /></Suspense>} />
           <Route element={<Suspense fallback={<h1>Loading...</h1>}><PrivateRoutes loggedIn={false}/></Suspense>}>
             <Route path="/login" element={<Suspense fallback={<h1>Loading...</h1>}><LoginPage /></Suspense>} />
             <Route path="/register" element={<Suspense fallback={<h1>Loading...</h1>}><RegisterPage /></Suspense>} />
