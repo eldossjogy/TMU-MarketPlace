@@ -752,7 +752,6 @@ export async function adminDeleteUser(req, res) {
             }
         }
         
-
         if (userArr.length === 1) res.status(200).json({message: `User ${userArr[0].name} successfully deleted!`})
         else res.status(204).json({message: `All selected users successfully deleted!`})
     }
