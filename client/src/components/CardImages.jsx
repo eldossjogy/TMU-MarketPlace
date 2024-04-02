@@ -19,11 +19,7 @@ export default function CardImages({ image, hovered, setHovered, vertical = true
     )
   } else {
     return (
-      <img
-        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : ' max-w-32 lg:max-w-60'}`}
-        src={image[0].file_path}
-        alt="img"
-      ></img>
+      <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={vertical}/>
     );
   }
 }
