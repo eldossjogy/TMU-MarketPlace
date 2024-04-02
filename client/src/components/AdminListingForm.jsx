@@ -1,11 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react'; import AuthContext from '../authAndContext/contextApi';
+import React, { useContext, useState, useEffect, Fragment } from 'react'; import AuthContext from '../authAndContext/contextApi';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadingScreen from './LoadingScreen';
 import LocationContext from '../authAndContext/locationProvider';
 import "../index.css";
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
 
-export default function ListingForm({formDataProp = {
+export default function AdminListingForm({formDataProp = {
     title: '',
     price: '',
     description: '',
@@ -15,8 +17,10 @@ export default function ListingForm({formDataProp = {
 	lat: null,
 	lng: null,
     category_id: 2,
-}, typeOfReq="Post", editingForm=false}) {
-    const { createNewListing, loadingState, setLoadingState, categories, updateListing } = useContext(AuthContext);
+	status_id: 1,
+}, typeOfReq="Post", editingForm=false, postReqAsAdmin, putReqAsAdmin}) {
+
+    const { loadingState, setLoadingState, categories, statusList } = useContext(AuthContext);
 	const { location, city, generateLocation, searchForLocation, searchingLocation } = useContext(LocationContext);
 	
     const navigate = useNavigate();
@@ -105,7 +109,7 @@ export default function ListingForm({formDataProp = {
 		//location validation
 		if(!formData.lat || !formData.lng){
 			errors.coordinates = 'Coords missing.'
-			// console.log('Coords missing');
+			console.log('Coords missing');
 			setNoResults(true);
 		}
 		else if(!formDataProp.location && !formData.location) {
@@ -145,11 +149,11 @@ export default function ListingForm({formDataProp = {
 			
 			if (typeOfReq === "Post") {
 				setLoadingState(true);
-				await createNewListing({ ...formData, location: !formDataProp.location && !formData.location ? city : formData.location,  expire_time: getCurrentDateTime(48) }, imageList);
+				await postReqAsAdmin({ ...formData, location: !formDataProp.location && !formData.location ? city : formData.location,  expire_time: getCurrentDateTime(48) }, imageList);
 			}
 			else if (typeOfReq === "Put") {
 				setLoadingState(true);
-				await updateListing({...formData, expire_time: getCurrentDateTime(48)}, imageList)
+				await putReqAsAdmin({...formData, expire_time: getCurrentDateTime(48)}, imageList)
 			}
 		}
 	};
@@ -199,7 +203,7 @@ export default function ListingForm({formDataProp = {
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
 		const filteredImageArr = newImageArr.filter((item, i) => i !== index);
-		// console.log(filteredImageArr);
+		console.log(filteredImageArr);
 		setFormData(prev => ({ ...prev, image: filteredImageArr }));
 	
 		const fileInput = document.getElementById('dropzone-file');
@@ -254,7 +258,7 @@ export default function ListingForm({formDataProp = {
 		<>
 			<section className="flex flex-col md:px-8 rounded-lg space-y-4 mt-2">
 				{editingForm ? <h1 className='text-5xl'>Edit Listing</h1> : <h1 className='text-5xl'>Create Listing</h1>}
-				<div className='flex flex-wrap w-full gap-4'>
+				<div className='flex flex-wrap w-full space-y-4'>
 					<div className='w-full space-y-2'>
 						<label className="block">Title: <span className='text-red-500'>{formErrors.title} *</span></label>
 						<input autoComplete='off' type="text" name="title" 
@@ -319,9 +323,63 @@ export default function ListingForm({formDataProp = {
 						<textarea rows="3" name="description" maxLength={350} value={formData.description} onChange={handleChange} className="block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-4"></textarea>
 					</div>
 
-					<div className='w-full lg:w-[50%]'>
+					<Listbox value={formData.status_id} onChange={(e) => setFormData(prev => ({...prev, status_id: e}))}>
+						<div className="relative w-full">
+						<label className="block">
+							Set Status:
+						</label>
+							<Listbox.Button className="mt-2 relative w-full cursor-pointer rounded-lg bg-white p-1 md:py-2 md:pl-3 md:pr-10 sm:text-left ring-gray-200 ring-2 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+								<h2 className={`${formData.status_id !== 1 ? 'text-rose-700 ' : ''} text-xs sm:text-sm md:text-base line-clamp-1`}>{statusList.find(item => item.id === formData.status_id).type}</h2>
+								<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+									<ChevronUpDownIcon
+										className="hidden sm:block h-5 w-5 text-gray-400"
+										aria-hidden="true"
+									/>
+								</span>
+							</Listbox.Button>
+							<Transition
+								as={Fragment}
+								leave="transition ease-in duration-100"
+								leaveFrom="opacity-100"
+								leaveTo="opacity-0"
+							>
+								<Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-xs sm:text-sm md:text-base z-50">
+									{statusList.map((status) => (
+										<Listbox.Option
+											key={status.id}
+											className={({ active }) =>
+												`relative cursor-default select-none p-1 sm:py-2 sm:pl-10 sm:pr-4 ${
+													active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+												}`
+											}
+											value={status.id}
+										>
+											{({ selected }) => (
+												<div className='flex'>
+													<span
+														className={`block truncate ${
+															selected ? 'font-medium' : 'font-normal'
+														}`}
+													>
+														{status.type}
+													</span>
+													{selected ? (
+														<span className="hidden sm:flex absolute inset-y-0 left-0  items-center pl-3 text-amber-600">
+															<CheckIcon className="h-5 w-5" aria-hidden="true" />
+														</span>
+													) : null}
+												</div>
+											)}
+										</Listbox.Option>
+									))}
+								</Listbox.Options>
+							</Transition>
+						</div>
+				</Listbox>
+
+					<div className='w-full'>
 						<div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-							<label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
+							<label htmlFor="dropzone-file" className={`mt-5 flex flex-col items-center justify-center w-full h-64 rounded-lg cursor-pointer
 							border-2 border-gray-300 border-dashed
 							bg-gray-50 hover:bg-gray-100 `}>
 							{/* dark:border-gray-600 dark:hover:border-gray-500
@@ -344,18 +402,18 @@ export default function ListingForm({formDataProp = {
 								/>
 							</label>
 						</div>
-						<ul className='w-full flex flex-col gap-4'>
+						<ul className='selectedImageDisplayContainer'>
 							<h1>Images Selected:</h1>
 							{selectedImages.map((elem, index) => (
-								<li className='relative w-full text-xl p-2 text-[#464686] bg-[#e0f2fe] rounded-xl flex justify-between overflow-hidden' key={index}>
+								<li className='relative selectedImageBox overflow-hidden' key={index}>
 									<img className="w-full" src={elem}></img>
-									<i className="absolute cursor-pointer font-bold right-1 p-2 hover:text-red-600 hover:bg-gray-300/75 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
+									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleImageDelete(index)}>&#x2715;</i>
 								</li>
 							))}
 							{formData.image?.map((elem, index) => (
-								<li className='relative w-full text-xl p-2 text-[#464686] bg-[#e0f2fe] rounded-xl flex justify-between overflow-hidden' key={index}>
+								<li className='relative selectedImageBox overflow-hidden flex' key={index}>
 									<img className="w-full" src={elem.file_path}></img>
-									<i className="absolute cursor-pointer font-bold hover:text-red-600 hover:bg-gray-300/75 right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
+									<i className="absolute right-1 p-2 text-red-500" onClick={() => handleUploadedImageDelete(index)}>&#x2715;</i>
 								</li>
 							))}
 						</ul>

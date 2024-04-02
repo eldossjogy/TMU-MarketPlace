@@ -4,7 +4,6 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import Loading from "../components/Loading";
 import MyMarketContainer from "../components/MyMarketContainer";
 import NoAvatar from "../assets/noAvatar.jpg"
-import toast from "react-hot-toast";
 
 export default function Profile() {
 	const [selectedImage, setSelectedImage] = useState(null);

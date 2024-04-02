@@ -9,11 +9,12 @@ import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
 import EditProfile from "./pages/EditProfile";
+import InboxPage from "./pages/InboxPage";
 import PrivateRoutes from "./util/PrivateRoutes";
+import AdminRoutes from "./util/AdminRoutes";
 import ErrorPage from "./pages/ErrorPage";
 import Adpage from "./pages/AdPage";
 import EditListingPage from "./pages/EditListingPage";
-import InboxPage from './pages/InboxPage';
 import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -32,8 +33,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/ad/:slug" element={<Adpage />} />
-          <Route path="admin-dashboard" element={<AdminDashboard />} />
-          <Route element={<PrivateRoutes loggedIn={false} />}>
+          <Route element={<PrivateRoutes loggedIn={false}/>}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
@@ -52,8 +52,12 @@ function App() {
                 <Route path="saved" element={<SavedPage />} />
             </Route>
           </Route>
+          <Route element={<AdminRoutes/>}>
+            <Route path="admin-dashboard" element={<AdminDashboard />} />
+          </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />
+        <Route path="unauthorized" element={<ErrorPage />} />
       </Routes>
     </div>
   );
