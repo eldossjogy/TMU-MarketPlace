@@ -17,8 +17,46 @@ export const AuthProvider = ({ children }) => {
 	const [userListings, setUserListings] = useState([]);
 
 	//usestates for global use acquired from db (categories, etc)
-	const [categories, setCategories] = useState([]);
-	const [statusList, setStatusList] = useState([]);
+	const categories = [
+		{
+			"id": 1,
+			"name": "Items Wanted"
+		},
+		{
+			"id": 2,
+			"name": "Items for Sale"
+		},
+		{
+			"id": 3,
+			"name": "Tutoring"
+		},
+		{
+			"id": 4,
+			"name": "Textbook Exchanges"
+		},
+		{
+			"id": 5,
+			"name": "Study Group"
+		}
+	];
+	const statusList = [
+		{
+			"id": 1,
+			"type": "Available"
+		},
+		{
+			"id": 2,
+			"type": "Pending"
+		},
+		{
+			"id": 4,
+			"type": "Unavailable"
+		},
+		{
+			"id": 3,
+			"type": "Sold"
+		}
+	];
 
 	// API req loading useState. set it true before api req, and at the end of server req function set it to false
 	const [loadingState, setLoadingState] = useState(false);
@@ -29,30 +67,37 @@ export const AuthProvider = ({ children }) => {
 
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, session) => {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
 			if (event === "INITIAL_SESSION") {
 				// if not logged in
 				if (session !== null) {
 					setLocalSession(session);
 				}
 			}
-			else if (event === "SIGNED_OUT") {
-				setLocalSession(null);
-			} else {
+			else {
 				setLocalSession(session);
 			}
 			setIsLoading(false)
-
 		});
 
 		return () => data.subscription.unsubscribe();
+
 	}, []);
 
 	// use effect that updates the user state when local session exists
 	useEffect(() => {
-		setUser(
-			localSession ? (localSession.user ? localSession.user : null) : null
-		);
+		if(localSession?.user){ // if local session and it has a user and user hasnt been set,
+			if(!user){
+				setUser( localSession.user ); // set user
+				// console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
+			}
+		}
+		else { 
+			if(user){
+				setUser(null);
+				// console.log('update user unset');
+			} 
+		}
 	}, [localSession]);
 
 	// use effect that updates the profileData with data from profile db and pfp link
@@ -67,21 +112,6 @@ export const AuthProvider = ({ children }) => {
 			} catch (error) {
 				toast.error(error);
 				return null;
-			}
-		}
-		async function downloadImage(avatar_url) {
-			try {
-				const timestamp = new Date().getTime();
-				const { data, error } = await supabase.storage
-					.from("avatars")
-					.download(`${avatar_url}?timestamp=${timestamp}`);
-				if (error) {
-					throw error;
-				}
-				const url = URL.createObjectURL(data);
-				return url;
-			} catch (error) {
-				toast.error("Error downloading image: ", error);
 			}
 		}
 		async function fetchProfile() {
@@ -101,30 +131,56 @@ export const AuthProvider = ({ children }) => {
 	}, [user]);
 
 	//useEffect to get all required infomration such as categories and statusList once upon entering app
-	useEffect(() => {
-		getCategories()
-		getStatusLists()
-	}, [])
-
-	// use effect for when profileData changes
 	// useEffect(() => {
-	// 	console.log(profileData);
-	// }, [profileData]);
+	// 	getCategories()
+	// 	getStatusLists()
+	// }, [])
+
+
+	async function checkIfAdmin() {
+		const checkUser = await supabase.auth.getUser();
+		if (checkUser.data.user !== null) {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/admin/verify-admin-privilege`,
+					{
+						headers: {
+							Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
+						},
+					}
+				)
+	
+				if(response.data) {
+					return true
+				}
+			}
+			catch(error) {
+				toast.error(error.message)
+				return false
+			}
+		}
+		
+		return false
+	}
 
 	// function for registering new account
-	async function registerNewAccount(email, password, username) {
-		console.log(`${email} ${password}`);
+	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
+		// console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
 				email: email,
 				password: password,
 				options: {
 					data: {
-						avatar_url: "",
-						name: username,
-						postal_code: "",
-						role_id: 1,
-					},
+                        avatar_url: '',
+                        name: username,
+                        first_name: firstName,
+                        last_name: lastName,
+                        student_number: parseInt(studentNum),
+                        postal_code: '',
+                        role_id: 1,
+						email: email
+                    },
 				},
 			});
 			if (error)
@@ -133,8 +189,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not Registered", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data ? (data.user ? data.user : null) : null);
+				// setLocalSession(data);
+				// setUser(data ? (data.user ? data.user : null) : null);
 				return [{ success: true, message: "Registered", error: null }, null];
 			}
 		} catch (error) {
@@ -155,8 +211,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged in", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data.user ? data.user : null);
+				// setLocalSession(data);
+				// setUser(data.user ? data.user : null);
 				return [{ success: true, message: "Logged in", error: null }, null];
 			}
 		} catch (error) {
@@ -177,8 +233,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged out", error: error },
 				];
 			else {
-				setLocalSession(null);
-				setUser(null);
+				//setLocalSession(null);
+				// setUser(null);
 				setProfileData(null);
 				return [{ success: true, message: "Logged out", error: null }, null];
 			}
@@ -192,6 +248,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function that returns link for pfp from supabase bucket
 	async function downloadImage(filePath) {
+		if (!filePath){return}
 		try {
 			const timestamp = new Date().getTime();
 			const { data, error } = await supabase.storage
@@ -331,14 +388,7 @@ export const AuthProvider = ({ children }) => {
 			if (tempError != null) {
 				throw tempError;
 			}
-			const timestamp = new Date().getTime();
-			const { data, error } = await supabase.storage
-				.from("avatars")
-				.download(`${filePath}?timestamp=${timestamp}`);
-			if (error) {
-				throw error;
-			}
-			const url = URL.createObjectURL(data);
+			const url = await downloadImage(filePath)
 			return url;
 		} catch (error) {
 			toast.error("Error downloading image: ", JSON.stringify(error));
@@ -348,7 +398,9 @@ export const AuthProvider = ({ children }) => {
 
 	//function to get user's listings
 	async function fetchMyPostings(categorId) {
+		setLoadingState(true);
 		try {
+			setUserListings([]);
 			if(categorId) {
 				const response = await axios.get(
 					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings/${categorId}`,
@@ -359,49 +411,46 @@ export const AuthProvider = ({ children }) => {
 					}
 				)
 				setUserListings(response.data)
+				setLoadingState(false);
 			}
 			else {
-				const response = await axios.get(
-					`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`,
-					{
-						headers: {
-							Authorization: "Bearer " + localSession.access_token,
-						},
-					}
-				)
-				setUserListings(response.data)
+				axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/my-market/my-listings`, { headers: { Authorization: "Bearer " + localSession.access_token},}).then((response) => {
+					setUserListings(response.data)
+					setLoadingState(false);
+				})
 			}
 			
 		}
 		catch (error) {
 			toast.error(error.message + ". Can't get user listings from db");
+			setLoadingState(false);
 		}
-		setLoadingState(false)
 	}
-
+	
 	//function that gets categories
 	async function getCategories() {
-		try {
-			const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
-			setCategories(response.data);
-		  } catch (error) {
-			toast.error(error.message + "Error fetching categories from db");
-		  }
-
+		// try {
+		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
+		// 	setCategories();
+		//   } catch (error) {
+		// 	toast.error(error.message + "Error fetching categories from db");
+		//   }
+		return categories;
 	}
 
 	//function that gets status' list
 	function getStatusLists() {
-		axios.get(
-			`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
-		)
-			.then(response => {
-				setStatusList(response.data)
-			})
-			.catch(error => {
-				toast.error(error.message + "Erro fetching status Lists from db");
-			})
-
+		// axios.get(
+		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+		// )
+		// 	.then(response => {
+		// 		setStatusList(response.data)
+		// 	})
+		// 	.catch(error => {
+		// 		toast.error(error.message + "Erro fetching status Lists from db");
+		// 	})
+		// setStatusList();
+		return statusList;
 	}
 
 	//function to qickly change status of listing
@@ -459,6 +508,7 @@ export const AuthProvider = ({ children }) => {
 
   	//function to delete lisitng
 	async function deleteListing(listingInfo) {
+        setLoadingState(true);
 		try{
 		const response = await axios.put(
 			`${process.env.REACT_APP_BACKEND_API_URL}/my-market/delete-listing`,{
@@ -534,7 +584,9 @@ export const AuthProvider = ({ children }) => {
         changeListingStatusAPI,
         deleteListing,
         updateListing,
-		getCategories
+		getCategories,
+		uploadImageToBucket,
+		checkIfAdmin
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}

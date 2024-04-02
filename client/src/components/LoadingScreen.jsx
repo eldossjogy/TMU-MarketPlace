@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function LoadingScreen({message}) {
   return (
-    <div className="itemModalContainer flex justify-center items-center flex-col">
+    <div className=" fixed top-0 left-0 w-[100vw] h-[100vh] bg-[#1a1a1b33] z-[100] backdrop-blur flex justify-center items-center flex-col">
       <svg
         aria-hidden="true"
         className="inline w-20 h-20 mr-2 text-shadow-md text-white animate-spin dark:text-gray-600 fill-blue-500"

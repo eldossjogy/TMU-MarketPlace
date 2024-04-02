@@ -7,32 +7,34 @@ export const LocationProvider = ({ children }) =>  {
     const [isReady, setIsReady] = useState(false);
     const [searchingLocation, setsearchingLocation] = useState(false);
     const [location, setLocation] = useState({lat: 43.65775180503111, lng:-79.3786619239608});
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState("Toronto, ON");
     const [range, setRange] = useState(30000);
 
     useEffect(() => {
-        getLocation();
+        loadLocation();
         //setIsReady(true);
     }, []);
+
+    async function loadLocation() {
+        // TODO load localstorage location
+    }
 
     // Gets IP address location from browser and forwards it to generateLocation(pos)
     async function getLocation() {
         if (!navigator.geolocation) {
-            toast.error("Geolocation is not supported by this browser.");
-            //generateLocation({lat: 43.6577518, lng:-79.3786619});
-            generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
+            toast.promise(generateLocation({lat: 43.65775180503111, lng:-79.3786619239608}), {loading: 'Setting default location...', success: 'Geolocation is not supported by this browser. Set to default.', error: 'Geolocation is not supported by this browser. Could not set default location.'})
             return;
         }
 
         navigator.permissions.query({ name: "geolocation" }).then(function (result) {
             if (result.state === "denied") {
                 //If denied then you have to show instructions to enable location
-                toast.error(`You did not allow location access.`);
-                generateLocation({lat: 43.65775180503111, lng:-79.3786619239608});
+                toast.promise(generateLocation({lat: 43.65775180503111, lng:-79.3786619239608}), {loading: 'Setting default location...', success: 'You did not allow location access. Set to default.', error: 'You did not allow location access. Could not set default location.'})
+                toast("To use your location, allow access from your browser.", {icon: "ℹ"})
             } else{
                 //If prompt then the user will be asked to give permission or location was already granted 
                 navigator.geolocation.getCurrentPosition(
-                    (pos) => { generateLocation({lat: pos.coords.latitude, lng: pos.coords.longitude})},
+                    (pos) => { toast.promise(generateLocation({lat: pos.coords.latitude, lng: pos.coords.longitude}), {loading: 'Setting location...', success: 'Set location!', error: 'Could not set location.'})},
                     () => { toast.error(`Cannot get your location.`); }, 
                     {enableHighAccuracy: true, timeout: 5000, maximumAge: 65255}
                 );
@@ -45,7 +47,7 @@ export const LocationProvider = ({ children }) =>  {
         let result;
         if((pos?.lat ?? null) === null  || (pos?.lng ?? null) === null){
             console.log(`Invalid coordinates provided to generate location`);
-            return;
+            return Promise.reject(new Error('error'));
         }
 
         setLocation(pos);
@@ -57,7 +59,6 @@ export const LocationProvider = ({ children }) =>  {
 
         setIsReady(true);
         return result;
-
     }
 
     // 
