@@ -9,6 +9,7 @@ import LogoutPage from "./pages/LogoutPage";
 import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
 import EditProfile from "./pages/EditProfile";
+import InboxPage from "./pages/InboxPage";
 import PrivateRoutes from "./util/PrivateRoutes";
 import AdminRoutes from "./util/AdminRoutes";
 import ErrorPage from "./pages/ErrorPage";
@@ -18,6 +19,8 @@ import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import HistoryPage from "./pages/HistoryPage";
+import SavedPage from "./pages/SavedPage";
 
 library.add(fas);
 
@@ -44,6 +47,9 @@ function App() {
                 <Route path="edit-listing/:id" element={<EditListingPage />} />
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="profile" element={<EditProfile />} />
+                <Route path="inbox" element={<InboxPage />} />
+                <Route path="history" element={<HistoryPage />} />
+                <Route path="saved" element={<SavedPage />} />
             </Route>
           </Route>
           <Route element={<AdminRoutes/>}>

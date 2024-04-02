@@ -105,7 +105,7 @@ export default function ListingForm({formDataProp = {
 		//location validation
 		if(!formData.lat || !formData.lng){
 			errors.coordinates = 'Coords missing.'
-			console.log('Coords missing');
+			// console.log('Coords missing');
 			setNoResults(true);
 		}
 		else if(!formDataProp.location && !formData.location) {
@@ -199,7 +199,7 @@ export default function ListingForm({formDataProp = {
 	function handleUploadedImageDelete(index) {
 		const newImageArr = [...formData.image];
 		const filteredImageArr = newImageArr.filter((item, i) => i !== index);
-		console.log(filteredImageArr);
+		// console.log(filteredImageArr);
 		setFormData(prev => ({ ...prev, image: filteredImageArr }));
 	
 		const fileInput = document.getElementById('dropzone-file');

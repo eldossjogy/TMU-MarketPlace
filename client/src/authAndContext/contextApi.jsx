@@ -86,9 +86,18 @@ export const AuthProvider = ({ children }) => {
 
 	// use effect that updates the user state when local session exists
 	useEffect(() => {
-		setUser(
-			localSession ? (localSession.user ? localSession.user : null) : null
-		);
+		if(localSession?.user){ // if local session and it has a user and user hasnt been set,
+			if(!user){
+				setUser( localSession.user ); // set user
+				// console.log(`update user set ${localSession.user ? 'exists' : 'null'}`);
+			}
+		}
+		else { 
+			if(user){
+				setUser(null);
+				// console.log('update user unset');
+			} 
+		}
 	}, [localSession]);
 
 	// use effect that updates the profileData with data from profile db and pfp link
@@ -156,7 +165,7 @@ export const AuthProvider = ({ children }) => {
 
 	// function for registering new account
 	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
-		console.log(`${email} ${password}`);
+		// console.log(`${email} ${password}`);
 		try {
 			const { data, error } = await supabase.auth.signUp({
 				email: email,
@@ -180,8 +189,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not Registered", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data ? (data.user ? data.user : null) : null);
+				// setLocalSession(data);
+				// setUser(data ? (data.user ? data.user : null) : null);
 				return [{ success: true, message: "Registered", error: null }, null];
 			}
 		} catch (error) {
@@ -202,8 +211,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged in", error: error },
 				];
 			else {
-				setLocalSession(data);
-				setUser(data.user ? data.user : null);
+				// setLocalSession(data);
+				// setUser(data.user ? data.user : null);
 				return [{ success: true, message: "Logged in", error: null }, null];
 			}
 		} catch (error) {
@@ -224,8 +233,8 @@ export const AuthProvider = ({ children }) => {
 					{ success: false, message: "Not logged out", error: error },
 				];
 			else {
-				setLocalSession(null);
-				setUser(null);
+				//setLocalSession(null);
+				// setUser(null);
 				setProfileData(null);
 				return [{ success: true, message: "Logged out", error: null }, null];
 			}

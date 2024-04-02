@@ -11,13 +11,14 @@ export default function LoginPage() {
     const logOut = async () => {
         const [data, error] = await signOut();
             
-        console.log(data);
-        console.log(error);
-        if(! error && data.success == true) {
+        // console.log(data);
+        
+        if(!error && data.success === true) {
             toast.success(`Logged out`);
         }
         else{
-            toast.error(`Unable to log out. ${error.error.message ?? 'Unknown reason.'}`)
+            toast.error(`Unable to log out. ${error.error.message ?? 'Unknown reason.'}`);
+            console.log(error);
         }
             //navigate('/');
     }
@@ -26,7 +27,7 @@ export default function LoginPage() {
         const fn = async () => {
             const [data, error] = await signOut();
             
-            if(! error && data.success == true) {
+            if(!error && data.success === true) {
                 toast.success(`Logged out`);
             }
             else{

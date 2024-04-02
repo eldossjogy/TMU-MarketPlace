@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { ArrowLongRightIcon, HeartIcon } from "@heroicons/react/24/solid";
 import CardImages from "./CardImages";
+import SearchContext from "../authAndContext/searchProvider";
+import toast from "react-hot-toast";
 
 
 export default function HorizontalCard({
@@ -13,8 +15,11 @@ export default function HorizontalCard({
 	location,
 	postID,
 	date,
-	distance
+	distance,
+	is_saved = false,
+	show_saved = false
 }) {
+    const {addToSaved, deleteFromSaved, userSavedIDs} = useContext(SearchContext);
 	const [hovered, setHovered] = useState(false);
 	const rawDate = new Date(date ?? '01/16/2024');
 	const rawAge = Date.now() - rawDate.getTime();
@@ -26,13 +31,25 @@ export default function HorizontalCard({
 	const seconds = Math.round(rawAge / (1000));
 
 	const age = weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''} ago` : days > 0 ? `${days} day${days > 1 ? 's' : ''} ago` : hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
+
+	const handleSaved = (e) => {
+		if(e) e.preventDefault();
+		if(userSavedIDs[postID]){
+			toast.promise(deleteFromSaved(postID), {loading: 'Removing from Saved...', success: 'Unsaved', error: 'Unable to unsave'});
+		}
+		else{
+			toast.promise(addToSaved(postID), {loading: 'Saving...', success: 'Saved', error: 'Unable to save'});
+		}
+	}
+
 	return (
 		<Link to={{ pathname: `/ad/${postID}` }}
 		>
-			<div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
-					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
+			<div className="hover:cursor-pointer relative group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+				<div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex  max-h-40 lg:max-h-72 overflow-hidden">
+					<section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md relative">
 						<CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
+						<HeartIcon className={`${show_saved ? '' : `hidden group-hover:block ${is_saved ? '-rotate-6' : ''}`} absolute top-1 start-1 w-6 h-6 md:w-8 md:h-8 hover:rotate-6 ${is_saved ? 'text-rose-500 hover:text-white/25 hover:stroke-rose-500' : 'text-white/25 stroke-rose-500'} hover:text-rose-600`} onClick={handleSaved}/>
 					</section>
 						
 					<section className="w-full flex flex-row-reverse">

@@ -35,8 +35,9 @@ export default function ListingCard({ listingInfo }) {
 
         <div className="" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
             <div className={`bg-[#fafafb] border-2 border-gray ${modal ? 'rounded-t-lg' : 'rounded-xl'} shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-40 lg:max-h-72`}>
-                <section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md">
+                <section className="max-w-32 lg:max-w-60 2xl:max-w-72 my-auto h-full rounded-md relative">
                     <CardImages image={listingInfo.image} hovered={hovered} setHovered={setHovered} vertical={false} />
+                    <Link to={{ pathname: `/ad/${listingInfo.id}`}} className='absolute inset-y-0 start-0 top-0 w-full h-full'/>
                 </section>
 
                 <section className="w-full flex flex-col justify-between sm:justify-normal sm:flex-row">
@@ -103,7 +104,8 @@ export default function ListingCard({ listingInfo }) {
                             </div>
                         </section>
                         <section className="flex flex-col justify-between w-full pe-2">
-                            <div>
+                            <div className='relative'>
+                                <Link to={{ pathname: `/ad/${listingInfo.id}`}} className='absolute inset-y-0 start-0 top-0 w-full h-full'/>
                                 <div className="flex justify-between pb-2">
                                     <p className="line-clamp-1 font-bold text-sm md:text-xl">{listingInfo.title}</p>
                                 </div>
@@ -113,8 +115,7 @@ export default function ListingCard({ listingInfo }) {
                             </div>
                             <div className="hidden text-xs md:text-base sm:flex sm:flex-nowrap sm:space-x-4">
                                 <div className="h-auto line-clamp-1 font-bold w-fit">📍 {listingInfo.location}</div>
-                                <div className="h-auto line-clamp-1">{String(parsedDate)}</div> {/* String(age) */}
-                                {/* <div className="h-auto line-clamp-1">{distance ? `${parseInt(distance)} m away` : ''}</div> */}
+                                <div className="h-auto line-clamp-1">{String(parsedDate)}</div>
                             </div>
                         </section>
                     </section>
