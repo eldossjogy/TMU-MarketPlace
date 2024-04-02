@@ -471,7 +471,7 @@ export default function AdminAdDashboard() {
                           <tbody>
                               {/*Each <tr> is a row*/}
                               {allAdListings && allAdListings.map((elem, index) => (
-                                    <tr className={`${isRowSelected(elem) ? 'bg-blue-100 border-white' : 'border-b'}`}>
+                                    <tr key={index} className={`${isRowSelected(elem) ? 'bg-blue-100 border-white' : 'border-b'}`}>
                                         <td className="p-4 w-4">
                                             <div className="flex items-center">
                                                 <input checked={isRowSelected(elem)} type="checkbox" onChange={() => handleCheckboxChange(elem)} className="w-4 h-4 text-primary-600 bg-gray-100 rounded border-gray-300 focus:ring-primary-500 focus:ring-2" />
