@@ -49,7 +49,9 @@ export async function homepage(req, res) {
           image!left(file_path),
           category_id,
           status!inner(type)
-          `);
+          `)
+          .order('id', { ascending: false });
+
 
     if (error) {
       throw error;
