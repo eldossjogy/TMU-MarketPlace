@@ -15,15 +15,15 @@ export default function AdminDashboard() {
   return (
     <>
       <Navbar/>
-      <section className= "dark:bg-gray-900 p-3 sm:p-5 antialiased">
+      <section className= "p-3 sm:p-5 antialiased">
           <div className="mx-auto w-full px-1 lg:px-12">
           <h1 className="text-2xl sm:text-2xl md:text-4xl font-bold text-gray-900 mt-2">
               Admin Dashboard
           </h1>   
 
           <form className="max-w-sm mt-5">
-              <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a Table</label>
-              <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={selectedOption} onChange={handleSelectChange}>
+              <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Select a Table</label>
+              <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value={selectedOption} onChange={handleSelectChange}>
                 <option value="">Choose a Table</option>
                 <option value="ad_listings">Ad Listings</option>
                 <option value="profiles">Profile</option>
