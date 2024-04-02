@@ -54,7 +54,7 @@ export const AdProvider = ({ children }) => {
       if (response.data.error) {
         throw new Error(response.error);
       }
-      if (response.data.length == 0) {
+      if (response.data.length === 0) {
         throw new Error(response.error);
       }
       return response.data[0]
