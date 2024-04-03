@@ -161,7 +161,7 @@ export const ChatProvider = ({ children }) => {
   /* remove notification */
   /* find out if the message has been read */
   /* must have ad_id and message_id and user_id */
-  async function removeNotification(user_id, chat_id) {
+  async function removeNotification(chat_id) {
     toast.success(`Chat :> You're reading the chat: ${chat_id}`);
     setCurrentChat(chat_id); // if the user has unread messages
     if (gotMail.length === 0) {
@@ -169,16 +169,14 @@ export const ChatProvider = ({ children }) => {
       return toast.success(`Chat :> No new message in chat ${chat_id}`);
     }
 
-    if (user_id === user.id) {
       // update teh notification
-      setGotMail((prev) => {
-        let updatedArray = prev.filter((dict) => dict.chat_id !== chat_id);
-        return updatedArray;
-      });
+    setGotMail((prev) => {
+      let updatedArray = prev.filter((dict) => dict.chat_id !== chat_id);
+      return updatedArray;
+    });
 
-      // update teh database
-      updateDBReadStatus(user.id, chat_id);
-    }
+    // update teh database
+    updateDBReadStatus(user.id, chat_id);
   }
 
   // stop reading

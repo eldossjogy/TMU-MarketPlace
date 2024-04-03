@@ -6,8 +6,10 @@ import AuthContext from "../authAndContext/contextApi";
 export default function ChatTest() {
   const { sentMsg, getChat, messages, removeNotification, currentChat, gotMail, exitChat } = useContext(ChatContext)
   const { user } = useContext(AuthContext)
-  const [reply,setReply] = useState({id: null, ad_id: null})
-  useEffect(() => { getChat() }, [user])
+  const [reply,setReply] =useState({id: null, ad_id: null})
+  useEffect(() => { 
+    if(user !== null) getChat();
+  }, [user])
 
   /* call on unmount */
   useEffect(() => {
@@ -19,8 +21,8 @@ export default function ChatTest() {
   useEffect(()=>{console.log(reply)},[reply])
 
   const [formData, setFormData] = useState({
-    list_id: "null",
-    recipient_id: "null",
+    list_id: null,
+    recipient_id: null,
     init_msg: "Still Available?",
   });
 
@@ -114,7 +116,7 @@ export default function ChatTest() {
 
             key={index}
             onClick={() => {
-              removeNotification(user.id, adPost)
+              removeNotification(adPost)
             }}
           >{adPost}</button>
         )
