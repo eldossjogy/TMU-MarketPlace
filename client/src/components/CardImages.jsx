@@ -2,11 +2,11 @@ import React from "react";
 import ImageCarousel from "./ImageCarousel";
 import noImage from '../assets/noImage.png'
 
-export default function CardImages({ image, hovered, setHovered, vertical = true }) {
+export default function CardImages({ image, hovered, setHovered, vertical = true, maxWidthSet = 'max-w-32 lg:max-w-60' }) {
   if (image.length === 0) {
     return (
       <img
-        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : ' max-w-32 lg:max-w-60'}`}
+        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : maxWidthSet}`}
         src={noImage}
         alt="img"
       ></img>
