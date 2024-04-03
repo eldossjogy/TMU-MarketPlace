@@ -6,7 +6,7 @@ import AuthContext from "../authAndContext/contextApi";
 export default function ChatTest() {
   const { sentMsg, getChat, messages, removeNotification, currentChat, gotMail, exitChat } = useContext(ChatContext)
   const { user } = useContext(AuthContext)
-
+  const [reply,setReply] =useState({id: null, ad_id: null})
   useEffect(() => { getChat() }, [user])
 
   /* call on unmount */
@@ -16,6 +16,7 @@ export default function ChatTest() {
     };
   }, []); // Empty dependency array means this effect runs only once (on mount) and cleans up on unmount
 
+  useEffect(()=>{console.log(reply)},[reply])
 
   const [formData, setFormData] = useState({
     list_id: null,
@@ -57,6 +58,7 @@ export default function ChatTest() {
               name="list_id"
               placeholder="Enter Listing ID"
               onChange={handleChange}
+              value={formData.list_id}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             />
           </div>
@@ -70,6 +72,7 @@ export default function ChatTest() {
               name="recipient_id"
               placeholder="Enter recipient_id"
               onChange={handleChange}
+              value={formData.recipient_id}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             />
           </div>
@@ -118,8 +121,11 @@ export default function ChatTest() {
       })}
 
       {messages && messages.map((ele) => {
-        // console.log(ele)
         if (currentChat == ele.chat_id) {
+          if (reply.id != ele.sender_id && ele.sender_id != user.id){
+            setReply((prev)=>({ad_id: ele?.chats?.ad_id,id:ele.sender_id}))
+            setFormData((prev)=>({...prev,list_id: ele?.chats?.ad_id,recipient_id:ele.sender_id}))
+          }
           return (
             <div key={ele.id}>
               {ele.chat_id} -- {ele?.chats?.ad_id} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
