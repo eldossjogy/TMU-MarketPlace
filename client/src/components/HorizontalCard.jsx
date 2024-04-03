@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLongRightIcon, HeartIcon } from "@heroicons/react/24/solid";
 import CardImages from "./CardImages";

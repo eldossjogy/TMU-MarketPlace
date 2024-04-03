@@ -62,7 +62,7 @@ export default function ListingCard({ listingInfo }) {
                                             leaveFrom="opacity-100"
                                             leaveTo="opacity-0"
                                         >
-                                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-xs sm:text-sm md:text-base z-50">
+                                        <Listbox.Options className="absolute right-0 md:left-0 mt-1 max-h-60 w-32 sm:w-48 md:w-full rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none text-xs sm:text-sm md:text-base z-50">
                                             {statusList.map((status) => (
                                                 <Listbox.Option
                                                     key={status.id}
@@ -76,14 +76,14 @@ export default function ListingCard({ listingInfo }) {
                                                     {({ selected }) => (
                                                         <div className='flex'>
                                                             <span
-                                                                className={`block truncate ${
+                                                                className={`block truncate text-right md:text-left w-full pr-2 ${
                                                                 selected ? 'font-medium' : 'font-normal'
                                                                 }`}
                                                             >
                                                                 {status.type}
                                                             </span>
                                                             {selected ? (
-                                                                <span className="hidden sm:flex absolute inset-y-0 left-0  items-center pl-3 text-amber-600">
+                                                                <span className="flex absolute inset-y-0 left-0  items-center p-3 text-amber-600">
                                                                 <CheckIcon className="h-5 w-5" aria-hidden="true" />
                                                                 </span>
                                                             ) : null}
