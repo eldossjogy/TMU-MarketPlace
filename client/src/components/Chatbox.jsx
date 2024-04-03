@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import ChatMessage from './ChatMessage';
+import ChatContext from "../authAndContext/chatProvider";
 
 export default function Chatbox() {
-    const [messages, setMessages] = useState([]);
+    const {messages} = useContext(ChatContext)
+    //const [messages, setMessages] = useState([]);
     const [nextMessage, setNextMessage] = useState('');
     const sendMessage = (e) => {
         e?.preventDefault();
 
-        if(nextMessage) {
-            let time = new Date().toJSON();
-            setMessages([...messages, {id: messages.length, message: nextMessage, initial: 'A', sender: true, timestamp: time}]);
-            setNextMessage('');
-        }
+        // if(nextMessage) {
+        //     let time = new Date().toJSON();
+        //     setMessages([...messages, {id: messages.length, message: nextMessage, initial: 'A', sender: true, timestamp: time}]);
+        //     setNextMessage('');
+        // }
     }
     return (
         <div className='flex flex-col group w-full lg:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg h-[60vh] divide-y-2 overflow-hidden'>
