@@ -6,8 +6,6 @@ import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
-
-import LoadingScreen from "./components/LoadingScreen";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const MyMarketPage = lazy(() => import('./pages/MyMarketPage'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
