@@ -91,7 +91,7 @@ export async function addToHistory(req, res) {
     try {
         var { data, error } = await supabase.from('history').select('id, view_count').match({ad_id: ad_id, user_id: user_id});
 
-        if (error) throw new Error(error);
+        if (error) throw error;
 
         if(data[0]){
             let history_id = data[0].id;
@@ -103,7 +103,7 @@ export async function addToHistory(req, res) {
             var { data, error } = await supabase.from('history').insert({ad_id: ad_id, user_id: user_id});
         }
 
-        if (error) throw new Error(error);
+        if (error) throw error;
 
         else{
             res.status(201).json({
@@ -146,7 +146,7 @@ export async function getUserHistory(req, res) {
 
         const { data, error } = await query;
 
-        if(error) throw new Error(error);
+        if(error) throw error;
 
         res.status(200).json({
             data: data.reverse(),
@@ -194,7 +194,7 @@ export async function addToSaved(req, res) {
 
         var { data, error } = await supabase.from('saved').insert({ad_id: ad_id, user_id: user_id}).select('id');
 
-        if(error) throw new Error(error);
+        if(error) throw error;
         
         res.status(201).json({
             data: data[0]?.id ?? null,
@@ -229,7 +229,7 @@ export async function getUserSavedListings(req, res) {
         const { data, error } = await supabase.from('saved').select(`id, ad_id, created_at, ad!inner(title, description, price, status_id, status!inner(type), image!left(file_path), location, lng, lat)`)
         .filter('ad.status_id', 'in', '(1,2,3)').eq('user_id', user_id).order('created_at'); // , )
 
-        if(error) throw new Error(error);
+        if(error) throw error;
 
         res.status(200).json({
             data: data.reverse(),
@@ -262,7 +262,7 @@ export async function getUserSavedIDs(req, res) {
     const {user_id} = req.body;
     try {
         var { data, error } = await supabase.from('saved').select('id, ad_id').eq('user_id',user_id);
-        if(error) throw new Error(error);
+        if(error) throw error;
 
         let parsedData = {};
 
@@ -303,7 +303,7 @@ export async function deleteFromSaved(req, res) {
     try {
         var { data, error } = await supabase.from('saved').delete().match({ad_id: ad_id, user_id: user_id});
 
-        if(error) throw new Error(error);
+        if(error) throw error;
 
         res.status(204).json({
             data: null,
@@ -336,7 +336,7 @@ async function checkIfExists(ad_id, user_id, table) {
     try {
         var { data, error } = await supabase.from(table).select('id').match({ad_id: ad_id, user_id: user_id});
 
-        if(error) throw new Error(error);
+        if(error) throw error;
 
         if(data[0]?.id) return data[0].id;
 
