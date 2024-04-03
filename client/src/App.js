@@ -18,7 +18,7 @@ const InboxPage = lazy(() => import('./pages/InboxPage'));
 const PrivateRoutes = lazy(() => import('./util/PrivateRoutes'));
 const AdminRoutes = lazy(() => import('./util/AdminRoutes'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
-const Adpage = lazy(() => import('./pages/AdPage'));
+const AdvertisementPages = lazy(() => import('./pages/AdvertisementPages'));
 const EditListingPage = lazy(() => import('./pages/EditListingPage'));
 const CreateListings = lazy(() => import('./pages/CreateListings'));
 const SavedPage = lazy(() => import('./pages/SavedPage'));
@@ -36,7 +36,7 @@ function App() {
         <Route path="/">
           <Route index element={<Suspense fallback={<h1>Loading...</h1>}><HomePage /></Suspense>} />
           <Route path="/search" element={<Suspense fallback={<h1>Loading...</h1>}><SearchPage /></Suspense>} />
-          <Route path="/ad/:slug" element={<Suspense fallback={<h1>Loading...</h1>}><Adpage /></Suspense>} />
+          <Route path="/ad/:slug" element={<Suspense fallback={<h1>Loading...</h1>}><AdvertisementPages /></Suspense>} />
           <Route element={<Suspense fallback={<h1>Loading...</h1>}><PrivateRoutes loggedIn={false}/></Suspense>}>
             <Route path="/login" element={<Suspense fallback={<h1>Loading...</h1>}><LoginPage /></Suspense>} />
             <Route path="/register" element={<Suspense fallback={<h1>Loading...</h1>}><RegisterPage /></Suspense>} />
