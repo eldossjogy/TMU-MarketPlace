@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ImageCarousel from "./ImageCarousel";
 import StarRating from "./StarRating";
+import Loading from "./Loading";
+import CardImages from "./CardImages";
+import Avatar from "./Avatar";
 
 
 
-//define a functional component that takes in different props to render
 function AdvertisementCard({
     image,
     price,
@@ -29,44 +31,35 @@ function AdvertisementCard({
     const [hovered, setHovered] = useState(false);
 
     return (
-        //wrapping the card in a link that can be clicked on
-        <Link to={{ pathname: `/${postID}` }}>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex hover:cursor-pointer overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                <div className="w-1/2 flex justify-center items-center">
-                    {/*carousel component*/}
-                    <div className="carousel-container">
-                        {Array.isArray(image) ?
-                            <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} />
-                            :
-                            <img
-                                className="rounded-md w-[auto] h-fit object-cover aspect-square"
-                                src={image}
-                                alt="img"
-                            ></img>
-                        }
+        <div className="w-full">
+                <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex hover:cursor-pointer overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                    <div className="w-3/5 flex justify-center items-center">
+                        {/*carousel component*/}
+                            <CardImages image={image} hovered={hovered} setHovered={setHovered}/>
                     </div>
-                </div>
-                {/**description of the current ad on the right */}
-                <div className="w-1/2 px-4 pb-4 bg-[#fafafb]">
-                    <p className="line-clamp-1 font-bold text-4xl">{title}</p>
-                    <div className="flex justify-between">
-                        <div>
-                            <h2 className="text-left text-lg">{location}</h2>
-                            <h6 className="text-xs">{dateposted}</h6>
+                    <div className="w-full px-4 pb-4 bg-[#fafafb]">
+                        <p className="line-clamp-1 font-bold text-4xl">{title}</p>
+                        <div className="flex justify-between">
+                            <div>
+                                <h2 className="text-left text-lg">{location}</h2>
+                                <h6 className="text-xs">{dateposted}</h6>
+                            </div>
+                            <h2 className="text-green-600 text-xl font-bold text-right">${price}</h2>
+                        </div><br></br>
+                        <h2 className="">{description}</h2>
+                        <div className="flex justify-end">
+                            <button className="bg-[#fef08a] text-center rounded-lg px-4 py-2 font-bold border border-black border-opacity-25 hover:bg-opacity-50">Message</button>
                         </div>
-                        <h2 className="text-green-600 text-lg text-right">${price}</h2>
-                    </div><br></br>
-                    <h2 className="">{description}</h2>
-                    <div className="flex justify-end">
-                        <button className="bg-[#fef08a] text-center rounded-lg px-4 py-2 font-bold border border-black border-opacity-25 hover:bg-opacity-50">Message</button>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
+
+
+
             <br></br>
             <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex">
                 <div className="w-1/2 flex justify-center items-center">
-                    <img className="rounded-full w-40 h-40 drop-shadow-xl" src={userimg} alt="img"></img>
+                    <Avatar userID={userimg} />
                     <div className="w-1/2 items-center p-5">
                         <div className="bg-[#f3f4f6] rounded-lg border border-gray-200 p-4 text-center shadow-lg">
                             <h2 className="text-center">{sellername}</h2>
@@ -105,9 +98,9 @@ function AdvertisementCard({
 
                 </div>
             </div>
-            <br></br>
 
-        </Link>
+        </div>
+
 
     );
 

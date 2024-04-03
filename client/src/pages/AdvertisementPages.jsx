@@ -1,33 +1,68 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar"
+import { useLocation } from "react-router-dom";
 import AdvertisementCard from "../components/AdvertisementCard";
 import StarRating from "../components/StarRating";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import AdContext from "../authAndContext/adProvider";
+import Loading from "../components/Loading";
+import { useParams } from "react-router-dom";
 
-export default function () {
+
+export default function AdvertisementPages() {
+    const { fetchAdPage } = useContext(AdContext);
+    const location = useLocation();
+    const [dbData, setData] = useState(null);
+    const { slug } = useParams();
+
+    useEffect( () => {
+        if (slug) {
+            fetchAdPage(slug).then((res) => {setData(res)})
+        }
+    }, [slug]);
+
+    function previousAd() {
+        alert("You scrolled left!");
+    }
+
+    function nextAd() {
+        alert("You scrolled right!");
+    }
+
+    if (dbData === null) {
+        <Navbar />
+        return <Loading/>
+    }
+
+    if (dbData === false || dbData === undefined) {
+        <div>
+            <Navbar />
+            <h1>This ad is currently not available</h1>
+        </div>
+    }
+
     return (
         <>
             <Navbar />
-            <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
-                    <AdvertisementCard
-                        image={[{file_path : "https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}, {file_path : "https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492"}, { file_path: "https://cdn.motor1.com/images/mgl/6ZzGrX/s3/modified-mazda-rx-7-driving-at-the-nurburgring-source-micha-charoudin-youtube.jpg"}]}
-                        title={"Mazda RX-7"}
-                        price={"30,000"}
-                        dateposted={"December 31 2023"}
-                        location={"Toronto, ON"}
-                        description={
-                            "The Mazda RX-7 is an iconic sports car renowned for its unique rotary engine, lightweight chassis, and sleek design. Introduced in 1978, it gained fame for its performance, handling, and affordability in the sports car market. The RX-7, particularly its FD generation, remains a beloved classic among enthusiasts."
-                        }
-                        userimg={"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}
-                        sellername={"Shams Kadriusu"}
-                        rating={<StarRating rating={2}/>}
-                        ad1={"https://www.motortrend.com/uploads/2023/08/rx7-fd-front-end.jpg?fit=around%7C875:492"}
-                        ad2={"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}
-                        ad3={"https://www.motortrend.com/uploads/2023/11/sema-rx7-rear-quarter.jpg?fit=around%7C875:492"}
-                        postID={1}
-                    />
 
+            <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
+
+                <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={previousAd}></ChevronLeftIcon>
+
+                <AdvertisementCard
+                image={dbData.image}
+                title={dbData.title}
+                price={dbData.price}
+                location={dbData.location}
+                description={dbData.description}
+                userimg={dbData.profile.id}
+                sellername={dbData.profile.name}
+                />
+
+                <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={nextAd}></ChevronRightIcon>
             </main>
+
         </>
     );
 }
