@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import HorizontalCardInbox from '../components/HorizontalCardInbox';
 import Chatbox from '../components/Chatbox';
+import ChatContext from '../authAndContext/chatProvider';
 
-export default function ChatList({list = []}) {
-    const [chats, setChats] = useState([{ id: 1, title: "Cat!" }, { id: 2, title: "Bear!" }, { id: 3, title: "Frog!" }, { id: 4, title: "Turtle!" }, { id: 5, title: "Duck!" }]);
+export default function ChatList({list = [], inbox}) {
+    const { currentChat } = useContext(ChatContext)
 
     return (
         <section className='flex flex-wrap lg:flex-nowrap p-3 gap-3'>
@@ -18,7 +19,8 @@ export default function ChatList({list = []}) {
                         username={result.ad.profile.name}
                         status={result.ad_status}
                         lastMessage={"Hey why havent you called me back yet?"}
-                        date={result.created_at}>
+                        date={result.created_at}
+                        chat_id={result.id}>
                     </HorizontalCardInbox>
                 ))}
                 {(!list || !(list?.length > 0)) && [1].map((key) => (
@@ -31,7 +33,7 @@ export default function ChatList({list = []}) {
                     </div>
                 ))}
             </div>
-            <Chatbox chatID={0} />
+            {currentChat && <Chatbox chatID={currentChat} />}
         </section>
     )
 }
