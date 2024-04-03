@@ -10,16 +10,17 @@ export async function getUserChat(req, res) {
       .from("messages")
       .select(
         `
-                    id,
-                    message,
-                    sender_id,
-                    sender:profile!public_messages_sender_id_fkey(name),
-                    recipient_id,
-                    recipient:profile!public_messages_recipient_id_fkey(name),
-                    created_at,
-                    chat_id,
-                    is_read
-                    `
+        id,
+        message,
+        sender_id,
+        sender:profile!public_messages_sender_id_fkey(name),
+        recipient_id,
+        recipient:profile!public_messages_recipient_id_fkey(name),
+        created_at,
+        chat_id,
+        is_read,
+        chats!inner(ad_id)
+        `
       )
 
       .or(`recipient_id.eq.${user_id},sender_id.eq.${user_id}`)
@@ -35,34 +36,51 @@ export async function getUserChat(req, res) {
 // Basically tries to add otherwise tries to fetch with 2 selects because constraint
 async function getChatID(user1_id, user2_id, ad_id) {
   const { data: chatID, error: chatError } = await supabase
-        .from("chats")
-        .insert([
-        {
-            user1_id: user1_id,
-            user2_id: user2_id,
-            ad_id: ad_id,
-        },
-        ])
-        .select();
-    if (chatID && chatID.length > 0) {return chatID}
-    if (chatError.code !== "23505") {return new Error(error.message)}
-    const { data: firstSearchData, error: firstSearchError } = await supabase
-        .from("chats")
-        .select("*")
-        .eq("user1_id", user1_id)
-        .eq("user2_id", user2_id)
-        .eq("ad_id", ad_id);
-    if (firstSearchData && firstSearchData.length > 0) {return firstSearchData}
-    if (firstSearchError) {return new Error(firstSearchError)}
-    const { data: secondSearchData, error: secondSearchError } = await supabase
-        .from("chats")
-        .select("*")
-        .eq("user1_id", user2_id)
-        .eq("user2_id", user1_id)
-        .eq("ad_id", ad_id);
-    if (secondSearchData && secondSearchData.length > 0) {return secondSearchData}
-    if (secondSearchError) {return new Error(secondSearchError)}
-    return new Error("NOTHING WORKED")
+    .from("chats")
+    .insert([
+      {
+        user1_id: user1_id,
+        user2_id: user2_id,
+        ad_id: ad_id,
+      },
+    ])
+    .select();
+  if (chatID && chatID.length > 0) {
+    return chatID;
+  }
+  if (chatError.code !== "23505") {
+    throw chatError;
+  }
+  const { data: firstSearchData, error: firstSearchError } = await supabase
+    .from("chats")
+    .select("*")
+    .eq("user1_id", user1_id)
+    .eq("user2_id", user2_id)
+    .eq("ad_id", ad_id);
+  console.log(
+    "firstSearchData,firstSearchError",
+    firstSearchData,
+    firstSearchError
+  );
+  if (firstSearchData && firstSearchData.length > 0) {
+    return firstSearchData;
+  }
+  if (firstSearchError) {
+    throw firstSearchError;
+  }
+  const { data: secondSearchData, error: secondSearchError } = await supabase
+    .from("chats")
+    .select("*")
+    .eq("user1_id", user2_id)
+    .eq("user2_id", user1_id)
+    .eq("ad_id", ad_id);
+  if (secondSearchData && secondSearchData.length > 0) {
+    return secondSearchData;
+  }
+  if (secondSearchError) {
+    throw secondSearchError;
+  }
+  return new Error("Something went wrong");
 }
 
 // send message
@@ -72,9 +90,16 @@ export async function sendMessage(req, res) {
     if (!recipient_id || !list_id || !init_msg || !user_id) {
       throw new Error("Missing an input query");
     }
-    let chat_id = null
+    if (recipient_id === user_id) {
+      throw new Error("Cannot send a message to yourself.");
+    }
+    let chat_id = null;
     let chatID = await getChatID(user_id, recipient_id, list_id);
-    if (chatID && chatID.length > 0){ chat_id = chatID[0].id} else{ throw new Error("NO CHAT ID")}
+    if (chatID && chatID.length > 0) {
+      chat_id = chatID[0].id;
+    } else {
+      throw new Error("NO CHAT ID");
+    }
     const { data, error } = await supabase
       .from("messages")
       .insert([
@@ -97,7 +122,7 @@ export async function sendMessage(req, res) {
 export async function updateReadStatus(req, res) {
   let { user_id, chat_id } = req.body;
   try {
-    if (!user_id || !ad_post) {
+    if (!user_id || !chat_id) {
       throw new Error("Missing an input query");
     }
     const { data, error } = await supabase

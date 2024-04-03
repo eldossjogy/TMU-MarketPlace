@@ -122,7 +122,7 @@ export default function ChatTest() {
         if (currentChat == ele.chat_id) {
           return (
             <div key={ele.id}>
-              {ele.chat_id} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
+              {ele.chat_id} -- {ele?.chats?.ad_id} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
             </div>
           );
         }

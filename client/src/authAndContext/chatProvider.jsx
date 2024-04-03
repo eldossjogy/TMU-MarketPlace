@@ -40,6 +40,7 @@ export const ChatProvider = ({ children }) => {
             [payload.new.recipient_id, payload.new.sender_id].includes(user?.id)
           ) {
             let newMsg = payload.new;
+            console.log(newMsg)
             setMessages((prev) => {
               const alreadyExist = prev.some((msg) => msg.id == newMsg.id);
               if (!alreadyExist) {
@@ -103,7 +104,6 @@ export const ChatProvider = ({ children }) => {
           },
         }
       );
-      console.log(response)
       if (response.data) {
         return toast.success("Chat :> Send Message")
       }
@@ -118,7 +118,7 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     if (messages.length > 0 && newMsg) {
       if (newMsg.recipient_id === user.id) {
-        if (newMsg.ad_post === currentChat) {
+        if (newMsg.chat_id === currentChat) {
           updateDBReadStatus(user.id, currentChat);
           return toast.success("Chat :> No notifacation because u are already reading the chat");
         }
@@ -158,29 +158,29 @@ export const ChatProvider = ({ children }) => {
   /* remove notification */
   /* find out if the message has been read */
   /* must have ad_id and message_id and user_id */
-  async function removeNotification(user_id, ad_post) {
-    toast.success("Chat :> You're reading the chat for ad post: ", ad_post);
-    setCurrentChat(ad_post); // if the user has unread messages
+  async function removeNotification(user_id, chat_id) {
+    toast.success(`Chat :> You're reading the chat: ${chat_id}`);
+    setCurrentChat(chat_id); // if the user has unread messages
     if (gotMail.length === 0) {     // if the user has unread messages
-      return toast.success("Chat :> No New Mail");;
+      return toast.success(`Chat :> No new message in chat ${chat_id}`); 
     }
 
     if (user_id === user.id) {
       // update teh notification
       setGotMail((prev) => {
-        let updatedArray = prev.filter((dict) => dict.ad_post !== ad_post);
+        let updatedArray = prev.filter((dict) => dict.chat_id !== chat_id);
         return updatedArray;
       });
 
       // update teh database
-      updateDBReadStatus(user.id, ad_post);
+      updateDBReadStatus(user.id, chat_id);
     }
   }
 
   // stop reading
 
   async function exitChat() {
-    toast.success("Chat :> You've stoped reading the chat for ad post: ", currentChat);
+    toast.success(`Chat :> You've stoped reading the chat`);
     setCurrentChat(null);
   }
 
