@@ -95,7 +95,7 @@ export async function sendMessage(req, res) {
 
 // set a current chat which will remove notifications
 export async function updateReadStatus(req, res) {
-  let { user_id, ad_post } = req.body;
+  let { user_id, chat_id } = req.body;
   try {
     if (!user_id || !ad_post) {
       throw new Error("Missing an input query");
@@ -104,7 +104,7 @@ export async function updateReadStatus(req, res) {
       .from("messages")
       .update({ is_read: true })
       .eq("recipient_id", user_id)
-      .eq("ad_post", ad_post)
+      .eq("chat_id", chat_id)
       .select();
     if (error) throw new Error(error.message);
     res.status(200).json(data);

@@ -129,7 +129,7 @@ export const ChatProvider = ({ children }) => {
   }, [messages, newMsg]);
 
   // set a current chat which will remove notifications
-  async function updateDBReadStatus(user_id,ad_post) {
+  async function updateDBReadStatus(user_id,chat_id) {
     if (!user) {
       return toast.error("Chat :> No user data at the moment")
     }
@@ -137,7 +137,7 @@ export const ChatProvider = ({ children }) => {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_API_URL}/chat/read-status`,
         {
-          ad_post: ad_post
+          chat_id: chat_id
         },
         {
           headers: {
