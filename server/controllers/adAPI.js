@@ -36,7 +36,7 @@ export async function getByID(req, res) {
 
 export async function homepage(req, res) {
   try {
-    const { data: ads, error } = await supabase.from("ad").select(`
+      const category1Req = await supabase.from("ad").select(`
           id,
           title,
           price,
@@ -49,26 +49,97 @@ export async function homepage(req, res) {
           image!left(file_path),
           category_id,
           status!inner(type)
-          `);
+          `)
+          .eq('category_id', 1)
+          .eq('status_id', 1)
+          .order('id', { ascending: false })
+          .limit(5);
 
-    if (error) {
-      throw error;
-    }
+      const category2Req = await supabase.from("ad").select(`
+          id,
+          title,
+          price,
+          description,
+          postal_code,
+          location,
+          lng,
+          lat,
+          post_time,
+          image!left(file_path),
+          category_id,
+          status!inner(type)
+          `)
+          .eq('category_id', 2)
+          .eq('status_id', 1)
+          .order('id', { ascending: false })
+          .limit(5);
 
-    const availableAds = ads.filter(ad => ad.status.type == "Available");
+      const category3Req = await supabase.from("ad").select(`
+          id,
+          title,
+          price,
+          description,
+          postal_code,
+          location,
+          lng,
+          lat,
+          post_time,
+          image!left(file_path),
+          category_id,
+          status!inner(type)
+          `)
+          .eq('category_id', 3)
+          .eq('status_id', 1)
+          .order('id', { ascending: false })
+          .limit(5);
+          
+      const category4Req = await supabase.from("ad").select(`
+          id,
+          title,
+          price,
+          description,
+          postal_code,
+          location,
+          lng,
+          lat,
+          post_time,
+          image!left(file_path),
+          category_id,
+          status!inner(type)
+          `)
+          .eq('category_id', 4)
+          .eq('status_id', 1)
+          .order('id', { ascending: false })
+          .limit(5);
 
-    const adsByCategory = availableAds.reduce((acc, ad) => {
-      const categoryID = ad.category_id.toString();
-      if (!acc[categoryID]) {
-        acc[categoryID] = [];
-      }
-      if (acc[categoryID].length < 5) {
-        acc[categoryID].push(ad);
-      }
-      return acc;
-    }, {});
+      const category5Req = await supabase.from("ad").select(`
+          id,
+          title,
+          price,
+          description,
+          postal_code,
+          location,
+          lng,
+          lat,
+          post_time,
+          image!left(file_path),
+          category_id,
+          status!inner(type)
+          `)
+          .eq('category_id', 5)
+          .eq('status_id', 1)
+          .order('id', { ascending: false })
+          .limit(5);
 
-    res.json(adsByCategory);
+      const homepageData = {}
+      homepageData[1] = category1Req.data
+      homepageData[2] = category2Req.data
+      homepageData[3] = category3Req.data
+      homepageData[4] = category4Req.data
+      homepageData[5] = category5Req.data
+
+      res.status(200).json(homepageData)
+    
   } catch (error) {
     console.error("Error fetching or processing ads:", error);
     res.status(500).json({ error: "Internal server error" });
