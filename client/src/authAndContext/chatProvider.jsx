@@ -27,26 +27,26 @@ export const ChatProvider = ({ children }) => {
       setChannel(userChannel);
     }
   }, [user]);
-
+  
   // listen to a chatroom
   useEffect(() => {
     const msgSubscription = supabase
-      .channel(currentChannel)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages" },
-        (payload) => {
+    .channel(currentChannel)
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "messages" },
+      (payload) => {
+          console.log(user,payload.new)
           if (
             [payload.new.recipient_id, payload.new.sender_id].includes(user?.id)
           ) {
             let newMsg = payload.new;
-            console.log(newMsg)
-            setMessages((prev) => {
-              const alreadyExist = prev.some((msg) => msg.id == newMsg.id);
-              if (!alreadyExist) {
-                return [...prev, newMsg];
-              }
-            });
+            console.log(newMsg);
+            const alreadyExist = messages.some((msg) => msg.id == newMsg.id);
+            if (!alreadyExist) {
+              setMessages((prev) => [...prev, newMsg]);
+              console.log(alreadyExist, "new msg");
+            }
             setNewMsg(newMsg);
           }
         }
@@ -54,14 +54,16 @@ export const ChatProvider = ({ children }) => {
       .subscribe();
     // Cleanup function to unsubscribe from the channel when the component unmounts
     // return () => {
-    // supabase.removeSubscription(messagesSubscription);
+    //   if (currentChannel) {
+    //     supabase.removeChannel(currentChannel);
+    //   }
     // };
   }, [currentChannel]); // Empty dependency array means this effect runs once on mount
 
   // onMount of the chatpage we can read all chats
   async function getChat() {
     if (!user || messages.length > 0) {
-      return toast.error("Chat :> No user data at the moment")
+      return toast.error("Chat :> No user data at the moment");
     }
 
     try {
@@ -78,7 +80,7 @@ export const ChatProvider = ({ children }) => {
           setGotMail((prev) => [...prev, ele]);
         }
       });
-      setMessages(response.data)
+      setMessages(response.data);
     } catch (error) {
       toast.error("Error fetching ads: ", JSON.stringify(error));
       return null;
@@ -88,7 +90,7 @@ export const ChatProvider = ({ children }) => {
   // send message
   async function sentMsg(recipient_id, list_id, init_msg) {
     if (!user) {
-      return toast.error("Chat :> No user data at the moment")
+      return toast.error("Chat :> No user data at the moment");
     }
     try {
       const response = await axios.post(
@@ -96,7 +98,7 @@ export const ChatProvider = ({ children }) => {
         {
           recipient_id: recipient_id,
           list_id: list_id,
-          init_msg: init_msg
+          init_msg: init_msg,
         },
         {
           headers: {
@@ -105,10 +107,10 @@ export const ChatProvider = ({ children }) => {
         }
       );
       if (response.data) {
-        return toast.success("Chat :> Send Message")
+        return toast.success("Chat :> Send Message");
       }
     } catch (error) {
-      return toast.error("Chat :> Failed to send message", error.message)
+      return toast.error("Chat :> Failed to send message", error.message);
     }
   }
 
@@ -120,7 +122,9 @@ export const ChatProvider = ({ children }) => {
       if (newMsg.recipient_id === user.id) {
         if (newMsg.chat_id === currentChat) {
           updateDBReadStatus(user.id, currentChat);
-          return toast.success("Chat :> No notifacation because u are already reading the chat");
+          toast.success(
+            "Chat :> No notifacation because u are already reading the chat"
+          );
         }
         setGotMail((prev) => [...prev, newMsg]);
         toast.success("Chat :> You've got mail");
@@ -129,15 +133,15 @@ export const ChatProvider = ({ children }) => {
   }, [messages, newMsg]);
 
   // set a current chat which will remove notifications
-  async function updateDBReadStatus(user_id,chat_id) {
+  async function updateDBReadStatus(user_id, chat_id) {
     if (!user) {
-      return toast.error("Chat :> No user data at the moment")
+      return toast.error("Chat :> No user data at the moment");
     }
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_API_URL}/chat/read-status`,
         {
-          chat_id: chat_id
+          chat_id: chat_id,
         },
         {
           headers: {
@@ -145,14 +149,12 @@ export const ChatProvider = ({ children }) => {
           },
         }
       );
-      console.log(response)
       if (response.data) {
-        return toast.success("Chat :> DB Read Status Updated")
+        return toast.success("Chat :> DB Read Status Updated");
       }
     } catch (error) {
-      return toast.error("Chat :> Failed to send message", error.message)
+      return toast.error("Chat :> Failed to send message", error.message);
     }
-
   }
 
   /* remove notification */
@@ -161,8 +163,9 @@ export const ChatProvider = ({ children }) => {
   async function removeNotification(user_id, chat_id) {
     toast.success(`Chat :> You're reading the chat: ${chat_id}`);
     setCurrentChat(chat_id); // if the user has unread messages
-    if (gotMail.length === 0) {     // if the user has unread messages
-      return toast.success(`Chat :> No new message in chat ${chat_id}`); 
+    if (gotMail.length === 0) {
+      // if the user has unread messages
+      return toast.success(`Chat :> No new message in chat ${chat_id}`);
     }
 
     if (user_id === user.id) {
@@ -194,7 +197,7 @@ export const ChatProvider = ({ children }) => {
         gotMail,
         removeNotification,
         currentChat,
-        exitChat
+        exitChat,
       }}
     >
       {children}
@@ -203,3 +206,4 @@ export const ChatProvider = ({ children }) => {
 };
 
 export default ChatContext;
+
