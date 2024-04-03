@@ -51,6 +51,7 @@ export async function homepage(req, res) {
           status!inner(type)
           `)
           .eq('category_id', 1)
+          .eq('status_id', 1)
           .order('id', { ascending: false })
           .limit(5);
 
@@ -69,6 +70,7 @@ export async function homepage(req, res) {
           status!inner(type)
           `)
           .eq('category_id', 2)
+          .eq('status_id', 1)
           .order('id', { ascending: false })
           .limit(5);
 
@@ -87,6 +89,7 @@ export async function homepage(req, res) {
           status!inner(type)
           `)
           .eq('category_id', 3)
+          .eq('status_id', 1)
           .order('id', { ascending: false })
           .limit(5);
           
@@ -105,6 +108,7 @@ export async function homepage(req, res) {
           status!inner(type)
           `)
           .eq('category_id', 4)
+          .eq('status_id', 1)
           .order('id', { ascending: false })
           .limit(5);
 
@@ -123,6 +127,7 @@ export async function homepage(req, res) {
           status!inner(type)
           `)
           .eq('category_id', 5)
+          .eq('status_id', 1)
           .order('id', { ascending: false })
           .limit(5);
 
