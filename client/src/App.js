@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
 import EditProfile from "./pages/EditProfile";
 import InboxPage from "./pages/InboxPage";
+import OutboxPage from "./pages/OutboxPage";
 import PrivateRoutes from "./util/PrivateRoutes";
 import AdminRoutes from "./util/AdminRoutes";
 import ErrorPage from "./pages/ErrorPage";
@@ -49,6 +50,7 @@ function App() {
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="profile" element={<EditProfile />} />
                 <Route path="inbox" element={<InboxPage />} />
+                <Route path="outbox" element={<OutboxPage />} />
                 <Route path="history" element={<HistoryPage />} />
                 <Route path="saved" element={<SavedPage />} />
                 <Route path="chat" element={<ChatTest />} />
