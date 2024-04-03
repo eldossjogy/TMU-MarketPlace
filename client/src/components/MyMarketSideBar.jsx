@@ -30,7 +30,7 @@ export default function MyMarketSideBar({title}) {
     ]
 
   return (
-    <div className={`mx-auto w-full md:w-64 xl:w-80 h-fit shrink-0 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:h-[90vh] `}> {/* md:bg-[#e0f2fe] md:border-[#7dd3fc] */}
+    <div className={`mx-auto w-full md:w-64 xl:w-80 h-fit shrink-0 p-4 bg-[#fafafb] rounded-xl md:rounded-lg shadow-lg border-2 border-gray md:min-h-[90vh] `}> {/* md:bg-[#e0f2fe] md:border-[#7dd3fc] */}
       <section className={`w-full space-y-4 md:hidden`}>
         <div className='flex justify-between items-center px-2 rounded-xl shadow-md border-neutral-400/30 hover:bg-sky-400 hover:text-white bg-white p-2 text-lg' onClick={() => { setCollapsed(!collapsed) }}>
           <span>{title ? title : 'My Market'}</span>
