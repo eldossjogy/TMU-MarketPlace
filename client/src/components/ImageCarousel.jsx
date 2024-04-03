@@ -41,7 +41,7 @@ export default function ImageCarousel({ images, hovered, setHovered, vertical = 
       <div className={`text-center mt-2 absolute w-full bottom-0 ${hovered ? 'visible' : 'invisible'}`}>
         {images.length > 1 && images.map((ele, index) => (
           <button
-            className={`cursor-pointer h-3 w-3 mx-0.5 rounded-full inline-block transition-colors duration-600 ease-in-out ${index === currPos ? 'bg-white' : 'bg-gray-400'}`}
+            className={`mb-4 cursor-pointer h-3 w-3 mx-0.5 rounded-full inline-block transition-colors duration-600 ease-in-out ${index === currPos ? 'bg-white' : 'bg-gray-400'}`}
             onClick={() => setPos(index)}
             key={index}
           ></button>
