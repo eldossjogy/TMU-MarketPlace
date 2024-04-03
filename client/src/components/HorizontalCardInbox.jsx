@@ -1,7 +1,8 @@
-import { ArrowLongRightIcon, TrashIcon } from '@heroicons/react/24/solid';
-import React, { useEffect, useState } from 'react'
+import { TrashIcon } from '@heroicons/react/24/solid';
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import CardImages from './CardImages';
+import ChatContext from '../authAndContext/chatProvider';
 
 export default function HorizontalCardInbox({
     image,
@@ -11,7 +12,10 @@ export default function HorizontalCardInbox({
 	status,
     lastMessage,
 	date,
+    chat_id,
 }) {
+    const {removeNotification} = useContext(ChatContext)
+
 	const [hovered, setHovered] = useState(false);
 	const rawDate = new Date(date ?? '01/16/2024');
 	const rawAge = Date.now() - rawDate.getTime();
@@ -23,6 +27,10 @@ export default function HorizontalCardInbox({
 	const seconds = Math.round(rawAge / (1000));
     
 	const age = weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''} ago` : days > 0 ? `${days} day${days > 1 ? 's' : ''} ago` : hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
+
+    const handleSetChat = () => {
+        removeNotification(chat_id);
+    }
     return (
 
         <div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
@@ -43,7 +51,7 @@ export default function HorizontalCardInbox({
                         </div>
                         <div className='w-full flex space-x-2'>
                             <button className="rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white hidden group-hover:flex justify-center items-center p-1"><TrashIcon className='h-6 w-6'/></button>
-                            <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-neutral-950 hidden group-hover:flex justify-center items-center py-1 max-w-20">Reply</button>
+                            <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-neutral-950 hidden group-hover:flex justify-center items-center py-1 max-w-20" onClick={handleSetChat}>Reply</button>
                         </div>
                     </section>
                     <section className="flex flex-col justify-between w-full">
