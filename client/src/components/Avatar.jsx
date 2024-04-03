@@ -19,12 +19,10 @@ export default function Avatar({ userID }) {
   if (url && !(url === 'error')) {
     return (
       <LazyLoadImage
-        className="h-40 w-40 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
+        className="h-60 w-60 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
         src={`${url}`}
         alt={noImage}
         effect='blur'
-        width='100%'
-        height='100%'
         placeholderSrc={noImage} />
       );
     } else {

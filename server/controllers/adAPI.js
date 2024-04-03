@@ -24,10 +24,41 @@ export async function getByID(req, res) {
           image!left(file_path),
           category!inner(name),
           status!inner(type),
-          profile!inner(id,name,avatar_url,postal_code)
+          profile!inner(id,name,avatar_url,first_name,last_name)
           `
       )
       .eq("id", id);
+    res.status(200).json(postData.data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function get3ListingsByID(req, res) {
+  let { get_by_user_id } = req.query;
+  try {
+    const postData = await supabase
+      .from("ad")
+      .select(
+        `
+        id,
+        title,
+        price,
+        description,
+        postal_code,
+        location,
+        lng,
+        lat,
+        post_time,
+        image!left(file_path),
+        category_id,
+        status!inner(type)
+        `
+      )
+      .eq("user_id", get_by_user_id)
+      .order('id', { ascending: false })
+      .limit(3);
+
     res.status(200).json(postData.data);
   } catch (error) {
     res.status(500).json({ message: error.message });

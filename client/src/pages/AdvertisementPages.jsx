@@ -8,16 +8,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import AdContext from "../authAndContext/adProvider";
 import Loading from "../components/Loading";
 import { useParams } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
+import toast from "react-hot-toast";
 
 
 export default function AdvertisementPages() {
-    const { fetchAdPage } = useContext(AdContext);
+    const { fetchAdPage, fetch3ListingsForAdPage } = useContext(AdContext);
     const location = useLocation();
     const [dbData, setData] = useState(null);
     const { slug } = useParams();
     const [nextAd, setNextAd] = useState(null)
     const [previousAd, setPreviousAd] = useState(null)
-    const similarAds = location.state || {};
+    const [similarAds, setSimilarAds] = useState({})
+    const [localLoading, setLocalLoading] = useState(true)
     //const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
 
@@ -39,79 +42,64 @@ export default function AdvertisementPages() {
     
     useEffect(() => {
         if (slug) {
-            fetchAdPage(slug).then((res) => { setData(res) });
+           fetchRequiredata(slug)
         }
+
+        /*
         if(similarAds.length > 1){
 
             const { previousElement, nextElement } = findNextAndPrevious(similarAds, parseInt(slug));
             setNextAd(nextElement)
             setPreviousAd(previousElement)
         }
+        */
     }, [slug]);
 
-    // function previousAd() {
-    //     //alert("You scrolled left!");
-    //     setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? similarAds.length - 1 : prevIndex - 1));
-    // }
-
-    // function nextAd() {
-    //     //alert("You scrolled right!");
-    //     setCurrentAdIndex((prevIndex) => (prevIndex === similarAds.length - 1 ? 0 : prevIndex + 1));
-
-    // }
-
-    if (dbData === null) {
-        <Navbar />
-        return <Loading />
-    }
-
-    if (dbData === false || dbData === undefined) {
-        return (
-            <div>
-                <Navbar />
-                <div className="flex justify-center items-center my-3 mx-3">
-                    <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
-                        <h1 className="text-xl">
-                            This listing does not exist or has been removed.
-                        </h1>
-                        <a href="/" className="text-xl text-blue-500">
-                            Return home
-                        </a>
-                    </div>
-                </div>
-            </div>
-        )
+    async function fetchRequiredata(slug) {
+        try {
+            const res = await fetchAdPage(slug);
+            setData(res);
+            
+            try {
+              const res2 = await fetch3ListingsForAdPage(res.profile.id);
+              setSimilarAds(res2);
+            } catch (error) {
+              toast.success("Ad Fetched")
+            }
+          } catch (error) {
+            toast.error('Error fetching ad page:')
+          }
+          setLocalLoading(false)
+          
     }
 
     return (
+        !localLoading ?
         <>
             <Navbar />
 
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
                 
-                {similarAds.length > 1 ? 
+                {/*similarAds.length > 1 ? 
                 <Link to={{ pathname: `/ad/${previousAd}` }} state={similarAds}>
                     <ChevronLeftIcon className="relative right-2 size-36 top-28" ></ChevronLeftIcon>
                 </Link>
-                : <></>}
+    : <></>*/}
 
                 <AdvertisementCard
-                    image={dbData.image}
-                    title={dbData.title}
-                    price={dbData.price}
-                    location={dbData.location}
-                    description={dbData.description}
-                    userimg={dbData.profile.id}
-                    sellername={dbData.profile.name}
+                    dbData = {dbData}
+                    similarAds={similarAds}
                 />
-                {similarAds.length > 1 ? 
+                {/*similarAds.length > 1 ? 
                 <Link to={{ pathname: `/ad/${nextAd}` }} state={similarAds}>
                     <ChevronRightIcon className="relative left-2 size-36 top-28" ></ChevronRightIcon>
                 </Link> 
-                : <></>}
+: <></>*/}
 
             </main>
 
         </>
+        :
+        <LoadingScreen message={"Loading Ad Data"}/>
     );
 }
