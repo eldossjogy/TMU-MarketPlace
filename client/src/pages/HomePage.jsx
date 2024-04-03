@@ -44,6 +44,7 @@ export default function HomePage() {
                       description={element.description}
                       postID={element.id}
                       key={element.id}
+                      similarAds={ads[key].map(obj => obj.id)}
                       is_saved={userSavedIDs[element.id] !== undefined}
                       show_saved={true}
                     />

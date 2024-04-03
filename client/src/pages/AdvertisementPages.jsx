@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar"
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import AdvertisementCard from "../components/AdvertisementCard";
 import StarRating from "../components/StarRating";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
@@ -15,31 +15,50 @@ export default function AdvertisementPages() {
     const location = useLocation();
     const [dbData, setData] = useState(null);
     const { slug } = useParams();
+    const similarAds = location.state || {};
+    const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
-    useEffect( () => {
+
+    useEffect(() => {
         if (slug) {
-            fetchAdPage(slug).then((res) => {setData(res)})
+            fetchAdPage(slug).then((res) => { setData(res) })
         }
     }, [slug]);
 
     function previousAd() {
-        alert("You scrolled left!");
+        //alert("You scrolled left!");
+        setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? similarAds.length - 1 : prevIndex - 1));
+        alert(similarAds[currentAdIndex].profile.id);
     }
 
     function nextAd() {
-        alert("You scrolled right!");
+        //alert("You scrolled right!");
+        setCurrentAdIndex((prevIndex) => (prevIndex === similarAds.length - 1 ? 0 : prevIndex + 1));
+        alert(similarAds[currentAdIndex].profile.id);
+
     }
 
     if (dbData === null) {
         <Navbar />
-        return <Loading/>
+        return <Loading />
     }
 
     if (dbData === false || dbData === undefined) {
-        <div>
-            <Navbar />
-            <h1>This ad is currently not available</h1>
-        </div>
+        return (
+            <div>
+                <Navbar />
+                <div className="flex justify-center items-center my-3 mx-3">
+                    <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
+                        <h1 className="text-xl">
+                            This listing does not exist or has been removed.
+                        </h1>
+                        <a href="/" className="text-xl text-blue-500">
+                            Return home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -48,19 +67,24 @@ export default function AdvertisementPages() {
 
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
 
-                <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={previousAd}></ChevronLeftIcon>
+                <Link to={{ pathname: `/ads/${currentAdIndex}` }} state={similarAds}>
+                    <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={previousAd}></ChevronLeftIcon>
+                </Link>
 
                 <AdvertisementCard
-                image={dbData.image}
-                title={dbData.title}
-                price={dbData.price}
-                location={dbData.location}
-                description={dbData.description}
-                userimg={dbData.profile.id}
-                sellername={dbData.profile.name}
+                    image={dbData.image}
+                    title={dbData.title}
+                    price={dbData.price}
+                    location={dbData.location}
+                    description={dbData.description}
+                    userimg={dbData.profile.id}
+                    sellername={dbData.profile.name}
                 />
 
-                <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={nextAd}></ChevronRightIcon>
+                <Link to={{ pathname: `/ads/${currentAdIndex}` }} state={similarAds}>
+                    <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={nextAd}></ChevronRightIcon>
+                </Link>
+
             </main>
 
         </>
