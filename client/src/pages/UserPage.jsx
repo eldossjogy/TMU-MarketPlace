@@ -19,7 +19,7 @@ export default function UserPage() {
 
   useEffect(() => {
     if (username) {
-      fetchUserProfile(username).then((res) => {
+      fetchUserProfile(username.toLowerCase()).then((res) => {
         setUser(res);
         if (res) {
           fetchUserAds(res.id).then((res) => {
@@ -128,7 +128,7 @@ export default function UserPage() {
                     postID={ad.id}
                     date={ad.post_time}
                     is_saved={userSavedIDs[ad.id] ? true : false}
-                    show_saved={true}
+                    show_saved={false}
                   />
                 </div>
               );
