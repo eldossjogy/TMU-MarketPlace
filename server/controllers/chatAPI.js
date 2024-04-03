@@ -92,7 +92,7 @@ export async function getChat(req, res) {
 
 // Basically tries to add otherwise tries to fetch with 2 selects because constraint
 // Checks for a chat id where user1 is sender and user2 is recipient with a given ad id
-async function getChatID(sender, recipient, ad_id) {
+async function generateChatID(sender, recipient, ad_id) {
   const { data: chatID, error: chatError } = await supabase
     .from("chats")
     .insert([
@@ -103,9 +103,10 @@ async function getChatID(sender, recipient, ad_id) {
       },
     ])
     .select();
-  if (chatID?.length > 0) {
+  if (chatID && chatID.length > 0) {
     return chatID;
   }
+
   if (chatError.code !== "23505") {
     throw chatError;
   }
@@ -122,52 +123,40 @@ async function getChatID(sender, recipient, ad_id) {
   if (firstSearchError) {
     throw firstSearchError;
   }
-  // const { data: secondSearchData, error: secondSearchError } = await supabase
-  //   .from("chats")
-  //   .select("*")
-  //   .eq("user1_id", user2_id)
-  //   .eq("user2_id", user1_id)
-  //   .eq("ad_id", ad_id);
-  // if (secondSearchData && secondSearchData.length > 0) {
-  //   return secondSearchData;
-  // }
-  // if (secondSearchError) {
-  //   throw secondSearchError;
-  // }
   return new Error("Something went wrong");
 }
 
-// send message
-export async function sendMessage(req, res) {
+// send message -- with list_id
+export async function sendMessage_With_ListID(req, res) {
   const { list_id, init_msg, user_id } = req.body;
   try {
+
+    if (!list_id || !init_msg || !user_id) {
+      throw new Error("Missing an input query");
+    }
+
+    // get receipeint_id from the list_id
     const { data: recipient_data, error: recipient_data_error } = await supabase.from('ad').select('user_id').eq('id', list_id);
 
-    if(!recipient_data){
+    if(!recipient_data || recipient_data.length === 0){
       throw new Error("Cannot send a message to deleted or missing user.");
     }
     else if(recipient_data_error) throw recipient_data_error;
 
     const recipient_id = recipient_data[0].user_id;
 
-    if (!recipient_id || !list_id || !init_msg || !user_id) {
-      throw new Error("Missing an input query");
-    }
     if (recipient_id === user_id) {
       throw new Error("Cannot send a message to yourself.");
     }
 
     let chat_id = null;
-    let chatID = await getChatID(user_id, recipient_id, list_id);
+    let chatID = await generateChatID(user_id, recipient_id, list_id);
 
     if (chatID && chatID.length > 0) {
       chat_id = chatID[0].id;
-      //res.status(200).json({chatID, chat_id});
     } else {
       throw new Error("NO CHAT ID");
     }
-
-    console.log(init_msg);
 
     const { data, error } = await supabase
       .from("messages")
@@ -180,7 +169,44 @@ export async function sendMessage(req, res) {
         },
       ])
       .select();
-    console.log(data);
+    if (error) throw new Error(error.message);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function sendMessage_With_ChatID(req, res) {
+  const { chat_id, init_msg, user_id } = req.body;
+  try {
+    if ( !chat_id || !init_msg || !user_id) {
+      throw new Error("Missing an input query");
+    }
+
+    // get receipeint_id from chat_id
+    const { data: recipient_data, error: recipient_data_error } = await supabase.from('chats').select('user2_id, user1_id').eq('id', chat_id);
+
+    if(!recipient_data || recipient_data.length === 0){
+      throw new Error("Cannot send a message to deleted or missing user.");
+    }
+    else if(recipient_data_error) throw recipient_data_error;
+
+    const recipient_id = (recipient_data[0].user1_id == user_id ? recipient_data[0].user2_id : recipient_data[0].user1_id);
+
+    if (recipient_id === user_id) {
+      throw new Error("Cannot send a message to yourself.");
+    }
+    const { data, error } = await supabase
+      .from("messages")
+      .insert([
+        {
+          recipient_id: recipient_id,
+          sender_id: user_id,
+          chat_id: chat_id,
+          message: init_msg,
+        },
+      ])
+      .select();
     if (error) throw new Error(error.message);
     res.status(200).json(data);
   } catch (error) {
