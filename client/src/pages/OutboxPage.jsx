@@ -24,7 +24,7 @@ export default function CreateListings() {
     function createChat(e) {
         e.preventDefault();
         console.log(formData);
-        if(!isNaN(parseInt(formData.list_id))) sentMsg(formData.list_id, formData.init_msg).then(getInbox());
+        if(!isNaN(parseInt(formData.list_id))) sentMsg(formData.list_id, formData.init_msg).then(getInbox(2));
     }
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export default function CreateListings() {
     return (
         <MyMarketContainer title={"Your Inbox"}>
             <h1 className='w-full shrink-0 text-5xl p-4'>Outbox</h1>
-            <ChatList list={inbox}/>
+            <ChatList list={inbox} inbox={2}/>
             <div className="max-w-md mx-auto">
                 <form onSubmit={createChat} className="mb-8">
                     <h2 className="text-lg font-semibold mb-4">Create/Send Chat</h2>
