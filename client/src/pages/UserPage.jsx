@@ -64,7 +64,7 @@ export default function UserPage() {
         <div className="flex items-start space-x-4 ml-3">
           <Avatar userID={user.id} square={true} />
           <div>
-            <div className="font-bold text-lg">{user.name}</div>
+            <div className="font-bold text-lg">{user.first_name && user.last_name ?  `${user.first_name} ${user.last_name}` : user.name}</div>
             <div className="text-sm text-gray-600">
               Joined:{" "}
               {new Date(user.created_at).toLocaleDateString("en-US", {
