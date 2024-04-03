@@ -15,27 +15,50 @@ export default function AdvertisementPages() {
     const location = useLocation();
     const [dbData, setData] = useState(null);
     const { slug } = useParams();
+    const [nextAd, setNextAd] = useState(null)
+    const [previousAd, setPreviousAd] = useState(null)
     const similarAds = location.state || {};
-    const [currentAdIndex, setCurrentAdIndex] = useState(0);
+    //const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
 
+    function findNextAndPrevious(arr, element) {
+        let nextElement = null;
+        let previousElement = null;
+    
+        // Find the index of the element in the array
+        const index = arr.indexOf(element);
+    
+        if (index !== -1) {
+            // Use modulus operator to make the array behave like a circular list
+            nextElement = arr[(index + 1) % arr.length];
+            previousElement = arr[(index - 1 + arr.length) % arr.length]; // Add arr.length before modulo to handle negative indices
+        }
+    
+        return { previousElement, nextElement };
+    }
+    
     useEffect(() => {
         if (slug) {
             fetchAdPage(slug).then((res) => { setData(res) });
         }
-        setCurrentAdIndex(similarAds.indexOf(parseInt(slug)));
+        if(similarAds.length > 1){
+
+            const { previousElement, nextElement } = findNextAndPrevious(similarAds, parseInt(slug));
+            setNextAd(nextElement)
+            setPreviousAd(previousElement)
+        }
     }, [slug]);
 
-    function previousAd() {
-        //alert("You scrolled left!");
-        setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? similarAds.length - 1 : prevIndex - 1));
-    }
+    // function previousAd() {
+    //     //alert("You scrolled left!");
+    //     setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? similarAds.length - 1 : prevIndex - 1));
+    // }
 
-    function nextAd() {
-        //alert("You scrolled right!");
-        setCurrentAdIndex((prevIndex) => (prevIndex === similarAds.length - 1 ? 0 : prevIndex + 1));
+    // function nextAd() {
+    //     //alert("You scrolled right!");
+    //     setCurrentAdIndex((prevIndex) => (prevIndex === similarAds.length - 1 ? 0 : prevIndex + 1));
 
-    }
+    // }
 
     if (dbData === null) {
         <Navbar />
@@ -65,10 +88,12 @@ export default function AdvertisementPages() {
             <Navbar />
 
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
-
-                <Link to={{ pathname: `/ads/${similarAds[currentAdIndex]}` }} state={similarAds}>
-                    <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={()=>{previousAd()}}></ChevronLeftIcon>
+                
+                {similarAds.length > 1 ? 
+                <Link to={{ pathname: `/ads/${previousAd}` }} state={similarAds}>
+                    <ChevronLeftIcon className="relative right-2 size-36 top-28" ></ChevronLeftIcon>
                 </Link>
+                : <></>}
 
                 <AdvertisementCard
                     image={dbData.image}
@@ -79,10 +104,11 @@ export default function AdvertisementPages() {
                     userimg={dbData.profile.id}
                     sellername={dbData.profile.name}
                 />
-
-                <Link to={{ pathname: `/ads/${similarAds[currentAdIndex]}` }} state={similarAds}>
-                    <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={()=>{nextAd()}}></ChevronRightIcon>
-                </Link>
+                {similarAds.length > 1 ? 
+                <Link to={{ pathname: `/ads/${nextAd}` }} state={similarAds}>
+                    <ChevronRightIcon className="relative left-2 size-36 top-28" ></ChevronRightIcon>
+                </Link> 
+                : <></>}
 
             </main>
 
