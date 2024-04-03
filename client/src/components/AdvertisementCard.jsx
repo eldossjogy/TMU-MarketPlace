@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import CardImages from "./CardImages";
 import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
+import SearchContext from "../authAndContext/searchProvider";
 
 
 
@@ -13,6 +14,7 @@ function AdvertisementCard({
     //state variable will change based on whether user hovers over an image
     //on the advertisement card
     const [hovered, setHovered] = useState(false);
+    const {userSavedIDs} = useContext(SearchContext);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -72,7 +74,7 @@ function AdvertisementCard({
                 </div>
                 <div className="w-1/2 flex flex-col space-x-1">
                     <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mt-2">
-                        Other Listing from {dbData.profile.name}
+                        Other Available Listings from {dbData.profile.name}
                     </h1>
                     <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-3 gap-3">
                         {similarAds.map((element, index) => (
@@ -84,6 +86,7 @@ function AdvertisementCard({
                                 description={element.description}
                                 postID={element.id}
                                 key={element.id}
+                                is_saved={userSavedIDs[element.id] !== undefined}
                                 show_saved={true}
                             />
                         ))}

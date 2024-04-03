@@ -56,6 +56,7 @@ export async function get3ListingsByID(req, res) {
         `
       )
       .eq("user_id", get_by_user_id)
+      .eq("status_id", 1)
       .order('id', { ascending: false })
       .limit(3);
 
