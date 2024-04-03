@@ -43,11 +43,13 @@ function AdvertisementCard({
                     </div>
                     <div className="flex flex-col justify-between w-full px-4 pb-4 bg-[#fafafb]">
                        <div>
-                            <p className="line-clamp-1 font-bold text-4xl">{dbData.title}</p>
+                            <h1 className="text-2xl sm:text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+                                {dbData.category.name}: {dbData.title}
+                            </h1>   
                             <div className="flex justify-between">
                                 <div>
-                                    <h2 className="text-left text-lg">📍{dbData.location}</h2>
-                                    <h6 className="text-xs">{formatDate(dbData.created_at)}</h6>
+                                    <h2 className="text-left text-lg">Location:📍{dbData.location}</h2>
+                                    <h2 className="text-md">Listing created at: {formatDate(dbData.created_at)}</h2>
                                 </div>
                                 <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
                             </div><br></br>

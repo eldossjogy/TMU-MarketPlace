@@ -52,7 +52,8 @@ export async function get3ListingsByID(req, res) {
         post_time,
         image!left(file_path),
         category_id,
-        status!inner(type)
+        status!inner(type),
+        category!inner(name)
         `
       )
       .eq("user_id", get_by_user_id)
