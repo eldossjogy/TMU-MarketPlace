@@ -90,7 +90,7 @@ export default function AdvertisementPages() {
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
                 
                 {similarAds.length > 1 ? 
-                <Link to={{ pathname: `/ads/${previousAd}` }} state={similarAds}>
+                <Link to={{ pathname: `/ad/${previousAd}` }} state={similarAds}>
                     <ChevronLeftIcon className="relative right-2 size-36 top-28" ></ChevronLeftIcon>
                 </Link>
                 : <></>}
@@ -105,7 +105,7 @@ export default function AdvertisementPages() {
                     sellername={dbData.profile.name}
                 />
                 {similarAds.length > 1 ? 
-                <Link to={{ pathname: `/ads/${nextAd}` }} state={similarAds}>
+                <Link to={{ pathname: `/ad/${nextAd}` }} state={similarAds}>
                     <ChevronRightIcon className="relative left-2 size-36 top-28" ></ChevronRightIcon>
                 </Link> 
                 : <></>}
