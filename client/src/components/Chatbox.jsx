@@ -20,11 +20,10 @@ export default function Chatbox() {
     const sendMessage = (e) => {
         e?.preventDefault();
 
-        // if(nextMessage) {
-        //     let time = new Date().toJSON();
-        //     setMessages([...messages, {id: messages.length, message: nextMessage, initial: 'A', sender: true, timestamp: time}]);
-        //     setNextMessage('');
-        // }
+        if(currentChat !== null) {
+            sentMsg(currentChat, nextMessage);
+            setNextMessage('');
+        }
     }
     
     return (
@@ -34,21 +33,10 @@ export default function Chatbox() {
                 <h3 className='text-xl'>Adam</h3>
             </section>
             <section className='flex flex-col w-full bg-white p-3 overflow-y-auto overflow-x-hidden h-[80%]'>
-                {messages && messages.map((msg) => {
-                    if (currentChat === msg.chat_id) {
-                        // if (reply.id != ele.sender_id && ele.sender_id != user.id) {
-                        //     setReply((prev) => ({ ad_id: ele?.chats?.ad_id, id: ele.sender_id }))
-                        // }
-
-                        return (
-                            // <div key={msg.id}>
-                                /* {msg.chat_id} -- {msg?.chats?.ad_id} -- {msg.sender?.name} - ={msg.sender_id}= - {msg.message} */
-                            <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} initial={msg.sender?.name[0]} timestamp={'msg.created_at'} />
-
-                            // </div>
-                        );
-                    }
-                })}
+                {messages && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).map((msg) => (
+                        <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} initial={msg.sender?.name[0]} timestamp={msg.created_at} />
+                    ))
+                }
             </section>
             <form className='w-full bg-white p-3 h-auto shrink-0 flex justify-center items-center flex-row-reverse z-50 gap-2 rounded-xl' onSubmit={sendMessage}>
                 <button className="w-full rounded-xl shadow-md h-full bg-[#eebe45] hover:bg-[#f9a200] text-neutral-950 flex justify-center items-center py-1 max-w-20">Reply</button>

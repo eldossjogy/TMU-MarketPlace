@@ -9,7 +9,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.itemModalContainer {
+/* .itemModalContainer {
     position: fixed;
     top: 0;
     left: 0;
@@ -27,7 +27,7 @@
     align-items: center;
     margin-top: 1em;
     gap: 1em;
-}
+} */
 
 /* .myMarketPageContainer {
     width: 90%;

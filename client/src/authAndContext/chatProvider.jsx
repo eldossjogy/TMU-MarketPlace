@@ -90,7 +90,7 @@ export const ChatProvider = ({ children }) => {
   }
 
   // send message
-  async function sentMsg(list_id, init_msg) {
+  async function sentMsg(chat_id, init_msg) {
     if (!user) {
       return toast.error("Chat :> No user data at the moment");
     }
@@ -98,7 +98,7 @@ export const ChatProvider = ({ children }) => {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_API_URL}/chat/message`,
         {
-          list_id: list_id,
+          chat_id: chat_id,
           init_msg: init_msg,
         },
         {

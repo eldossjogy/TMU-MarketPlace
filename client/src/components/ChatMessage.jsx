@@ -1,10 +1,7 @@
 import React from 'react'
 
-export default function ChatMessage(
-    { sender = true, message = '', username = 'A', timestamp = '' }) {
-
-
-    const rawDate = new Date(timestamp ?? '01/16/2024');
+export default function ChatMessage({ sender = true, message = '', username = 'A', timestamp}) {
+    const rawDate = new Date(timestamp ?? '2024-04-03T17:38:47.771797+00:00');
     const rawAge = Date.now() - rawDate.getTime();
 
     const weeks = Math.round(rawAge / (1000 * 3600 * 24 * 7));

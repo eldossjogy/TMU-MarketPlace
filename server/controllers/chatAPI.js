@@ -146,8 +146,11 @@ export async function sendMessage_With_ListID(req, res) {
     const recipient_id = recipient_data[0].user_id;
 
     if (recipient_id === user_id) {
+      console.log('y');
+
       throw new Error("Cannot send a message to yourself.");
     }
+    console.log(user_id);
 
     let chat_id = null;
     let chatID = await generateChatID(user_id, recipient_id, list_id);
