@@ -98,13 +98,13 @@ export default function ChatTest() {
 
       Currently reading {currentChat}
 
-      {messages && Array.from(new Set(messages.map(message => message.ad_post))).map((adPost, index) => {
+      {messages && Array.from(new Set(messages.map(message => message.chat_id))).map((adPost, index) => {
         return (
           <button
             type="submit"
             className={`text-white font-semibold py-2 px-4 rounded-lg mr-2 ${currentChat === adPost
                 ? 'bg-amber-400 hover:bg-amber-700'
-                : gotMail.some(obj => obj.ad_post === adPost)
+                : gotMail.some(obj => obj.chat_id === adPost)
                   ? 'bg-red-500 hover:bg-red-700'
                   : 'bg-blue-500 hover:bg-blue-700'
               }`}
@@ -119,10 +119,10 @@ export default function ChatTest() {
 
       {messages && messages.map((ele) => {
         // console.log(ele)
-        if (currentChat == ele.ad_post) {
+        if (currentChat == ele.chat_id) {
           return (
             <div key={ele.id}>
-              {ele.ad_post} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
+              {ele.chat_id} -- {ele.sender?.name} - ={ele.sender_id}= - {ele.message}
             </div>
           );
         }
