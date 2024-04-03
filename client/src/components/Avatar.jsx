@@ -19,7 +19,7 @@ export default function Avatar({ userID }) {
   if (url && !(url === 'error')) {
     return (
       <LazyLoadImage
-        className="h-6 w-6 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
+        className="h-40 w-40 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
         src={`${url}`}
         alt={noImage}
         effect='blur'
