@@ -20,6 +20,8 @@ export const ChatProvider = ({ children }) => {
   // current chat user is reading
   const [currentChat, setCurrentChat] = useState(null);
 
+  const [inbox, setInbox] = useState([]);
+
   // create/connect to users channel (can be moved to one useEffect in AuthContext)
   useEffect(() => {
     if (user && user.id) {
@@ -88,7 +90,7 @@ export const ChatProvider = ({ children }) => {
   }
 
   // send message
-  async function sentMsg(recipient_id, list_id, init_msg) {
+  async function sentMsg(list_id, init_msg) {
     if (!user) {
       return toast.error("Chat :> No user data at the moment");
     }
@@ -96,7 +98,6 @@ export const ChatProvider = ({ children }) => {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_API_URL}/chat/message`,
         {
-          recipient_id: recipient_id,
           list_id: list_id,
           init_msg: init_msg,
         },
@@ -187,6 +188,54 @@ export const ChatProvider = ({ children }) => {
     setCurrentChat(null);
   }
 
+  async function getInbox(useInbox = 1) {
+    if (!user) {
+      return toast.error("Chat :> No user data at the moment");
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/chat/inbox`,
+        {
+          params: {
+            inbox: useInbox
+          },
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      );
+      if (response.data) {
+        setInbox(response.data);
+      }
+    } catch (error) {
+      return toast.error("Chat :> Failed to get inbox", error.message);
+    }
+  }
+
+  async function loadChat(id) {
+    if (!user) {
+      return toast.error("Chat :> No user data at the moment");
+    }
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/chat/`,
+        {
+          params: {
+            chat_id: id
+          },
+          headers: {
+            Authorization: "Bearer " + localSession.access_token,
+          },
+        }
+      );
+      if (response.data) {
+        setInbox(response.data);
+      }
+    } catch (error) {
+      return toast.error("Chat :> Failed to get inbox", error.message);
+    }
+  }
+
   return (
     <ChatContext.Provider
       value={{
@@ -198,6 +247,8 @@ export const ChatProvider = ({ children }) => {
         removeNotification,
         currentChat,
         exitChat,
+        getInbox,
+        inbox
       }}
     >
       {children}
