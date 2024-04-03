@@ -13,7 +13,7 @@ export default function Adpage() {
   const passed = location.state || {};
   const [dbData, setData] = useState(null);
   const { slug } = useParams();
-
+  
   useEffect(() => {
     if (slug) {
       fetchAdPage(slug).then((res)=>{

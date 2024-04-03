@@ -19,6 +19,7 @@ import CreateListings from "./pages/CreateListings";
 import { Toaster } from "react-hot-toast";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import AdvertisementPages from "./pages/AdvertisementPages";
 import HistoryPage from "./pages/HistoryPage";
 import SavedPage from "./pages/SavedPage";
 
@@ -33,6 +34,8 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/ad/:slug" element={<Adpage />} />
+          <Route path="/ads/:slug" element={<AdvertisementPages />} />
+          <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route element={<PrivateRoutes loggedIn={false}/>}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
