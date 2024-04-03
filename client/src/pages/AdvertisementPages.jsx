@@ -21,20 +21,19 @@ export default function AdvertisementPages() {
 
     useEffect(() => {
         if (slug) {
-            fetchAdPage(slug).then((res) => { setData(res) })
+            fetchAdPage(slug).then((res) => { setData(res) });
         }
+        setCurrentAdIndex(similarAds.indexOf(parseInt(slug)));
     }, [slug]);
 
     function previousAd() {
         //alert("You scrolled left!");
         setCurrentAdIndex((prevIndex) => (prevIndex === 0 ? similarAds.length - 1 : prevIndex - 1));
-        alert(similarAds[currentAdIndex].profile.id);
     }
 
     function nextAd() {
         //alert("You scrolled right!");
         setCurrentAdIndex((prevIndex) => (prevIndex === similarAds.length - 1 ? 0 : prevIndex + 1));
-        alert(similarAds[currentAdIndex].profile.id);
 
     }
 
@@ -67,8 +66,8 @@ export default function AdvertisementPages() {
 
             <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
 
-                <Link to={{ pathname: `/ads/${currentAdIndex}` }} state={similarAds}>
-                    <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={previousAd}></ChevronLeftIcon>
+                <Link to={{ pathname: `/ads/${similarAds[currentAdIndex]}` }} state={similarAds}>
+                    <ChevronLeftIcon className="relative right-2 size-36 top-28" onClick={()=>{previousAd()}}></ChevronLeftIcon>
                 </Link>
 
                 <AdvertisementCard
@@ -81,8 +80,8 @@ export default function AdvertisementPages() {
                     sellername={dbData.profile.name}
                 />
 
-                <Link to={{ pathname: `/ads/${currentAdIndex}` }} state={similarAds}>
-                    <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={nextAd}></ChevronRightIcon>
+                <Link to={{ pathname: `/ads/${similarAds[currentAdIndex]}` }} state={similarAds}>
+                    <ChevronRightIcon className="relative left-2 size-36 top-28" onClick={()=>{nextAd()}}></ChevronRightIcon>
                 </Link>
 
             </main>

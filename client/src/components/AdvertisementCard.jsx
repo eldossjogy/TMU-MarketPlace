@@ -22,9 +22,6 @@ function AdvertisementCard({
     ad1,
     ad2,
     ad3,
-    titlead1,
-    titlead2,
-    titlead3,
 }) {
     //state variable will change based on whether user hovers over an image
     //on the advertisement card
