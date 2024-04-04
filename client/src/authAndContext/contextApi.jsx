@@ -585,6 +585,18 @@ export const AuthProvider = ({ children }) => {
 			}
 	}
 
+	async function changePassword(newPassword) {
+		try {
+			const response = await supabase.auth.updateUser({ password: newPassword })
+			toast.success("Password Changed!")
+			return true
+		}
+		catch(error) {
+			toast.error(error.message)
+			return false
+		}
+	}
+
   return (
     <AuthContext.Provider
       value={{
@@ -610,7 +622,8 @@ export const AuthProvider = ({ children }) => {
 		getCategories,
 		uploadImageToBucket,
 		checkIfAdmin,
-		editProfile
+		editProfile,
+		changePassword
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
