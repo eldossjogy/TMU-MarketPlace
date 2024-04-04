@@ -4,12 +4,15 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import Loading from "../components/Loading";
 import MyMarketContainer from "../components/MyMarketContainer";
 import NoAvatar from "../assets/noAvatar.jpg"
+import toast from "react-hot-toast";
 
 export default function Profile() {
 	const [selectedImage, setSelectedImage] = useState(null);
 	const {uploadProfilePicture, user} = useContext(AuthContext);
 	const [userName, setUserName] = useState("");
 	const [postCode, setPostCode] = useState("");
+	const [newPassword, setNewPassword] = useState("")
+	const [confirmPassword, setConfirmPassword] = useState("")
 
 	// use effect updates when user changes
 	useEffect(() => {
@@ -25,9 +28,16 @@ export default function Profile() {
 		}
 	}
 
+	function handlePasswordChange() {
+		if (newPassword !== confirmPassword) {
+			toast.error("Passwords do not match!")
+		}
+	}
+
 	return (
 		<MyMarketContainer>
 			{user ?
+			<>
 				<div className="bg-card p-6 rounded-lg w-full border border-gray-200 shadow-md flex flex-col space-y-10 justify-center md:min-h-[90vh]">
 					<div className="flex flex-wrap sm:flex-nowrap justify-center items-center sm:justify-evenly gap-12 w-full mb-8">
 						{selectedImage && (
@@ -142,6 +152,36 @@ export default function Profile() {
 						</button>
 					</div>
 				</div>
+				<div className="bg-card p-6 rounded-lg w-full border border-gray-200 shadow-md flex flex-col space-y-10 justify-center">
+					
+					<div className="w-full md:w-96 space-y-4 text-sm md:text-base m-auto">
+						<div className="flex items-center w-full justify-between">
+							<label htmlFor="password" className="min-w-24">New Password:</label>
+							<input
+								type="password"
+								name="password"
+								className="max-w-64 w-full rounded-lg"
+								onChange={e => setNewPassword(e.target.value)}
+							/>
+						</div>
+						<div className="flex items-center w-full justify-between">
+							<label htmlFor="first_name" className="min-w-24">Confirm New Password:</label>
+							<input
+								type="password"
+								name="confirmPassword"
+								className="max-w-64 w-full rounded-lg"
+								onChange={e => setConfirmPassword(e.target.value)}
+							/>
+						</div>
+						
+					</div>
+					<div className="w-full md:w-96 justify-end flex m-auto">
+						<button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-md shadow-md" onClick={handlePasswordChange}>
+							Change Password
+						</button>
+					</div>
+				</div>
+			</>
 			: <Loading />
 			}
 		</MyMarketContainer>
