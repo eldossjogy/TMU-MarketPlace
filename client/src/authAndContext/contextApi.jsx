@@ -578,7 +578,7 @@ export const AuthProvider = ({ children }) => {
 				},
 				}
 			)
-			toast.success(response.data)
+			toast.success("Profile informtaion updated!")
 			}
 			catch(error) {
 				if (error.response.status === 500) {
