@@ -25,6 +25,7 @@ const CreateListings = lazy(() => import('./pages/CreateListings'));
 const SavedPage = lazy(() => import('./pages/SavedPage'));
 const HistoryPage = lazy(() => import('./pages/HistoryPage'));
 const UserPage = lazy(() => import('./pages/UserPage'))
+const MyUserProfile = lazy(() => import('./pages/MyUserProfile'))
 
 
 library.add(fas);
@@ -51,7 +52,8 @@ function App() {
                 <Route path="create-listing" element={<Suspense fallback={<h1>Loading...</h1>}><CreateListings /></Suspense>} />
                 <Route path="edit-listing/:id" element={<Suspense fallback={<h1>Loading...</h1>}><EditListingPage /></Suspense>} />
                 <Route path="repost-listings" element={<HomePage />} />
-                <Route path="profile" element={<Suspense fallback={<h1>Loading...</h1>}><EditProfile /></Suspense>} />
+                <Route path="profile" element={<Suspense fallback={<h1>Loading...</h1>}><MyUserProfile /></Suspense>} />
+                <Route path="edit-profile" element={<Suspense fallback={<h1>Loading...</h1>}><EditProfile /></Suspense>} />
                 <Route path="inbox" element={<Suspense fallback={<h1>Loading...</h1>}><InboxPage /></Suspense>} />
                 <Route path="outbox" element={<Suspense fallback={<h1>Loading...</h1>}><OutboxPage /></Suspense>} />
                 <Route path="history" element={<Suspense fallback={<h1>Loading...</h1>}><HistoryPage /></Suspense>} />
