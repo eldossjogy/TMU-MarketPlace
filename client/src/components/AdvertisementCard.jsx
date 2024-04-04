@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
 import SearchContext from "../authAndContext/searchProvider";
@@ -17,6 +17,12 @@ function AdvertisementCard({
     const {userSavedIDs} = useContext(SearchContext);
 
     const navigate = useNavigate()
+
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [pathname]); 
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -95,7 +101,9 @@ function AdvertisementCard({
                                 key={element.id}
                                 is_saved={userSavedIDs[element.id] !== undefined}
                                 show_saved={true}
-                                onClick={() => navigate(`/ad/${dbData.id}`)}
+                                onClick={() => {
+                                    navigate(`/ad/${dbData.id}`)
+                                }}
                             />
                         ))}
                     </div>
