@@ -67,7 +67,7 @@ export default function LoginPage() {
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl">Welcome</h1>
                     <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
                         <div className="relative z-0 w-full mb-5">
-                            <input type="email" name="email" id="email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                            <input type="email" name="email" id="email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " maxLength={100} required />
                             <label for="email" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TMU Email Address</label>
                             <p class="mt-2 text-sm">
                                 {errors.email && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.email}</div>}
