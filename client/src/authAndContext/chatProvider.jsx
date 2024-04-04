@@ -92,8 +92,12 @@ export const ChatProvider = ({ children }) => {
   // send message
   async function sentMsg(chat_id, init_msg) {
     if (!user) {
-      toast.error(" No user data");
-      return Promise.reject('No user data.')
+      return toast.error("No user data, please wait");
+      // return Promise.reject('No user data.')
+    }
+    if (!init_msg) {
+      return toast.error("No msg to send");
+      // return Promise.reject('No user data.')
     }
     try {
       const response = await axios.post(
