@@ -81,11 +81,11 @@ function AdvertisementCard({
                                 <section className="flex flex-col w-fit">
                                     <div className="flex w-full justify-between gap-4">
                                         <p className="flex shrink-0">Posted by:</p>
-                                        <p className="w-full">{dbData.profile.name}</p>
+                                        <p className="w-full font-bold">{dbData.profile.name}</p>
                                     </div>
                                     <div className="flex w-full justify-between gap-4">
                                         <p className="flex shrink-0">Posted on:</p>
-                                        <p className="w-full">{formatDate(dbData.created_at)}</p>
+                                        <p className="w-full font-bold">{new Date(dbData.created_at).toLocaleDateString()}</p>
                                     </div>
                                 </section>
                             </Link>
