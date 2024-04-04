@@ -562,6 +562,28 @@ export const AuthProvider = ({ children }) => {
 		setLoadingState(false);
 	}
 
+	async function editProfile({username, first_name, last_name, bio}) {
+		try{
+			const response = await axios.put(
+				`${process.env.REACT_APP_BACKEND_API_URL}/user/`,{
+					username: username,
+					first_name:first_name,
+					last_name:last_name,
+					bio:bio
+				},
+				{
+				headers: {
+					Authorization: "Bearer " + localSession.access_token,
+				},
+				}
+			)
+			toast.success(response.data)
+			}
+			catch(error) {
+			toast.error(error.message);
+			}
+	}
+
   return (
     <AuthContext.Provider
       value={{
@@ -586,7 +608,8 @@ export const AuthProvider = ({ children }) => {
         updateListing,
 		getCategories,
 		uploadImageToBucket,
-		checkIfAdmin
+		checkIfAdmin,
+		editProfile
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
