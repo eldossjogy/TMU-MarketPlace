@@ -34,7 +34,7 @@ export default function HorizontalCardInbox({
     return (
 
         <div className="hover:cursor-pointer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-            <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-48 lg:max-h-64 overflow-hidden">
+            <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex group max-h-48 lg:max-h-64 2xl:max-h-80 overflow-hidden">
                 <section className="flex flex-col items-center justify-center my-auto max-w-32 lg:max-w-56 2xl:max-w-72 space-y-2 h-full  rounded-md bg-[#fafafb] ">
                     <CardImages image={image} hovered={hovered} setHovered={setHovered} vertical={false} />
                     

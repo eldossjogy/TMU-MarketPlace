@@ -7,11 +7,11 @@ export default function ChatList({list = [], inbox}) {
     const { currentChat } = useContext(ChatContext)
 
     return (
-        <section className='flex flex-wrap lg:flex-nowrap gap-6'>
+        <section className='flex flex-col lg:flex-row-reverse gap-6'>
             {/* Toolbar with sorting and title and stuff */}
             {currentChat && <Chatbox chatID={currentChat} />}
 
-            <div className='space-y-3 w-full lg:w-[60%]'>
+            <div className={`space-y-3 w-full ${currentChat ? 'lg:w-[60%] shrink-0' : ''}`}>
                 {list?.length !== 0 && list.map((result) => (
                     <HorizontalCardInbox
                         key={result.id}

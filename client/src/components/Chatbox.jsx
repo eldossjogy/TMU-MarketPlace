@@ -4,9 +4,8 @@ import ChatContext from "../authAndContext/chatProvider";
 import AuthContext from '../authAndContext/contextApi';
 
 export default function Chatbox() {
-    const { sentMsg, getChat, messages, removeNotification, currentChat, gotMail, exitChat } = useContext(ChatContext)
+    const { sentMsg, getChat, messages, currentChat, exitChat } = useContext(ChatContext)
     const { user } = useContext(AuthContext)
-    const [reply,setReply] = useState({id: null, ad_id: null})
     const [nextMessage, setNextMessage] = useState('');
 
     useEffect(() => { getChat() }, [user])
@@ -21,8 +20,15 @@ export default function Chatbox() {
         e?.preventDefault();
 
         if(currentChat !== null) {
-            sentMsg(currentChat, nextMessage);
             setNextMessage('');
+            sentMsg(currentChat, nextMessage).then(() => {
+                let container = document.querySelector('#message-container');
+                container.scroll({
+                    top: container.scrollHeight,
+                    left: 0,
+                    behavior: "smooth"
+                })
+            });
         }
     }
     
@@ -32,8 +38,8 @@ export default function Chatbox() {
                 <h1 className='text-4xl'>Mazda RX-7</h1>
                 <h3 className='text-xl'>Adam</h3>
             </section>
-            <section className='flex flex-col w-full bg-white p-3 overflow-y-auto overflow-x-hidden h-[80%]'>
-                {messages && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).map((msg) => (
+            <section className='flex w-full bg-white p-3 overflow-y-auto overflow-x-hidden h-[80%] flex-col-reverse' id='message-container'>
+                {messages && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).reverse().map((msg) => (
                         <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} initial={msg.sender?.name[0]} timestamp={msg.created_at} />
                     ))
                 }
