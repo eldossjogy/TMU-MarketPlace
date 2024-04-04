@@ -5,7 +5,7 @@ export async function fetchUserProfile(req, res) {
   try {
     const userData = await supabase
       .from("profile")
-      .select("id,name,avatar_url,created_at,first_name,last_name")
+      .select("id,name,avatar_url,created_at,first_name,last_name,bio")
       .eq("name", user_name);
     res.status(200).json(userData.data);
   } catch (error) {

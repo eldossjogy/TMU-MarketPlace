@@ -77,6 +77,9 @@ export default function UserPage() {
                 day: "numeric",
               })}
             </div>
+            <div className="text-sm text-gray-600 mt-2">
+              {user.bio}
+            </div>
           </div>
         </div>
         {ads && ads.length > 0 ? (
