@@ -17,7 +17,7 @@ export async function getUserAds(req, res) {
       post_time,
       image!inner(file_path),
       category_id,
-      status!inner(type)`
+      status!inner(type,id)`
       )
       .eq("user_id", user_id);
     res.status(200).json(myListings.data);

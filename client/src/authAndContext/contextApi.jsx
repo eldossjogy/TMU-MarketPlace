@@ -312,6 +312,7 @@ export const AuthProvider = ({ children }) => {
 					updated_at: dateString,
 				}));
 			});
+			toast.success("Updated profile picture");
 		} else {
 			toast.error("Invalid image upload");
 		}
@@ -562,6 +563,39 @@ export const AuthProvider = ({ children }) => {
 		setLoadingState(false);
 	}
 
+	async function editProfile({username, first_name, last_name, bio}) {
+		try{
+			const response = await axios.put(
+				`${process.env.REACT_APP_BACKEND_API_URL}/user/`,{
+					username: username,
+					first_name:first_name,
+					last_name:last_name,
+					bio:bio
+				},
+				{
+				headers: {
+					Authorization: "Bearer " + localSession.access_token,
+				},
+				}
+			)
+			toast.success(response.data)
+			}
+			catch(error) {
+			toast.error(error.message);
+			}
+	}
+
+	async function changePassword(newPassword) {
+		try {
+			const response = await supabase.auth.updateUser({ password: newPassword })
+			console.log(response.data)
+			toast.success("Password Changed!")
+		}
+		catch(error) {
+			toast.error(error.message)
+		}
+	}
+
   return (
     <AuthContext.Provider
       value={{
@@ -586,7 +620,9 @@ export const AuthProvider = ({ children }) => {
         updateListing,
 		getCategories,
 		uploadImageToBucket,
-		checkIfAdmin
+		checkIfAdmin,
+		editProfile,
+		changePassword
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
