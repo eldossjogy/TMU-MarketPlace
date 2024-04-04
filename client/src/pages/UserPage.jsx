@@ -30,18 +30,16 @@ export default function UserPage() {
     }
   }, [fetchUserAds, fetchUserProfile, username]);
 
-  if (user == false) {
+  if (user === false) {
     return (
       <>
         <Navbar />
-        <div className="flex justify-center items-center my-3 mx-3">
-          <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
-            <h1 className="text-xl">
-              This user does not exist or has been removed.
-            </h1>
-            <a href="/" className="text-xl text-blue-500">
-              Return home
-            </a>
+        <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+          <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+            <div className="flex items-center pt-8 sm:justify-start sm:pt-0 flex-col gap-5">
+              <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">This user does not exist or has been removed.</div>
+              <a href="/" className="text-xl text-blue-500">Return home</a>
+            </div>
           </div>
         </div>
       </>
@@ -60,8 +58,8 @@ export default function UserPage() {
   return (
     <>
       <Navbar />
-      <div className="mx-auto lg:max-w-[80%] mt-4 ">
-        <div className="flex items-start space-x-4 ml-3">
+      <div className="mx-auto lg:max-w-[80%] p-3 pt-6 gap-3 flex flex-col">
+        <div className="flex items-start gap-4">
           <Avatar userID={user.id} square={true} />
           <div>
             <div className="font-bold text-2xl">
@@ -132,38 +130,40 @@ export default function UserPage() {
           <></>
         )}
 
-        {ads && ads.length > 0 ? (
-          ads.map((ad) => {
-            if (selectedCat == null || selectedCat === ad.category_id) {
-              return (
-                <div className="mb-3" key={ad.id}>
-                  <HorizontalCard
-                    image={ad.image}
-                    title={ad.title}
-                    price={ad.price}
-                    description={ad.description}
-                    status={ad.status}
-                    location={ad.location}
-                    postID={ad.id}
-                    date={ad.post_time}
-                    is_saved={userSavedIDs[ad.id] ? true : false}
-                    show_saved={false}
-                  />
-                </div>
-              );
-            }
-          })
-        ) : (
-          <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
-            <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
-              <div className="flex items-center pt-8 sm:justify-start sm:pt-0">
-                <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">
-                  No Results
+        <section className="flex flex-col">
+          {ads && ads.length > 0 ? (
+            ads.map((ad) => {
+              if (selectedCat == null || selectedCat === ad.category_id) {
+                return (
+                  <div className="mb-3" key={ad.id}>
+                    <HorizontalCard
+                      image={ad.image}
+                      title={ad.title}
+                      price={ad.price}
+                      description={ad.description}
+                      status={ad.status}
+                      location={ad.location}
+                      postID={ad.id}
+                      date={ad.post_time}
+                      is_saved={userSavedIDs[ad.id] ? true : false}
+                      show_saved={false}
+                    />
+                  </div>
+                );
+              }
+            })
+          ) : (
+            <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+              <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+                <div className="flex items-center pt-8 sm:justify-start sm:pt-0">
+                  <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">
+                    No Results
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </section>
       </div>
     </>
   );

@@ -31,7 +31,7 @@ export default function ImageCarousel({ images, hovered, setHovered, vertical = 
   return (
     <div className={`${vertical ? 'w-full' : ''} relative`}>
       <LazyLoadImage
-        className={`rounded-md object-cover aspect-square h-auto ${vertical ? 'w-full' : 'w-full max-w-32 lg:max-w-60'}`}
+        className={`rounded-md object-cover aspect-square h-auto ${vertical ? 'w-full' : 'w-32 lg:w-60'}`}
         src={currImage}
         alt={noImage}
         effect='blur'
