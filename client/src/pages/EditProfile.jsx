@@ -23,6 +23,7 @@ export default function Profile() {
         username: user.name,
         first_name: user.first_name,
         last_name: user.last_name,
+        bio : user.bio
       }));
     }
   }, [user]);
@@ -34,8 +35,8 @@ export default function Profile() {
   }
 
   function handleSubmit(){
-	console.log(formData)
-	editProfile(formData)
+    editProfile(formData)
+    updateUserData()
   }
 
   const handleChange = (e) => {

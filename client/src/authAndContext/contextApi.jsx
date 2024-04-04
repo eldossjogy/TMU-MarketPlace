@@ -312,6 +312,7 @@ export const AuthProvider = ({ children }) => {
 					updated_at: dateString,
 				}));
 			});
+			toast.success("Updated profile picture");
 		} else {
 			toast.error("Invalid image upload");
 		}

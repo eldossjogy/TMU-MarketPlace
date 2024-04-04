@@ -64,7 +64,11 @@ export default function UserPage() {
         <div className="flex items-start space-x-4 ml-3">
           <Avatar userID={user.id} square={true} />
           <div>
-            <div className="font-bold text-lg">{user.first_name && user.last_name ?  `${user.first_name} ${user.last_name}` : user.name}</div>
+            <div className="font-bold text-lg">
+              {user.first_name && user.last_name
+                ? `${user.first_name} ${user.last_name}`
+                : user.name}
+            </div>
             <div className="text-sm text-gray-600">
               Joined:{" "}
               {new Date(user.created_at).toLocaleDateString("en-US", {
@@ -75,13 +79,13 @@ export default function UserPage() {
             </div>
           </div>
         </div>
-        <div className="pb-4 ">
-          <div
-            id="title"
-            className="flex justify-end lg:justify-end md:justify-end"
-          >
-            <div className="flex flex-wrap gap-2 p-1.5 bg-[#fafafb] ring-1 ring-gray-200 rounded-2xl">
-              {ads && ads.length > 0 ? (
+        {ads && ads.length > 0 ? (
+          <div className="pb-4 ">
+            <div
+              id="title"
+              className="flex justify-end lg:justify-end md:justify-end"
+            >
+              <div className="flex flex-wrap gap-2 p-1.5 bg-[#fafafb] ring-1 ring-gray-200 rounded-2xl">
                 <button
                   className={`text-sm md:text-base relative flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 font-semibold transition duration-200 group ${
                     selectedCat === null ? "bg-amber-300" : ""
@@ -92,30 +96,33 @@ export default function UserPage() {
                 >
                   All
                 </button>
-              ) : (
-                <></>
-              )}
-              {categories?.map((element) => {
-                const categoryIds = new Set(ads.map((obj) => obj.category_id));
-                if (categoryIds.has(element.id)) {
-                  return (
-                    <button
-                      key={element.id}
-                      className={`text-sm md:text-base relative flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 font-semibold transition duration-200 group ${
-                        selectedCat === element.id ? "bg-amber-300" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedCat(element.id);
-                      }}
-                    >
-                      {element.name}
-                    </button>
+
+                {categories?.map((element) => {
+                  const categoryIds = new Set(
+                    ads.map((obj) => obj.category_id)
                   );
-                }
-              })}
+                  if (categoryIds.has(element.id)) {
+                    return (
+                      <button
+                        key={element.id}
+                        className={`text-sm md:text-base relative flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 font-semibold transition duration-200 group ${
+                          selectedCat === element.id ? "bg-amber-300" : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedCat(element.id);
+                        }}
+                      >
+                        {element.name}
+                      </button>
+                    );
+                  }
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )}
 
         {ads && ads.length > 0 ? (
           ads.map((ad) => {
