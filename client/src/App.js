@@ -15,6 +15,7 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const EditProfile = lazy(() => import('./pages/EditProfile'));
 const InboxPage = lazy(() => import('./pages/InboxPage'));
+const OutboxPage = lazy(() => import('./pages/OutboxPage'));
 const PrivateRoutes = lazy(() => import('./util/PrivateRoutes'));
 const AdminRoutes = lazy(() => import('./util/AdminRoutes'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
@@ -44,7 +45,6 @@ function App() {
           </Route>
           <Route element={<Suspense fallback={<h1>Loading...</h1>}><PrivateRoutes loggedIn={true}/></Suspense>}>
             <Route path="/logout" element={<Suspense fallback={<h1>Loading...</h1>}><LogoutPage /></Suspense>} />
-            {/* <Route path="/settings" element={<Profile />} /> */}
             <Route path="/my-market">
                 <Route index element={<Suspense fallback={<h1>Loading...</h1>}><MyMarketPage /></Suspense>} />
                 <Route path="sold-listings" element={<HomePage />} />
@@ -53,9 +53,9 @@ function App() {
                 <Route path="repost-listings" element={<HomePage />} />
                 <Route path="profile" element={<Suspense fallback={<h1>Loading...</h1>}><EditProfile /></Suspense>} />
                 <Route path="inbox" element={<Suspense fallback={<h1>Loading...</h1>}><InboxPage /></Suspense>} />
+                <Route path="outbox" element={<Suspense fallback={<h1>Loading...</h1>}><OutboxPage /></Suspense>} />
                 <Route path="history" element={<Suspense fallback={<h1>Loading...</h1>}><HistoryPage /></Suspense>} />
                 <Route path="saved" element={<SavedPage />} />
-                {/* <Route path="chat" element={<ChatTest />} /> */}
             </Route>
           </Route>
           <Route element={<Suspense fallback={<h1>Loading...</h1>}><AdminRoutes/></Suspense>}>
