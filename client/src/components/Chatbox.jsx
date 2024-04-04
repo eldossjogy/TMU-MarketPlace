@@ -42,11 +42,11 @@ export default function Chatbox({chatData}) {
                     <XMarkIcon className="h-6 w-6" />
                 </button>
                 </div>
-                <h3 className='text-xl'>By {chatData?.ad_profile.name}</h3>
+                <h3 className='text-xl'>By {chatData?.ad_profile?.name}</h3>
             </section>
             <section className='flex w-full bg-white p-3 overflow-y-auto overflow-x-hidden h-[80%] flex-col-reverse' id='message-container'>
                 {messages && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).reverse().map((msg) => (
-                        <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} username={msg.sender_id === chatData.ad_profile.id ? chatData.recipient.name : chatData.sender.name} timestamp={msg.created_at}/> // message sender might be null
+                        <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} username={msg.sender_id === chatData.ad_profile?.id ? chatData.recipient.name : chatData.sender.name} timestamp={msg.created_at}/> // message sender might be null
                     ))
                 }
             </section>
