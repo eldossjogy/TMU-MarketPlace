@@ -58,7 +58,11 @@ export default function Profile() {
 		toast.error("Password must be min 6 characters!")
 	}
 	else {
-		changePassword(newPassword)
+		if (changePassword(newPassword)) {
+			setConfirmPassword("")
+			setNewPassword("")
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
 	}
   }
 
