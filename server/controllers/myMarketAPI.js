@@ -39,6 +39,9 @@ function validateFormData(formData) {
     if(!formData.location){
         errors.location = "Missing location."
     }
+    else if (formData.location.length > 250) {
+        errors.description = 'Location must be at most 250 characters long.';
+    }
 
     if (isNaN(parseFloat(formData.lat)) || isNaN(parseFloat(formData.lng))){
         errors.coordinates = "Invalid coordinates";

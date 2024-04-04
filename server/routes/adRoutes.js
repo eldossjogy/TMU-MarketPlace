@@ -1,13 +1,13 @@
 import express from "express";
-import { homepage, getUserAds, getByID } from "../controllers/adAPI.js";
+import { homepage, getUserAds, getByID} from "../controllers/adAPI.js";
 
 const router = express.Router();
 
 // get ads by id
 router.get("/", getByID);
 
-// get user ads
-router.get("/me", getUserAds);
+// get all ads by user id
+router.get("/user", getUserAds);
 
 // get homepage ads
 router.get("/homepage", homepage);

@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
 	//caching/performance useStates:
 	const [fetchedUserListings, setFetchedUserListings] = useState(false);
 
+
 	// use effect that subscribes to supabase user events such as on sign in, sign out, etc
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -129,6 +130,39 @@ export const AuthProvider = ({ children }) => {
 		fetchProfile();
 	}, [user]);
 
+	//useEffect to get all required infomration such as categories and statusList once upon entering app
+	// useEffect(() => {
+	// 	getCategories()
+	// 	getStatusLists()
+	// }, [])
+
+
+	async function checkIfAdmin() {
+		const checkUser = await supabase.auth.getUser();
+		if (checkUser.data.user !== null) {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_BACKEND_API_URL}/admin/verify-admin-privilege`,
+					{
+						headers: {
+							Authorization: "Bearer " + (localSession.access_token ?? localSession.session.access_token)
+						},
+					}
+				)
+	
+				if(response.data) {
+					return true
+				}
+			}
+			catch(error) {
+				toast.error(error.message)
+				return false
+			}
+		}
+		
+		return false
+	}
+
 	// function for registering new account
 	async function registerNewAccount(email, password, username, studentNum, firstName, lastName) {
 		// console.log(`${email} ${password}`);
@@ -139,12 +173,13 @@ export const AuthProvider = ({ children }) => {
 				options: {
 					data: {
                         avatar_url: '',
-                        name: username,
+                        name: username.toLowerCase(),
                         first_name: firstName,
                         last_name: lastName,
                         student_number: parseInt(studentNum),
                         postal_code: '',
-                        role_id: 1
+                        role_id: 1,
+						email: email
                     },
 				},
 			});
@@ -391,6 +426,32 @@ export const AuthProvider = ({ children }) => {
 			setLoadingState(false);
 		}
 	}
+	
+	//function that gets categories
+	async function getCategories() {
+		// try {
+		// 	// const response = await axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/home/get-categories`);
+		// 	setCategories();
+		//   } catch (error) {
+		// 	toast.error(error.message + "Error fetching categories from db");
+		//   }
+		return categories;
+	}
+
+	//function that gets status' list
+	function getStatusLists() {
+		// axios.get(
+		// 	`${process.env.REACT_APP_BACKEND_API_URL}/home/get-status-list`,
+		// )
+		// 	.then(response => {
+		// 		setStatusList(response.data)
+		// 	})
+		// 	.catch(error => {
+		// 		toast.error(error.message + "Erro fetching status Lists from db");
+		// 	})
+		// setStatusList();
+		return statusList;
+	}
 
 	//function to qickly change status of listing
 	async function changeListingStatusAPI(listingInfo, status) {
@@ -523,6 +584,9 @@ export const AuthProvider = ({ children }) => {
         changeListingStatusAPI,
         deleteListing,
         updateListing,
+		getCategories,
+		uploadImageToBucket,
+		checkIfAdmin
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
