@@ -241,6 +241,7 @@ export default function Profile() {
 								type="password"
 								name="password"
 								className="max-w-64 w-full rounded-lg"
+								value={newPassword}
 								onChange={e => setNewPassword(e.target.value)}
 							/>
 						</div>
@@ -250,6 +251,7 @@ export default function Profile() {
 								type="password"
 								name="confirmPassword"
 								className="max-w-64 w-full rounded-lg"
+								value={confirmPassword}
 								onChange={e => setConfirmPassword(e.target.value)}
 							/>
 						</div>
