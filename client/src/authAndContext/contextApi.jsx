@@ -588,7 +588,6 @@ export const AuthProvider = ({ children }) => {
 	async function changePassword(newPassword) {
 		try {
 			const response = await supabase.auth.updateUser({ password: newPassword })
-			console.log(response.data)
 			toast.success("Password Changed!")
 		}
 		catch(error) {
