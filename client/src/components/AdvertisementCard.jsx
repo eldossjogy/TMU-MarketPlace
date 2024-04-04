@@ -44,8 +44,8 @@ function AdvertisementCard({
     }
     return (
         <div className="w-full">
-                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-                    <div className="w-3/5 flex justify-center items-center">
+                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex md:flex-row sm:flex-col overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                    <div className="md:w-3/5 sm:w-full flex justify-center items-center">
                         {/*carousel component*/}
                             <ImageArrowCarousel images={dbData.image} />
                     </div>
@@ -70,12 +70,10 @@ function AdvertisementCard({
                         </div> 
                     </div>
                 </div>
-{/*<Avatar userID={dbData.user_id} />*/}
-
 
             <br></br>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex gap-3">
-                <div className="w-1/2 flex justify-center items-center">
+            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex md:flex-row sm:flex-col gap-3">
+                <div className="md:w-1/2 sm:w-full flex justify-center items-center">
                     <div className="flex flex-col items-center justify-start pb-10">
                         <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mb-5">
                             Creator
@@ -85,7 +83,7 @@ function AdvertisementCard({
                         <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
                     </div>
                 </div>
-                <div className="w-1/2 flex flex-col space-x-1">
+                <div className="md:w-1/2 sm:w-full flex items-center flex-col space-x-1">
                     <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mt-2">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
