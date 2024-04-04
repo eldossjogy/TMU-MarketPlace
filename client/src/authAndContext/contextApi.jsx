@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
 				options: {
 					data: {
                         avatar_url: '',
-                        name: username,
+                        name: username.toLowerCase(),
                         first_name: firstName,
                         last_name: lastName,
                         student_number: parseInt(studentNum),

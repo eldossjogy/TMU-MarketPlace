@@ -55,7 +55,7 @@ function AdvertisementCard({
 
             <br></br>
             <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex">
-                <div className="w-1/2 flex justify-center items-center">
+                <Link to={`/u/${sellername}`} className="w-1/2 flex justify-center items-center">
                     <Avatar userID={userimg} />
                     <div className="w-1/2 items-center p-5">
                         <div className="bg-[#f3f4f6] rounded-lg border border-gray-200 p-4 text-center shadow-lg">
@@ -66,7 +66,7 @@ function AdvertisementCard({
                             <h2>{rating}</h2>
                         </div>
                     </div>
-                </div>
+                </Link>
                 <div className="w-1/2 flex justify-center items-center space-x-1">
                     <div className="w-1/3 bg-[#fafafb] rounded-lg border border-gray-200 p-2 shadow-lg">
                         <div className="rounded-md bg-[#fafafb]">

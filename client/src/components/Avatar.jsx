@@ -4,36 +4,26 @@ import noImage from '../assets/noAvatar.jpg'
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
-export default function Avatar({ userID }) {
-  const [url, setURL] = useState("");
+export default function Avatar({ userID, square = false }) {
+  const [url, setURL] = useState('');
   const { fetchAvatar } = useContext(AuthContext);
 
   useEffect(() => {
     if (userID) {
-      fetchAvatar(userID).then((res) => {
-        setURL(res);
-      });
+      fetchAvatar(userID).then((res) => setURL(res));
     }
-  }, [userID]);
+  }, [userID, fetchAvatar]);
 
-  if (url && !(url === 'error')) {
-    return (
-      <LazyLoadImage
-        className="h-40 w-40 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
-        src={`${url}`}
-        alt={noImage}
-        effect='blur'
-        width='100%'
-        height='100%'
-        placeholderSrc={noImage} />
-      );
-    } else {
-      return (
-      <img
-        src={noImage}
-        className="h-40 w-40 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center"
-        alt="profile"
-      ></img>
-    );
-  }
+  const className = square
+    ? 'w-48 h-48 rounded-lg shadow-lg shrink-0 object-cover object-center'
+    : 'h-40 w-40 rounded-full ring-2 ring-yellow-600/60 shadow-lg shrink-0 object-cover object-center';
+
+  const imageSrc = url && url !== 'error' ? url : noImage;
+
+  return <LazyLoadImage
+  className={className}
+  src={imageSrc}
+  alt={noImage}
+  effect='blur'
+  placeholderSrc={noImage} />;
 }

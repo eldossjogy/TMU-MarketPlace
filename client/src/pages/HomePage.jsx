@@ -9,12 +9,20 @@ import SearchContext from "../authAndContext/searchProvider";
 export default function HomePage() {
   const { fetchHomePage } = useContext(AdContext);
   const { categories } = useContext(AuthContext);
-  const {userSavedIDs} = useContext(SearchContext);
+  const { userSavedIDs } = useContext(SearchContext);
   const [ads, setAds] = useState(null);
 
   useEffect(() => {
     fetchHomePage().then((res) => {
-      setAds(res);
+      if (res) {
+        // updated to remove empty arrays
+        Object.entries(res).forEach(([key, value]) => {
+          if (value.length === 0) {
+            delete res[key];
+          }
+        });
+        setAds(res);
+      }
     });
   }, []);
 
@@ -44,7 +52,7 @@ export default function HomePage() {
                       description={element.description}
                       postID={element.id}
                       key={element.id}
-                      similarAds={ads[key].map(obj => obj.id)}
+                      similarAds={ads[key].map((obj) => obj.id)}
                       is_saved={userSavedIDs[element.id] !== undefined}
                       show_saved={true}
                     />
@@ -52,7 +60,8 @@ export default function HomePage() {
 
                 <Link
                   to={`/search?category=${key}`}
-                  className="hover:cursor-pointer bg-[#fafafb] rounded-lg border-2 shadow-md hover:shadow-lg overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-amber-100 hover:border-none">
+                  className="hover:cursor-pointer bg-[#fafafb] rounded-lg border-2 shadow-md hover:shadow-lg overflow-hidden flex flex-col items-center justify-center p-4 hover:bg-amber-100 hover:border-none"
+                >
                   <div className="text-black text-6xl">→</div>
                   <div className="text-gray-700 text-base mt-2">show more</div>
                 </Link>

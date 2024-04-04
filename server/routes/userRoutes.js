@@ -1,9 +1,12 @@
 import express from "express";
+import {fetchUserProfile} from "../controllers/userAPI.js"
 
 const router = express.Router();
 
-router.get('/id', () => {console.log("came to user id route")})
+// given id return user info
+router.get('/', fetchUserProfile)
 
 export default router;
+
 
 
