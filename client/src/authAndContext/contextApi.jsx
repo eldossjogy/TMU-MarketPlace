@@ -581,7 +581,10 @@ export const AuthProvider = ({ children }) => {
 			toast.success(response.data)
 			}
 			catch(error) {
-			toast.error(error.message);
+				if (error.response.status === 500) {
+					toast.error("Bio must be <= 250 char");
+				}
+				else toast.error(error.message);
 			}
 	}
 
