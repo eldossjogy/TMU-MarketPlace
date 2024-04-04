@@ -65,12 +65,14 @@ export default function AdminUserDashboard() {
                 }
             )
             setAllUserRecords(response.data)
-            setColoumns(() => {
-                return Object.keys(response.data[0]).map(key => ({
-                    name: key,
-                    active: true
-                }));
-            });
+            if (response.data.length > 0) {
+                setColoumns(() => {
+                    return Object.keys(response.data[0]).map(key => ({
+                        name: key,
+                        active: true
+                    }));
+                });
+            }
             toast.success("All User Records fetched!")
         }
         catch(error) {

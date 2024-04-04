@@ -40,6 +40,7 @@ export default function Profile() {
   function handleSubmit(){
     editProfile(formData)
     updateUserData()
+	window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   const handleChange = (e) => {
@@ -211,9 +212,10 @@ export default function Profile() {
 					Bio:
 				</label>
 				<div className="relative w-full max-w-64 ">
-					<input
+					<textarea
 					type="text"
 					name="bio"
+					rows='5'
 					placeholder="bio"
 					defaultValue={formData.bio}
 					onChange={handleChange}
