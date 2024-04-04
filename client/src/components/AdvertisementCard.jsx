@@ -6,8 +6,8 @@ import SearchContext from "../authAndContext/searchProvider";
 import ImageArrowCarousel from "./ImageArrowCarousel";
 import CardImages from "./CardImages";
 import { MapContainer, TileLayer, Popup, Marker} from 'react-leaflet'
-import LocateControl from "./LeafletLocateControl";
-import LocationMarker from "./LocationMarker";
+import toast from "react-hot-toast";
+import ChatContext from "../authAndContext/chatProvider";
 
 
 function AdvertisementCard({
@@ -19,6 +19,7 @@ function AdvertisementCard({
     const [hovered, setHovered] = useState(false);
     const [chatMessage, setChatMessage] = useState('Is this still available?');
     const {userSavedIDs} = useContext(SearchContext);
+    const {createChat} = useContext(ChatContext);
 
     const navigate = useNavigate()
 
@@ -34,8 +35,11 @@ function AdvertisementCard({
         setChatMessage(e.target.value);
     };
 
-    const handleStartChat = () => {
-
+    const handleStartChat = (e) => {
+        if(e) e.preventDefault();
+        toast.promise(createChat(dbData.id, chatMessage), {loading: 'Sending message...', success: "Chat :> Send Message", error: "Chat :> Failed to send message"}).then(
+            () => {setChatMessage('')}, () => {console.log('Unable to create chat');}
+        );
     }
 
     function formatDate(dateString) {
@@ -65,13 +69,19 @@ function AdvertisementCard({
                         {/*<ImageArrowCarousel images={dbData.image} />*/}
                     </div>
                     <div className="flex flex-col justify-between w-full bg-[#fafafb] gap-y-12">
-                       <div className="flex flex-col justify-cente">
-                            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
-                                {dbData.category.name}: {dbData.title}
-                            </h1>   
-                            <div className="flex justify-between">
-                                <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
-                            </div><br></br>
+                       <div className="flex flex-col justify-center">
+                            <section className="flex justify-between">
+                                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+                                    {dbData.title}
+                                </h1>   
+                                <div>
+                                    <div className="flex gap-2">
+                                        <h2 className="text-xl font-bold text-right">{dbData.category.name}: </h2>
+                                        <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
+                                    </div>
+								    <h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(dbData?.status_id !== 1) ? dbData?.status?.type ?? '' : ''}</h2>
+                                </div>
+                            </section>
                             <h2 className="">{dbData.description}</h2>
                        </div>
                        <div className="flex flex-col lg:flex-row lg:justify-between gap-10">
@@ -90,7 +100,7 @@ function AdvertisementCard({
                                     </div>
                                 </section>
                             </Link>
-                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl xl:w-64 2xl:w-96'>
+                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl xl:w-64 2xl:w-96' onSubmit={handleStartChat}>
                                 <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-r-md shadow-md">
                                     Message
                                 </button>
@@ -104,15 +114,7 @@ function AdvertisementCard({
             <br></br>
             <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-3">
                 <div className="lg:w-1/2 sm:w-full flex justify-center p-10 flex-col gap-2">
-                    {/* <Link to={`/u/${dbData.profile.name}`} className="flex flex-col items-center justify-start pb-10 gap-3">
-                        <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900">
-                            Created by
-                        </h1>
-                        <Avatar userID={dbData.user_id} />
-                        <h5 className="text-xl font-medium text-gray-900">{dbData.profile.name}</h5>
-                        <span className="text-sm text-gray-500">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
-                        <span className="text-sm text-gray-500">{dbData.profile.email}</span>
-                    </Link> */}
+
                     <h2 className="text-xl">Location: {dbData.location}</h2>
                     <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full" id="map">
                         <MapContainer center={[dbData.lat, dbData.lng]} zoom={10} scrollWheelZoom={true} className="h-full" doubleClickZoom={true} attributionControl={false} zoomControl={true}>

@@ -121,6 +121,37 @@ export const ChatProvider = ({ children }) => {
     }
   }
 
+    // send message
+    async function createChat(ad_id, init_msg) {
+      if (!user) {
+        toast.error("Chat :> No user data at the moment");
+        return Promise.reject('No user data.')
+      }
+      try {
+        const response = await axios.put(
+          `${process.env.REACT_APP_BACKEND_API_URL}/chat/message`,
+          {
+            list_id: ad_id,
+            init_msg: init_msg,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + localSession.access_token,
+            },
+          }
+        );
+        if (response.data) {
+          return Promise.resolve('Success')
+        }
+        else{
+          return Promise.reject('Not sent');
+        }
+      } catch (error) {
+        console.log(error.message);
+        return Promise.reject('Failed to send message.')
+      }
+    }
+
   // setCurrentChat
 
   /* add notification */
@@ -244,6 +275,7 @@ export const ChatProvider = ({ children }) => {
     <ChatContext.Provider
       value={{
         sentMsg,
+        createChat,
         getChat,
         messages,
         newMsg,
