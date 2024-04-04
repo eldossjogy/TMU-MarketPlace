@@ -64,13 +64,19 @@ function AdvertisementCard({
                         {/*<ImageArrowCarousel images={dbData.image} />*/}
                     </div>
                     <div className="flex flex-col justify-between w-full bg-[#fafafb] gap-y-12">
-                       <div className="flex flex-col justify-cente">
-                            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
-                                {dbData.category.name}: {dbData.title}
-                            </h1>   
-                            <div className="flex justify-between">
-                                <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
-                            </div><br></br>
+                        <div className="flex flex-col justify-center">
+                            <section className="flex justify-between">
+                                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+                                    {dbData.title}
+                                </h1>   
+                                <div>
+                                    <div className="flex gap-2">
+                                        <h2 className="text-xl font-bold text-right">{dbData.category.name}: </h2>
+                                        <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
+                                    </div>
+								    <h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(dbData?.status_id !== 1) ? dbData?.status?.type ?? '' : ''}</h2>
+                                </div>
+                            </section>
                             <h2 className="">{dbData.description}</h2>
                        </div>
                        <div className="flex flex-col lg:flex-row lg:justify-between gap-10">
