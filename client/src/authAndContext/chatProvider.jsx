@@ -96,7 +96,7 @@ export const ChatProvider = ({ children }) => {
       // return Promise.reject('No user data.')
     }
     if (!init_msg) {
-      return toast.error("No msg to send");
+      return toast.error("Can't send empty message");
       // return Promise.reject('No user data.')
     }
     try {
