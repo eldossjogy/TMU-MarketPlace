@@ -37,15 +37,17 @@ export default function Chatbox({chatData}) {
         <div id='chat-box' className='flex flex-col group w-full lg:w-1/2 2xl:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg h-[60vh] divide-y-2 overflow-hidden'>
             <section className='w-full p-3 h-24 bg-[#fafafb] rounded-xl'>
                 <div className='flex justify-between'>
-                <h1 className='text-4xl'>{chatData?.title}</h1>
-                <button onClick={() => exitChat()} className="rounded-md shadow-md bg-rose-500 text-white flex justify-center items-center p-1">
-                    <XMarkIcon className="h-6 w-6" />
-                </button>
+                    <h1 className='text-4xl line-clamp-1'>{chatData?.title}</h1>
+                    <div className='flex items-center justify-center shrink-0'>
+                        <button onClick={() => exitChat()} className="rounded-md shadow-md bg-rose-500 text-white flex justify-center items-center p-1 h-8 w-8">
+                            <XMarkIcon className="h-6 w-6" />
+                        </button>
+                    </div>
                 </div>
-                <h3 className='text-xl'>By {chatData?.ad_profile?.name}</h3>
+                <h3 className='text-xl line-clamp-1'>By: {chatData?.ad_profile?.name}</h3>
             </section>
             <section className='flex w-full bg-white p-3 overflow-y-auto overflow-x-hidden h-[80%] flex-col-reverse' id='message-container'>
-                {messages && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).reverse().map((msg) => (
+                {messages && chatData && messages.filter((ele) => {return ele.chat_id === currentChat ? true : false}).reverse().map((msg) => (
                         <ChatMessage key={msg.id} message={msg.message} sender={msg.sender_id === user.id} username={msg.sender_id === chatData.ad_profile?.id ? chatData.recipient.name : chatData.sender.name} timestamp={msg.created_at}/> // message sender might be null
                     ))
                 }

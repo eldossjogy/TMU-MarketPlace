@@ -28,6 +28,7 @@ export default function Navbar() {
                     {name: 'My Market', url: '/my-market'},
                     {name: 'My Profile', url: '/my-market/profile'},
                     {name: 'My Inbox', url: '/my-market/inbox'},
+                    {name: 'My Outbox', url: '/my-market/outbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
                     { name: 'Admin Dashboard', url: '/admin-dashboard'},
                     { name: 'Log out', url: '/logout' },
@@ -37,6 +38,7 @@ export default function Navbar() {
                     {name: 'My Market', url: '/my-market'},
                     {name: 'My Profile', url: '/my-market/profile'},
                     {name: 'My Inbox', url: '/my-market/inbox'},
+                    {name: 'My Outbox', url: '/my-market/outbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
                     { name: 'Log out', url: '/logout' },
                   ];
