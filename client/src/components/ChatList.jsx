@@ -4,7 +4,11 @@ import Chatbox from '../components/Chatbox';
 import ChatContext from '../authAndContext/chatProvider';
 
 export default function ChatList({list = [], inbox}) {
-    const { currentChat } = useContext(ChatContext)
+    const { currentChat, gotMail, removeNotification } = useContext(ChatContext)
+
+    const handleSetChat = (chat_id) => {
+        removeNotification(chat_id);
+    }
 
     return (
         <section className='flex flex-col lg:flex-row-reverse gap-6'>
@@ -22,7 +26,9 @@ export default function ChatList({list = [], inbox}) {
                         status={result.ad_status}
                         lastMessage={"Hey why havent you called me back yet?"}
                         date={result.created_at}
-                        chat_id={result.id}>
+                        chat_id={result.id}
+                        unread={gotMail.some(obj => obj.chat_id === result.chat_id)}
+                        handleChatFn={handleSetChat}>
                     </HorizontalCardInbox>
                 ))}
                 {(!list || !(list?.length > 0)) && [1].map((key) => (
