@@ -35,7 +35,7 @@ function AdvertisementCard({
 
     const handleStartChat = (e) => {
         if(e) e.preventDefault();
-        toast.promise(createChat(dbData.id, chatMessage), {loading: 'Sending message...', success: "Chat :> Send Message", error: "Chat :> Failed to send message"}).then(
+        toast.promise(createChat(dbData.id, chatMessage), {loading: 'Sending message...', success: "Send Message", error: "Failed to send message"}).then(
             () => {setChatMessage('')}, () => {console.log('Unable to create chat');}
         );
     }

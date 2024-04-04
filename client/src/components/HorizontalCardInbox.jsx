@@ -53,8 +53,8 @@ export default function HorizontalCardInbox({
                             <h2 className="text-rose-700 font-bold text-xs md:text-base line-clamp-1">{ unread ? 'Unread' : ''}</h2>
                         </div>
                         <div className='w-full flex space-x-2'>
-                            <button className="rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white hidden group-hover:flex justify-center items-center p-1"><TrashIcon className='h-6 w-6'/></button>
-                            <button className="w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-neutral-950 hidden group-hover:flex justify-center items-center py-1 max-w-20" onClick={handleSetChat}>Reply</button>
+                            {/* <button className="rounded-md shadow-md bg-rose-500 hover:bg-rose-600 text-white hidden group-hover:flex justify-center items-center p-1"><TrashIcon className='h-6 w-6'/></button> */}
+                            <button className="ml-auto w-full rounded-md shadow-md bg-[#F9B300] hover:bg-[#f9a200] text-neutral-950 hidden group-hover:flex justify-center items-center py-1 max-w-20" onClick={handleSetChat}>Reply</button>
                         </div>
                     </section>
                     <section className="flex flex-col justify-between w-full">

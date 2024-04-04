@@ -64,9 +64,9 @@ export const ChatProvider = ({ children }) => {
 
   // onMount of the chatpage we can read all chats
   async function getChat() {
-    if (!user || messages.length > 0) {
-      return toast.error("Chat :> No user data at the moment");
-    }
+    // if (!user || messages.length > 0) {
+    //   return toast.error("Chat :> No user data at the moment");
+    // }
 
     try {
       const response = await axios.get(
@@ -92,7 +92,7 @@ export const ChatProvider = ({ children }) => {
   // send message
   async function sentMsg(chat_id, init_msg) {
     if (!user) {
-      toast.error("Chat :> No user data at the moment");
+      toast.error(" No user data");
       return Promise.reject('No user data.')
     }
     try {
@@ -109,14 +109,14 @@ export const ChatProvider = ({ children }) => {
         }
       );
       if (response.data) {
-        toast.success("Chat :> Send Message");
+        toast.success("Send Message");
         return Promise.resolve('Success')
       }
       else{
         return Promise.reject('Not sent');
       }
     } catch (error) {
-      toast.error("Chat :> Failed to send message", error.message);
+      toast.error("Failed to send message", error.message);
       return Promise.reject('Failed to send message.')
     }
   }
@@ -124,7 +124,7 @@ export const ChatProvider = ({ children }) => {
     // send message
     async function createChat(ad_id, init_msg) {
       if (!user) {
-        toast.error("Chat :> No user data at the moment");
+        toast.error("No user data at the moment");
         return Promise.reject('No user data.')
       }
       try {
@@ -160,12 +160,12 @@ export const ChatProvider = ({ children }) => {
       if (newMsg.recipient_id === user.id) {
         if (newMsg.chat_id === currentChat) {
           updateDBReadStatus(user.id, currentChat);
-          toast.success(
-            "Chat :> No notifacation because u are already reading the chat"
-          );
+          // toast.success(
+          //   "Chat :> No notifacation because u are already reading the chat"
+          // );
         }
         setGotMail((prev) => [...prev, newMsg]);
-        toast.success("Chat :> You've got mail");
+        toast.success("You've got mail");
       }
     }
   }, [messages, newMsg]);
@@ -173,7 +173,7 @@ export const ChatProvider = ({ children }) => {
   // set a current chat which will remove notifications
   async function updateDBReadStatus(user_id, chat_id) {
     if (!user) {
-      return toast.error("Chat :> No user data at the moment");
+      return toast.error("No user data at the moment");
     }
     try {
       const response = await axios.post(
@@ -188,10 +188,10 @@ export const ChatProvider = ({ children }) => {
         }
       );
       if (response.data) {
-        return toast.success("Chat :> DB Read Status Updated");
+        return toast.success();
       }
     } catch (error) {
-      return toast.error("Chat :> Failed to send message", error.message);
+      return toast.error("Failed to send message", error.message);
     }
   }
 
@@ -199,11 +199,12 @@ export const ChatProvider = ({ children }) => {
   /* find out if the message has been read */
   /* must have ad_id and message_id and user_id */
   async function removeNotification(chat_id) {
-    toast.success(`Chat :> You're reading the chat: ${chat_id}`);
+    // toast.success(`Chat :> You're reading the chat: ${chat_id}`);
     setCurrentChat(chat_id); // if the user has unread messages
     if (gotMail.length === 0) {
       // if the user has unread messages
-      return toast.success(`Chat :> No new message in chat ${chat_id}`);
+      return 
+      // return toast.success(`Chat :> No new message in chat ${chat_id}`);
     }
 
       // update teh notification
@@ -219,13 +220,13 @@ export const ChatProvider = ({ children }) => {
   // stop reading
 
   async function exitChat() {
-    toast.success(`Chat :> You've stoped reading the chat`);
+    // toast.success(`Chat :> You've stoped reading the chat`);
     setCurrentChat(null);
   }
 
   async function getInbox(useInbox = 1) {
     if (!user) {
-      return toast.error("Chat :> No user data at the moment");
+      return toast.error("No user data at the moment");
     }
     try {
       const response = await axios.get(
@@ -243,13 +244,13 @@ export const ChatProvider = ({ children }) => {
         setInbox(response.data);
       }
     } catch (error) {
-      return toast.error("Chat :> Failed to get inbox", error.message);
+      return toast.error("Failed to get inbox", error.message);
     }
   }
 
   async function loadChat(id) {
     if (!user) {
-      return toast.error("Chat :> No user data at the moment");
+      return toast.error("No user data at the moment");
     }
     try {
       const response = await axios.get(
@@ -267,7 +268,7 @@ export const ChatProvider = ({ children }) => {
         setInbox(response.data);
       }
     } catch (error) {
-      return toast.error("Chat :> Failed to get inbox", error.message);
+      return toast.error("Failed to get inbox", error.message);
     }
   }
 
