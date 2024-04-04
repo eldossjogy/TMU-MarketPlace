@@ -71,7 +71,7 @@ function AdvertisementCard({
                         {/*<ImageArrowCarousel images={dbData.image} />*/}
                     </div>
                     <div className="flex flex-col justify-between items w-full bg-[#fafafb] gap-y-12">
-                        <div className="flex flex-col justify-center">
+                        <div className="flex flex-col justify-center gap-4">
                             <section className="flex justify-between">
                                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                                     {dbData.title}
@@ -102,7 +102,7 @@ function AdvertisementCard({
                                     </div>
                                 </section>
                             </Link>
-                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl xl:w-64 2xl:w-96' onSubmit={handleStartChat}>
+                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl w-full lg:w-1/2' onSubmit={handleStartChat}>
                                 {dbData.user_id !== user?.id && (
                                     <>
                                         <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-r-md shadow-md">
@@ -117,12 +117,12 @@ function AdvertisementCard({
                 </div>
 
             <br></br>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-3">
-                <div className="lg:w-1/2 sm:w-full flex justify-center p-10 flex-col gap-3">
+            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-6">
+                <div className="lg:w-1/2 sm:w-full flex justify-center flex-col gap-3">
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Location: {dbData.location}
                     </h1>
-                    <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full" id="map">
+                    <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full max-h-96" id="map">
                         <MapContainer center={[dbData.lat, dbData.lng]} zoom={10} scrollWheelZoom={true} className="h-full" doubleClickZoom={true} attributionControl={false} zoomControl={true}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -134,7 +134,7 @@ function AdvertisementCard({
                         </MapContainer>
                     </div>   
                 </div>
-                <div className="lg:w-1/2 sm:w-full flex items-center flex-col space-x-1 gap-3 justify-center">
+                <div className="lg:w-1/2 sm:w-full flex items-center flex-col gap-3 justify-center">
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
