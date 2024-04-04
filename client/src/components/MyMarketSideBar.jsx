@@ -13,14 +13,14 @@ export default function MyMarketSideBar({title}) {
   }, [])
 
   const navList = [
-    {title: "Listings", items: [{linkText: "Your Listings", link: "/my-market"},
+    {title: "Listings", items: [{linkText: "My Listings", link: "/my-market"},
         {linkText: "Create Listing", link: "/my-market/create-listing"},
         {linkText: "View History", link: "/my-market/history"},
         {linkText: "View Saved", link: "/my-market/saved"}
     ]},
     {title: "Messages", items:[
-        {linkText: "Inbox", link: "/my-market/inbox"},
-        {linkText: "Outbox", link: "/my-market/outbox"},
+        {linkText: "My Inbox", link: "/my-market/inbox"},
+        {linkText: "My Outbox", link: "/my-market/outbox"},
     ]},
     {title: "Profile", items:[
         {linkText: "My Profile", link: "/my-market/profile"},

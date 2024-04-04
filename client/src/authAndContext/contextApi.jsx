@@ -570,7 +570,7 @@ export const AuthProvider = ({ children }) => {
 					username: username,
 					first_name:first_name,
 					last_name:last_name,
-					bio:bio
+					bio: bio ? bio : ''
 				},
 				{
 				headers: {
@@ -578,10 +578,13 @@ export const AuthProvider = ({ children }) => {
 				},
 				}
 			)
-			toast.success(response.data)
+			toast.success("Profile informtaion updated!")
 			}
 			catch(error) {
-			toast.error(error.message);
+				if (error.response.status === 500) {
+					toast.error("Bio must be <= 250 char");
+				}
+				else toast.error(error.message);
 			}
 	}
 
