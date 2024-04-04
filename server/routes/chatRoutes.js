@@ -1,5 +1,5 @@
 import express from "express";
-import { getChat, getChats, getUserChat, sendMessage_With_ChatID, sendMessage_With_ListID, updateReadStatus } from "../controllers/chatAPI.js";
+import { getChats, getUserChat, sendMessage_With_ChatID, sendMessage_With_ListID, updateReadStatus } from "../controllers/chatAPI.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -7,7 +7,6 @@ const router = express.Router();
 // get all chat of a user
 router.get("/all", verifyToken, getUserChat);
 router.get("/inbox", verifyToken, getChats);
-router.get("/", verifyToken, getChat);
 
 // send a message -- with chat_id 
 router.post("/message",verifyToken, sendMessage_With_ChatID);

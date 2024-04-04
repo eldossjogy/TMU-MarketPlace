@@ -45,42 +45,13 @@ export async function getChats(req, res) {
       .from("chats")
       .select(
         `*, 
-        ad!inner(title, price, image!left(file_path), profile!left(name))`
+        sender:profile!public_chats_user1_id_fkey(name),
+        recipient:profile!public_chats_user2_id_fkey(name),
+        ad!inner(title, price, image!left(file_path), profile!left(name, id))
+        
+        `
       )
       .eq(parseInt(inbox) === 1 ? 'user2_id' : 'user1_id', user_id) // If inbox, load all chats where someone sent to user, else load all chats where user sent to someone
-      .order("created_at", { ascending: true });
-
-    if (error) throw new Error(error.message);
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-export async function getChat(req, res) {
-  const { user_id } = req.body;
-  const { chat_id } = req.query;
-  try {
-    if (!user_id || !chat_id) {
-      throw new Error("Missing an input query");
-    }
-
-    const { data, error } = await supabase
-      .from("messages")
-      .select(
-        `
-        id,
-        message,
-        sender_id,
-        sender:profile!public_messages_sender_id_fkey(name, avatar_url),
-        recipient_id,
-        recipient:profile!public_messages_recipient_id_fkey(name, avatar_url),
-        created_at,
-        is_read,
-        chats!inner(ad_id)
-        `
-      )
-      .eq('chat_id' , chat_id) // If inbox, load all chats where someone sent to user, else load all chats where user sent to someone
       .order("created_at", { ascending: true });
 
     if (error) throw new Error(error.message);

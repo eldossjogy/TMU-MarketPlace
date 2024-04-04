@@ -6,10 +6,10 @@ import ChatContext from '../authAndContext/chatProvider';
 export default function ChatList({list = [], inbox}) {
     const { currentChat, gotMail, removeNotification } = useContext(ChatContext)
     const [currentData, setCurrentData] = useState(null)
-    const handleSetChat = (chat_id) => {        removeNotification(chat_id)    }
+    const handleSetChat = (chat_id) => { removeNotification(chat_id) }
     useEffect(()=>{
         if (currentChat === null){
-            setCurrentData((prev)=>({...prev, title: null, username:null }))
+            setCurrentData((prev)=>({...prev, title: null, ad_profile:{id: null, name: null}, sender:{id: null, name: null}, recipient:{id: null, name: null} }))
         }
     },[currentChat])
 
@@ -32,6 +32,7 @@ export default function ChatList({list = [], inbox}) {
                             date={result.created_at}
                             chat_id={result.id}
                             unread={gotMail.some(obj => obj.chat_id === result.id)}
+                            data={{title: result.ad.title, ad_profile: result.ad.profile, sender: {id: result.user1_id, name:result.sender.name}, recipient: {id: result.user2_id, name:result.recipient.name}}}
                             setCurrentData={setCurrentData}
                             >
                         </HorizontalCardInbox>
