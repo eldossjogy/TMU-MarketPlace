@@ -45,7 +45,7 @@ function AdvertisementCard({
     }
     return (
         <div className="w-full">
-                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-2 sm:p-3 sm:space-x-3 flex md:flex-row m-2 flex-col overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 sm:space-x-3 flex md:flex-row flex-col overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                     <div className="md:w-3/5 sm:w-full flex justify-center items-center">
                         {/*carousel component*/}
                         <CardImages image={dbData.image} hovered={true} setHovered={setHovered} autoScrollBool={false}/>
@@ -59,13 +59,28 @@ function AdvertisementCard({
                             <div className="flex justify-between">
                                 <div>
                                     <h2 className="text-left text-md sm:text-lg">Location:📍{dbData.location}</h2>
-                                    <h2 className="text-md">Listing created at: {formatDate(dbData.created_at)}</h2>
+                                    <h2 className="text-md">Listing created at: {}</h2>
                                 </div>
                                 <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
                             </div><br></br>
                             <h2 className="">{dbData.description}</h2>
                        </div>
-                        <div className="flex justify-end">
+                       <div className="flex justify-between">
+                            <Link to={`/u/${dbData.profile.name}`} className="flex flex-row-reverse gap-4">
+                                <section className="flex h-full w-auto items-center justify-center">
+                                    <Avatar userID={dbData.user_id} size={'10'}/>
+                                </section>
+                                <section className="flex flex-col w-fit">
+                                    <div className="flex w-full justify-between gap-4">
+                                        <p className="flex shrink-0">Posted by:</p>
+                                        <p className="w-full">{dbData.profile.name}</p>
+                                    </div>
+                                    <div className="flex w-full justify-between gap-4">
+                                        <p className="flex shrink-0">Posted on:</p>
+                                        <p className="w-full">{formatDate(dbData.created_at)}</p>
+                                    </div>
+                                </section>
+                            </Link>
                             <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-md shadow-md">
                                 Message
                             </button>    
@@ -74,24 +89,23 @@ function AdvertisementCard({
                 </div>
 
             <br></br>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex md:flex-row flex-col gap-3">
+            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex md:flex-row flex-col gap-3">
                 <div className="md:w-1/2 sm:w-full flex justify-center items-center">
-                    <div className="flex flex-col items-center justify-start pb-10">
-                        <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mb-5">
+                    {/* <Link to={`/u/${dbData.profile.name}`} className="flex flex-col items-center justify-start pb-10 gap-3">
+                        <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900">
                             Created by
                         </h1>
                         <Avatar userID={dbData.user_id} />
-                        <h5 className="mt-3 mb-1 text-xl font-medium text-gray-900 dark:text-white">{dbData.profile.name}</h5>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.email}</span>
-
-                    </div>
+                        <h5 className="text-xl font-medium text-gray-900">{dbData.profile.name}</h5>
+                        <span className="text-sm text-gray-500">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
+                        <span className="text-sm text-gray-500">{dbData.profile.email}</span>
+                    </Link> */}
                 </div>
-                <div className="md:w-1/2 sm:w-full flex items-center flex-col space-x-1">
-                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-2">
+                <div className="md:w-1/2 sm:w-full flex items-center flex-col space-x-1 gap-3">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
-                    <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {similarAds.map((element, index) => (
                             <VerticalCard
                                 image={element.image}

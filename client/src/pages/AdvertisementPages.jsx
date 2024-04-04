@@ -78,7 +78,7 @@ export default function AdvertisementPages() {
         <>
             <Navbar />
 
-            <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap mt-4 h-[100vh] overflow-show">
+            <main className="container mx-auto lg:max-w-[90%] flex flex-wrap md:flex-nowrap p-3 pt-6 min-h-[100vh] gap-3 md:gap-6 overflow-show">
                 
                 {/*similarAds.length > 1 ? 
                 <Link to={{ pathname: `/ad/${previousAd}` }} state={similarAds}>
