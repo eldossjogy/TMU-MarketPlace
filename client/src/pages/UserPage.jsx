@@ -113,7 +113,7 @@ export default function UserPage() {
           </div>
         </div>
 
-        {ads &&
+        {ads && ads.length > 0 ? (
           ads.map((ad) => {
             if (selectedCat == null || selectedCat === ad.category_id) {
               return (
@@ -133,7 +133,12 @@ export default function UserPage() {
                 </div>
               );
             }
-          })}
+          })
+        ) : (
+          <div>
+            <h1 className="text-black text-lg font-semibold">This user has not posted any ads yet....</h1>
+          </div>
+        )}
       </div>
     </>
   );
