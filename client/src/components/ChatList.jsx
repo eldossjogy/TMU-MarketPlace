@@ -1,19 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import HorizontalCardInbox from '../components/HorizontalCardInbox';
 import Chatbox from '../components/Chatbox';
 import ChatContext from '../authAndContext/chatProvider';
 
 export default function ChatList({list = [], inbox}) {
     const { currentChat, gotMail, removeNotification } = useContext(ChatContext)
-
-    const handleSetChat = (chat_id) => {
-        removeNotification(chat_id);
-    }
+    const [currentData, setCurrentData] = useState(null)
+    const handleSetChat = (chat_id) => {        removeNotification(chat_id)    }
+    useEffect(()=>{
+        if (currentChat === null){
+            setCurrentData((prev)=>({...prev, title: null, username:null }))
+        }
+    },[currentChat])
 
     return (
         <section className='flex flex-col lg:flex-row-reverse gap-6'>
             {/* Toolbar with sorting and title and stuff */}
-            {currentChat && <Chatbox chatID={currentChat} />}
+            {currentChat && <Chatbox chatID={currentChat} chatData={currentData}/>}
 
             <div className={`space-y-3 w-full ${currentChat ? 'lg:w-1/2 2xl:w-[60%] shrink-0' : ''}`}>
                 {list?.length !== 0 && list.map((result) => {
@@ -28,7 +31,9 @@ export default function ChatList({list = [], inbox}) {
                             lastMessage={"Hey why havent you called me back yet?"}
                             date={result.created_at}
                             chat_id={result.id}
-                            unread={gotMail.some(obj => obj.chat_id === result.id)}>
+                            unread={gotMail.some(obj => obj.chat_id === result.id)}
+                            setCurrentData={setCurrentData}
+                            >
                         </HorizontalCardInbox>
                     )
                 })}

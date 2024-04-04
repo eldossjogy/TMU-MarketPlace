@@ -12,7 +12,8 @@ export default function HorizontalCardInbox({
     lastMessage,
 	date,
     chat_id,
-    unread
+    unread,
+    setCurrentData
 }) {
     const {removeNotification} = useContext(ChatContext)
 
@@ -30,6 +31,7 @@ export default function HorizontalCardInbox({
 
     const handleSetChat = () => {
         removeNotification(chat_id);
+        setCurrentData((prev)=>({...prev, title: title, username:username }))
     }
     return (
 
