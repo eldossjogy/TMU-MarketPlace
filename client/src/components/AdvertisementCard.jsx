@@ -102,17 +102,10 @@ function AdvertisementCard({
 
             <br></br>
             <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-3">
-                <div className="lg:w-1/2 sm:w-full flex justify-center p-10 flex-col gap-2">
-                    {/* <Link to={`/u/${dbData.profile.name}`} className="flex flex-col items-center justify-start pb-10 gap-3">
-                        <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900">
-                            Created by
-                        </h1>
-                        <Avatar userID={dbData.user_id} />
-                        <h5 className="text-xl font-medium text-gray-900">{dbData.profile.name}</h5>
-                        <span className="text-sm text-gray-500">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
-                        <span className="text-sm text-gray-500">{dbData.profile.email}</span>
-                    </Link> */}
-                    <h2 className="text-xl">Location: {dbData.location}</h2>
+                <div className="lg:w-1/2 sm:w-full flex justify-center p-10 flex-col gap-3">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
+                        Location: {dbData.location}
+                    </h1>
                     <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full" id="map">
                         <MapContainer center={[dbData.lat, dbData.lng]} zoom={10} scrollWheelZoom={true} className="h-full" doubleClickZoom={true} attributionControl={false} zoomControl={true}>
                             <TileLayer
@@ -125,11 +118,11 @@ function AdvertisementCard({
                         </MapContainer>
                     </div>   
                 </div>
-                <div className="lg:w-1/2 sm:w-full flex items-center flex-col space-x-1 gap-3">
+                <div className="lg:w-1/2 sm:w-full flex items-center flex-col space-x-1 gap-3 justify-center">
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
-                    <div className={ ' gap-3 ' + (!similarAds || (similarAds && similarAds.length === 0)) ? '' : `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
+                    <div className={(!similarAds || (similarAds && similarAds.length === 0)) ? 'gap-3' : `gap-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
                         {similarAds && similarAds.length > 0 && similarAds.map((element, index) => (
                             <VerticalCard
                                 image={element.image}
