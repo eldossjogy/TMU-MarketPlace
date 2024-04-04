@@ -4,6 +4,7 @@ import CardImages from "./CardImages";
 import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
 import SearchContext from "../authAndContext/searchProvider";
+import ImageArrowCarousel from "./ImageArrowCarousel";
 
 
 
@@ -39,7 +40,8 @@ function AdvertisementCard({
                 <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                     <div className="w-3/5 flex justify-center items-center">
                         {/*carousel component*/}
-                            <CardImages image={dbData.image} hovered={hovered} setHovered={setHovered}/>
+                            {/*<CardImages image={dbData.image} hovered={hovered} setHovered={setHovered}/>*/}
+                            <ImageArrowCarousel images={dbData.image} />
                     </div>
                     <div className="flex flex-col justify-between w-full px-4 pb-4 bg-[#fafafb]">
                        <div>
