@@ -14,6 +14,7 @@ export default function VerticalCard({
   date,
   distance,
   postID,
+  similarAds,
   is_saved = false,
 	show_saved = false
 }) {
@@ -42,7 +43,7 @@ export default function VerticalCard({
 	const age = weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''} ago` : days > 0 ? `${days} day${days > 1 ? 's' : ''} ago` : hours > 0 ? `${hours} hour${hours > 1 ? 's' : ''} ago` : minutes > 0 ? `${minutes}m ago` : `${seconds}s ago`
 
   return (
-    <Link to={{ pathname: `/ad/${postID}` }}
+    <Link to={{ pathname: `/ad/${postID}`  }} state={similarAds}
     >
       <div id="card" className="hover:cursor-pointer group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="bg-[#fafafb] rounded-lg border-2 border-gray shadow-md hover:shadow-lg overflow-hidden">
