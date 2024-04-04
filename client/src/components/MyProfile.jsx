@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AdContext from "../authAndContext/adProvider";
 import Loading from "../components/Loading";
 import HorizontalCard from "../components/HorizontalCard";
 import AuthContext from "../authAndContext/contextApi";
 import SearchContext from "../authAndContext/searchProvider";
 import Avatar from "../components/Avatar";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 export default function MyProfile({ forcedUsername }) {
   const [username, setUserName] = useState("");
@@ -66,11 +67,16 @@ export default function MyProfile({ forcedUsername }) {
         <div className="flex items-start gap-4">
           <Avatar userID={user.id} square={true} />
           <div>
-            <div className="font-bold text-2xl">
-              {user.name
-                ? `${user.name}`
-                : user.name}
-            </div>
+            <section className="flex items-center gap-4">
+              <div className="font-bold text-2xl">
+                {user.name
+                  ? `${user.name}`
+                  : user.name}
+              </div>
+              <Link to={'/my-market/edit-profile'} className="w-6 h-6" aria-label="Click to edit profile.">
+                <PencilSquareIcon className="w-6 h-6 hover:text-sky-600"/>
+              </Link>
+            </section>
             <div className="">
               {user.first_name && user.last_name
                 ? `${user.first_name} ${user.last_name}`
