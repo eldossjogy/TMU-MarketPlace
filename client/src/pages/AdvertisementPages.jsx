@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../components/Navbar"
 import AdvertisementCard from "../components/AdvertisementCard";
 import AdContext from "../authAndContext/adProvider";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import toast from "react-hot-toast";
 
@@ -17,6 +17,7 @@ export default function AdvertisementPages() {
     const [localLoading, setLocalLoading] = useState(true)
     //const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
+    const navigate = useNavigate()
 
     function findNextAndPrevious(arr, element) {
         let nextElement = null;
@@ -38,22 +39,14 @@ export default function AdvertisementPages() {
         if (slug) {
            fetchRequiredata(slug)
         }
-
-        /*
-        if(similarAds.length > 1){
-
-            const { previousElement, nextElement } = findNextAndPrevious(similarAds, parseInt(slug));
-            setNextAd(nextElement)
-            setPreviousAd(previousElement)
-        }
-        */
     }, [slug]);
 
     async function fetchRequiredata(slug) {
         try {
             const res = await fetchAdPage(slug);
+            if (!res) navigate('/error')
             setData(res);
-            
+    
             try {
               const res2 = await fetch3ListingsForAdPage(res.profile.id);
               setSimilarAds(res2);
