@@ -6,19 +6,14 @@ import SearchContext from "../authAndContext/searchProvider";
 import ImageArrowCarousel from "./ImageArrowCarousel";
 import CardImages from "./CardImages";
 import { MapContainer, TileLayer, Popup, Marker} from 'react-leaflet'
-import LocateControl from "./LeafletLocateControl";
-import LocationMarker from "./LocationMarker";
-
 
 function AdvertisementCard({
     dbData,
     similarAds
 }) {
-    //state variable will change based on whether user hovers over an image
-    //on the advertisement card
     const [hovered, setHovered] = useState(false);
     const [chatMessage, setChatMessage] = useState('Is this still available?');
-    const {userSavedIDs} = useContext(SearchContext);
+    const {userSavedIDs, addToHistory} = useContext(SearchContext);
 
     const navigate = useNavigate()
 
@@ -37,6 +32,10 @@ function AdvertisementCard({
     const handleStartChat = () => {
 
     }
+
+    useEffect(() => {
+        addToHistory(dbData.id);
+    },[])
 
     function formatDate(dateString) {
         const date = new Date(dateString);
