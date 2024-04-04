@@ -440,6 +440,7 @@ export default function AdminUserDashboard() {
                                         <td className="px-4 py-3 truncate max-w-[20rem]">{elem.last_name}</td>
                                         <td className="px-4 py-3">{elem.student_number}</td>
                                         <td className="px-4 py-3">{elem.email}</td>
+                                        <td className="px-4 py-3 truncate max-w-[15rem]">{elem.bio}</td>
 
 
                                         <td className="px-4 py-3 flex flex-col items-end relative">
@@ -577,7 +578,12 @@ export default function AdminUserDashboard() {
                         </div>
 
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div>
+                            <label htmlFor="bio" className="w-full mb-2 text-sm font-medium text-gray-900">Bio</label>
+                            <textarea type="text" onChange={handleChange} value={editModalInfo.bio} name="bio" id="bio" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"/>
+                        </div>
+
+                        <div className="mt-5 flex items-center space-x-4">
                         <button onClick={(event) => {
                             event.preventDefault();
                             putReqAsAdmin(editModalInfo)
@@ -622,6 +628,8 @@ export default function AdminUserDashboard() {
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5">{previewUser.first_name ? previewUser.first_name : "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900">Last Name</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5">{previewUser.last_name ? previewUser.last_name : "N/A"}</dd>
+                            <dt className="mb-2 font-semibold leading-none text-gray-900">Bio</dt>
+                            <dd className="mb-4 font-light text-gray-500 sm:mb-5">{previewUser.bio ?? "N/A"}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900">Email</dt>
                             <dd className="mb-4 font-light text-gray-500 sm:mb-5">{previewUser.email}</dd>
                             <dt className="mb-2 font-semibold leading-none text-gray-900">Avatar</dt>
