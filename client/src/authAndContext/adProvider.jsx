@@ -14,7 +14,7 @@ export const AdProvider = ({ children }) => {
       return reponse.data;
     } catch (error) {
       toast.error("Error fetching ads: ", JSON.stringify(error));
-      return null;
+      return false;
     }
   }
 
