@@ -20,7 +20,7 @@ export default function ChatMessage({ sender = true, message = '', username = 'A
                     </div>
                     <div className='flex-col space-y-2 w-full' >
                         <div className='flex gap-2'>
-                            <div className='flex items-center justify-center rounded-full h-8 w-8 aspect-square bg-rose-500'>{username[0]}</div>
+                            <div className='flex items-center justify-center rounded-full h-8 w-8 aspect-square bg-rose-500'>{username[0].toLocaleUpperCase()}</div>
                             <div className='flex items-center justify-start text-gray-400 line-clamp-1 truncate'>{age}</div>
                         </div>
                         <div className='bg-neutral-200 rounded-xl flex items-center justify-start p-2 w-auto'>{message}</div>
@@ -31,7 +31,7 @@ export default function ChatMessage({ sender = true, message = '', username = 'A
                 <div className='flex p-1 flex-row-reverse w-full'>
                     <div className='flex-col space-y-2 w-full' >
                         <div className='flex gap-2 flex-row-reverse'>
-                            <div className='flex items-center justify-center rounded-full h-8 w-8 aspect-square bg-violet-400'>{username[0]}</div>
+                            <div className='flex items-center justify-center rounded-full h-8 w-8 aspect-square bg-violet-400'>{username[0].toLocaleUpperCase()}</div>
                             <div className='flex items-center justify-start text-gray-400 line-clamp-1 truncate'>{age}</div>
                         </div>
                         <div className='bg-sky-200 rounded-xl flex items-center justify-start p-2 w-auto'>{message}</div>
