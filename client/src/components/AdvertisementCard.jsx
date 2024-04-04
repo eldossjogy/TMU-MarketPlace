@@ -6,6 +6,7 @@ import SearchContext from "../authAndContext/searchProvider";
 import ImageArrowCarousel from "./ImageArrowCarousel";
 import CardImages from "./CardImages";
 import { MapContainer, TileLayer, Popup, Marker} from 'react-leaflet'
+import AuthContext from "../authAndContext/contextApi";
 
 function AdvertisementCard({
     dbData,
@@ -14,6 +15,7 @@ function AdvertisementCard({
     const [hovered, setHovered] = useState(false);
     const [chatMessage, setChatMessage] = useState('Is this still available?');
     const {userSavedIDs, addToHistory} = useContext(SearchContext);
+    const {user} = useContext(AuthContext);
 
     const navigate = useNavigate()
 
@@ -96,10 +98,14 @@ function AdvertisementCard({
                                 </section>
                             </Link>
                             <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl xl:w-64 2xl:w-96'>
-                                <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-r-md shadow-md">
-                                    Message
-                                </button>
-                                <input className='w-full bg-neutral-100 rounded-l-2xl border-gray-200' placeholder='Send a message' name='message' aria-label='message' value={chatMessage} onChange={handleChange}></input>
+                                {dbData.user_id !== user?.id && (
+                                    <>
+                                        <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-r-md shadow-md">
+                                            Message
+                                        </button>
+                                        <input className='w-full bg-neutral-100 rounded-l-2xl border-gray-200' placeholder='Send a message' name='message' aria-label='message' value={chatMessage} onChange={handleChange}></input>
+                                    </>
+                                )}
                             </form>
                              
                         </div> 
