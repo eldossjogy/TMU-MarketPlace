@@ -129,8 +129,8 @@ function AdvertisementCard({
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {similarAds.map((element, index) => (
+                    <div className={ ' gap-3 ' + (!similarAds || (similarAds && similarAds.length === 0)) ? '' : `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
+                        {similarAds && similarAds.length > 0 && similarAds.map((element, index) => (
                             <VerticalCard
                                 image={element.image}
                                 title={element.title}
@@ -146,12 +146,19 @@ function AdvertisementCard({
                                 }}
                             />
                         ))}
+                        {(!similarAds || (similarAds && similarAds.length === 0)) && [1].map((key) => (
+							<div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+								<div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+									<div className="flex items-center pt-8 sm:justify-start sm:pt-0">
+										<div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">No Results</div>
+									</div>
+								</div>
+							</div>
+						))}
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
-
 export default AdvertisementCard;
