@@ -24,7 +24,7 @@ export default function Navbar() {
                 ? [
                     {name: 'Post New Ad', url: '/my-market/create-listing'},
                     {name: 'My Market', url: '/my-market'},
-                    {name: 'Profile', url: '/my-market/profile'},
+                    {name: 'My Profile', url: '/my-market/profile'},
                     {name: 'Inbox', url: '/my-market/inbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
                     { name: 'Admin Dashboard', url: '/admin-dashboard'},
@@ -32,7 +32,7 @@ export default function Navbar() {
                   ]
                 : [
                     {name: 'Post New Ad', url: '/my-market/create-listing'},
-                    {name: 'My Market', url: '/my-market'},
+                    {name: 'My Profile', url: '/my-market'},
                     {name: 'Profile', url: '/my-market/profile'},
                     {name: 'Inbox', url: '/my-market/inbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
