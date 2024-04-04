@@ -69,6 +69,16 @@ export default function HomePage() {
             </div>
           </main>
         ))}
+      {(!ads || !ads.length > 1) && [1].map((key) => (
+        <div key={key} className="w-full p-3 m-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+          <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center pt-8 justify-center text-center gap-2">
+              <div className="w-full text-lg text-gray-500 uppercase tracking-wider">No Ads posted yet... </div>
+              <div className="w-full text-lg text-gray-500 uppercase tracking-wider">Why don't you take the lead?</div>
+            </div>
+          </div>
+        </div>
+      ))}
     </>
   );
 }

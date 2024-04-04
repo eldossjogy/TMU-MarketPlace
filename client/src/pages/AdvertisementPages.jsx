@@ -1,12 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import VerticalCard from "../components/VerticalCard";
 import Navbar from "../components/Navbar"
-import { useLocation, Link } from "react-router-dom";
 import AdvertisementCard from "../components/AdvertisementCard";
-import StarRating from "../components/StarRating";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import AdContext from "../authAndContext/adProvider";
-import Loading from "../components/Loading";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import toast from "react-hot-toast";
@@ -14,7 +9,6 @@ import toast from "react-hot-toast";
 
 export default function AdvertisementPages() {
     const { fetchAdPage, fetch3ListingsForAdPage } = useContext(AdContext);
-    const location = useLocation();
     const [dbData, setData] = useState(null);
     const { slug } = useParams();
     const [nextAd, setNextAd] = useState(null)
@@ -39,11 +33,6 @@ export default function AdvertisementPages() {
     
         return { previousElement, nextElement };
     }
-
-    useEffect(() => {
-      
-    }, [])
-    
     
     useEffect(() => {
         if (slug) {
