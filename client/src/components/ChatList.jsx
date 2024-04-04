@@ -15,7 +15,7 @@ export default function ChatList({list = [], inbox}) {
             {/* Toolbar with sorting and title and stuff */}
             {currentChat && <Chatbox chatID={currentChat} />}
 
-            <div className={`space-y-3 w-full ${currentChat ? 'lg:w-[60%] shrink-0' : ''}`}>
+            <div className={`space-y-3 w-full ${currentChat ? 'lg:w-1/2 2xl:w-[60%] shrink-0' : ''}`}>
                 {list?.length !== 0 && list.map((result) => {
                     return (
                         <HorizontalCardInbox
