@@ -4,9 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./authAndContext/contextApi";
 import { LocationProvider } from "./authAndContext/locationProvider";
 import { AdProvider } from "./authAndContext/adProvider";
+import { SearchProvider } from "./authAndContext/searchProvider";
+import { ChatProvider } from "./authAndContext/chatProvider";
 import "./index.css";
 import App from "./App";
-import { SearchProvider } from "./authAndContext/searchProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,7 +16,9 @@ root.render(
       <LocationProvider>
         <SearchProvider>
           <AdProvider>
-            <App />
+            <ChatProvider>
+              <App />
+            </ChatProvider>
           </AdProvider>
         </SearchProvider>
       </LocationProvider>

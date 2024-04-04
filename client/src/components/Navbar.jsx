@@ -5,14 +5,15 @@ import AuthContext from '../authAndContext/contextApi';
 import LocationContext from '../authAndContext/locationProvider';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Logo from "../assets/logo.png"
+import ChatContext from '../authAndContext/chatProvider';
 
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const {city, range, getLocation} = useContext(LocationContext);
     const { user, checkIfAdmin } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const { gotMail } = useContext(ChatContext);    
 
     useEffect(() => {
         const fetchDropdownOptions = async () => {
@@ -26,6 +27,7 @@ export default function Navbar() {
                     {name: 'My Market', url: '/my-market'},
                     {name: 'My Profile', url: '/my-market/profile'},
                     {name: 'My Inbox', url: '/my-market/inbox'},
+                    {name: 'My Outbox', url: '/my-market/outbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
                     { name: 'Admin Dashboard', url: '/admin-dashboard'},
                     { name: 'Log out', url: '/logout' },
@@ -35,6 +37,7 @@ export default function Navbar() {
                     {name: 'My Market', url: '/my-market'},
                     {name: 'My Profile', url: '/my-market/profile'},
                     {name: 'My Inbox', url: '/my-market/inbox'},
+                    {name: 'My Outbox', url: '/my-market/outbox'},
                     {name: 'Saved Listings', url: '/my-market/saved'},
                     { name: 'Log out', url: '/logout' },
                   ];
@@ -47,7 +50,7 @@ export default function Navbar() {
       }, [user]);
     
     return (
-        <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
+        <nav id='nav' className="bg-slate-900 h-auto md:h-16 w-full flex">
             <div className="container mx-auto flex flex-col justify-center p-4 md:flex-row md:justify-between md:items-center md:h-full md:p-0 md:py-1 md:pr-[3vw] lg:max-w-[90%]">
                 <section className='md:flex md:flex-row md:w-auto space-y-4 md:space-y-0'>
                     <section className='flex w-full items-center justify-between flex-wrap md:block md:w-auto'>
@@ -57,7 +60,7 @@ export default function Navbar() {
                             </section>
                         </Link>
                         <section id="nav-account-mobile" className="flex md:hidden space-x-2">
-                            <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>}/>
+                            <Dropdown options={dropdownOptions} text={user ? '' : 'Log In'} image={<ProfilePicture/>} gotMail={gotMail}/>
                         </section>
                     </section>
                     <section id="nav-search-group" className="flex flex-wrap space-y-2 group md:flex-nowrap md:space-y-0 md:w-[30vw] md:space-x-2 md:items-center md:justify-start">
@@ -73,7 +76,7 @@ export default function Navbar() {
                     </section>
                 </section>
                 <section id="nav-account" className="hidden md:flex justify-center items-center shrink-0">
-                    <Dropdown options={dropdownOptions} text={user ? user.name ?? 'User' : 'Log In'} image={<ProfilePicture/>}/>
+                    <Dropdown options={dropdownOptions} text={user ? user.name ?? 'User' : 'Log In'} image={<ProfilePicture/>} gotMail={gotMail}/>
                 </section>
             </div>
         </nav>

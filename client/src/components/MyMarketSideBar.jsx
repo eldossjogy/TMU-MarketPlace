@@ -20,8 +20,7 @@ export default function MyMarketSideBar({title}) {
     ]},
     {title: "Messages", items:[
         {linkText: "My Inbox", link: "/my-market/inbox"},
-        {linkText: "My Outbox", link: "/my-market/inbox"},
-        {linkText: "Unread", link: "/my-market/inbox?unread=true"}
+        {linkText: "My Outbox", link: "/my-market/outbox"},
     ]},
     {title: "Profile", items:[
         {linkText: "My Profile", link: "/my-market/profile"},

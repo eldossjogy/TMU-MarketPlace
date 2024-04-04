@@ -9,13 +9,13 @@ export default function CreateListings() {
     const { getInbox, inbox } = useContext(ChatContext);
 
     useEffect(() => {
-        if(user) getInbox();
+        if(user) getInbox(2);
     }, [user])
 
     return (
-        <MyMarketContainer title={"Your Inbox"}>
-            <h1 className='hidden md:block w-full shrink-0 text-5xl p-4'>Inbox</h1>
-            <ChatList list={inbox} inbox={1}/>
+        <MyMarketContainer title={"Your Outbox"}>
+            <h1 className='hidden md:block w-full shrink-0 text-5xl p-4'>Outbox</h1>
+            <ChatList list={inbox} inbox={2}/>
         </MyMarketContainer>
     );
 }

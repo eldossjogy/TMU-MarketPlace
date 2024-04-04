@@ -9,7 +9,7 @@ import searchRoutes from "./routes/searchRoutes.js";
 import historyRoutes from "./routes/historyRoutes.js";
 import savedRoutes from "./routes/savedRoutes.js";
 import myMarketRoutes from "./routes/myMarketRoutes.js";
-
+import chatRoutes from "./routes/chatRoutes.js"
 
 const app = express();
 const port = process.env.port || 5000;
@@ -27,6 +27,7 @@ app.use('/search', searchRoutes);
 app.use('/my-market', myMarketRoutes);
 app.use('/history', historyRoutes);
 app.use('/saved', savedRoutes);
+app.use('/chat', chatRoutes);
 
 server.listen(port, () => {
   console.log(`server is now running on port ${port}`);

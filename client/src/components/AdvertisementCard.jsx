@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Avatar from "./Avatar";
-import VerticalCard from "./VerticalCard";
-import SearchContext from "../authAndContext/searchProvider";
-import ImageArrowCarousel from "./ImageArrowCarousel";
-import CardImages from "./CardImages";
 import { MapContainer, TileLayer, Popup, Marker} from 'react-leaflet'
+import SearchContext from "../authAndContext/searchProvider";
+import ChatContext from "../authAndContext/chatProvider";
 import AuthContext from "../authAndContext/contextApi";
+import VerticalCard from "./VerticalCard";
+import CardImages from "./CardImages";
+import toast from "react-hot-toast";
+import Avatar from "./Avatar";
 
 function AdvertisementCard({
     dbData,
@@ -16,6 +17,7 @@ function AdvertisementCard({
     const [chatMessage, setChatMessage] = useState('Is this still available?');
     const {userSavedIDs, addToHistory} = useContext(SearchContext);
     const {user} = useContext(AuthContext);
+    const {createChat} = useContext(ChatContext);
 
     const navigate = useNavigate()
 
@@ -31,8 +33,11 @@ function AdvertisementCard({
         setChatMessage(e.target.value);
     };
 
-    const handleStartChat = () => {
-
+    const handleStartChat = (e) => {
+        if(e) e.preventDefault();
+        toast.promise(createChat(dbData.id, chatMessage), {loading: 'Sending message...', success: "Send Message", error: "Failed to send message"}).then(
+            () => {setChatMessage('')}, () => {console.log('Unable to create chat');}
+        );
     }
 
     useEffect(() => {
@@ -65,15 +70,15 @@ function AdvertisementCard({
                         <CardImages image={dbData.image} hovered={true} setHovered={setHovered} autoScrollBool={false}/>
                         {/*<ImageArrowCarousel images={dbData.image} />*/}
                     </div>
-                    <div className="flex flex-col justify-between w-full bg-[#fafafb] gap-y-12">
-                        <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-between items w-full bg-[#fafafb] gap-y-12">
+                        <div className="flex flex-col justify-center gap-4">
                             <section className="flex justify-between">
-                                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+                                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
                                     {dbData.title}
                                 </h1>   
-                                <div>
+                                <div className="min-w-40">
                                     <div className="flex gap-2">
-                                        <h2 className="text-xl font-bold text-right">{dbData.category.name}: </h2>
+                                        <h2 className="flex text-xl font-bold text-right line-clamp-1">{dbData.category.name}: </h2>
                                         <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
                                     </div>
 								    <h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(dbData?.status_id !== 1) ? dbData?.status?.type ?? '' : ''}</h2>
@@ -88,16 +93,16 @@ function AdvertisementCard({
                                 </section>
                                 <section className="flex flex-col w-fit">
                                     <div className="flex w-full justify-between gap-4">
-                                        <p className="flex shrink-0">Posted by:</p>
+                                        <p className="flex shrink-0 font-bold">Posted by:</p>
                                         <p className="w-full">{dbData.profile.name}</p>
                                     </div>
                                     <div className="flex w-full justify-between gap-4">
-                                        <p className="flex shrink-0">Posted on:</p>
+                                        <p className="flex shrink-0 font-bold">Posted on:</p>
                                         <p className="w-full">{formatDate(dbData.created_at)}</p>
                                     </div>
                                 </section>
                             </Link>
-                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl xl:w-64 2xl:w-96'>
+                            <form className='h-auto flex justify-center items-center flex-row-reverse z-50 rounded-xl w-full lg:w-1/2' onSubmit={handleStartChat}>
                                 {dbData.user_id !== user?.id && (
                                     <>
                                         <button type="submit" className="bg-[#F9B300] hover:bg-[#f9a200] text-gray-900 font-bold py-2 px-8 sm:px-12 rounded-r-md shadow-md">
@@ -107,18 +112,17 @@ function AdvertisementCard({
                                     </>
                                 )}
                             </form>
-                             
                         </div> 
                     </div>
                 </div>
 
             <br></br>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-3">
-                <div className="lg:w-1/2 sm:w-full flex justify-center p-10 flex-col gap-3">
+            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-3 flex lg:flex-row flex-col gap-6">
+                <div className="lg:w-1/2 sm:w-full flex justify-center flex-col gap-3">
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Location: {dbData.location}
                     </h1>
-                    <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full" id="map">
+                    <div className="aspect-video rounded-xl overflow-hidden ring-2 ring-neutral-400 w-full max-h-96" id="map">
                         <MapContainer center={[dbData.lat, dbData.lng]} zoom={10} scrollWheelZoom={true} className="h-full" doubleClickZoom={true} attributionControl={false} zoomControl={true}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -130,7 +134,7 @@ function AdvertisementCard({
                         </MapContainer>
                     </div>   
                 </div>
-                <div className="lg:w-1/2 sm:w-full flex items-center flex-col space-x-1 gap-3 justify-center">
+                <div className="lg:w-1/2 sm:w-full flex items-center flex-col gap-3 justify-center">
                     <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
