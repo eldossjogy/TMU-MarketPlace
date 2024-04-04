@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CardImages from "./CardImages";
 import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
@@ -16,6 +16,8 @@ function AdvertisementCard({
     //on the advertisement card
     const [hovered, setHovered] = useState(false);
     const {userSavedIDs} = useContext(SearchContext);
+
+    const navigate = useNavigate()
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -92,6 +94,7 @@ function AdvertisementCard({
                                 key={element.id}
                                 is_saved={userSavedIDs[element.id] !== undefined}
                                 show_saved={true}
+                                onClick={() => navigate(`/ad/${dbData.id}`)}
                             />
                         ))}
                     </div>

@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import placeholderImage from "../assets/imageLoading.png"
+import noImage from '../assets/noImage.png'
 
 export default function ImageArrowCarousel({images}) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -17,6 +18,14 @@ export default function ImageArrowCarousel({images}) {
     return (
         <div id="controls-carousel" className="relative w-full" data-carousel="static">
             <div className="relative">
+                {images.length === 0 && (
+                    <LazyLoadImage
+                      className={`rounded-md object-cover aspect-square h-auto w-full transition-opacity duration-700 ease-in-out`}
+                      src={noImage}
+                      effect='blur'
+                      placeholderSrc={placeholderImage}
+                    />
+                )}
                 {images.map((image, index) => (
                 <LazyLoadImage
                         key={index}
