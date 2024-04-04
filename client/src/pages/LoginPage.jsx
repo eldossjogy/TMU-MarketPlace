@@ -60,7 +60,7 @@ export default function LoginPage() {
     return (
         <div className="bg-gray-50 h-auto min-h-[100vh] flex items-center justify-center p-0 sm:px-6 sm:py-8 mx-auto lg:py-3">
             <div className="w-full h-[100vh] sm:h-auto bg-white rounded-lg shadow-lg md:mt-0 sm:max-w-md xl:p-0">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <div className="p-6 space-y-4 md:space-y-6 sm:p-8 pt-40">
                     <section className="h-16 w-auto md:w-64 xl:w-80 m-auto">
                         <img src={transparentLogo} alt="Logo" className="h-full w-auto m-auto"></img>
                     </section>
