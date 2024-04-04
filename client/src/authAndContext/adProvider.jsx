@@ -31,6 +31,19 @@ export const AdProvider = ({ children }) => {
       return false;
     }
   }
+  ////get3ListingsByID
+  async function fetch3ListingsForAdPage(userID) {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/ad/similarListings`,
+        { params: { get_by_user_id: userID } }
+      );
+      return response.data;
+    } catch (error) {
+      toast.error("Error fetching ads: ", JSON.stringify(error));
+      return false;
+    }
+  }
 
   async function fetchUserAds(userID){
     try {
@@ -66,7 +79,7 @@ export const AdProvider = ({ children }) => {
 
 
   return (
-    <AdContext.Provider value={{ fetchAdPage, fetchHomePage , fetchUserProfile, fetchUserAds}}>
+    <AdContext.Provider value={{ fetchAdPage, fetchHomePage, fetch3ListingsForAdPage, fetchUserProfile, fetchUserAds}}>
       {children}
     </AdContext.Provider>
   );

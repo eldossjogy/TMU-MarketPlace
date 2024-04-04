@@ -64,10 +64,15 @@ export default function UserPage() {
         <div className="flex items-start space-x-4 ml-3">
           <Avatar userID={user.id} square={true} />
           <div>
-            <div className="font-bold text-lg">
+            <div className="font-bold text-2xl">
+              {user.name
+                ? `${user.name}`
+                : user.name}
+            </div>
+            <div className="">
               {user.first_name && user.last_name
                 ? `${user.first_name} ${user.last_name}`
-                : user.name}
+                : ''}
             </div>
             <div className="text-sm text-gray-600">
               Joined:{" "}
