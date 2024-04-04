@@ -4,7 +4,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import placeholderImage from "../assets/imageLoading.png"
 import noImage from '../assets/noImage.png'
 
-export default function ImageCarousel({ images, hovered, setHovered, vertical = true }) {
+export default function ImageCarousel({ images, hovered, setHovered, vertical = true, autoScrollBool=true }) {
   const [currImage, setImage] = useState(images[0].file_path);
   const [currPos, setPos] = useState(0);
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function ImageCarousel({ images, hovered, setHovered, vertical = 
 
   useEffect(() => {
     let interval;
-    if (hovered) {
+    if (hovered && autoScrollBool) {
       interval = setInterval(autoScroll, 2500);
     } else {
       clearInterval(interval);

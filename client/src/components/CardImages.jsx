@@ -2,7 +2,7 @@ import React from "react";
 import ImageCarousel from "./ImageCarousel";
 import noImage from '../assets/noImage.png'
 
-export default function CardImages({ image, hovered, setHovered, vertical = true, maxWidthSet = 'max-w-32 lg:max-w-60' }) {
+export default function CardImages({ image, hovered, setHovered, vertical = true, autoScrollBool, maxWidthSet = 'max-w-32 lg:max-w-60' }) {
   if (image.length === 0) {
     return (
       <img
@@ -15,7 +15,7 @@ export default function CardImages({ image, hovered, setHovered, vertical = true
 
   if (image.length > 1) {
     return (
-      <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={vertical}/>
+      <ImageCarousel images={image} hovered={hovered} setHovered={setHovered} vertical={vertical} autoScrollBool={autoScrollBool}/>
     )
   } else {
     return (

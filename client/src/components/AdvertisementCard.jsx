@@ -4,6 +4,7 @@ import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
 import SearchContext from "../authAndContext/searchProvider";
 import ImageArrowCarousel from "./ImageArrowCarousel";
+import CardImages from "./CardImages";
 
 
 
@@ -44,19 +45,20 @@ function AdvertisementCard({
     }
     return (
         <div className="w-full">
-                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex md:flex-row sm:flex-col overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-2 sm:p-3 sm:space-x-3 flex md:flex-row m-2 flex-col overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                     <div className="md:w-3/5 sm:w-full flex justify-center items-center">
                         {/*carousel component*/}
-                            <ImageArrowCarousel images={dbData.image} />
+                        <CardImages image={dbData.image} hovered={true} setHovered={setHovered} autoScrollBool={false}/>
+                        {/*<ImageArrowCarousel images={dbData.image} />*/}
                     </div>
-                    <div className="flex flex-col justify-between w-full px-4 pb-4 bg-[#fafafb]">
-                       <div>
-                            <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+                    <div className="flex flex-col justify-between w-full sm:px-4 pb-4 bg-[#fafafb]">
+                       <div className="flex flex-col justify-cente">
+                            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
                                 {dbData.category.name}: {dbData.title}
                             </h1>   
                             <div className="flex justify-between">
                                 <div>
-                                    <h2 className="text-left text-lg">Location:📍{dbData.location}</h2>
+                                    <h2 className="text-left text-md sm:text-lg">Location:📍{dbData.location}</h2>
                                     <h2 className="text-md">Listing created at: {formatDate(dbData.created_at)}</h2>
                                 </div>
                                 <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
@@ -72,19 +74,21 @@ function AdvertisementCard({
                 </div>
 
             <br></br>
-            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex md:flex-row sm:flex-col gap-3">
+            <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex md:flex-row flex-col gap-3">
                 <div className="md:w-1/2 sm:w-full flex justify-center items-center">
                     <div className="flex flex-col items-center justify-start pb-10">
                         <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mb-5">
-                            Creator
+                            Created by
                         </h1>
                         <Avatar userID={dbData.user_id} />
                         <h5 className="mt-3 mb-1 text-xl font-medium text-gray-900 dark:text-white">{dbData.profile.name}</h5>
                         <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.email}</span>
+
                     </div>
                 </div>
                 <div className="md:w-1/2 sm:w-full flex items-center flex-col space-x-1">
-                    <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mt-2">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mt-2">
                         Other Available Listings from {dbData.profile.name}
                     </h1>
                     <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-3 gap-3">

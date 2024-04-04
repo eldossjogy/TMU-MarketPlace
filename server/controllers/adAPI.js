@@ -24,7 +24,7 @@ export async function getByID(req, res) {
           image!left(file_path),
           category!inner(name),
           status!inner(type),
-          profile!inner(id,name,avatar_url,first_name,last_name)
+          profile!inner(id,name,avatar_url,first_name,last_name, email)
           `
       )
       .eq("id", id);
