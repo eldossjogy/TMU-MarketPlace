@@ -5,6 +5,7 @@ import AdContext from "../authAndContext/adProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import toast from "react-hot-toast";
+import Loading from "../components/Loading";
 
 
 export default function AdvertisementPages() {
@@ -58,6 +59,34 @@ export default function AdvertisementPages() {
           }
           setLocalLoading(false)
           
+    }
+
+    if(dbData === null){
+        return (
+            <>
+                <Navbar/>
+                <Loading/>
+            </>
+        )
+        
+    }
+
+    if (dbData === false || dbData === undefined){
+        return (
+            <div>
+                <Navbar />
+                <div className="flex justify-center items-center my-3 mx-3">
+                    <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
+                        <h1 className="text-xl">
+                            This listing does not exist or has been removed.
+                        </h1>
+                        <a href="/" className="text-xl text-blue-500">
+                            Return home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
