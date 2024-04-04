@@ -3,7 +3,7 @@ import {useMap, useMapEvents, Popup, Marker} from 'react-leaflet'
 import LocationContext from '../authAndContext/locationProvider';
 import L from "leaflet";
 
-export default function LocationMarker() {
+export default function LocationMarker({popupMessage = 'Your Location'}) {
     const {location, generateLocation, range} = useContext(LocationContext);
     const [map] = useState(useMap());
     const [circle] = useState(L.circle({lat: location.lat, lng: location.lng}, range));
@@ -33,7 +33,7 @@ export default function LocationMarker() {
         // >
         // </Circle>
         <Marker position={{lat: location.lat, lng: location.lng}}>
-            <Popup>{`Your Location`}</Popup>
+            <Popup>{popupMessage}</Popup>
         </Marker>
     )
 }

@@ -39,6 +39,11 @@ export default function AdvertisementPages() {
     
         return { previousElement, nextElement };
     }
+
+    useEffect(() => {
+      
+    }, [])
+    
     
     useEffect(() => {
         if (slug) {
