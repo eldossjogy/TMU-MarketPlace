@@ -16,21 +16,22 @@ export default function ChatList({list = [], inbox}) {
             {currentChat && <Chatbox chatID={currentChat} />}
 
             <div className={`space-y-3 w-full ${currentChat ? 'lg:w-[60%] shrink-0' : ''}`}>
-                {list?.length !== 0 && list.map((result) => (
-                    <HorizontalCardInbox
-                        key={result.id}
-                        image={result.ad.image}
-                        ad_id={result.ad_id}
-                        title={result.ad.title}
-                        username={result.ad.profile.name}
-                        status={result.ad_status}
-                        lastMessage={"Hey why havent you called me back yet?"}
-                        date={result.created_at}
-                        chat_id={result.id}
-                        unread={gotMail.some(obj => obj.chat_id === result.chat_id)}
-                        handleChatFn={handleSetChat}>
-                    </HorizontalCardInbox>
-                ))}
+                {list?.length !== 0 && list.map((result) => {
+                    return (
+                        <HorizontalCardInbox
+                            key={result.id}
+                            image={result.ad.image}
+                            ad_id={result.ad_id}
+                            title={result.ad.title}
+                            username={result.ad.profile.name}
+                            status={result.ad_status}
+                            lastMessage={"Hey why havent you called me back yet?"}
+                            date={result.created_at}
+                            chat_id={result.id}
+                            unread={gotMail.some(obj => obj.chat_id === result.id)}>
+                        </HorizontalCardInbox>
+                    )
+                })}
                 {(!list || !(list?.length > 0)) && [1].map((key) => (
                     <div key={key} className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
                         <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
