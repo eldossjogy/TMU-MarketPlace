@@ -81,16 +81,20 @@ export default function UserPage() {
             className="flex justify-end lg:justify-end md:justify-end"
           >
             <div className="flex flex-wrap gap-2 p-1.5 bg-[#fafafb] ring-1 ring-gray-200 rounded-2xl">
-              <button
-                className={`text-sm md:text-base relative flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 font-semibold transition duration-200 group ${
-                  selectedCat === null ? "bg-amber-300" : ""
-                }`}
-                onClick={() => {
-                  setSelectedCat(null);
-                }}
-              >
-                All
-              </button>
+              {ads && ads.length > 0 ? (
+                <button
+                  className={`text-sm md:text-base relative flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 font-semibold transition duration-200 group ${
+                    selectedCat === null ? "bg-amber-300" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedCat(null);
+                  }}
+                >
+                  All
+                </button>
+              ) : (
+                <></>
+              )}
               {categories?.map((element) => {
                 const categoryIds = new Set(ads.map((obj) => obj.category_id));
                 if (categoryIds.has(element.id)) {
@@ -135,8 +139,14 @@ export default function UserPage() {
             }
           })
         ) : (
-          <div>
-            <h1 className="text-black text-lg font-semibold">This user has not posted any ads yet....</h1>
+          <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+            <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+              <div className="flex items-center pt-8 sm:justify-start sm:pt-0">
+                <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">
+                  No Results
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
