@@ -5,7 +5,7 @@ import AuthContext from '../authAndContext/contextApi';
 import LocationContext from '../authAndContext/locationProvider';
 import { MapPinIcon } from '@heroicons/react/24/solid';
 import ProfilePicture from './ProfilePicture';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Logo from "../assets/logo.png"
 import ChatContext from '../authAndContext/chatProvider';
 
@@ -14,7 +14,6 @@ export default function Navbar() {
     const {city, range, getLocation} = useContext(LocationContext);
     const { user, checkIfAdmin } = useContext(AuthContext);
     const { gotMail } = useContext(ChatContext);    
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDropdownOptions = async () => {
