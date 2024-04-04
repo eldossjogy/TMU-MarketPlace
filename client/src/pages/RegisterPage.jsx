@@ -103,56 +103,56 @@ export default function RegisterPage() {
                         <div className="grid md:grid-cols-2 md:gap-6">
                             <div className="relative z-0 w-full mb-5">
                                 <input type="text" name="fname" id="fname" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-nonefocus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " minLength={2} maxLength={50} required />
-                                <label htmlFor="fname" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name <span className='text-red-500'>*</span></label>
+                                <label htmlFor="fname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name <span className='text-red-500'>*</span></label>
                             </div>
                             <div className="relative z-0 w-full mb-5">
                                 <input type="text" name="lname" id="lname" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " minLength={2} maxLength={50} required />
-                                <label htmlFor="lname" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name <span className='text-red-500'>*</span></label>
+                                <label htmlFor="lname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name <span className='text-red-500'>*</span></label>
                             </div>
                         </div>
                         <div className="relative z-0 w-full mb-5">
                             <input type="text" name="student-number" id="student-number" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " maxLength={9} required />
-                            <label htmlFor="student-number" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Student Number <span className='text-red-500'>*</span></label>
-                            <p className="mt-1 text-sm">
+                            <label htmlFor="student-number" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Student Number <span className='text-red-500'>*</span></label>
+                            <p className="mt-1">
                                 {errors.studNum && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.studNum}</div>}
                             </p>
                         </div>
                         <div className="relative z-0 w-full mb-5">
                             <input type="text" name="username" id="username" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                            <label htmlFor="username" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username <span className='text-red-500'>*</span></label>
-                            <p className="mt-1 text-sm">
+                            <label htmlFor="username" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Username <span className='text-red-500'>*</span></label>
+                            <p className="mt-1">
                                 {errors.username && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.username}</div>}
                             </p>
                         </div>
                         <div className="relative z-0 w-full mb-5">
                             <input type="email" name="email" id="email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " maxLength={100} required />
-                            <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TMU Email Address <span className='text-red-500'>*</span></label>
-                            <p className="mt-2 text-sm">
+                            <label htmlFor="email" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TMU Email Address <span className='text-red-500'>*</span></label>
+                            <p className="mt-2">
                                 {errors.email && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.email}</div>}
                             </p>
                         </div>
                         <div className="relative z-0 w-full mb-5">
                             <input type="password" name="password" id="password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                            <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password <span className='text-red-500'>*</span></label>
-                            <p className="mt-2 text-sm">
+                            <label htmlFor="password" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password <span className='text-red-500'>*</span></label>
+                            <p className="mt-2">
                                 {errors.password && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.password}</div>}
                             </p>
                         </div>
                         <div className="relative z-0 w-full mb-5">
                             <input type="password" name="confirm-password" id="confirm-password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                            <label htmlFor="confirm-password" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Re-enter password <span className='text-red-500'>*</span></label>
+                            <label htmlFor="confirm-password" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Re-enter password <span className='text-red-500'>*</span></label>
                             <span id="eye-div" className="absolute inset-y-0 right-0 flex items-center pl-2">
                                 <button type='button' className="h-8 p-1 focus:outline-none focus:shadow-outline hover:bg-gray-200 rounded-full">
                                     <img id="eye-icon" src={eyeCrossed} onClick={togglePassword} alt="Logo" className="h-full w-auto m-auto"></img>
                                 </button>
                             </span>
-                            <p className="mt-2 text-sm">
+                            <p className="mt-2">
                                 {errors.confirm && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.confirm}</div>}
                             </p>
                         </div>
                         <div className='space-y-4 md:space-y-6'>
-                            <button type="submit" className="w-full rounded-full text-white bg-sky-500 hover:bg-sky-600 font-medium text-sm px-5 py-2.5 text-center">Register</button>
-                            <p className="text-sm text-center font-light text-gray-500">
+                            <button type="submit" className="w-full rounded-full text-white bg-sky-500 hover:bg-sky-600 font-medium text-xs sm:text-sm px-5 py-2.5 text-center">Register</button>
+                            <p className="text-xs sm:text-sm text-center font-light text-gray-500">
                                 Already have an account? <Link to={'/login'} className='font-medium text-primary-600 hover:underline'>{'Login'}</Link>
                             </p>
                         </div>
