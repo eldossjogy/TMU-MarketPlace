@@ -33,7 +33,11 @@ export default function ChatList({list = [], inbox}) {
                             chat_id={result.id}
                             unread={gotMail.some(obj => obj.chat_id === result.id)}
                             data={{title: result.ad.title, ad_profile: result.ad.profile, sender: {id: result.user1_id, name:result.sender.name}, recipient: {id: result.user2_id, name:result.recipient.name}}}
-                            setCurrentData={setCurrentData}
+                            setCurrentData={(e) => {
+                                setCurrentData(e);
+                                let container = document.querySelector('#nav');
+                                container?.scrollIntoView({ behavior: "smooth" });
+                            }}
                             >
                         </HorizontalCardInbox>
                     )

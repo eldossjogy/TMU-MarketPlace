@@ -49,7 +49,7 @@ export default function Navbar() {
       }, [user]);
     
     return (
-        <nav className=" bg-slate-900 h-auto md:h-16 w-full flex">
+        <nav id='nav' className="bg-slate-900 h-auto md:h-16 w-full flex">
             <div className="container mx-auto flex flex-col justify-center p-4 md:flex-row md:justify-between md:items-center md:h-full md:p-0 md:py-1 md:pr-[3vw] lg:max-w-[90%]">
                 <section className='md:flex md:flex-row md:w-auto space-y-4 md:space-y-0'>
                     <section className='flex w-full items-center justify-between flex-wrap md:block md:w-auto'>

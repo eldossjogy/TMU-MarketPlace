@@ -34,7 +34,7 @@ export default function Chatbox({chatData}) {
     }
     
     return (
-        <div className='flex flex-col group w-full lg:w-1/2 2xl:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg h-[60vh] divide-y-2 overflow-hidden'>
+        <div id='chat-box' className='flex flex-col group w-full lg:w-1/2 2xl:w-[40%] rounded-xl  border-2 border-gray shadow-md hover:shadow-lg h-[60vh] divide-y-2 overflow-hidden'>
             <section className='w-full p-3 h-24 bg-[#fafafb] rounded-xl'>
                 <div className='flex justify-between'>
                 <h1 className='text-4xl'>{chatData?.title}</h1>
