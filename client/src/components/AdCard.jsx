@@ -2,12 +2,8 @@ import React from "react";
 import Loading from "./Loading";
 import Avatar from "./Avatar";
 import CardImages from "./CardImages"
-<<<<<<< HEAD
 import ChatModal from "./ChatModal";
-=======
 import { Link } from "react-router-dom";
-
->>>>>>> 4993db47addf86a210eb042f32108c8883ef16a3
 export default function AdCard({ adData }) {
   if (adData === null) {
     return <Loading />;
