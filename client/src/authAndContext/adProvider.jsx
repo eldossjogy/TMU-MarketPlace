@@ -45,8 +45,41 @@ export const AdProvider = ({ children }) => {
     }
   }
 
+  async function fetchUserAds(userID){
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/ad/user`,
+        { params: { user_id: userID } }
+      );
+      return response.data
+    } catch (error) {
+      toast.error("Error fetching ads: ", JSON.stringify(error));
+      return null;
+    }
+  }
+
+  async function fetchUserProfile(userName){
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API_URL}/user`,
+        { params: { user_name: userName } }
+      );
+      if (response.data.error) {
+        throw new Error(response.error);
+      }
+      if (response.data.length === 0) {
+        throw new Error(response.error);
+      }
+      return response.data[0]
+    } catch (error) {
+      toast.error("Error fetching ads: ", JSON.stringify(error));
+      return false;
+    }
+  }
+
+
   return (
-    <AdContext.Provider value={{ fetchAdPage, fetchHomePage, fetch3ListingsForAdPage }}>
+    <AdContext.Provider value={{ fetchAdPage, fetchHomePage, fetch3ListingsForAdPage, fetchUserProfile, fetchUserAds}}>
       {children}
     </AdContext.Provider>
   );

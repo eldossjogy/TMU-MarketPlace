@@ -6,7 +6,7 @@ export default function CardImages({ image, hovered, setHovered, vertical = true
   if (image.length === 0) {
     return (
       <img
-        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : maxWidthSet}`}
+        className={`rounded-md w-full h-auto object-cover aspect-square ${vertical ? '' : maxWidthSet} m-[0.219rem]`}
         src={noImage}
         alt="img"
       ></img>

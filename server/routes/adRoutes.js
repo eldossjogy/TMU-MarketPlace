@@ -7,8 +7,8 @@ const router = express.Router();
 router.get("/", getByID);
 router.get("/similarListings", get3ListingsByID);
 
-// get user ads
-router.get("/me", getUserAds);
+// get all ads by user id
+router.get("/user", getUserAds);
 
 // get homepage ads
 router.get("/homepage", homepage);

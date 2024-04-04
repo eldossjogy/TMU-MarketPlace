@@ -150,12 +150,8 @@ function AdvertisementCard({
                     </div>
                 </div>
             </div>
-
         </div>
-
-
     );
-
 }
 
 

@@ -23,7 +23,7 @@ const EditListingPage = lazy(() => import('./pages/EditListingPage'));
 const CreateListings = lazy(() => import('./pages/CreateListings'));
 const SavedPage = lazy(() => import('./pages/SavedPage'));
 const HistoryPage = lazy(() => import('./pages/HistoryPage'));
-
+const UserPage = lazy(() => import('./pages/UserPage'))
 
 
 library.add(fas);
@@ -37,6 +37,7 @@ function App() {
           <Route index element={<Suspense fallback={<h1>Loading...</h1>}><HomePage /></Suspense>} />
           <Route path="/search" element={<Suspense fallback={<h1>Loading...</h1>}><SearchPage /></Suspense>} />
           <Route path="/ad/:slug" element={<Suspense fallback={<h1>Loading...</h1>}><AdvertisementPages /></Suspense>} />
+          <Route path="/u/:username" element={<Suspense fallback={<h1>Loading...</h1>}><UserPage /></Suspense>} />
           <Route element={<Suspense fallback={<h1>Loading...</h1>}><PrivateRoutes loggedIn={false}/></Suspense>}>
             <Route path="/login" element={<Suspense fallback={<h1>Loading...</h1>}><LoginPage /></Suspense>} />
             <Route path="/register" element={<Suspense fallback={<h1>Loading...</h1>}><RegisterPage /></Suspense>} />

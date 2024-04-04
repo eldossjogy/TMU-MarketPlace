@@ -511,7 +511,7 @@ export async function adminUpdateUser(req, res) {
         
         const updateUser = await supabase
             .from('profile')
-            .update({name: updatedUser.name, postal_code: updatedUser.postal_code, first_name: updatedUser.first_name, last_name: updatedUser.last_name, student_number: updatedUser.student_number})
+            .update({name: updatedUser.name, postal_code: updatedUser.postal_code, first_name: updatedUser.first_name, last_name: updatedUser.last_name, student_number: updatedUser.student_number, bio: updatedUser.bio})
             .eq('id', updatedUser.id)
             .select()
 
