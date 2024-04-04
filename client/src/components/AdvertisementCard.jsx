@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import CardImages from "./CardImages";
 import Avatar from "./Avatar";
 import VerticalCard from "./VerticalCard";
 import SearchContext from "../authAndContext/searchProvider";
@@ -42,12 +41,11 @@ function AdvertisementCard({
                 <div className="bg-[#fafafb] border-2 border-gray rounded-lg shadow-md hover:shadow-lg p-3 space-x-3 flex overflow-hidden" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                     <div className="w-3/5 flex justify-center items-center">
                         {/*carousel component*/}
-                            {/*<CardImages image={dbData.image} hovered={hovered} setHovered={setHovered}/>*/}
                             <ImageArrowCarousel images={dbData.image} />
                     </div>
                     <div className="flex flex-col justify-between w-full px-4 pb-4 bg-[#fafafb]">
                        <div>
-                            <h1 className="text-2xl sm:text-2xl md:text-4xl font-bold text-gray-900 mt-2">
+                            <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold text-gray-900 mt-2">
                                 {dbData.category.name}: {dbData.title}
                             </h1>   
                             <div className="flex justify-between">
@@ -72,10 +70,13 @@ function AdvertisementCard({
             <br></br>
             <div className="bg-[#fafafb] rounded-lg border border-gray-200 p-4 flex gap-3">
                 <div className="w-1/2 flex justify-center items-center">
-                    <div class="flex flex-col items-center pb-10">
+                    <div className="flex flex-col items-center justify-start pb-10">
+                        <h1 className="text-2xl sm:text-xl md:text-2xl font-bold text-gray-900 mb-5">
+                            Creator
+                        </h1>
                         <Avatar userID={dbData.user_id} />
-                        <h5 class="mt-3 mb-1 text-xl font-medium text-gray-900 dark:text-white">{dbData.profile.name}</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
+                        <h5 className="mt-3 mb-1 text-xl font-medium text-gray-900 dark:text-white">{dbData.profile.name}</h5>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{dbData.profile.first_name}&nbsp;{dbData.profile.last_name}</span>
                     </div>
                 </div>
                 <div className="w-1/2 flex flex-col space-x-1">
