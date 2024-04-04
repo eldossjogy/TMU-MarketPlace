@@ -23,9 +23,9 @@ export default function MyMarketSideBar({title}) {
         {linkText: "Outbox", link: "/my-market/inbox"},
         {linkText: "Unread", link: "/my-market/inbox?unread=true"}
     ]},
-    {title: "Settings", items:[
-        {linkText: "Edit Settings", link: "/my-market/settings"},
-        {linkText: "Edit Profile", link: "/my-market/profile"},
+    {title: "Profile", items:[
+        {linkText: "My Profile", link: "/my-market/profile"},
+        {linkText: "Edit Profile", link: "/my-market/edit-profile"},
     ]}
     ]
 
