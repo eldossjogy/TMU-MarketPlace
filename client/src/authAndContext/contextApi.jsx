@@ -570,7 +570,7 @@ export const AuthProvider = ({ children }) => {
 					username: username,
 					first_name:first_name,
 					last_name:last_name,
-					bio:bio
+					bio: bio ? bio : ''
 				},
 				{
 				headers: {
