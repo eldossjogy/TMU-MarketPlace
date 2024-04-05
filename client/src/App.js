@@ -79,7 +79,7 @@ function App() {
                   </a>
                 <a href="https://github.com/Emil-mm" target="_blank" rel="noreferrer">Emily mm,{" "}
                   </a>
-                <a href="https://github.com/jasminejj08" target="_blank" rel="noreferrer">Jasmine jj,{" "}
+                <a href="https://github.com/jasminejj08" target="_blank" rel="noreferrer">Jasmine jj{" "}
                   </a> </h4>
                 <p >&copy; 2024 TMU MarketPlace. All rights reserved.</p>
         </div>
