@@ -9,7 +9,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const navigate = useNavigate();
-
+	const [adminStatus,setAdmin] = useState(false);
 	const [user, setUser] = useState(null);
 	const [localSession, setLocalSession] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +125,8 @@ export const AuthProvider = ({ children }) => {
 				};
 				setProfileData(combinedDict);
 				setIsLoading(false);
+				let admin = await checkIfAdmin();
+				setAdmin(admin)
 			}
 		}
 		fetchProfile();
@@ -149,7 +151,6 @@ export const AuthProvider = ({ children }) => {
 						},
 					}
 				)
-	
 				if(response.data) {
 					return true
 				}
@@ -626,7 +627,8 @@ export const AuthProvider = ({ children }) => {
 		uploadImageToBucket,
 		checkIfAdmin,
 		editProfile,
-		changePassword
+		changePassword,
+		adminStatus
       }}
     >
 		{isLoading ? <LoadingScreen /> : children}
