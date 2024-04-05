@@ -51,10 +51,10 @@ export default function AdvertisementPages() {
               const res2 = await fetch3ListingsForAdPage(res.profile.id);
               setSimilarAds(res2);
             } catch (error) {
-              toast.success("Ad Fetched")
+              throw error
             }
           } catch (error) {
-            toast.error('Error fetching ad page:')
+            toast.error('Error fetching ad page')
           }
           setLocalLoading(false)
           

@@ -33,7 +33,8 @@ library.add(fas);
 
 function App() {
   return (
-    <div id="app" className="">
+    <div id="app" class="min-h-screen flex flex-col">
+      <main class="flex-grow">
       <Toaster position="bottom-right" reverseOrder={true} toastOptions={{ duration: 5000 }} />
       <Routes>
         <Route path="/">
@@ -67,7 +68,8 @@ function App() {
         </Route>
         <Route path="*" element={<ErrorPage />} />
         <Route path="unauthorized" element={<ErrorPage />} />
-      </Routes>
+      </Routes> 
+      </main>
       <footer className="text-center py-4">
         <div className="mx-auto text-gray-600">
                 <h4 >Made with ❤️ by Amin Nausin, Muyeed Hossain, Eldoss Jogy, Emily mm, Jasmin jj</h4>
