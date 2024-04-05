@@ -7,7 +7,6 @@ import eyeOpened from "../assets/eye.png";
 import eyeCrossed from "../assets/eye-crossed.png";
 
 export default function RegisterPage() {
-
     const {registerNewAccount, user} = useContext(AuthContext)
     const [errors, setErrors] = useState({})
     const navigate = useNavigate();
@@ -20,7 +19,7 @@ export default function RegisterPage() {
         //Name validation
         const first = form.get("fname");
         const last = form.get("lname");
-        if(!(/^[A-Za-z]+$/.test(first) || !(/^[A-Za-z]+$/.test(last)))){
+        if(!(/^[A-Za-z]+$/.test(first)) || !(/^[A-Za-z]+$/.test(last))){
             invalid.name = "First and last name must only contain letters";
         }
 
@@ -36,11 +35,13 @@ export default function RegisterPage() {
             invalid.studNum = "Student number must be 9 digits, no spaces";
         }
 
+        //Email validation, checks if TMU password
         const email = form.get("email");
         if (email && !email.endsWith("@torontomu.ca")) {
             invalid.email = "Must use student email with domain @torontomu.ca";
         }
 
+        //Password validation, checks if longer than 6 characters
         const password = form.get("password");
         if(password.length < 6){
             invalid.password = "Password must be at least 6 characters";
@@ -56,12 +57,9 @@ export default function RegisterPage() {
             setErrors(invalid);
         } 
         else {
-            // console.log(Array.from(form.entries()));
             setErrors({});
             const [data, error] = await registerNewAccount(email, password, username, studentNum, first, last);
 
-            // console.log(data);
-            // console.log(error);
             if(! error && data.success === true) {
                 toast.success(`Successfully registered as ${email}`);
                 navigate('/');
@@ -78,6 +76,7 @@ export default function RegisterPage() {
         }
     }, [user, navigate])
 
+    //Toggles the ability to view the password
     function togglePassword(){
         let password = document.getElementById("confirm-password");
         let eyeIcon = document.getElementById("eye-icon");
@@ -101,15 +100,18 @@ export default function RegisterPage() {
                     </section>
                     <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
                         <div className="grid md:grid-cols-2 md:gap-6">
-                            <div className="relative z-0 w-full mb-5">
+                            <div className="relative z-0 w-full">
                                 <input type="text" name="fname" id="fname" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-nonefocus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " minLength={2} maxLength={50} required />
-                                <label htmlFor="fname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name <span className='text-red-500'>*</span></label>
+                                <label htmlFor="fname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First Name <span className='text-red-500'>*</span></label>
                             </div>
-                            <div className="relative z-0 w-full mb-5">
+                            <div className="relative z-0 w-full">
                                 <input type="text" name="lname" id="lname" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " minLength={2} maxLength={50} required />
-                                <label htmlFor="lname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name <span className='text-red-500'>*</span></label>
+                                <label htmlFor="lname" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last Name <span className='text-red-500'>*</span></label>
                             </div>
                         </div>
+                        <p className="mt-1 mb-5">
+                            {errors.name && <div className={"mb-1 text-xs sm:text-sm font-medium text-red-500 text-wrap"}>{errors.name}</div>}
+                        </p>
                         <div className="relative z-0 w-full mb-5">
                             <input type="text" name="student-number" id="student-number" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " maxLength={9} required />
                             <label htmlFor="student-number" className="peer-focus:font-medium absolute text-xs sm:text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Student Number <span className='text-red-500'>*</span></label>

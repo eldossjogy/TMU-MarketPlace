@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useState} from 'react'
 import AuthContext from '../authAndContext/contextApi'
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -18,6 +18,7 @@ export default function LoginPage() {
         const password = form.get("password");
         let invalid = {};
 
+        //Validates whether the email is TMU email
         if (email && !email.endsWith("@torontomu.ca")) {
             invalid.email = "Must use student email with domain @torontomu.ca";
         }
@@ -26,23 +27,20 @@ export default function LoginPage() {
             setErrors(invalid);
         } 
         else {
-            // console.log(Array.from(form.entries()));
             setErrors({});
             const [data, error] = await signIn(email, password);
              
-            // console.log(data);
-            // console.log(error);
             if(! error && data.success === true) {
                 toast.success(`Logged in ${email}`);
                 navigate('/');
             }
             else{
                 toast.error(`Unable to log in. ${error.error.message ?? 'Unknown reason.'}`);
-                // console.log(error);
             }
         }
     }
 
+    //Toggles the ability to view the password
     function togglePassword(){
         let password = document.getElementById("password");
         let eyeIcon = document.getElementById("eye-icon");
