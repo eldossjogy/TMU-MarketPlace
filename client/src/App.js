@@ -68,8 +68,8 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="unauthorized" element={<ErrorPage />} />
       </Routes>
-      <footer class="text-center py-4">
-        <div class="mx-auto text-gray-600">
+      <footer className="text-center py-4">
+        <div className="mx-auto text-gray-600">
                 <h4 >Made with ❤️ by Amin Nausin, Muyeed Hossain, Eldoss Jogy, Emily mm, Jasmin jj</h4>
                 <p >&copy; 2024 TMU MarketPlace. All rights reserved.</p>
         </div>

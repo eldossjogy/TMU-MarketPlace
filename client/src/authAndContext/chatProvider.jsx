@@ -19,7 +19,7 @@ export const ChatProvider = ({ children }) => {
   const [gotMail, setGotMail] = useState([]);
   // current chat user is reading
   const [currentChat, setCurrentChat] = useState(null);
-
+  // inbox?
   const [inbox, setInbox] = useState([]);
 
   // create/connect to users channel (can be moved to one useEffect in AuthContext)
@@ -27,6 +27,8 @@ export const ChatProvider = ({ children }) => {
     if (user && user.id) {
       let userChannel = supabase.channel(user.id);
       setChannel(userChannel);
+      // get chat on userLoad so that notification works
+      getChat();
     }
   }, [user]);
   
@@ -38,16 +40,13 @@ export const ChatProvider = ({ children }) => {
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "messages" },
       (payload) => {
-          console.log(user,payload.new)
           if (
             [payload.new.recipient_id, payload.new.sender_id].includes(user?.id)
           ) {
             let newMsg = payload.new;
-            console.log(newMsg);
-            const alreadyExist = messages.some((msg) => msg.id == newMsg.id);
+            const alreadyExist = messages.some((msg) => msg.id === newMsg.id);
             if (!alreadyExist) {
               setMessages((prev) => [...prev, newMsg]);
-              console.log(alreadyExist, "new msg");
             }
             setNewMsg(newMsg);
           }
@@ -164,15 +163,14 @@ export const ChatProvider = ({ children }) => {
       if (newMsg.recipient_id === user.id) {
         if (newMsg.chat_id === currentChat) {
           updateDBReadStatus(user.id, currentChat);
-          // toast.success(
-          //   "Chat :> No notifacation because u are already reading the chat"
-          // );
         }
+       else{
         setGotMail((prev) => [...prev, newMsg]);
         toast.success("You've got mail");
+       }
       }
     }
-  }, [messages, newMsg]);
+  }, [newMsg]);
 
   // set a current chat which will remove notifications
   async function updateDBReadStatus(user_id, chat_id) {
@@ -191,9 +189,6 @@ export const ChatProvider = ({ children }) => {
           },
         }
       );
-      if (response.data) {
-        return toast.success();
-      }
     } catch (error) {
       return toast.error("Failed to send message", error.message);
     }
@@ -238,30 +233,6 @@ export const ChatProvider = ({ children }) => {
         {
           params: {
             inbox: useInbox
-          },
-          headers: {
-            Authorization: "Bearer " + localSession.access_token,
-          },
-        }
-      );
-      if (response.data) {
-        setInbox(response.data);
-      }
-    } catch (error) {
-      return toast.error("Failed to get inbox", error.message);
-    }
-  }
-
-  async function loadChat(id) {
-    if (!user) {
-      return toast.error("No user data at the moment");
-    }
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_API_URL}/chat/`,
-        {
-          params: {
-            chat_id: id
           },
           headers: {
             Authorization: "Bearer " + localSession.access_token,

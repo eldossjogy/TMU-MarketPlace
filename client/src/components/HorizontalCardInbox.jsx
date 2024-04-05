@@ -33,6 +33,7 @@ export default function HorizontalCardInbox({
     const handleSetChat = () => {
         removeNotification(chat_id);
         setCurrentData((prev)=>({...prev, ...data}))
+        removeNotification(chat_id);
     }
     return (
 
