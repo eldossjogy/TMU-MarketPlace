@@ -45,17 +45,16 @@ export default function AdvertisementPages() {
     async function fetchRequiredata(slug) {
         try {
             const res = await fetchAdPage(slug);
-            if (!res) navigate('/error')
             setData(res);
     
             try {
               const res2 = await fetch3ListingsForAdPage(res.profile.id);
               setSimilarAds(res2);
             } catch (error) {
-              toast.success("Ad Fetched")
+              throw error
             }
           } catch (error) {
-            toast.error('Error fetching ad page:')
+            toast.error('Error fetching ad page')
           }
           setLocalLoading(false)
           
@@ -75,16 +74,14 @@ export default function AdvertisementPages() {
         return (
             <div>
                 <Navbar />
-                <div className="flex justify-center items-center my-3 mx-3">
-                    <div className="bg-card p-3 rounded-lg w-full max-w-7xl shadow-md text-center">
-                        <h1 className="text-xl">
-                            This listing does not exist or has been removed.
-                        </h1>
-                        <a href="/" className="text-xl text-blue-500">
-                            Return home
-                        </a>
+                <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
+                    <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
+                        <div className="flex items-center pt-8 sm:justify-start sm:pt-0 flex-col gap-5">
+                        <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">This listing does not exist or has been removed.</div>
+                        <a href="/" className="text-xl text-blue-500">Return home</a>
+                        </div>
                     </div>
-                </div>
+                </div>  
             </div>
         )
     }

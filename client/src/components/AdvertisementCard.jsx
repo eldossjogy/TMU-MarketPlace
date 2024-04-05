@@ -77,9 +77,9 @@ function AdvertisementCard({
                                     {dbData.title}
                                 </h1>   
                                 <div className="min-w-40">
-                                    <div className="flex gap-2">
-                                        <h2 className="flex text-xl font-bold text-right line-clamp-1">{dbData.category.name}: </h2>
-                                        <h2 className="text-green-600 text-xl font-bold text-right">${dbData.price}</h2>
+                                    <div className="gap-2">
+                                        <h2 className="text-green-600 text-2xl font-bold text-right">${dbData.price}</h2>
+                                        <h2 className="text-gray-700 text-lg font-bold text-right line-clamp-2">{dbData.category.name}</h2>
                                     </div>
 								    <h2 className="text-rose-700 font-bold text-xs sm:text-sm md:text-base line-clamp-1">{(dbData?.status_id !== 1) ? dbData?.status?.type ?? '' : ''}</h2>
                                 </div>

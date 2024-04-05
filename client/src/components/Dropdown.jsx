@@ -48,7 +48,8 @@ function DropdownOption({index, content, count, gotMail}) {
     return(
         <span className={`${index == 0 ? 'rounded-t-md font-bold text-neutral-900 hover:bg-[#F9B300] border-[#F9B300] border-b-2' : 'text-gray-700 hover:bg-neutral-200'} block px-4 py-2 text-sm  ` + roundedStyle} role="menuitem" tabIndex="-1" id="menu-item-0">
             <Link to={content.url ?? '/'} className='flex w-full h-full items-center space-even justify-between'>{content.name ?? ''}
-                {content.name == "Inbox" && gotMail.length > 0 ? <div >
+            {/* we cant tell outbox and inbox apart! */}
+                {(content.name == "My Inbox"  || content.name == "My Outbox") && gotMail.length > 0 ? <div >
                     <div className="w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
                     </div>
                 </div> : <></>}

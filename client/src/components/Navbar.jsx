@@ -12,16 +12,15 @@ import ChatContext from '../authAndContext/chatProvider';
 export default function Navbar() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const {city, range, getLocation} = useContext(LocationContext);
-    const { user, checkIfAdmin } = useContext(AuthContext);
+    const { user, adminStatus } = useContext(AuthContext);
     const { gotMail } = useContext(ChatContext);    
 
     useEffect(() => {
         const fetchDropdownOptions = async () => {
             // Perform asynchronous operation to determine authentication status
-            const isAdmin = await checkIfAdmin();
     
             const unauthOptions = [{name: 'Log in', url: '/login'}, {name: 'Register', url: '/register'}];
-            const authOptions = isAdmin
+            const authOptions = adminStatus
                 ? [
                     {name: 'Post New Ad', url: '/my-market/create-listing'},
                     {name: 'My Market', url: '/my-market'},
@@ -47,7 +46,7 @@ export default function Navbar() {
         };
     
         fetchDropdownOptions();
-      }, [user]);
+      }, [user,adminStatus]);
     
     return (
         <nav id='nav' className="bg-slate-900 h-auto md:h-16 w-full flex">
