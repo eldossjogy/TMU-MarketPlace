@@ -37,8 +37,12 @@ export default function UserPage() {
         <div className="m-3 p-3 space-x-3 flex group max-h-40 lg:max-h-72 overflow-hidden">
           <div className="max-w-xl mx-auto sm:px-6 lg:px-8">
             <div className="flex items-center pt-8 sm:justify-start sm:pt-0 flex-col gap-5">
-              <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">This user does not exist or has been removed.</div>
-              <a href="/" className="text-xl text-blue-500">Return home</a>
+              <div className="ml-4 text-lg text-gray-500 uppercase tracking-wider">
+                This user does not exist or has been removed.
+              </div>
+              <a href="/" className="text-xl text-blue-500">
+                Return home
+              </a>
             </div>
           </div>
         </div>
@@ -59,32 +63,30 @@ export default function UserPage() {
     <>
       <Navbar />
       <div className="mx-auto lg:max-w-[80%] p-3 pt-6 gap-3 flex flex-col">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
+        <div className="flex-shrink-0 md:order-1 md:text-center">
           <Avatar userID={user.id} square={true} />
-          <div>
-            <div className="font-bold text-2xl">
-              {user.name
-                ? `${user.name}`
-                : user.name}
-            </div>
-            <div className="">
-              {user.first_name && user.last_name
-                ? `${user.first_name} ${user.last_name}`
-                : ''}
-            </div>
-            <div className="text-sm text-gray-600">
-              Joined:{" "}
-              {new Date(user.created_at).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-            <div className="text-sm text-gray-600 mt-2">
-              {user.bio}
-            </div>
-          </div>
         </div>
+        <div className="flex-grow md:order-2">
+          <div className="font-bold text-2xl">
+            {user.name ? `${user.name}` : user.name}
+          </div>
+          <div className="">
+            {user.first_name && user.last_name
+              ? `${user.first_name} ${user.last_name}`
+              : ""}
+          </div>
+          <div className="text-sm text-gray-600">
+            Joined:{" "}
+            {new Date(user.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
+          <div className="text-sm text-gray-600 mt-2">{user.bio}</div>
+        </div>
+      </div>
         {ads && ads.length > 0 ? (
           <div className="pb-4 ">
             <div

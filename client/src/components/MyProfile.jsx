@@ -64,9 +64,11 @@ export default function MyProfile({ forcedUsername }) {
   return (
     <>
       <div className="mx-auto w-full flex flex-col gap-6">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
+        <div className="flex-shrink-0 md:order-1 md:text-center">
           <Avatar userID={user.id} square={true} />
-          <div>
+        </div>
+        <div className="flex-grow md:order-2">
             <section className="flex items-center gap-4">
               <div className="font-bold text-2xl">
                 {user.name
