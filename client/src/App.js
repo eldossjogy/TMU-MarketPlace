@@ -72,7 +72,15 @@ function App() {
       </main>
       <footer className="text-center py-4">
         <div className="mx-auto text-gray-600">
-                <h4 >Made with ❤️ by Amin Nausin, Muyeed Hossain, Eldoss Jogy, Emily mm, Jasmin jj</h4>
+                <h4 >Made with ❤️ by <a href="https://github.com/aminnausin" target="_blank" rel="noreferrer">Amin Nausin</a>,{" "}
+                <a href="https://github.com/muyeed10" target="_blank" rel="noreferrer">Muyeed Hossain,{" "}
+                  </a> 
+                <a href="https://github.com/eldossjogy" target="_blank" rel="noreferrer">Eldoss Jogy,{" "}
+                  </a>
+                <a href="https://github.com/Emil-mm" target="_blank" rel="noreferrer">Emily mm,{" "}
+                  </a>
+                <a href="https://github.com/jasminejj08" target="_blank" rel="noreferrer">Jasmine jj,{" "}
+                  </a> </h4>
                 <p >&copy; 2024 TMU MarketPlace. All rights reserved.</p>
         </div>
     </footer>
