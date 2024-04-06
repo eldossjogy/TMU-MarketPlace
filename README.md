@@ -36,6 +36,11 @@ Running server only using `npm run server`.
 Open http://localhost:3000 to view the React client in your browser.  
 Open http://localhost:5000 to view the Express server in your browser.
 
+## Demo
+https://github.com/eldossjogy/TMU-MarketPlace/assets/77898541/19b972d5-e287-44c7-b882-8f5f39cca9f6
+
+
+
 ## Contributors
 
 - [@aminnausin](https://github.com/aminnausin)
