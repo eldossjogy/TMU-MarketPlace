@@ -8,7 +8,8 @@
         "dev": "concurrently \"npm run server\"  \"npm run client\"",
         "client-i": "cd ./client && npm i",
         "server-i": "cd ./server && npm i",
-        "install": "concurrently \"npm run server-i\"  \"npm run client-i\""
+        "install": "concurrently \"npm run server-i\"  \"npm run client-i\"",
+        "build": "concurrently \"cd ./client && npm run build && serve -s build\"  \"npm run server\""
     },
     "dependencies": {
         "concurrently": "^8.2.2",
