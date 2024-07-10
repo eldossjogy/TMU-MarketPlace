@@ -14,7 +14,7 @@
 TMU Marketplace is the ultimate online destination for Toronto Metropolitan University students, offering a specialized platform to buy, sell, and exchange not just goods like textbooks and tech, but also services such as tutoring, exclusively within the TMU community. 
 Connect, trade, and thrive with fellow students at TMU!
   
-🔗[Visit Website](https://tmu-marketplace-atoz.onrender.com/)
+🔗[Visit Website](https://tmu-marketplace.eldoss.me/)
 
 ## Built Using
 
