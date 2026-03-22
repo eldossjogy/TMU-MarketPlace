@@ -8,11 +8,13 @@
         "dev": "concurrently \"npm run server\"  \"npm run client\"",
         "client-i": "cd ./client && npm i",
         "server-i": "cd ./server && npm i",
-        "install": "concurrently \"npm run server-i\"  \"npm run client-i\""
+        "install": "concurrently \"npm run server-i\"  \"npm run client-i\"",
+        "build": "concurrently \"cd ./client && npm run build && serve -s build\"  \"npm run server\""
     },
     "dependencies": {
         "concurrently": "^8.2.2",
         "jsdoc": "^4.0.2",
-        "nodemon": "^3.0.3"
+        "nodemon": "^3.0.3",
+        "serve": "^14.2.3"
     }
 }
